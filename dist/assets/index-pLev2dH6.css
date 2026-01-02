@@ -576,6 +576,49 @@ section[aria-label='Notifications alt+T'] {
     margin: 0 !important;
   }
 
+.container{
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 2rem;
+  padding-left: 2rem;
+}
+
+@media (min-width: 640px){
+
+  .container{
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px){
+
+  .container{
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px){
+
+  .container{
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px){
+
+  .container{
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1400px){
+
+  .container{
+    max-width: 1400px;
+  }
+}
+
 .sr-only{
   position: absolute;
   width: 1px;
@@ -816,8 +859,20 @@ section[aria-label='Notifications alt+T'] {
   margin-bottom: 1rem;
 }
 
+.mb-6{
+  margin-bottom: 1.5rem;
+}
+
+.mb-8{
+  margin-bottom: 2rem;
+}
+
 .ml-1{
   margin-left: 0.25rem;
+}
+
+.ml-2{
+  margin-left: 0.5rem;
 }
 
 .ml-auto{
@@ -885,6 +940,11 @@ section[aria-label='Notifications alt+T'] {
 
 .hidden{
   display: none;
+}
+
+.size-12{
+  width: 3rem;
+  height: 3rem;
 }
 
 .size-2{
@@ -1026,6 +1086,10 @@ section[aria-label='Notifications alt+T'] {
   max-height: 300px;
 }
 
+.max-h-\[400px\]{
+  max-height: 400px;
+}
+
 .max-h-\[var\(--radix-dropdown-menu-content-available-height\)\]{
   max-height: var(--radix-dropdown-menu-content-available-height);
 }
@@ -1052,6 +1116,10 @@ section[aria-label='Notifications alt+T'] {
 
 .min-h-\[80px\]{
   min-height: 80px;
+}
+
+.min-h-\[80vh\]{
+  min-height: 80vh;
 }
 
 .min-h-screen{
@@ -1212,6 +1280,14 @@ section[aria-label='Notifications alt+T'] {
   min-width: var(--radix-select-trigger-width);
 }
 
+.max-w-2xl{
+  max-width: 42rem;
+}
+
+.max-w-3xl{
+  max-width: 48rem;
+}
+
 .max-w-\[--skeleton-width\]{
   max-width: var(--skeleton-width);
 }
@@ -1227,6 +1303,10 @@ section[aria-label='Notifications alt+T'] {
 .max-w-max{
   max-width: -moz-max-content;
   max-width: max-content;
+}
+
+.max-w-md{
+  max-width: 28rem;
 }
 
 .flex-1{
@@ -1358,6 +1438,10 @@ section[aria-label='Notifications alt+T'] {
           user-select: none;
 }
 
+.resize-none{
+  resize: none;
+}
+
 .list-none{
   list-style-type: none;
 }
@@ -1448,6 +1532,12 @@ section[aria-label='Notifications alt+T'] {
   margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+.space-x-3 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
 .space-x-4 > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(1rem * var(--tw-space-x-reverse));
@@ -1458,6 +1548,12 @@ section[aria-label='Notifications alt+T'] {
   --tw-space-y-reverse: 0;
   margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0px * var(--tw-space-y-reverse));
+}
+
+.space-y-1 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
 
 .space-y-1\.5 > :not([hidden]) ~ :not([hidden]){
@@ -1732,6 +1828,11 @@ section[aria-label='Notifications alt+T'] {
   border-color: rgb(153 246 228 / var(--tw-border-opacity, 1));
 }
 
+.border-teal-500{
+  --tw-border-opacity: 1;
+  border-color: rgb(20 184 166 / var(--tw-border-opacity, 1));
+}
+
 .border-transparent{
   border-color: transparent;
 }
@@ -1785,6 +1886,11 @@ section[aria-label='Notifications alt+T'] {
   border-top-color: rgb(239 68 68 / var(--tw-border-opacity, 1));
 }
 
+.border-t-teal-500{
+  --tw-border-opacity: 1;
+  border-top-color: rgb(20 184 166 / var(--tw-border-opacity, 1));
+}
+
 .border-t-transparent{
   border-top-color: transparent;
 }
@@ -1834,6 +1940,11 @@ section[aria-label='Notifications alt+T'] {
 .bg-gray-100{
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+}
+
+.bg-green-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1));
 }
 
 .bg-green-50{
@@ -1916,6 +2027,11 @@ section[aria-label='Notifications alt+T'] {
 .bg-slate-900{
   --tw-bg-opacity: 1;
   background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1));
+}
+
+.bg-teal-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(204 251 241 / var(--tw-bg-opacity, 1));
 }
 
 .bg-teal-50{
@@ -2052,6 +2168,11 @@ section[aria-label='Notifications alt+T'] {
   padding-bottom: 0.375rem;
 }
 
+.py-10{
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
 .py-2{
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -2089,6 +2210,10 @@ section[aria-label='Notifications alt+T'] {
   padding-bottom: 1rem;
 }
 
+.pb-8{
+  padding-bottom: 2rem;
+}
+
 .pl-2{
   padding-left: 0.5rem;
 }
@@ -2099,6 +2224,10 @@ section[aria-label='Notifications alt+T'] {
 
 .pl-4{
   padding-left: 1rem;
+}
+
+.pl-6{
+  padding-left: 1.5rem;
 }
 
 .pl-8{
@@ -2119,6 +2248,10 @@ section[aria-label='Notifications alt+T'] {
 
 .pr-2\.5{
   padding-right: 0.625rem;
+}
+
+.pr-4{
+  padding-right: 1rem;
 }
 
 .pr-8{
@@ -2256,6 +2389,10 @@ section[aria-label='Notifications alt+T'] {
 
 .tracking-wide{
   letter-spacing: 0.025em;
+}
+
+.tracking-wider{
+  letter-spacing: 0.05em;
 }
 
 .tracking-widest{
@@ -2692,12 +2829,20 @@ section[aria-label='Notifications alt+T'] {
   transition-duration: 300ms;
 }
 
+.duration-500{
+  transition-duration: 500ms;
+}
+
 .ease-in-out{
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ease-linear{
   transition-timing-function: linear;
+}
+
+.ease-out{
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 @keyframes enter{
@@ -2750,12 +2895,20 @@ section[aria-label='Notifications alt+T'] {
   animation-duration: 300ms;
 }
 
+.duration-500{
+  animation-duration: 500ms;
+}
+
 .ease-in-out{
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ease-linear{
   animation-timing-function: linear;
+}
+
+.ease-out{
+  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 .animate-fade-in {
@@ -3944,6 +4097,21 @@ section[aria-label='Notifications alt+T'] {
 
   .sm\:text-left{
     text-align: left;
+  }
+
+  .sm\:text-3xl{
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  .sm\:text-lg{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .sm\:text-sm{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 
   .data-\[state\=open\]\:sm\:slide-in-from-bottom-full[data-state="open"]{

@@ -18733,7 +18733,7 @@ function focusFirst$2(candidates) {
 }
 var Provider$1 = ToastProvider$1;
 var Viewport$1 = ToastViewport$1;
-var Root2$3 = Toast$2;
+var Root2$4 = Toast$2;
 var Title$1 = ToastTitle$1;
 var Description$1 = ToastDescription$1;
 var Action = ToastAction$1;
@@ -18911,6 +18911,10 @@ var ChevronDown = createLucideIcon("chevron-down", [["path", {
 	d: "m6 9 6 6 6-6",
 	key: "qrunsl"
 }]]);
+var ChevronRight = createLucideIcon("chevron-right", [["path", {
+	d: "m9 18 6-6-6-6",
+	key: "mthhwq"
+}]]);
 var ChevronUp = createLucideIcon("chevron-up", [["path", {
 	d: "m18 15-6-6-6 6",
 	key: "153udz"
@@ -18961,6 +18965,12 @@ var CircleCheck = createLucideIcon("circle-check", [["circle", {
 }], ["path", {
 	d: "m9 12 2 2 4-4",
 	key: "dzmm74"
+}]]);
+var Circle = createLucideIcon("circle", [["circle", {
+	cx: "12",
+	cy: "12",
+	r: "10",
+	key: "1mglay"
 }]]);
 var Clock = createLucideIcon("clock", [["path", {
 	d: "M12 6v6l4 2",
@@ -19033,6 +19043,10 @@ var Map$1 = createLucideIcon("map", [
 		key: "1uimfh"
 	}]
 ]);
+var MessageSquare = createLucideIcon("message-square", [["path", {
+	d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
+	key: "18887p"
+}]]);
 var PanelLeft = createLucideIcon("panel-left", [["rect", {
 	width: "18",
 	height: "18",
@@ -19069,6 +19083,24 @@ var RefreshCw = createLucideIcon("refresh-cw", [
 		key: "1cv678"
 	}]
 ]);
+var Rocket = createLucideIcon("rocket", [
+	["path", {
+		d: "M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z",
+		key: "m3kijz"
+	}],
+	["path", {
+		d: "m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z",
+		key: "1fmvmk"
+	}],
+	["path", {
+		d: "M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0",
+		key: "1f8sc4"
+	}],
+	["path", {
+		d: "M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5",
+		key: "qeys4"
+	}]
+]);
 var Save = createLucideIcon("save", [
 	["path", {
 		d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
@@ -19092,6 +19124,37 @@ var Search = createLucideIcon("search", [["path", {
 	r: "8",
 	key: "4ej97u"
 }]]);
+var Settings = createLucideIcon("settings", [["path", {
+	d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
+	key: "1i5ecw"
+}], ["circle", {
+	cx: "12",
+	cy: "12",
+	r: "3",
+	key: "1v7zrd"
+}]]);
+var Settings2 = createLucideIcon("settings-2", [
+	["path", {
+		d: "M14 17H5",
+		key: "gfn3mx"
+	}],
+	["path", {
+		d: "M19 7h-9",
+		key: "6i9tg"
+	}],
+	["circle", {
+		cx: "17",
+		cy: "17",
+		r: "3",
+		key: "18b49y"
+	}],
+	["circle", {
+		cx: "7",
+		cy: "7",
+		r: "3",
+		key: "dfmy0x"
+	}]
+]);
 var ShieldAlert = createLucideIcon("shield-alert", [
 	["path", {
 		d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
@@ -20631,13 +20694,13 @@ var toastVariants = cva("group pointer-events-auto relative flex w-full items-ce
 	defaultVariants: { variant: "default" }
 });
 var Toast$1 = import_react.forwardRef(({ className, variant, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$3, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$4, {
 		ref,
 		className: cn(toastVariants({ variant }), className),
 		...props
 	});
 });
-Toast$1.displayName = Root2$3.displayName;
+Toast$1.displayName = Root2$4.displayName;
 var ToastAction = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Action, {
 	ref,
 	className: cn("inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive", className),
@@ -21017,10 +21080,10 @@ var Observer = class {
 			if (typeof id !== "string" && typeof id !== "number") return { unwrap };
 			else return Object.assign(id, { unwrap });
 		};
-		this.custom = (jsx$24, data) => {
+		this.custom = (jsx$25, data) => {
 			const id = (data == null ? void 0 : data.id) || toastsCounter++;
 			this.create({
-				jsx: jsx$24(id),
+				jsx: jsx$25(id),
 				id,
 				...data
 			});
@@ -23428,7 +23491,7 @@ function getSideAndAlignFromPlacement(placement) {
 	const [side, align = "center"] = placement.split("-");
 	return [side, align];
 }
-var Root2$2 = Popper;
+var Root2$3 = Popper;
 var Anchor = PopperAnchor;
 var Content$2 = PopperContent;
 var Arrow = PopperArrow;
@@ -23522,7 +23585,7 @@ var Tooltip$1 = (props) => {
 			}
 		};
 	}, []);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$2, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$3, {
 		...popperScope,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TooltipContextProvider, {
 			scope: __scopeTooltip,
@@ -25076,7 +25139,7 @@ var DialogTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		"aria-haspopup": "dialog",
 		"aria-expanded": context.open,
 		"aria-controls": context.contentId,
-		"data-state": getState(context.open),
+		"data-state": getState$1(context.open),
 		...triggerProps,
 		ref: composedTriggerRef,
 		onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
@@ -25125,7 +25188,7 @@ var DialogOverlayImpl = import_react.forwardRef((props, forwardedRef) => {
 		allowPinchZoom: true,
 		shards: [context.contentRef],
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-			"data-state": getState(context.open),
+			"data-state": getState$1(context.open),
 			...overlayProps,
 			ref: forwardedRef,
 			style: {
@@ -25224,7 +25287,7 @@ var DialogContentImpl = import_react.forwardRef((props, forwardedRef) => {
 			id: context.contentId,
 			"aria-describedby": context.descriptionId,
 			"aria-labelledby": context.titleId,
-			"data-state": getState(context.open),
+			"data-state": getState$1(context.open),
 			...contentProps,
 			ref: composedRefs,
 			onDismiss: () => context.onOpenChange(false)
@@ -25268,7 +25331,7 @@ var DialogClose$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 DialogClose$1.displayName = CLOSE_NAME;
-function getState(open) {
+function getState$1(open) {
 	return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
@@ -25817,7 +25880,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$5({ inst: {
+			cachedValue = useState$6({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -25854,7 +25917,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$5 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$6 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$2.useSyncExternalStore ? React$2.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26008,6 +26071,11 @@ var menuItems = [
 		title: "Execução (PDCA)",
 		url: "/execucao",
 		icon: Activity
+	},
+	{
+		title: "Configuração",
+		url: "/configuracao",
+		icon: Settings
 	}
 ];
 function Layout() {
@@ -26131,7 +26199,7 @@ var createStoreImpl = (createState) => {
 			listeners$1.forEach((listener) => listener(state, previousState));
 		}
 	};
-	const getState$1 = () => state;
+	const getState$2 = () => state;
 	const getInitialState = () => initialState;
 	const subscribe$1 = (listener) => {
 		listeners$1.add(listener);
@@ -26143,12 +26211,12 @@ var createStoreImpl = (createState) => {
 	};
 	const api = {
 		setState,
-		getState: getState$1,
+		getState: getState$2,
 		getInitialState,
 		subscribe: subscribe$1,
 		destroy
 	};
-	const initialState = state = createState(setState, getState$1, api);
+	const initialState = state = createState(setState, getState$2, api);
 	return api;
 };
 var createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
@@ -26245,6 +26313,17 @@ var createImpl = (createState) => {
 var create = (createState) => createState ? createImpl(createState) : createImpl;
 const useStrategyStore = create((set) => ({
 	clinicName: "Clínica Vida & Saúde",
+	clinicConfig: {
+		tipo_clinica: "",
+		nome_clinica: "",
+		localizacao: "",
+		publico_principal: "",
+		estagio_clinica: "",
+		gestores_principais: "",
+		objetivo_geral_2026: "",
+		tamanho_relatorio: "",
+		tom_linguagem: ""
+	},
 	diagnosis: {
 		porter: {
 			rivalry: "Alta concorrência de clínicas populares na região.",
@@ -26327,6 +26406,7 @@ const useStrategyStore = create((set) => ({
 			okrId: "1"
 		}
 	],
+	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
 		rumelt: {
@@ -26415,10 +26495,10 @@ var Progress$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Progress$1.displayName = PROGRESS_NAME;
-var INDICATOR_NAME = "ProgressIndicator";
+var INDICATOR_NAME$1 = "ProgressIndicator";
 var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeProgress, ...indicatorProps } = props;
-	const context = useProgressContext(INDICATOR_NAME, __scopeProgress);
+	const context = useProgressContext(INDICATOR_NAME$1, __scopeProgress);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive$1.div, {
 		"data-state": getProgressState(context.value, context.max),
 		"data-value": context.value ?? void 0,
@@ -26427,7 +26507,7 @@ var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	});
 });
-ProgressIndicator.displayName = INDICATOR_NAME;
+ProgressIndicator.displayName = INDICATOR_NAME$1;
 function defaultGetValueLabel(value, max$1) {
 	return `${Math.round(value / max$1 * 100)}%`;
 }
@@ -26455,12 +26535,12 @@ function getInvalidValueError(propValue, componentName) {
 Defaulting to \`null\`.`;
 }
 var Root$2 = Progress$1;
-var Indicator = ProgressIndicator;
+var Indicator$1 = ProgressIndicator;
 var Progress = import_react.forwardRef(({ className, value, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
 	ref,
 	className: cn("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className),
 	...props,
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Indicator, {
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Indicator$1, {
 		className: "h-full w-full flex-1 bg-primary transition-all",
 		style: { transform: `translateX(-${100 - (value || 0)}%)` }
 	})
@@ -26803,12 +26883,12 @@ var RovingFocusGroupImpl = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-var ITEM_NAME$1 = "RovingFocusGroupItem";
+var ITEM_NAME$2 = "RovingFocusGroupItem";
 var RovingFocusGroupItem = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeRovingFocusGroup, focusable = true, active = false, tabStopId, children, ...itemProps } = props;
 	const autoId = useId();
 	const id = tabStopId || autoId;
-	const context = useRovingFocusContext(ITEM_NAME$1, __scopeRovingFocusGroup);
+	const context = useRovingFocusContext(ITEM_NAME$2, __scopeRovingFocusGroup);
 	const isCurrentTabStop = context.currentTabStopId === id;
 	const getItems = useCollection$1(__scopeRovingFocusGroup);
 	const { onFocusableItemAdd, onFocusableItemRemove, currentTabStopId } = context;
@@ -26864,7 +26944,7 @@ var RovingFocusGroupItem = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-RovingFocusGroupItem.displayName = ITEM_NAME$1;
+RovingFocusGroupItem.displayName = ITEM_NAME$2;
 var MAP_KEY_TO_FOCUS_INTENT = {
 	ArrowLeft: "prev",
 	ArrowUp: "prev",
@@ -26900,7 +26980,7 @@ var Root$1 = RovingFocusGroup;
 var Item$1 = RovingFocusGroupItem;
 var TABS_NAME = "Tabs";
 var [createTabsContext, createTabsScope] = createContextScope(TABS_NAME, [createRovingFocusGroupScope]);
-var useRovingFocusGroupScope = createRovingFocusGroupScope();
+var useRovingFocusGroupScope$1 = createRovingFocusGroupScope();
 var [TabsProvider, useTabsContext] = createTabsContext(TABS_NAME);
 var Tabs$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, value: valueProp, onValueChange, defaultValue, orientation = "horizontal", dir, activationMode = "automatic", ...tabsProps } = props;
@@ -26932,7 +27012,7 @@ var TAB_LIST_NAME = "TabsList";
 var TabsList$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, loop = true, ...listProps } = props;
 	const context = useTabsContext(TAB_LIST_NAME, __scopeTabs);
-	const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
+	const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeTabs);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
 		asChild: true,
 		...rovingFocusGroupScope,
@@ -26952,7 +27032,7 @@ var TRIGGER_NAME$1 = "TabsTrigger";
 var TabsTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, value, disabled = false, ...triggerProps } = props;
 	const context = useTabsContext(TRIGGER_NAME$1, __scopeTabs);
-	const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeTabs);
+	const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeTabs);
 	const triggerId = makeTriggerId(context.baseId, value);
 	const contentId = makeContentId(context.baseId, value);
 	const isSelected = value === context.value;
@@ -27026,11 +27106,11 @@ function makeTriggerId(baseId, value) {
 function makeContentId(baseId, value) {
 	return `${baseId}-content-${value}`;
 }
-var Root2$1 = Tabs$1;
+var Root2$2 = Tabs$1;
 var List = TabsList$1;
 var Trigger$1 = TabsTrigger$1;
 var Content = TabsContent$1;
-var Tabs = Root2$1;
+var Tabs = Root2$2;
 var TabsList = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List, {
 	ref,
 	className: cn("inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground", className),
@@ -27623,7 +27703,7 @@ var Select$1 = (props) => {
 	const isFormControl = trigger ? form || !!trigger.closest("form") : true;
 	const [nativeOptionsSet, setNativeOptionsSet] = import_react.useState(/* @__PURE__ */ new Set());
 	const nativeSelectKey = Array.from(nativeOptionsSet).map((option) => option.props.value).join(";");
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$2, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$3, {
 		...popperScope,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectProvider, {
 			required,
@@ -28222,12 +28302,12 @@ var SelectLabel$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 SelectLabel$1.displayName = LABEL_NAME;
-var ITEM_NAME = "SelectItem";
-var [SelectItemContextProvider, useSelectItemContext] = createSelectContext(ITEM_NAME);
+var ITEM_NAME$1 = "SelectItem";
+var [SelectItemContextProvider, useSelectItemContext] = createSelectContext(ITEM_NAME$1);
 var SelectItem$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, value, disabled = false, textValue: textValueProp, ...itemProps } = props;
-	const context = useSelectContext(ITEM_NAME, __scopeSelect);
-	const contentContext = useSelectContentContext(ITEM_NAME, __scopeSelect);
+	const context = useSelectContext(ITEM_NAME$1, __scopeSelect);
+	const contentContext = useSelectContentContext(ITEM_NAME$1, __scopeSelect);
 	const isSelected = context.value === value;
 	const [textValue, setTextValue] = import_react.useState(textValueProp ?? "");
 	const [isFocused, setIsFocused] = import_react.useState(false);
@@ -28294,7 +28374,7 @@ var SelectItem$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-SelectItem$1.displayName = ITEM_NAME;
+SelectItem$1.displayName = ITEM_NAME$1;
 var ITEM_TEXT_NAME = "SelectItemText";
 var SelectItemText = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, className, style, ...itemTextProps } = props;
@@ -28455,7 +28535,7 @@ var SelectArrow = import_react.forwardRef((props, forwardedRef) => {
 	}) : null;
 });
 SelectArrow.displayName = ARROW_NAME;
-var BUBBLE_INPUT_NAME = "SelectBubbleInput";
+var BUBBLE_INPUT_NAME$1 = "SelectBubbleInput";
 var SelectBubbleInput = import_react.forwardRef(({ __scopeSelect, value, ...props }, forwardedRef) => {
 	const ref = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, ref);
@@ -28481,7 +28561,7 @@ var SelectBubbleInput = import_react.forwardRef(({ __scopeSelect, value, ...prop
 		defaultValue: value
 	});
 });
-SelectBubbleInput.displayName = BUBBLE_INPUT_NAME;
+SelectBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
 function shouldShowPlaceholder(value) {
 	return value === "" || value === void 0;
 }
@@ -28522,7 +28602,7 @@ function findNextItem(items, search, currentItem) {
 function wrapArray(array, startIndex) {
 	return array.map((_$1, index$1) => array[(startIndex + index$1) % array.length]);
 }
-var Root2 = Select$1;
+var Root2$1 = Select$1;
 var Trigger = SelectTrigger$1;
 var Value = SelectValue$1;
 var Icon = SelectIcon;
@@ -28536,7 +28616,7 @@ var ItemIndicator = SelectItemIndicator;
 var ScrollUpButton = SelectScrollUpButton$1;
 var ScrollDownButton = SelectScrollDownButton$1;
 var Separator = SelectSeparator$1;
-var Select = Root2;
+var Select = Root2$1;
 var SelectValue = Value;
 var SelectTrigger = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Trigger, {
 	ref,
@@ -29105,6 +29185,522 @@ function Execution() {
 		]
 	});
 }
+var RADIO_NAME = "Radio";
+var [createRadioContext, createRadioScope] = createContextScope(RADIO_NAME);
+var [RadioProvider, useRadioContext] = createRadioContext(RADIO_NAME);
+var Radio = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeRadio, name, checked = false, required, disabled, value = "on", onCheck, form, ...radioProps } = props;
+	const [button, setButton] = import_react.useState(null);
+	const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
+	const hasConsumerStoppedPropagationRef = import_react.useRef(false);
+	const isFormControl = button ? form || !!button.closest("form") : true;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(RadioProvider, {
+		scope: __scopeRadio,
+		checked,
+		disabled,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
+			type: "button",
+			role: "radio",
+			"aria-checked": checked,
+			"data-state": getState(checked),
+			"data-disabled": disabled ? "" : void 0,
+			disabled,
+			value,
+			...radioProps,
+			ref: composedRefs,
+			onClick: composeEventHandlers(props.onClick, (event) => {
+				if (!checked) onCheck?.();
+				if (isFormControl) {
+					hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
+					if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
+				}
+			})
+		}), isFormControl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioBubbleInput, {
+			control: button,
+			bubbles: !hasConsumerStoppedPropagationRef.current,
+			name,
+			value,
+			checked,
+			required,
+			disabled,
+			form,
+			style: { transform: "translateX(-100%)" }
+		})]
+	});
+});
+Radio.displayName = RADIO_NAME;
+var INDICATOR_NAME = "RadioIndicator";
+var RadioIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeRadio, forceMount, ...indicatorProps } = props;
+	const context = useRadioContext(INDICATOR_NAME, __scopeRadio);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || context.checked,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.span, {
+			"data-state": getState(context.checked),
+			"data-disabled": context.disabled ? "" : void 0,
+			...indicatorProps,
+			ref: forwardedRef
+		})
+	});
+});
+RadioIndicator.displayName = INDICATOR_NAME;
+var BUBBLE_INPUT_NAME = "RadioBubbleInput";
+var RadioBubbleInput = import_react.forwardRef(({ __scopeRadio, control, checked, bubbles = true, ...props }, forwardedRef) => {
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(ref, forwardedRef);
+	const prevChecked = usePrevious(checked);
+	const controlSize = useSize(control);
+	import_react.useEffect(() => {
+		const input = ref.current;
+		if (!input) return;
+		const inputProto = window.HTMLInputElement.prototype;
+		const setChecked = Object.getOwnPropertyDescriptor(inputProto, "checked").set;
+		if (prevChecked !== checked && setChecked) {
+			const event = new Event("click", { bubbles });
+			setChecked.call(input, checked);
+			input.dispatchEvent(event);
+		}
+	}, [
+		prevChecked,
+		checked,
+		bubbles
+	]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.input, {
+		type: "radio",
+		"aria-hidden": true,
+		defaultChecked: checked,
+		...props,
+		tabIndex: -1,
+		ref: composedRefs,
+		style: {
+			...props.style,
+			...controlSize,
+			position: "absolute",
+			pointerEvents: "none",
+			opacity: 0,
+			margin: 0
+		}
+	});
+});
+RadioBubbleInput.displayName = BUBBLE_INPUT_NAME;
+function getState(checked) {
+	return checked ? "checked" : "unchecked";
+}
+var ARROW_KEYS = [
+	"ArrowUp",
+	"ArrowDown",
+	"ArrowLeft",
+	"ArrowRight"
+];
+var RADIO_GROUP_NAME = "RadioGroup";
+var [createRadioGroupContext, createRadioGroupScope] = createContextScope(RADIO_GROUP_NAME, [createRovingFocusGroupScope, createRadioScope]);
+var useRovingFocusGroupScope = createRovingFocusGroupScope();
+var useRadioScope = createRadioScope();
+var [RadioGroupProvider, useRadioGroupContext] = createRadioGroupContext(RADIO_GROUP_NAME);
+var RadioGroup$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeRadioGroup, name, defaultValue, value: valueProp, required = false, disabled = false, orientation, dir, loop = true, onValueChange, ...groupProps } = props;
+	const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
+	const direction = useDirection(dir);
+	const [value, setValue] = useControllableState({
+		prop: valueProp,
+		defaultProp: defaultValue ?? null,
+		onChange: onValueChange,
+		caller: RADIO_GROUP_NAME
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupProvider, {
+		scope: __scopeRadioGroup,
+		name,
+		required,
+		disabled,
+		value,
+		onValueChange: setValue,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
+			asChild: true,
+			...rovingFocusGroupScope,
+			orientation,
+			dir: direction,
+			loop,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+				role: "radiogroup",
+				"aria-required": required,
+				"aria-orientation": orientation,
+				"data-disabled": disabled ? "" : void 0,
+				dir: direction,
+				...groupProps,
+				ref: forwardedRef
+			})
+		})
+	});
+});
+RadioGroup$1.displayName = RADIO_GROUP_NAME;
+var ITEM_NAME = "RadioGroupItem";
+var RadioGroupItem$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeRadioGroup, disabled, ...itemProps } = props;
+	const context = useRadioGroupContext(ITEM_NAME, __scopeRadioGroup);
+	const isDisabled = context.disabled || disabled;
+	const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
+	const radioScope = useRadioScope(__scopeRadioGroup);
+	const ref = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, ref);
+	const checked = context.value === itemProps.value;
+	const isArrowKeyPressedRef = import_react.useRef(false);
+	import_react.useEffect(() => {
+		const handleKeyDown = (event) => {
+			if (ARROW_KEYS.includes(event.key)) isArrowKeyPressedRef.current = true;
+		};
+		const handleKeyUp = () => isArrowKeyPressedRef.current = false;
+		document.addEventListener("keydown", handleKeyDown);
+		document.addEventListener("keyup", handleKeyUp);
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+			document.removeEventListener("keyup", handleKeyUp);
+		};
+	}, []);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item$1, {
+		asChild: true,
+		...rovingFocusGroupScope,
+		focusable: !isDisabled,
+		active: checked,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, {
+			disabled: isDisabled,
+			required: context.required,
+			checked,
+			...radioScope,
+			...itemProps,
+			name: context.name,
+			ref: composedRefs,
+			onCheck: () => context.onValueChange(itemProps.value),
+			onKeyDown: composeEventHandlers((event) => {
+				if (event.key === "Enter") event.preventDefault();
+			}),
+			onFocus: composeEventHandlers(itemProps.onFocus, () => {
+				if (isArrowKeyPressedRef.current) ref.current?.click();
+			})
+		})
+	});
+});
+RadioGroupItem$1.displayName = ITEM_NAME;
+var INDICATOR_NAME2 = "RadioGroupIndicator";
+var RadioGroupIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeRadioGroup, ...indicatorProps } = props;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioIndicator, {
+		...useRadioScope(__scopeRadioGroup),
+		...indicatorProps,
+		ref: forwardedRef
+	});
+});
+RadioGroupIndicator.displayName = INDICATOR_NAME2;
+var Root2 = RadioGroup$1;
+var Item2 = RadioGroupItem$1;
+var Indicator = RadioGroupIndicator;
+var RadioGroup = import_react.forwardRef(({ className, ...props }, ref) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2, {
+		className: cn("grid gap-2", className),
+		...props,
+		ref
+	});
+});
+RadioGroup.displayName = Root2.displayName;
+var RadioGroupItem = import_react.forwardRef(({ className, ...props }, ref) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item2, {
+		ref,
+		className: cn("aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50", className),
+		...props,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Indicator, {
+			className: "flex items-center justify-center",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Circle, { className: "h-2.5 w-2.5 fill-current text-current" })
+		})
+	});
+});
+RadioGroupItem.displayName = Item2.displayName;
+var QUESTIONS = [
+	{
+		key: "tipo_clinica",
+		title: "Qual é o tipo da sua clínica?",
+		description: "Ex: Fisioterapia, Odontologia, Dermatologia, Multidisciplinar.",
+		type: "text",
+		placeholder: "Digite o tipo da clínica..."
+	},
+	{
+		key: "nome_clinica",
+		title: "Qual é o nome da sua clínica?",
+		description: "Como ela é conhecida no mercado.",
+		type: "text",
+		placeholder: "Nome da clínica..."
+	},
+	{
+		key: "localizacao",
+		title: "Onde a clínica está localizada?",
+		description: "Cidade, Estado e/ou País.",
+		type: "text",
+		placeholder: "Ex: São Paulo, SP"
+	},
+	{
+		key: "publico_principal",
+		title: "Quem é o seu público principal?",
+		description: "Descreva brevemente o perfil dos seus pacientes (Ex: Atletas, Idosos, Classe A/B).",
+		type: "text",
+		placeholder: "Descreva seu público alvo..."
+	},
+	{
+		key: "estagio_clinica",
+		title: "Em qual estágio de negócio a clínica se encontra?",
+		description: "Selecione a opção que melhor descreve o momento atual.",
+		type: "select",
+		options: [
+			"Iniciante",
+			"Em Crescimento",
+			"Consolidada",
+			"Em Crise",
+			"Outro"
+		]
+	},
+	{
+		key: "gestores_principais",
+		title: "Quantos gestores participam da estratégia e quais seus cargos?",
+		description: "Ex: 2 gestores (Diretor Clínico e Gerente Administrativo).",
+		type: "text",
+		placeholder: "Descreva a estrutura de gestão..."
+	},
+	{
+		key: "objetivo_geral_2026",
+		title: "Qual é o principal objetivo estratégico para 2026?",
+		description: "O que seria um grande sucesso se alcançado até o final do ano?",
+		type: "textarea",
+		placeholder: "Ex: Dobrar o faturamento, abrir nova unidade, digitalizar processos..."
+	},
+	{
+		key: "tamanho_relatorio",
+		title: "Qual a profundidade desejada para o relatório estratégico?",
+		description: "Escolha o nível de detalhamento do output final.",
+		type: "radio",
+		options: [{
+			value: "resumido_20",
+			label: "Resumido (~20 páginas) - Foco em ação rápida"
+		}, {
+			value: "detalhado_40",
+			label: "Detalhado (~40 páginas) - Análise profunda"
+		}]
+	},
+	{
+		key: "tom_linguagem",
+		title: "Qual o tom de linguagem preferido para os relatórios?",
+		description: "Como a consultoria deve se comunicar com sua equipe.",
+		type: "radio",
+		options: [
+			{
+				value: "formal",
+				label: "Formal - Corporativo e técnico"
+			},
+			{
+				value: "intermediario",
+				label: "Intermediário - Profissional mas acessível"
+			},
+			{
+				value: "informal",
+				label: "Informal - Próximo e motivacional"
+			}
+		]
+	}
+];
+function SetupWizard() {
+	const { setClinicConfig, clinicConfig: savedConfig } = useStrategyStore();
+	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
+	const [answers, setAnswers] = (0, import_react.useState)(savedConfig);
+	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
+	const currentQuestion = QUESTIONS[currentStep];
+	const handleNext = () => {
+		if (!answers[currentQuestion.key]) {
+			toast.error("Por favor, preencha o campo para continuar.");
+			return;
+		}
+		if (currentStep < QUESTIONS.length - 1) setCurrentStep((prev) => prev + 1);
+		else {
+			setIsCompleted(true);
+			setClinicConfig(answers);
+			toast.success("Configuração concluída com sucesso!");
+		}
+	};
+	const handleInputChange = (value) => {
+		setAnswers((prev) => ({
+			...prev,
+			[currentQuestion.key]: value
+		}));
+	};
+	const handleKeyPress = (e) => {
+		if (e.key === "Enter" && currentQuestion.type !== "textarea") handleNext();
+	};
+	const progress = (currentStep + 1) / QUESTIONS.length * 100;
+	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex flex-col items-center justify-center min-h-[80vh] animate-fade-in p-4",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "bg-green-100 p-4 rounded-full mb-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "size-12 text-green-600" })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "text-3xl font-bold text-slate-900 mb-2 text-center",
+				children: "Configuração Finalizada!"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-slate-500 mb-8 text-center max-w-md",
+				children: "Seus dados foram salvos e o sistema está pronto para gerar insights personalizados para o ciclo 2026."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "w-full max-w-2xl bg-slate-50 border-slate-200 shadow-inner overflow-hidden",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+						className: "bg-slate-100 border-b border-slate-200",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-sm font-mono text-slate-500 uppercase",
+							children: "Output JSON gerado"
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+						className: "p-0",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", {
+							className: "p-4 overflow-auto text-xs sm:text-sm font-mono text-slate-700 bg-slate-50 max-h-[400px]",
+							children: JSON.stringify(answers, null, 2)
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+						className: "p-4 border-t border-slate-200 bg-white justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							variant: "outline",
+							onClick: () => setIsCompleted(false),
+							children: "Editar Respostas"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							onClick: () => window.location.href = "/",
+							children: "Ir para Dashboard"
+						})]
+					})
+				]
+			})
+		]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "container max-w-3xl mx-auto py-10 px-4 min-h-[80vh] flex flex-col justify-center",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mb-8 space-y-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center justify-between text-sm text-slate-500 mb-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "font-medium text-teal-600",
+					children: "Configuração Inicial"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+					"Passo ",
+					currentStep + 1,
+					" de ",
+					QUESTIONS.length
+				] })]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "h-2 w-full bg-slate-100 rounded-full overflow-hidden",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "h-full bg-teal-500 transition-all duration-500 ease-out rounded-full",
+					style: { width: `${progress}%` }
+				})
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-t-4 border-t-teal-500 shadow-lg animate-fade-in-up",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "space-y-1",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-2 mb-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bg-teal-100 p-2 rounded-lg",
+								children: [
+									currentStep < 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings2, { className: "size-5 text-teal-700" }),
+									currentStep >= 3 && currentStep < 6 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageSquare, { className: "size-5 text-teal-700" }),
+									currentStep >= 6 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Rocket, { className: "size-5 text-teal-700" })
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-xs font-bold uppercase tracking-wider text-teal-600",
+								children: currentStep < 3 ? "Identidade" : currentStep < 6 ? "Contexto de Mercado" : "Direcionamento Estratégico"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-2xl sm:text-3xl text-slate-800",
+							children: currentQuestion.title
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+							className: "text-base sm:text-lg",
+							children: currentQuestion.description
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+					className: "pt-6 pb-8",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-4",
+						children: [
+							currentQuestion.type === "text" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								autoFocus: true,
+								value: answers[currentQuestion.key] || "",
+								onChange: (e) => handleInputChange(e.target.value),
+								onKeyDown: handleKeyPress,
+								placeholder: currentQuestion.placeholder,
+								className: "text-lg h-12"
+							}),
+							currentQuestion.type === "textarea" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+								autoFocus: true,
+								value: answers[currentQuestion.key] || "",
+								onChange: (e) => handleInputChange(e.target.value),
+								placeholder: currentQuestion.placeholder,
+								className: "text-base min-h-[120px] resize-none"
+							}),
+							currentQuestion.type === "select" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+								value: answers[currentQuestion.key] || "",
+								onValueChange: handleInputChange,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+									className: "h-12 text-lg",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione uma opção" })
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: currentQuestion.options?.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+									value: opt,
+									className: "text-base py-3",
+									children: opt
+								}, opt)) })]
+							}),
+							currentQuestion.type === "radio" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
+								value: answers[currentQuestion.key] || "",
+								onValueChange: handleInputChange,
+								className: "grid gap-3",
+								children: currentQuestion.options?.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: cn("flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors", answers[currentQuestion.key] === opt.value ? "border-teal-500 bg-teal-50" : "border-slate-200"),
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+										value: opt.value,
+										id: opt.value
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+										htmlFor: opt.value,
+										className: "flex-1 cursor-pointer text-base font-medium text-slate-700",
+										children: opt.label
+									})]
+								}, opt.value))
+							})
+						]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+					className: "flex justify-between border-t bg-slate-50/50 p-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "text-xs text-slate-400",
+						children: [
+							"Pressione ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Enter" }),
+							" para continuar"
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						onClick: handleNext,
+						size: "lg",
+						className: "bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-200/50 pl-6 pr-4",
+						children: [currentStep === QUESTIONS.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+					})]
+				})
+			]
+		})]
+	});
+}
 var NotFound = () => {
 	const location = useLocation();
 	(0, import_react.useEffect)(() => {
@@ -29163,6 +29759,10 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 					path: "/execucao",
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Execution, {})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					path: "/configuracao",
+					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SetupWizard, {})
 				})
 			]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
@@ -29174,4 +29774,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-Cl-k3TVm.js.map
+//# sourceMappingURL=index-Cr3zT6DE.js.map

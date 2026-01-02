@@ -8,9 +8,8 @@ import {
   Search,
   Bell,
   ChevronDown,
-  User,
+  Settings,
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import {
   Sidebar,
   SidebarContent,
@@ -34,6 +33,7 @@ const menuItems = [
   { title: 'Estratégia', url: '/estrategia', icon: Lightbulb },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
   { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
+  { title: 'Configuração', url: '/configuracao', icon: Settings },
 ]
 
 export default function Layout() {

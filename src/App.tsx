@@ -10,6 +10,7 @@ import Diagnostic from './pages/Diagnostic'
 import Strategy from './pages/Strategy'
 import StrategicMap from './pages/StrategicMap'
 import Execution from './pages/Execution'
+import SetupWizard from './pages/SetupWizard'
 import NotFound from './pages/NotFound'
 
 const App = () => (
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/estrategia" element={<Strategy />} />
           <Route path="/mapa-estrategico" element={<StrategicMap />} />
           <Route path="/execucao" element={<Execution />} />
+          <Route path="/configuracao" element={<SetupWizard />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
