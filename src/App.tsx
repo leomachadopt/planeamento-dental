@@ -1,14 +1,16 @@
-/* Main App Component - Handles routing (using react-router-dom), query client and other providers - use this file to add all routes */
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import Index from './pages/Index'
-import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
 
-// ONLY IMPORT AND RENDER WORKING PAGES, NEVER ADD PLACEHOLDER COMPONENTS OR PAGES IN THIS FILE
-// AVOID REMOVING ANY CONTEXT PROVIDERS FROM THIS FILE (e.g. TooltipProvider, Toaster, Sonner)
+// Pages
+import Index from './pages/Index'
+import Diagnostic from './pages/Diagnostic'
+import Strategy from './pages/Strategy'
+import StrategicMap from './pages/StrategicMap'
+import Execution from './pages/Execution'
+import NotFound from './pages/NotFound'
 
 const App = () => (
   <BrowserRouter
@@ -20,7 +22,10 @@ const App = () => (
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES MUST BE ADDED HERE */}
+          <Route path="/diagnostico" element={<Diagnostic />} />
+          <Route path="/estrategia" element={<Strategy />} />
+          <Route path="/mapa-estrategico" element={<StrategicMap />} />
+          <Route path="/execucao" element={<Execution />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -1,0 +1,203 @@
+import { create } from 'zustand'
+
+export type ActionStatus = 'Plan' | 'Do' | 'Check' | 'Act'
+
+export interface ActionItem {
+  id: string
+  title: string
+  status: ActionStatus
+  owner: string
+  deadline: string
+  okrId?: string
+}
+
+export interface KeyResult {
+  id: string
+  title: string
+  target: number
+  current: number
+  unit: string
+}
+
+export interface OKR {
+  id: string
+  objective: string
+  perspective: 'Financeira' | 'Clientes' | 'Processos' | 'Aprendizado'
+  progress: number
+  keyResults: KeyResult[]
+}
+
+export interface StrategyState {
+  clinicName: string
+  diagnosis: {
+    porter: {
+      rivalry: string
+      newEntrants: string
+      substitutes: string
+      buyers: string
+      suppliers: string
+    }
+    rumelt: {
+      challenge: string
+      obstacles: string
+      policy: string
+    }
+  }
+  blueOcean: {
+    eliminate: string[]
+    reduce: string[]
+    raise: string[]
+    create: string[]
+  }
+  jtbd: {
+    id: string
+    job: string
+    type: 'Funcional' | 'Emocional' | 'Social'
+    solution: string
+  }[]
+  okrs: OKR[]
+  actions: ActionItem[]
+
+  updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
+  addBlueOceanItem: (
+    category: 'eliminate' | 'reduce' | 'raise' | 'create',
+    item: string,
+  ) => void
+  removeBlueOceanItem: (
+    category: 'eliminate' | 'reduce' | 'raise' | 'create',
+    index: number,
+  ) => void
+  addOKR: (okr: OKR) => void
+  addAction: (action: ActionItem) => void
+  updateActionStatus: (id: string, status: ActionStatus) => void
+}
+
+export const useStrategyStore = create<StrategyState>((set) => ({
+  clinicName: 'Clínica Vida & Saúde',
+  diagnosis: {
+    porter: {
+      rivalry: 'Alta concorrência de clínicas populares na região.',
+      newEntrants: 'Barreiras de entrada médias (custo de equipamentos).',
+      substitutes: 'Terapias holísticas e automedicação.',
+      buyers: 'Pacientes exigem agendamento digital e rapidez.',
+      suppliers: 'Fornecedores de insumos com preços voláteis.',
+    },
+    rumelt: {
+      challenge:
+        'Estagnação do crescimento devido à baixa fidelização de pacientes crônicos.',
+      obstacles:
+        'Processos manuais de agendamento, falta de pós-consulta estruturado.',
+      policy:
+        'Implementar uma jornada digital centrada no paciente, automatizando o relacionamento e criando programas de continuidade.',
+    },
+  },
+  blueOcean: {
+    eliminate: ['Papelada física na recepção', 'Tempo de espera > 15min'],
+    reduce: [
+      'Consultas de retorno presenciais desnecessárias (migrar para tele)',
+    ],
+    raise: ['Acompanhamento pós-consulta', 'Integração com wearables'],
+    create: ["Programa de Fidelidade 'Saúde Premium'", 'Concierge de Saúde'],
+  },
+  jtbd: [
+    {
+      id: '1',
+      job: 'Aliviar a dor nas costas rapidamente para voltar ao trabalho',
+      type: 'Funcional',
+      solution: "Protocolo 'Dor Zero' em 24h",
+    },
+    {
+      id: '2',
+      job: "Sentir-se cuidado e não apenas 'mais um número'",
+      type: 'Emocional',
+      solution: 'Atendimento personalizado e humanizado',
+    },
+  ],
+  okrs: [
+    {
+      id: '1',
+      objective: 'Garantir a Sustentabilidade Financeira',
+      perspective: 'Financeira',
+      progress: 65,
+      keyResults: [
+        {
+          id: 'kr1',
+          title: 'Aumentar faturamento recorrente',
+          target: 100000,
+          current: 65000,
+          unit: 'R$',
+        },
+      ],
+    },
+    {
+      id: '2',
+      objective: 'Encantar o Paciente na Jornada Digital',
+      perspective: 'Clientes',
+      progress: 40,
+      keyResults: [
+        {
+          id: 'kr2',
+          title: 'Atingir NPS de 75',
+          target: 75,
+          current: 45,
+          unit: 'pts',
+        },
+      ],
+    },
+  ],
+  actions: [
+    {
+      id: '1',
+      title: 'Implementar CRM de agendamento',
+      status: 'Do',
+      owner: 'Dr. Roberto',
+      deadline: '2024-03-15',
+      okrId: '2',
+    },
+    {
+      id: '2',
+      title: "Treinamento de recepcionistas em 'Hospitalidade'",
+      status: 'Plan',
+      owner: 'Ana (Gerente)',
+      deadline: '2024-03-20',
+      okrId: '2',
+    },
+    {
+      id: '3',
+      title: 'Revisar contratos de fornecedores',
+      status: 'Check',
+      owner: 'Financeiro',
+      deadline: '2024-02-28',
+      okrId: '1',
+    },
+  ],
+
+  updateRumelt: (data) =>
+    set((state) => ({
+      diagnosis: {
+        ...state.diagnosis,
+        rumelt: { ...state.diagnosis.rumelt, ...data },
+      },
+    })),
+  addBlueOceanItem: (category, item) =>
+    set((state) => ({
+      blueOcean: {
+        ...state.blueOcean,
+        [category]: [...state.blueOcean[category], item],
+      },
+    })),
+  removeBlueOceanItem: (category, index) =>
+    set((state) => ({
+      blueOcean: {
+        ...state.blueOcean,
+        [category]: state.blueOcean[category].filter((_, i) => i !== index),
+      },
+    })),
+  addOKR: (okr) => set((state) => ({ okrs: [...state.okrs, okr] })),
+  addAction: (action) =>
+    set((state) => ({ actions: [...state.actions, action] })),
+  updateActionStatus: (id, status) =>
+    set((state) => ({
+      actions: state.actions.map((a) => (a.id === id ? { ...a, status } : a)),
+    })),
+}))
