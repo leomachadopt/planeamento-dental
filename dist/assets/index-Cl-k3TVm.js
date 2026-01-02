@@ -25872,7 +25872,7 @@ function subscribe() {
 var AVATAR_NAME = "Avatar";
 var [createAvatarContext, createAvatarScope] = createContextScope$1(AVATAR_NAME);
 var [AvatarProvider, useAvatarContext] = createAvatarContext(AVATAR_NAME);
-var Avatar$2 = import_react.forwardRef((props, forwardedRef) => {
+var Avatar$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeAvatar, ...avatarProps } = props;
 	const [imageLoadingStatus, setImageLoadingStatus] = import_react.useState("idle");
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarProvider, {
@@ -25885,7 +25885,7 @@ var Avatar$2 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-Avatar$2.displayName = AVATAR_NAME;
+Avatar$1.displayName = AVATAR_NAME;
 var IMAGE_NAME = "AvatarImage";
 var AvatarImage$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeAvatar, src, onLoadingStatusChange = () => {}, ...imageProps } = props;
@@ -25906,7 +25906,7 @@ var AvatarImage$1 = import_react.forwardRef((props, forwardedRef) => {
 });
 AvatarImage$1.displayName = IMAGE_NAME;
 var FALLBACK_NAME = "AvatarFallback";
-var AvatarFallback$2 = import_react.forwardRef((props, forwardedRef) => {
+var AvatarFallback$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeAvatar, delayMs, ...fallbackProps } = props;
 	const context = useAvatarContext(FALLBACK_NAME, __scopeAvatar);
 	const [canRender, setCanRender] = import_react.useState(delayMs === void 0);
@@ -25921,7 +25921,7 @@ var AvatarFallback$2 = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	}) : null;
 });
-AvatarFallback$2.displayName = FALLBACK_NAME;
+AvatarFallback$1.displayName = FALLBACK_NAME;
 function resolveLoadingStatus(image, src) {
 	if (!image) return "idle";
 	if (!src) return "error";
@@ -25962,27 +25962,27 @@ function useImageLoadingStatus(src, { referrerPolicy, crossOrigin }) {
 	]);
 	return loadingStatus;
 }
-var Root$3 = Avatar$2;
+var Root$3 = Avatar$1;
 var Image = AvatarImage$1;
-var Fallback = AvatarFallback$2;
-var Avatar$1 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
+var Fallback = AvatarFallback$1;
+var Avatar = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
 	ref,
 	className: cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className),
 	...props
 }));
-Avatar$1.displayName = Root$3.displayName;
+Avatar.displayName = Root$3.displayName;
 var AvatarImage = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Image, {
 	ref,
 	className: cn("aspect-square h-full w-full", className),
 	...props
 }));
 AvatarImage.displayName = Image.displayName;
-var AvatarFallback$1 = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Fallback, {
+var AvatarFallback = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Fallback, {
 	ref,
 	className: cn("flex h-full w-full items-center justify-center rounded-full bg-muted", className),
 	...props
 }));
-AvatarFallback$1.displayName = Fallback.displayName;
+AvatarFallback.displayName = Fallback.displayName;
 var menuItems = [
 	{
 		title: "Dashboard",
@@ -26051,9 +26051,9 @@ function Layout() {
 					className: "bg-slate-900 p-4 border-t border-slate-800",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-3 group-data-[collapsible=icon]:justify-center",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar$1, {
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
 							className: "size-8",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: "https://img.usecurling.com/ppl/thumbnail?gender=male" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback$1, { children: "DR" })]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: "https://img.usecurling.com/ppl/thumbnail?gender=male" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: "DR" })]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -29174,4 +29174,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-nS21iLQY.js.map
+//# sourceMappingURL=index-Cl-k3TVm.js.map
