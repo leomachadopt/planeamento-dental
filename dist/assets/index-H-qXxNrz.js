@@ -26501,14 +26501,14 @@ var AvatarFallback = import_react.forwardRef(({ className, ...props }, ref) => /
 AvatarFallback.displayName = Fallback.displayName;
 var menuItems = [
 	{
-		title: "Passo 1",
-		url: "/configuracao",
-		icon: Settings
-	},
-	{
 		title: "Dashboard",
 		url: "/",
 		icon: LayoutDashboard
+	},
+	{
+		title: "Configuração Inicial (1)",
+		url: "/configuracao",
+		icon: Settings
 	},
 	{
 		title: "Operação (2A)",
@@ -35748,4 +35748,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-OUZeguv9.js.map
+//# sourceMappingURL=index-H-qXxNrz.js.map
