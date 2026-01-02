@@ -18883,6 +18883,15 @@ var Award = createLucideIcon("award", [["path", {
 	r: "6",
 	key: "1vp47v"
 }]]);
+var Ban = createLucideIcon("ban", [["path", {
+	d: "M4.929 4.929 19.07 19.071",
+	key: "196cmz"
+}], ["circle", {
+	cx: "12",
+	cy: "12",
+	r: "10",
+	key: "1mglay"
+}]]);
 var Bell = createLucideIcon("bell", [["path", {
 	d: "M10.268 21a2 2 0 0 0 3.464 0",
 	key: "vwvbt9"
@@ -19361,6 +19370,28 @@ var Save = createLucideIcon("save", [
 		key: "t51u73"
 	}]
 ]);
+var Scale = createLucideIcon("scale", [
+	["path", {
+		d: "M12 3v18",
+		key: "108xh3"
+	}],
+	["path", {
+		d: "m19 8 3 8a5 5 0 0 1-6 0zV7",
+		key: "zcdpyk"
+	}],
+	["path", {
+		d: "M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1",
+		key: "1yorad"
+	}],
+	["path", {
+		d: "m5 8 3 8a5 5 0 0 1-6 0zV7",
+		key: "eua70x"
+	}],
+	["path", {
+		d: "M7 21h10",
+		key: "1b0cd5"
+	}]
+]);
 var Search = createLucideIcon("search", [["path", {
 	d: "m21 21-4.34-4.34",
 	key: "14j7rj"
@@ -19413,6 +19444,32 @@ var ShieldAlert = createLucideIcon("shield-alert", [
 	["path", {
 		d: "M12 16h.01",
 		key: "1drbdi"
+	}]
+]);
+var Shield = createLucideIcon("shield", [["path", {
+	d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+	key: "oel41y"
+}]]);
+var Shuffle = createLucideIcon("shuffle", [
+	["path", {
+		d: "m18 14 4 4-4 4",
+		key: "10pe0f"
+	}],
+	["path", {
+		d: "m18 2 4 4-4 4",
+		key: "pucp1d"
+	}],
+	["path", {
+		d: "M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22",
+		key: "1ailkh"
+	}],
+	["path", {
+		d: "M2 6h1.972a4 4 0 0 1 3.6 2.2",
+		key: "km57vx"
+	}],
+	["path", {
+		d: "M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45",
+		key: "os18l9"
 	}]
 ]);
 var Stethoscope = createLucideIcon("stethoscope", [
@@ -26144,7 +26201,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$10({ inst: {
+			cachedValue = useState$11({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -26181,7 +26238,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$10 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$11 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$2.useSyncExternalStore ? React$2.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26345,6 +26402,11 @@ var menuItems = [
 		title: "Estratégia (3B)",
 		url: "/estrategia",
 		icon: Lightbulb
+	},
+	{
+		title: "Análise Avançada",
+		url: "/analise-avancada",
+		icon: BrainCircuit
 	},
 	{
 		title: "Mapa Estratégico",
@@ -26753,6 +26815,7 @@ const useStrategyStore = create((set) => ({
 	},
 	relatorio_1: null,
 	relatorio_2: null,
+	relatorio_3: null,
 	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
@@ -26792,7 +26855,8 @@ const useStrategyStore = create((set) => ({
 		...data
 	} })),
 	setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
-	setRelatorio2: (report) => set(() => ({ relatorio_2: report }))
+	setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
+	setRelatorio3: (report) => set(() => ({ relatorio_3: report }))
 }));
 var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	ref,
@@ -27264,6 +27328,99 @@ const generateStrategicDirectionReport = (state) => {
 		competitivePositioning,
 		bscObjectives,
 		strategicMapText
+	};
+};
+const generateAdvancedStrategyReport = (state) => {
+	const { diagnosis, blueOcean, jtbd, relatorio_1, clinicConfig, managerVision, marketAssessment } = state;
+	clinicConfig.tom_linguagem;
+	const portersForces = {
+		rivalry: diagnosis.porter.rivalry || "Alta rivalidade, com pressão por preços e marketing agressivo na região.",
+		entrants: diagnosis.porter.newEntrants || "Ameaça moderada, dependente de barreiras como capital inicial e reputação.",
+		substitutes: diagnosis.porter.substitutes || "Terapias alternativas e automedicação representam risco constante.",
+		buyerPower: diagnosis.porter.buyers || "Alto poder dos pacientes devido à oferta abundante de opções e acesso à informação.",
+		supplierPower: diagnosis.porter.suppliers || "Poder concentrado em poucos fornecedores de tecnologia/equipamentos ou operadoras de saúde."
+	};
+	const pestel = {
+		political: "Instabilidade nas políticas de saúde suplementar e possíveis reformas tributárias que impactam o setor de serviços médicos.",
+		economic: "Inflação médica acima do IPCA pressiona custos operacionais; pacientes com menor renda disponível buscam custo-benefício.",
+		social: "Envelhecimento da população aumenta demanda por tratamentos crônicos; valorização da medicina preventiva e bem-estar.",
+		technological: "Telemedicina consolidada; uso de IA para diagnósticos; pacientes esperam agendamento e resultados 100% digitais.",
+		ecological: "Crescente exigência por descarte correto de resíduos (ESG) e clínicas \"paperless\" (sustentabilidade).",
+		legal: "Rigor na LGPD (proteção de dados de pacientes) e normas da ANVISA/Conselhos de Classe mais fiscalizadoras."
+	};
+	const strengths = relatorio_1?.swot.strengths || [];
+	const weaknesses = relatorio_1?.swot.weaknesses || [];
+	const opportunities = relatorio_1?.swot.opportunities || [];
+	const threats = relatorio_1?.swot.threats || [];
+	const crossedSwot = {
+		fo: strengths.length > 0 && opportunities.length > 0 ? [`Usar "${strengths[0]}" para capturar "${opportunities[0]}".`, `Expandir "${strengths[1] || strengths[0]}" aproveitando o crescimento de "${opportunities[1] || opportunities[0]}".`] : ["Desenvolver novos serviços premium para a base atual."],
+		fa: strengths.length > 0 && threats.length > 0 ? [`Utilizar "${strengths[0]}" para blindar a clínica contra "${threats[0]}".`, `Focar em "${strengths[0]}" para reduzir o impacto da concorrência em "${threats[0]}".`] : ["Fortalecer o branding para reduzir sensibilidade a preço."],
+		do: weaknesses.length > 0 && opportunities.length > 0 ? [`Melhorar "${weaknesses[0]}" para não perder a oportunidade de "${opportunities[0]}".`, `Investir em tecnologia para resolver "${weaknesses[0]}" e crescer.`] : ["Digitalizar processos para aproveitar demanda online."],
+		da: weaknesses.length > 0 && threats.length > 0 ? [`Eliminar "${weaknesses[0]}" para evitar vulnerabilidade crítica frente a "${threats[0]}".`, "Estratégia de sobrevivência: cortar custos e focar no core business."] : ["Revisar estrutura de custos para enfrentar crises."]
+	};
+	const jtbdList = jtbd.map((j) => `${j.job} (${j.type})`);
+	if (jtbdList.length < 5) jtbdList.push("Sentir segurança no diagnóstico (Emocional)", "Não perder tempo na sala de espera (Funcional)", "Ser atendido por um especialista renomado (Social)", "Ter facilidade de pagamento/reembolso (Funcional)");
+	const valueCanvas = {
+		customerJobs: jtbdList,
+		pains: [
+			managerVision.problems[0] || "Atendimento demorado",
+			marketAssessment.patientComplaints || "Dificuldade de agendamento",
+			"Preço alto sem percepção de valor",
+			"Ambiente frio/hospitalar",
+			"Falta de estacionamento"
+		],
+		gains: [
+			marketAssessment.patientCompliments || "Atendimento humanizado",
+			"Resultado rápido do tratamento",
+			"Localização acessível",
+			"Confiança técnica",
+			"Tecnologia de ponta"
+		],
+		painRelievers: [
+			blueOcean.eliminate[0] || "Digitalização de processos",
+			diagnosis.rumelt.policy || "Foco na experiência do paciente",
+			"Protocolos de pontualidade",
+			"Treinamento de empatia"
+		],
+		gainCreators: [
+			blueOcean.create[0] || "Novos programas de fidelidade",
+			blueOcean.raise[0] || "Acompanhamento pós-consulta",
+			"Investimento em equipamentos modernos",
+			"Parcerias com outros especialistas"
+		]
+	};
+	const ensureItems = (items, defaults) => items.length > 0 ? items : defaults;
+	const blueOceanFinal = {
+		eliminate: ensureItems(blueOcean.eliminate, ["Burocracia de papel", "Procedimentos de baixa margem"]),
+		reduce: ensureItems(blueOcean.reduce, ["Tempo de espera", "Custos fixos desnecessários"]),
+		raise: ensureItems(blueOcean.raise, ["Nível de serviço", "Digitalização"]),
+		create: ensureItems(blueOcean.create, ["Programa de prevenção", "Telemonitoramento"])
+	};
+	const guidingPolicies = [
+		`Política Mestra: ${diagnosis.rumelt.policy || "Focar na diferenciação pela experiência do paciente."}`,
+		"Priorizar a retenção de pacientes atuais sobre a aquisição agressiva (LTV > CAC).",
+		"Adotar tecnologia apenas quando esta reduzir esforço do paciente ou custo operacional.",
+		"Centralizar a comunicação em canais digitais assíncronos (WhatsApp/App) para agilidade.",
+		"Não competir por preço em procedimentos commodities; focar em valor agregado.",
+		"Empoderar a recepção para resolução de problemas em primeiro contato."
+	];
+	const tradeOffs = [
+		"NÃO atenderemos convênios que pagam abaixo do custo operacional mínimo.",
+		"NÃO investiremos em marketing de massa (outdoor/rádio), focando apenas em digital segmentado.",
+		`NÃO manteremos processos manuais na ${blueOceanFinal.eliminate[0] || "recepção"}.`,
+		"NÃO expandiremos a estrutura física antes de atingir 85% de ocupação na atual.",
+		"Abriremos mão de pacientes que buscam apenas \"menor preço\" em favor dos que buscam \"resolutividade\"."
+	];
+	return {
+		generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+		portersForces,
+		pestel,
+		crossedSwot,
+		jtbd: jtbdList,
+		valueCanvas,
+		blueOcean: blueOceanFinal,
+		guidingPolicies,
+		tradeOffs
 	};
 };
 var DirectionContext = import_react.createContext(void 0);
@@ -32862,6 +33019,536 @@ function Identity() {
 		]
 	});
 }
+function AdvancedAnalysis() {
+	const state = useStrategyStore();
+	const { relatorio_3, setRelatorio3 } = state;
+	const [isGenerating, setIsGenerating] = (0, import_react.useState)(false);
+	const handleGenerateReport = () => {
+		setIsGenerating(true);
+		setTimeout(() => {
+			setRelatorio3(generateAdvancedStrategyReport(state));
+			setIsGenerating(false);
+			toast.success("Análise Estratégica Avançada gerada com sucesso!");
+		}, 2e3);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-6 animate-fade-in",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col gap-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "text-3xl font-bold tracking-tight text-slate-900 dark:text-white",
+				children: "Análise Estratégica Avançada"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-slate-500",
+				children: "Relatório 3: Consolidação de frameworks, cenários e trade-offs para 2026."
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs, {
+			defaultValue: "report",
+			className: "w-full",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsList, {
+					className: "grid w-full md:w-[600px] grid-cols-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "report",
+							children: "Relatório Completo"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "matrices",
+							children: "Matrizes (SWOT/ERRC)"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "canvas",
+							children: "Value Canvas"
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "report",
+					className: "mt-6 space-y-6",
+					children: !relatorio_3 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+						className: "border-2 border-dashed border-slate-200 bg-slate-50/50",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+							className: "flex flex-col items-center justify-center py-16 text-center space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-purple-100 p-4 rounded-full",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrainCircuit, { className: "size-10 text-purple-600" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2 max-w-md",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-xl font-semibold text-slate-900",
+										children: "Gerar Análise Avançada"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-slate-500",
+										children: "Cruze dados dos relatórios anteriores para gerar Insights Cross-SWOT, PESTEL e Políticas de Guia."
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									onClick: handleGenerateReport,
+									disabled: isGenerating,
+									className: "bg-purple-600 hover:bg-purple-700 text-white min-w-[200px]",
+									children: isGenerating ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "mr-2 size-4 animate-spin" }), "Processando Dados..."] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Zap, { className: "mr-2 size-4" }), "Gerar Relatório 3"] })
+								})
+							]
+						})
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-6 animate-fade-in",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-slate-100",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+										variant: "outline",
+										className: "text-purple-700 bg-purple-50",
+										children: [
+											"Gerado em:",
+											" ",
+											new Date(relatorio_3.generatedAt).toLocaleDateString()
+										]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs text-slate-400",
+										children: "Relatório Avançado (Estratégico)"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+										variant: "outline",
+										size: "sm",
+										onClick: () => window.print(),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "mr-2 size-3" }), " Imprimir"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+										variant: "outline",
+										size: "sm",
+										onClick: handleGenerateReport,
+										disabled: isGenerating,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: cn("mr-2 size-3", isGenerating && "animate-spin") }), "Regerar"]
+									})]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid md:grid-cols-2 gap-6",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+									className: "border-t-4 border-t-blue-500",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "size-5 text-blue-600" }), " 5 Forças de Porter"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Análise de competitividade estrutural." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+										className: "space-y-4 text-sm",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "space-y-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-blue-800",
+													children: "Rivalidade:"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600",
+													children: relatorio_3.portersForces.rivalry
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator, {}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "space-y-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-blue-800",
+													children: "Novos Entrantes:"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600",
+													children: relatorio_3.portersForces.entrants
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator, {}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "space-y-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-blue-800",
+													children: "Substitutos:"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600",
+													children: relatorio_3.portersForces.substitutes
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator, {}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "grid grid-cols-2 gap-4",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "space-y-1",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "font-semibold text-blue-800",
+														children: "Poder Compradores:"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-slate-600",
+														children: relatorio_3.portersForces.buyerPower
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "space-y-1",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "font-semibold text-blue-800",
+														children: "Poder Fornecedores:"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-slate-600",
+														children: relatorio_3.portersForces.supplierPower
+													})]
+												})]
+											})
+										]
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+									className: "border-t-4 border-t-teal-500",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "size-5 text-teal-600" }), " Cenário PESTEL 2026"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Fatores macroambientais de impacto." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "grid grid-cols-2 gap-4 text-sm",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "p-2 bg-slate-50 rounded border border-slate-100",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "block font-bold text-slate-700 text-xs uppercase mb-1",
+													children: "Político"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600 text-xs leading-relaxed",
+													children: relatorio_3.pestel.political
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "p-2 bg-slate-50 rounded border border-slate-100",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "block font-bold text-slate-700 text-xs uppercase mb-1",
+													children: "Econômico"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600 text-xs leading-relaxed",
+													children: relatorio_3.pestel.economic
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "p-2 bg-slate-50 rounded border border-slate-100",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "block font-bold text-slate-700 text-xs uppercase mb-1",
+													children: "Social"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600 text-xs leading-relaxed",
+													children: relatorio_3.pestel.social
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "p-2 bg-slate-50 rounded border border-slate-100",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "block font-bold text-slate-700 text-xs uppercase mb-1",
+													children: "Tecnológico"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600 text-xs leading-relaxed",
+													children: relatorio_3.pestel.technological
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "p-2 bg-slate-50 rounded border border-slate-100",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "block font-bold text-slate-700 text-xs uppercase mb-1",
+													children: "Ambiental (Eco)"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600 text-xs leading-relaxed",
+													children: relatorio_3.pestel.ecological
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "p-2 bg-slate-50 rounded border border-slate-100",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "block font-bold text-slate-700 text-xs uppercase mb-1",
+													children: "Legal"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-600 text-xs leading-relaxed",
+													children: relatorio_3.pestel.legal
+												})]
+											})
+										]
+									}) })]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid md:grid-cols-3 gap-6",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+									className: "md:col-span-2 border-l-4 border-l-indigo-500",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scale, { className: "size-5 text-indigo-600" }), " Políticas de Guia (Rumelt)"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Diretrizes claras para tomada de decisão no dia a dia." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "space-y-3",
+										children: relatorio_3.guidingPolicies.map((policy, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+											className: "flex gap-3 items-start text-sm",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "bg-indigo-100 text-indigo-700 font-bold rounded-full size-6 flex items-center justify-center shrink-0 mt-0.5",
+												children: i + 1
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-slate-700",
+												children: policy
+											})]
+										}, i))
+									}) })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+									className: "border-l-4 border-l-red-500 bg-red-50/20",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+										className: "flex items-center gap-2 text-red-800",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ban, { className: "size-5" }), " Trade-offs Estratégicos"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardDescription, { children: [
+										"O que ",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "NÃO" }),
+										" faremos."
+									] })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "space-y-3",
+										children: relatorio_3.tradeOffs.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+											className: "flex gap-2 items-start text-sm",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-red-500 font-bold",
+												children: "✕"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-red-900",
+												children: item
+											})]
+										}, i))
+									}) })]
+								})]
+							})
+						]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "matrices",
+					className: "mt-6",
+					children: relatorio_3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-8",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+							className: "flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shuffle, { className: "size-5 text-orange-600" }), " SWOT Cruzada (TOWS Matrix)"]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Estratégias geradas a partir da interseção de fatores." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "border border-green-200 bg-green-50/30 rounded-lg p-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+											className: "font-bold text-green-800 mb-2 flex items-center gap-2",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-green-200 text-green-800 px-1.5 py-0.5 rounded text-xs",
+													children: "FO"
+												}),
+												" ",
+												"Estratégia de Expansão"
+											]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-slate-500 mb-2",
+											children: "Usar Forças para aproveitar Oportunidades."
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-4 text-sm text-slate-700 space-y-1",
+											children: relatorio_3.crossedSwot.fo.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: s }, i))
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "border border-amber-200 bg-amber-50/30 rounded-lg p-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+											className: "font-bold text-amber-800 mb-2 flex items-center gap-2",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded text-xs",
+													children: "FA"
+												}),
+												" ",
+												"Estratégia de Defesa"
+											]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-slate-500 mb-2",
+											children: "Usar Forças para evitar Ameaças."
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-4 text-sm text-slate-700 space-y-1",
+											children: relatorio_3.crossedSwot.fa.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: s }, i))
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "border border-blue-200 bg-blue-50/30 rounded-lg p-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+											className: "font-bold text-blue-800 mb-2 flex items-center gap-2",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-blue-200 text-blue-800 px-1.5 py-0.5 rounded text-xs",
+													children: "DO"
+												}),
+												" ",
+												"Estratégia de Melhoria"
+											]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-slate-500 mb-2",
+											children: "Superar Fraquezas aproveitando Oportunidades."
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-4 text-sm text-slate-700 space-y-1",
+											children: relatorio_3.crossedSwot.do.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: s }, i))
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "border border-red-200 bg-red-50/30 rounded-lg p-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+											className: "font-bold text-red-800 mb-2 flex items-center gap-2",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-red-200 text-red-800 px-1.5 py-0.5 rounded text-xs",
+													children: "DA"
+												}),
+												" ",
+												"Estratégia de Sobrevivência"
+											]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-slate-500 mb-2",
+											children: "Reduzir Fraquezas e evitar Ameaças."
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-4 text-sm text-slate-700 space-y-1",
+											children: relatorio_3.crossedSwot.da.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: s }, i))
+										})
+									]
+								})
+							]
+						}) })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+							className: "flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "size-5 text-cyan-600" }), " Matriz Oceano Azul (ERRC)"]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Movimentos para sair da competição irrelevante." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-px bg-slate-200 border border-slate-200 rounded-lg overflow-hidden",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-white p-6",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+										className: "text-red-600 font-bold uppercase mb-4 flex items-center gap-2",
+										children: "Eliminar"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "space-y-2 text-sm text-slate-600",
+										children: relatorio_3.blueOcean.eliminate.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: ["• ", item] }, i))
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-white p-6",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+										className: "text-green-600 font-bold uppercase mb-4 flex items-center gap-2",
+										children: "Criar"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "space-y-2 text-sm text-slate-600",
+										children: relatorio_3.blueOcean.create.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: ["• ", item] }, i))
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-white p-6",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+										className: "text-amber-600 font-bold uppercase mb-4 flex items-center gap-2",
+										children: "Reduzir"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "space-y-2 text-sm text-slate-600",
+										children: relatorio_3.blueOcean.reduce.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: ["• ", item] }, i))
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-white p-6",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+										className: "text-blue-600 font-bold uppercase mb-4 flex items-center gap-2",
+										children: "Elevar"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "space-y-2 text-sm text-slate-600",
+										children: relatorio_3.blueOcean.raise.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: ["• ", item] }, i))
+									})]
+								})
+							]
+						}) })] })]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "canvas",
+					className: "mt-6",
+					children: relatorio_3 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-6",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid md:grid-cols-2 gap-8",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+								className: "border-r-4 border-r-pink-500 rounded-r-none md:rounded-r-xl md:border-r-0 md:border-l-4 md:border-l-pink-500",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+									className: "text-pink-700 flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserCheck, { className: "size-5" }), " Perfil do Paciente"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "O que o cliente observa." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+									className: "space-y-6",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+											className: "font-semibold text-slate-800 mb-2",
+											children: "Jobs (Tarefas)"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-5 text-sm text-slate-600 space-y-1",
+											children: relatorio_3.valueCanvas.customerJobs.map((j, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: j }, i))
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+											className: "font-semibold text-red-700 mb-2",
+											children: "Dores (Pains)"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-5 text-sm text-slate-600 space-y-1",
+											children: relatorio_3.valueCanvas.pains.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: p }, i))
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+											className: "font-semibold text-green-700 mb-2",
+											children: "Ganhos (Gains)"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-5 text-sm text-slate-600 space-y-1",
+											children: relatorio_3.valueCanvas.gains.map((g, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: g }, i))
+										})] })
+									]
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+								className: "border-l-4 border-l-purple-500 rounded-l-none md:rounded-l-xl md:border-l-0 md:border-r-4 md:border-r-purple-500",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+									className: "text-purple-700 flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { className: "size-5" }), " Mapa de Valor"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "O que a clínica oferece." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+									className: "space-y-6",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+											className: "font-semibold text-slate-800 mb-2",
+											children: "Produtos & Serviços"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-sm text-slate-600 bg-slate-50 p-3 rounded",
+											children: state.operationalAssessment.services || "Serviços gerais de clínica médica e especialidades."
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+											className: "font-semibold text-purple-700 mb-2",
+											children: "Aliviadores de Dor"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-5 text-sm text-slate-600 space-y-1",
+											children: relatorio_3.valueCanvas.painRelievers.map((pr, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: pr }, i))
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+											className: "font-semibold text-teal-700 mb-2",
+											children: "Criadores de Ganho"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "list-disc pl-5 text-sm text-slate-600 space-y-1",
+											children: relatorio_3.valueCanvas.gainCreators.map((gc, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: gc }, i))
+										})] })
+									]
+								})]
+							})]
+						})
+					})
+				})
+			]
+		})]
+	});
+}
 var NotFound = () => {
 	const location = useLocation();
 	(0, import_react.useEffect)(() => {
@@ -32930,6 +33617,10 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Strategy, {})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					path: "/analise-avancada",
+					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AdvancedAnalysis, {})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 					path: "/mapa-estrategico",
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StrategicMap, {})
 				}),
@@ -32951,4 +33642,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-B4ek0VIg.js.map
+//# sourceMappingURL=index-Dt_OL0rw.js.map

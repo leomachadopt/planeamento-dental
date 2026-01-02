@@ -15,6 +15,7 @@ import OperationalAssessment from './pages/OperationalAssessment'
 import MarketAssessment from './pages/MarketAssessment'
 import ManagerVision from './pages/ManagerVision'
 import Identity from './pages/Identity'
+import AdvancedAnalysis from './pages/AdvancedAnalysis'
 import NotFound from './pages/NotFound'
 
 const App = () => (
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/visao-gestor" element={<ManagerVision />} />
           <Route path="/identidade" element={<Identity />} />
           <Route path="/estrategia" element={<Strategy />} />
+          <Route path="/analise-avancada" element={<AdvancedAnalysis />} />
           <Route path="/mapa-estrategico" element={<StrategicMap />} />
           <Route path="/execucao" element={<Execution />} />
           <Route path="/configuracao" element={<SetupWizard />} />

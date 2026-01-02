@@ -2,6 +2,7 @@ import {
   StrategyState,
   Report1,
   Report2,
+  Report3,
   SWOT,
 } from '@/stores/useStrategyStore'
 
@@ -208,5 +209,198 @@ export const generateStrategicDirectionReport = (
     competitivePositioning,
     bscObjectives,
     strategicMapText,
+  }
+}
+
+export const generateAdvancedStrategyReport = (
+  state: StrategyState,
+): Report3 => {
+  const {
+    diagnosis,
+    blueOcean,
+    jtbd,
+    relatorio_1,
+    clinicConfig,
+    managerVision,
+    marketAssessment,
+  } = state
+  const tone = clinicConfig.tom_linguagem || 'intermediario'
+
+  // Tone helper
+  const t = (formal: string, informal: string) =>
+    tone === 'formal' || tone === 'intermediario' ? formal : informal
+
+  // 1. Porter's 5 Forces (Data Persistence & Enhancement)
+  const portersForces = {
+    rivalry:
+      diagnosis.porter.rivalry ||
+      'Alta rivalidade, com pressão por preços e marketing agressivo na região.',
+    entrants:
+      diagnosis.porter.newEntrants ||
+      'Ameaça moderada, dependente de barreiras como capital inicial e reputação.',
+    substitutes:
+      diagnosis.porter.substitutes ||
+      'Terapias alternativas e automedicação representam risco constante.',
+    buyerPower:
+      diagnosis.porter.buyers ||
+      'Alto poder dos pacientes devido à oferta abundante de opções e acesso à informação.',
+    supplierPower:
+      diagnosis.porter.suppliers ||
+      'Poder concentrado em poucos fornecedores de tecnologia/equipamentos ou operadoras de saúde.',
+  }
+
+  // 2. PESTEL Analysis (Contextual Logic)
+  // Generating based on generic trends if context is limited
+  const pestel = {
+    political:
+      'Instabilidade nas políticas de saúde suplementar e possíveis reformas tributárias que impactam o setor de serviços médicos.',
+    economic:
+      'Inflação médica acima do IPCA pressiona custos operacionais; pacientes com menor renda disponível buscam custo-benefício.',
+    social:
+      'Envelhecimento da população aumenta demanda por tratamentos crônicos; valorização da medicina preventiva e bem-estar.',
+    technological:
+      'Telemedicina consolidada; uso de IA para diagnósticos; pacientes esperam agendamento e resultados 100% digitais.',
+    ecological:
+      'Crescente exigência por descarte correto de resíduos (ESG) e clínicas "paperless" (sustentabilidade).',
+    legal:
+      'Rigor na LGPD (proteção de dados de pacientes) e normas da ANVISA/Conselhos de Classe mais fiscalizadoras.',
+  }
+
+  // 3. Crossed SWOT (FO, FA, DO, DA)
+  // Fallback to empty arrays if report 1 is missing
+  const strengths = relatorio_1?.swot.strengths || []
+  const weaknesses = relatorio_1?.swot.weaknesses || []
+  const opportunities = relatorio_1?.swot.opportunities || []
+  const threats = relatorio_1?.swot.threats || []
+
+  // Helper to generate simple crossed strategies if data exists
+  const crossedSwot = {
+    fo:
+      strengths.length > 0 && opportunities.length > 0
+        ? [
+            `Usar "${strengths[0]}" para capturar "${opportunities[0]}".`,
+            `Expandir "${strengths[1] || strengths[0]}" aproveitando o crescimento de "${opportunities[1] || opportunities[0]}".`,
+          ]
+        : ['Desenvolver novos serviços premium para a base atual.'],
+    fa:
+      strengths.length > 0 && threats.length > 0
+        ? [
+            `Utilizar "${strengths[0]}" para blindar a clínica contra "${threats[0]}".`,
+            `Focar em "${strengths[0]}" para reduzir o impacto da concorrência em "${threats[0]}".`,
+          ]
+        : ['Fortalecer o branding para reduzir sensibilidade a preço.'],
+    do:
+      weaknesses.length > 0 && opportunities.length > 0
+        ? [
+            `Melhorar "${weaknesses[0]}" para não perder a oportunidade de "${opportunities[0]}".`,
+            `Investir em tecnologia para resolver "${weaknesses[0]}" e crescer.`,
+          ]
+        : ['Digitalizar processos para aproveitar demanda online.'],
+    da:
+      weaknesses.length > 0 && threats.length > 0
+        ? [
+            `Eliminar "${weaknesses[0]}" para evitar vulnerabilidade crítica frente a "${threats[0]}".`,
+            'Estratégia de sobrevivência: cortar custos e focar no core business.',
+          ]
+        : ['Revisar estrutura de custos para enfrentar crises.'],
+  }
+
+  // 4. JTBD & Value Canvas
+  // Expanding JTBD list
+  const jtbdList = jtbd.map((j) => `${j.job} (${j.type})`)
+  if (jtbdList.length < 5) {
+    jtbdList.push(
+      'Sentir segurança no diagnóstico (Emocional)',
+      'Não perder tempo na sala de espera (Funcional)',
+      'Ser atendido por um especialista renomado (Social)',
+      'Ter facilidade de pagamento/reembolso (Funcional)',
+    )
+  }
+
+  const valueCanvas = {
+    customerJobs: jtbdList,
+    pains: [
+      managerVision.problems[0] || 'Atendimento demorado',
+      marketAssessment.patientComplaints || 'Dificuldade de agendamento',
+      'Preço alto sem percepção de valor',
+      'Ambiente frio/hospitalar',
+      'Falta de estacionamento',
+    ],
+    gains: [
+      marketAssessment.patientCompliments || 'Atendimento humanizado',
+      'Resultado rápido do tratamento',
+      'Localização acessível',
+      'Confiança técnica',
+      'Tecnologia de ponta',
+    ],
+    painRelievers: [
+      blueOcean.eliminate[0] || 'Digitalização de processos',
+      diagnosis.rumelt.policy || 'Foco na experiência do paciente',
+      'Protocolos de pontualidade',
+      'Treinamento de empatia',
+    ],
+    gainCreators: [
+      blueOcean.create[0] || 'Novos programas de fidelidade',
+      blueOcean.raise[0] || 'Acompanhamento pós-consulta',
+      'Investimento em equipamentos modernos',
+      'Parcerias com outros especialistas',
+    ],
+  }
+
+  // 5. Blue Ocean (Direct mapping)
+  // Ensure we have some defaults if empty
+  const ensureItems = (items: string[], defaults: string[]) =>
+    items.length > 0 ? items : defaults
+
+  const blueOceanFinal = {
+    eliminate: ensureItems(blueOcean.eliminate, [
+      'Burocracia de papel',
+      'Procedimentos de baixa margem',
+    ]),
+    reduce: ensureItems(blueOcean.reduce, [
+      'Tempo de espera',
+      'Custos fixos desnecessários',
+    ]),
+    raise: ensureItems(blueOcean.raise, ['Nível de serviço', 'Digitalização']),
+    create: ensureItems(blueOcean.create, [
+      'Programa de prevenção',
+      'Telemonitoramento',
+    ]),
+  }
+
+  // 6. Guiding Policies (Rumelt)
+  // Expanding the main policy into actionable sub-policies
+  const basePolicy =
+    diagnosis.rumelt.policy ||
+    'Focar na diferenciação pela experiência do paciente.'
+  const guidingPolicies = [
+    `Política Mestra: ${basePolicy}`,
+    'Priorizar a retenção de pacientes atuais sobre a aquisição agressiva (LTV > CAC).',
+    'Adotar tecnologia apenas quando esta reduzir esforço do paciente ou custo operacional.',
+    'Centralizar a comunicação em canais digitais assíncronos (WhatsApp/App) para agilidade.',
+    'Não competir por preço em procedimentos commodities; focar em valor agregado.',
+    'Empoderar a recepção para resolução de problemas em primeiro contato.',
+  ]
+
+  // 7. Strategic Trade-offs
+  // Inferring what NOT to do based on the strategy
+  const tradeOffs = [
+    'NÃO atenderemos convênios que pagam abaixo do custo operacional mínimo.',
+    'NÃO investiremos em marketing de massa (outdoor/rádio), focando apenas em digital segmentado.',
+    `NÃO manteremos processos manuais na ${blueOceanFinal.eliminate[0] || 'recepção'}.`,
+    'NÃO expandiremos a estrutura física antes de atingir 85% de ocupação na atual.',
+    'Abriremos mão de pacientes que buscam apenas "menor preço" em favor dos que buscam "resolutividade".',
+  ]
+
+  return {
+    generatedAt: new Date().toISOString(),
+    portersForces,
+    pestel,
+    crossedSwot,
+    jtbd: jtbdList,
+    valueCanvas,
+    blueOcean: blueOceanFinal,
+    guidingPolicies,
+    tradeOffs,
   }
 }

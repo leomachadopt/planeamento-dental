@@ -128,6 +128,47 @@ export interface Report2 {
   strategicMapText: string
 }
 
+export interface Report3 {
+  generatedAt: string
+  portersForces: {
+    rivalry: string
+    entrants: string
+    substitutes: string
+    buyerPower: string
+    supplierPower: string
+  }
+  pestel: {
+    political: string
+    economic: string
+    social: string
+    technological: string
+    ecological: string
+    legal: string
+  }
+  crossedSwot: {
+    fo: string[]
+    fa: string[]
+    do: string[]
+    da: string[]
+  }
+  jtbd: string[]
+  valueCanvas: {
+    customerJobs: string[]
+    pains: string[]
+    gains: string[]
+    painRelievers: string[]
+    gainCreators: string[]
+  }
+  blueOcean: {
+    eliminate: string[]
+    reduce: string[]
+    raise: string[]
+    create: string[]
+  }
+  guidingPolicies: string[]
+  tradeOffs: string[]
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -165,6 +206,7 @@ export interface StrategyState {
   identity: IdentityState
   relatorio_1: Report1 | null
   relatorio_2: Report2 | null
+  relatorio_3: Report3 | null
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -185,6 +227,7 @@ export interface StrategyState {
   updateIdentity: (data: Partial<IdentityState>) => void
   setRelatorio1: (report: Report1) => void
   setRelatorio2: (report: Report2) => void
+  setRelatorio3: (report: Report3) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -343,6 +386,7 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   },
   relatorio_1: null,
   relatorio_2: null,
+  relatorio_3: null,
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -391,4 +435,5 @@ export const useStrategyStore = create<StrategyState>((set) => ({
     })),
   setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
   setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
+  setRelatorio3: (report) => set(() => ({ relatorio_3: report })),
 }))

@@ -13,6 +13,7 @@ import {
   Globe,
   Eye,
   Fingerprint,
+  BrainCircuit,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -39,6 +40,7 @@ const menuItems = [
   { title: 'Diagnóstico', url: '/diagnostico', icon: Stethoscope },
   { title: 'Identidade (3A)', url: '/identidade', icon: Fingerprint },
   { title: 'Estratégia (3B)', url: '/estrategia', icon: Lightbulb },
+  { title: 'Análise Avançada', url: '/analise-avancada', icon: BrainCircuit },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
   { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
   { title: 'Configuração', url: '/configuracao', icon: Settings },
