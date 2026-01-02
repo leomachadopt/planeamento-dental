@@ -19012,6 +19012,22 @@ var Clock = createLucideIcon("clock", [["path", {
 	r: "10",
 	key: "1mglay"
 }]]);
+var Globe = createLucideIcon("globe", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["path", {
+		d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20",
+		key: "13o1zl"
+	}],
+	["path", {
+		d: "M2 12h20",
+		key: "9i4pu4"
+	}]
+]);
 var LayoutDashboard = createLucideIcon("layout-dashboard", [
 	["rect", {
 		width: "7",
@@ -19244,6 +19260,20 @@ var Target = createLucideIcon("target", [
 		key: "1c9p78"
 	}]
 ]);
+var ThumbsDown = createLucideIcon("thumbs-down", [["path", {
+	d: "M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z",
+	key: "m61m77"
+}], ["path", {
+	d: "M17 14V2",
+	key: "8ymqnk"
+}]]);
+var ThumbsUp = createLucideIcon("thumbs-up", [["path", {
+	d: "M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z",
+	key: "emmmcr"
+}], ["path", {
+	d: "M7 10v12",
+	key: "1qc93n"
+}]]);
 var TrendingUp$1 = createLucideIcon("trending-up", [["path", {
 	d: "M16 7h6v6",
 	key: "box55l"
@@ -25911,7 +25941,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$7({ inst: {
+			cachedValue = useState$8({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -25948,7 +25978,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$7 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$8 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$2.useSyncExternalStore ? React$2.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26087,6 +26117,11 @@ var menuItems = [
 		title: "Operação (2A)",
 		url: "/operacao",
 		icon: ClipboardList
+	},
+	{
+		title: "Mercado (2B)",
+		url: "/mercado",
+		icon: Globe
 	},
 	{
 		title: "Diagnóstico",
@@ -26452,6 +26487,16 @@ const useStrategyStore = create((set) => ({
 		processes_well_defined: "",
 		processes_disorganized: ""
 	},
+	marketAssessment: {
+		marketDescription: "",
+		competitors: "",
+		clinicStrengths: "",
+		competitorStrengths: "",
+		acquisitionChannels: "",
+		patientComplaints: "",
+		patientCompliments: "",
+		patientLoss: ""
+	},
 	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
@@ -26476,6 +26521,10 @@ const useStrategyStore = create((set) => ({
 	} : a) })),
 	updateOperationalAssessment: (data) => set((state) => ({ operationalAssessment: {
 		...state.operationalAssessment,
+		...data
+	} })),
+	updateMarketAssessment: (data) => set((state) => ({ marketAssessment: {
+		...state.marketAssessment,
 		...data
 	} }))
 }));
@@ -29751,7 +29800,7 @@ function SetupWizard() {
 		})]
 	});
 }
-var MIN_CHAR_LENGTH = 15;
+var MIN_CHAR_LENGTH$1 = 15;
 function OperationalAssessment() {
 	const { operationalAssessment, updateOperationalAssessment, clinicConfig } = useStrategyStore();
 	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
@@ -29817,7 +29866,7 @@ function OperationalAssessment() {
 			...prev,
 			[currentQuestion.key]: value
 		}));
-		if (vagueAnswerWarning && value.length >= MIN_CHAR_LENGTH) setVagueAnswerWarning(false);
+		if (vagueAnswerWarning && value.length >= MIN_CHAR_LENGTH$1) setVagueAnswerWarning(false);
 	};
 	const handleNext = () => {
 		const currentAnswer = localAnswers[currentQuestion.key];
@@ -29825,7 +29874,7 @@ function OperationalAssessment() {
 			toast.error("Por favor, preencha o campo para continuar.");
 			return;
 		}
-		if (currentAnswer.length < MIN_CHAR_LENGTH && !vagueAnswerWarning) {
+		if (currentAnswer.length < MIN_CHAR_LENGTH$1 && !vagueAnswerWarning) {
 			setVagueAnswerWarning(true);
 			toast.warning("Sua resposta parece curta.", {
 				description: "Detalhes ajudam a IA a ser mais precisa. Clique em \"Próximo\" novamente se quiser manter assim.",
@@ -29987,14 +30036,10 @@ function OperationalAssessment() {
 						children: "Revisar Respostas"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 						asChild: true,
-						className: "bg-teal-600 hover:bg-teal-700 text-white",
+						className: "bg-blue-600 hover:bg-blue-700 text-white",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-							to: "/diagnostico",
-							children: [
-								"Ir para Diagnóstico (Rumelt)",
-								" ",
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "ml-2 size-4" })
-							]
+							to: "/mercado",
+							children: ["Ir para Mercado (2B) ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "ml-2 size-4" })]
 						})
 					})]
 				})
@@ -30100,6 +30145,363 @@ function OperationalAssessment() {
 		})]
 	});
 }
+var MIN_CHAR_LENGTH = 10;
+function MarketAssessment() {
+	const { marketAssessment, updateMarketAssessment, clinicConfig } = useStrategyStore();
+	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
+	const [localAnswers, setLocalAnswers] = (0, import_react.useState)(marketAssessment);
+	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
+	const [vagueAnswerWarning, setVagueAnswerWarning] = (0, import_react.useState)(false);
+	const getClinicName = () => clinicConfig.nome_clinica || "sua clínica";
+	const getClinicLocation = () => clinicConfig.localizacao || "sua região";
+	const QUESTIONS$1 = [
+		{
+			key: "marketDescription",
+			title: "Como você descreveria o mercado de saúde local?",
+			description: `Analise a região de ${getClinicLocation()}. Há muita concorrência? O público é sensível a preço ou prioriza qualidade?`,
+			placeholder: "Ex: Mercado saturado de clínicas populares, mas com pouca oferta premium..."
+		},
+		{
+			key: "competitors",
+			title: "Quem são os principais concorrentes diretos?",
+			description: "Cite nomes ou tipos de estabelecimentos que disputam o mesmo paciente que você.",
+			placeholder: "Ex: Clínica X, Rede Y e consultórios particulares do bairro..."
+		},
+		{
+			key: "clinicStrengths",
+			title: `O que a ${getClinicName()} faz melhor que eles?`,
+			description: "Quais são seus diferenciais competitivos reais? Atendimento, tecnologia, corpo clínico?",
+			placeholder: "Ex: Nosso atendimento humanizado e a pontualidade nas consultas..."
+		},
+		{
+			key: "competitorStrengths",
+			title: "Em quais pontos os concorrentes são mais fortes?",
+			description: "Seja honesto. Eles têm preço menor? Melhor localização? Mais marketing?",
+			placeholder: "Ex: Eles possuem estacionamento próprio e investem muito em redes sociais..."
+		},
+		{
+			key: "acquisitionChannels",
+			title: "Como os pacientes chegam até a clínica hoje?",
+			description: "Indicação (boca a boca), Instagram, Google, Convênios, Passantes?",
+			placeholder: "Ex: 70% indicações de outros pacientes, 30% Instagram..."
+		},
+		{
+			key: "patientComplaints",
+			title: "Quais são as principais queixas dos pacientes?",
+			description: "O que eles reclamam na recepção ou nas pesquisas de satisfação?",
+			placeholder: "Ex: Dificuldade para agendar por telefone, demora no atendimento..."
+		},
+		{
+			key: "patientCompliments",
+			title: "Quais são os principais elogios recebidos?",
+			description: "O que faz o paciente voltar e indicar a clínica?",
+			placeholder: "Ex: A atenção do médico e a limpeza do ambiente..."
+		},
+		{
+			key: "patientLoss",
+			title: "Você já perdeu pacientes para a concorrência?",
+			description: "Se sim, qual foi o motivo principal na sua visão?",
+			placeholder: "Ex: Sim, principalmente por preço ou porque o concorrente aceita o convênio X..."
+		}
+	];
+	const currentQuestion = QUESTIONS$1[currentStep];
+	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
+	const handleInputChange = (value) => {
+		setLocalAnswers((prev) => ({
+			...prev,
+			[currentQuestion.key]: value
+		}));
+		if (vagueAnswerWarning && value.length >= MIN_CHAR_LENGTH) setVagueAnswerWarning(false);
+	};
+	const handleNext = () => {
+		const currentAnswer = localAnswers[currentQuestion.key];
+		if (!currentAnswer.trim()) {
+			toast.error("Por favor, preencha o campo para continuar.");
+			return;
+		}
+		if (currentAnswer.length < MIN_CHAR_LENGTH && !vagueAnswerWarning) {
+			setVagueAnswerWarning(true);
+			toast.warning("Sua resposta parece curta.", {
+				description: "Detalhes ajudam na análise estratégica.",
+				duration: 3e3
+			});
+			return;
+		}
+		setVagueAnswerWarning(false);
+		updateMarketAssessment({ [currentQuestion.key]: currentAnswer });
+		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
+		else {
+			setIsCompleted(true);
+			toast.success("Análise de Mercado concluída!");
+		}
+	};
+	const handleKeyPress = (e) => {
+		if (e.key === "Enter" && !e.shiftKey) {
+			e.preventDefault();
+			handleNext();
+		}
+	};
+	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-8 animate-fade-in max-w-4xl mx-auto pb-10",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col items-center text-center space-y-4",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "bg-blue-100 p-3 rounded-full",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "size-8 text-blue-600" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-3xl font-bold tracking-tight text-slate-900 dark:text-white",
+					children: "2B – Mercado, Clientes e Concorrência"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-slate-500 max-w-lg",
+					children: [
+						"Mapeamento estratégico do ambiente competitivo e percepção de valor dos pacientes da ",
+						getClinicName(),
+						"."
+					]
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-t-4 border-t-blue-500 shadow-lg",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+					className: "bg-slate-50 border-b border-slate-100",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex justify-between items-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-xl text-slate-800",
+							children: "Relatório de Inteligência de Mercado"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Visão consolidada dos fatores externos e internos." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+							variant: "outline",
+							className: "bg-white",
+							children: "Status: Analisado"
+						})]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+					className: "p-8 space-y-8",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "space-y-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+								className: "text-lg font-semibold text-blue-800 flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "size-4" }), "Visão de Mercado"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-slate-700 leading-relaxed pl-6 border-l-2 border-slate-200",
+								children: localAnswers.marketDescription
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid md:grid-cols-2 gap-6",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+								className: "space-y-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+									className: "text-lg font-semibold text-slate-700 flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { className: "size-4 text-red-500" }), "Concorrentes Diretos"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-slate-50 p-4 rounded-lg border border-slate-100 text-slate-700 text-sm",
+									children: localAnswers.competitors
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+								className: "space-y-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+									className: "text-lg font-semibold text-slate-700 flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "size-4 text-teal-500" }), "Canais de Aquisição"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-slate-50 p-4 rounded-lg border border-slate-100 text-slate-700 text-sm",
+									children: localAnswers.acquisitionChannels
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "space-y-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+								className: "text-lg font-semibold text-blue-800 flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-blue-500 rounded-full" }), "Diferenciais Competitivos"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid md:grid-cols-2 gap-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "border border-green-200 bg-green-50/50 rounded-lg p-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "text-xs font-bold text-green-700 uppercase mb-2 block flex items-center gap-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsUp, { className: "size-3" }), " Forças da Clínica"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-slate-800 text-sm",
+										children: localAnswers.clinicStrengths
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "border border-red-200 bg-red-50/50 rounded-lg p-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "text-xs font-bold text-red-700 uppercase mb-2 block flex items-center gap-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "size-3" }), " Pontos Fracos vs. Concorrência"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-slate-800 text-sm space-y-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: localAnswers.competitorStrengths }), localAnswers.patientLoss && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "pt-2 mt-2 border-t border-red-200",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-semibold text-red-600",
+													children: "Motivo de Perda:"
+												}),
+												" ",
+												localAnswers.patientLoss
+											]
+										})]
+									})]
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "space-y-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+								className: "text-lg font-semibold text-blue-800 flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-blue-500 rounded-full" }), "Percepção dos Pacientes"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid md:grid-cols-2 gap-4 pl-4 border-l-2 border-slate-200",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+									className: "font-medium text-green-700 text-sm mb-1 flex items-center gap-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsUp, { className: "size-3" }), " Elogios Frequentes"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-slate-600 text-sm",
+									children: localAnswers.patientCompliments
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+									className: "font-medium text-amber-700 text-sm mb-1 flex items-center gap-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsDown, { className: "size-3" }), " Reclamações Comuns"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-slate-600 text-sm",
+									children: localAnswers.patientComplaints
+								})] })]
+							})]
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+					className: "bg-slate-50 border-t border-slate-100 p-6 flex justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						variant: "outline",
+						onClick: () => setIsCompleted(false),
+						children: "Revisar Respostas"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						asChild: true,
+						className: "bg-blue-600 hover:bg-blue-700 text-white",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/diagnostico",
+							children: [
+								"Ir para Diagnóstico (Rumelt)",
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "ml-2 size-4" })
+							]
+						})
+					})]
+				})
+			]
+		})]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "container max-w-3xl mx-auto py-10 px-4 min-h-[80vh] flex flex-col justify-center animate-fade-in-up",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mb-8 space-y-4",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center justify-between",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-1",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						className: "text-2xl font-bold text-slate-900",
+						children: "Análise de Mercado"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "text-sm text-slate-500",
+						children: [
+							"Módulo 2B • Entendendo o ambiente externo da",
+							" ",
+							getClinicName()
+						]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full",
+					children: [
+						"Passo ",
+						currentStep + 1,
+						" de ",
+						QUESTIONS$1.length
+					]
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
+				value: progress,
+				className: "h-2"
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-t-4 border-t-blue-500 shadow-md transition-all duration-300",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+					className: "space-y-4",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-start gap-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "bg-blue-100 p-3 rounded-xl mt-1 shrink-0",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "size-6 text-blue-700" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								className: "text-2xl text-slate-800 leading-tight",
+								children: currentQuestion.title
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+								className: "text-base text-slate-600",
+								children: currentQuestion.description
+							})]
+						})]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+					className: "pt-4 pb-8",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-4",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "relative",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+								autoFocus: true,
+								value: localAnswers[currentQuestion.key],
+								onChange: (e) => handleInputChange(e.target.value),
+								onKeyDown: handleKeyPress,
+								placeholder: currentQuestion.placeholder,
+								className: cn("text-base min-h-[160px] resize-none p-4 transition-colors", vagueAnswerWarning ? "border-amber-400 focus-visible:ring-amber-400 bg-amber-50/30" : "border-slate-200 focus-visible:ring-blue-500")
+							}), vagueAnswerWarning && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "absolute bottom-4 right-4 flex items-center gap-2 text-xs text-amber-600 font-medium animate-pulse",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "size-3" }), "Tente ser mais detalhista."]
+							})]
+						})
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+					className: "flex justify-between border-t bg-slate-50/50 p-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex items-center gap-2 text-xs text-slate-400",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "hidden sm:inline",
+							children: [
+								"Pressione ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Enter" }),
+								" para avançar"
+							]
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex gap-3",
+						children: [currentStep > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+							variant: "ghost",
+							onClick: () => setCurrentStep((prev) => prev - 1),
+							children: "Voltar"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							onClick: handleNext,
+							className: cn("min-w-[140px] transition-all", vagueAnswerWarning ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-200/50"),
+							children: [currentStep === QUESTIONS$1.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+						})]
+					})]
+				})
+			]
+		})]
+	});
+}
 var NotFound = () => {
 	const location = useLocation();
 	(0, import_react.useEffect)(() => {
@@ -30152,6 +30554,10 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OperationalAssessment, {})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					path: "/mercado",
+					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MarketAssessment, {})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 					path: "/estrategia",
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Strategy, {})
 				}),
@@ -30177,4 +30583,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-DEOSosQe.js.map
+//# sourceMappingURL=index-BFTroGrQ.js.map

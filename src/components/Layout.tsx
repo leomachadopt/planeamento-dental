@@ -75,7 +75,7 @@ export default function Layout() {
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
-                SidebarMenuItem>
+                </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarContent>
