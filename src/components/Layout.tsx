@@ -12,6 +12,7 @@ import {
   ClipboardList,
   Globe,
   Eye,
+  Fingerprint,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -36,7 +37,8 @@ const menuItems = [
   { title: 'Mercado (2B)', url: '/mercado', icon: Globe },
   { title: 'Visão (2C)', url: '/visao-gestor', icon: Eye },
   { title: 'Diagnóstico', url: '/diagnostico', icon: Stethoscope },
-  { title: 'Estratégia', url: '/estrategia', icon: Lightbulb },
+  { title: 'Identidade (3A)', url: '/identidade', icon: Fingerprint },
+  { title: 'Estratégia (3B)', url: '/estrategia', icon: Lightbulb },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
   { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
   { title: 'Configuração', url: '/configuracao', icon: Settings },

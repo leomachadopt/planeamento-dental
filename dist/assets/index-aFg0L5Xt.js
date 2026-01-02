@@ -18874,6 +18874,15 @@ var ArrowUp = createLucideIcon("arrow-up", [["path", {
 	d: "M12 19V5",
 	key: "x0mq9r"
 }]]);
+var Award = createLucideIcon("award", [["path", {
+	d: "m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526",
+	key: "1yiouv"
+}], ["circle", {
+	cx: "12",
+	cy: "8",
+	r: "6",
+	key: "1vp47v"
+}]]);
 var Bell = createLucideIcon("bell", [["path", {
 	d: "M10.268 21a2 2 0 0 0 3.464 0",
 	key: "vwvbt9"
@@ -18972,6 +18981,10 @@ var Check = createLucideIcon("check", [["path", {
 var ChevronDown = createLucideIcon("chevron-down", [["path", {
 	d: "m6 9 6 6 6-6",
 	key: "qrunsl"
+}]]);
+var ChevronLeft = createLucideIcon("chevron-left", [["path", {
+	d: "m15 18-6-6 6-6",
+	key: "1wnfg3"
 }]]);
 var ChevronRight = createLucideIcon("chevron-right", [["path", {
 	d: "m9 18 6-6-6-6",
@@ -19113,6 +19126,44 @@ var FileText = createLucideIcon("file-text", [
 	["path", {
 		d: "M16 17H8",
 		key: "z1uh3a"
+	}]
+]);
+var FingerprintPattern = createLucideIcon("fingerprint-pattern", [
+	["path", {
+		d: "M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4",
+		key: "1nerag"
+	}],
+	["path", {
+		d: "M14 13.12c0 2.38 0 6.38-1 8.88",
+		key: "o46ks0"
+	}],
+	["path", {
+		d: "M17.29 21.02c.12-.6.43-2.3.5-3.02",
+		key: "ptglia"
+	}],
+	["path", {
+		d: "M2 12a10 10 0 0 1 18-6",
+		key: "ydlgp0"
+	}],
+	["path", {
+		d: "M2 16h.01",
+		key: "1gqxmh"
+	}],
+	["path", {
+		d: "M21.8 16c.2-2 .131-5.354 0-6",
+		key: "drycrb"
+	}],
+	["path", {
+		d: "M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2",
+		key: "1tidbn"
+	}],
+	["path", {
+		d: "M8.65 22c.21-.66.45-1.32.57-2",
+		key: "13wd9y"
+	}],
+	["path", {
+		d: "M9 6.8a6 6 0 0 1 9 5.2v2",
+		key: "1fr1j5"
 	}]
 ]);
 var Globe = createLucideIcon("globe", [
@@ -19395,7 +19446,7 @@ var ThumbsUp = createLucideIcon("thumbs-up", [["path", {
 	d: "M7 10v12",
 	key: "1qc93n"
 }]]);
-var TrendingUp$1 = createLucideIcon("trending-up", [["path", {
+var TrendingUp = createLucideIcon("trending-up", [["path", {
 	d: "M16 7h6v6",
 	key: "box55l"
 }], ["path", {
@@ -26066,7 +26117,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$9({ inst: {
+			cachedValue = useState$10({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -26103,7 +26154,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$9 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$10 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$2.useSyncExternalStore ? React$2.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26259,7 +26310,12 @@ var menuItems = [
 		icon: Stethoscope
 	},
 	{
-		title: "Estratégia",
+		title: "Identidade (3A)",
+		url: "/identidade",
+		icon: FingerprintPattern
+	},
+	{
+		title: "Estratégia (3B)",
 		url: "/estrategia",
 		icon: Lightbulb
 	},
@@ -26660,6 +26716,14 @@ const useStrategyStore = create((set) => ({
 			}
 		}
 	},
+	identity: {
+		reason: "",
+		recognitionGoal: "",
+		values: "",
+		priorityAudience: "",
+		pricePositioning: "",
+		strategyFocus: ""
+	},
 	relatorio_1: null,
 	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
@@ -26693,6 +26757,10 @@ const useStrategyStore = create((set) => ({
 	} })),
 	updateManagerVision: (data) => set((state) => ({ managerVision: {
 		...state.managerVision,
+		...data
+	} })),
+	updateIdentity: (data) => set((state) => ({ identity: {
+		...state.identity,
 		...data
 	} })),
 	setRelatorio1: (report) => set(() => ({ relatorio_1: report }))
@@ -26867,7 +26935,7 @@ function Index() {
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 								className: "text-sm font-medium",
 								children: "Sustentabilidade Financeira"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp$1, { className: "h-4 w-4 text-teal-600" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-4 w-4 text-teal-600" })]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "text-2xl font-bold",
 							children: "+12.5%"
@@ -27730,7 +27798,7 @@ function Diagnostic() {
 												className: "pb-2",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
 													className: "text-green-800 flex items-center gap-2 text-lg",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp$1, { className: "size-4" }), " Forças (Strengths)"]
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "size-4" }), " Forças (Strengths)"]
 												})
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 												className: "list-disc pl-5 space-y-1 text-sm text-green-900",
@@ -28060,7 +28128,7 @@ function Strategy() {
 										className: "pb-3",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
 											className: "text-blue-700 flex items-center gap-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "size-5" }), " Elevar"]
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp$1, { className: "size-5" }), " Elevar"]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "O que deve ser elevado bem acima do padrão?" })]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 										className: "space-y-2 mb-4",
@@ -28179,7 +28247,7 @@ function Strategy() {
 		})]
 	});
 }
-function TrendingUp({ className }) {
+function TrendingUp$1({ className }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 		xmlns: "http://www.w3.org/2000/svg",
 		width: "24",
@@ -29969,7 +30037,7 @@ var RadioGroupItem = import_react.forwardRef(({ className, ...props }, ref) => {
 	});
 });
 RadioGroupItem.displayName = Item2.displayName;
-var QUESTIONS = [
+var QUESTIONS$1 = [
 	{
 		key: "tipo_clinica",
 		title: "Qual é o tipo da sua clínica?",
@@ -30064,13 +30132,13 @@ function SetupWizard() {
 	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
 	const [answers, setAnswers] = (0, import_react.useState)(savedConfig);
 	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
-	const currentQuestion = QUESTIONS[currentStep];
+	const currentQuestion = QUESTIONS$1[currentStep];
 	const handleNext = () => {
 		if (!answers[currentQuestion.key]) {
 			toast.error("Por favor, preencha o campo para continuar.");
 			return;
 		}
-		if (currentStep < QUESTIONS.length - 1) setCurrentStep((prev) => prev + 1);
+		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
 		else {
 			setIsCompleted(true);
 			setClinicConfig(answers);
@@ -30086,7 +30154,7 @@ function SetupWizard() {
 	const handleKeyPress = (e) => {
 		if (e.key === "Enter" && currentQuestion.type !== "textarea") handleNext();
 	};
-	const progress = (currentStep + 1) / QUESTIONS.length * 100;
+	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
 	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "flex flex-col items-center justify-center min-h-[80vh] animate-fade-in p-4",
 		children: [
@@ -30147,7 +30215,7 @@ function SetupWizard() {
 					"Passo ",
 					currentStep + 1,
 					" de ",
-					QUESTIONS.length
+					QUESTIONS$1.length
 				] })]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "h-2 w-full bg-slate-100 rounded-full overflow-hidden",
@@ -30250,7 +30318,7 @@ function SetupWizard() {
 						onClick: handleNext,
 						size: "lg",
 						className: "bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-200/50 pl-6 pr-4",
-						children: [currentStep === QUESTIONS.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+						children: [currentStep === QUESTIONS$1.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
 					})]
 				})
 			]
@@ -30266,7 +30334,7 @@ function OperationalAssessment() {
 	const [vagueAnswerWarning, setVagueAnswerWarning] = (0, import_react.useState)(false);
 	const getClinicName = () => clinicConfig.nome_clinica || "sua clínica";
 	const getClinicType = () => clinicConfig.tipo_clinica || "saúde";
-	const QUESTIONS$1 = [
+	const QUESTIONS$2 = [
 		{
 			key: "services",
 			title: "Quais são os principais serviços oferecidos?",
@@ -30316,8 +30384,8 @@ function OperationalAssessment() {
 			placeholder: "Ex: Demora na confirmação de consultas, glosas de convênios, fila de espera..."
 		}
 	];
-	const currentQuestion = QUESTIONS$1[currentStep];
-	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
+	const currentQuestion = QUESTIONS$2[currentStep];
+	const progress = (currentStep + 1) / QUESTIONS$2.length * 100;
 	const handleInputChange = (value) => {
 		setLocalAnswers((prev) => ({
 			...prev,
@@ -30341,7 +30409,7 @@ function OperationalAssessment() {
 		}
 		setVagueAnswerWarning(false);
 		updateOperationalAssessment({ [currentQuestion.key]: currentAnswer });
-		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
+		if (currentStep < QUESTIONS$2.length - 1) setCurrentStep((prev) => prev + 1);
 		else {
 			setIsCompleted(true);
 			toast.success("Entrevista operacional concluída!");
@@ -30524,7 +30592,7 @@ function OperationalAssessment() {
 						"Passo ",
 						currentStep + 1,
 						" de ",
-						QUESTIONS$1.length
+						QUESTIONS$2.length
 					]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
@@ -30594,7 +30662,7 @@ function OperationalAssessment() {
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 							onClick: handleNext,
 							className: cn("min-w-[140px] transition-all", vagueAnswerWarning ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-200/50"),
-							children: [currentStep === QUESTIONS$1.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+							children: [currentStep === QUESTIONS$2.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
 						})]
 					})]
 				})
@@ -30611,7 +30679,7 @@ function MarketAssessment() {
 	const [vagueAnswerWarning, setVagueAnswerWarning] = (0, import_react.useState)(false);
 	const getClinicName = () => clinicConfig.nome_clinica || "sua clínica";
 	const getClinicLocation = () => clinicConfig.localizacao || "sua região";
-	const QUESTIONS$1 = [
+	const QUESTIONS$2 = [
 		{
 			key: "marketDescription",
 			title: "Como você descreveria o mercado de saúde local?",
@@ -30661,8 +30729,8 @@ function MarketAssessment() {
 			placeholder: "Ex: Sim, principalmente por preço ou porque o concorrente aceita o convênio X..."
 		}
 	];
-	const currentQuestion = QUESTIONS$1[currentStep];
-	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
+	const currentQuestion = QUESTIONS$2[currentStep];
+	const progress = (currentStep + 1) / QUESTIONS$2.length * 100;
 	const handleInputChange = (value) => {
 		setLocalAnswers((prev) => ({
 			...prev,
@@ -30686,7 +30754,7 @@ function MarketAssessment() {
 		}
 		setVagueAnswerWarning(false);
 		updateMarketAssessment({ [currentQuestion.key]: currentAnswer });
-		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
+		if (currentStep < QUESTIONS$2.length - 1) setCurrentStep((prev) => prev + 1);
 		else {
 			setIsCompleted(true);
 			toast.success("Análise de Mercado concluída!");
@@ -30881,7 +30949,7 @@ function MarketAssessment() {
 						"Passo ",
 						currentStep + 1,
 						" de ",
-						QUESTIONS$1.length
+						QUESTIONS$2.length
 					]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
@@ -30951,7 +31019,7 @@ function MarketAssessment() {
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 							onClick: handleNext,
 							className: cn("min-w-[140px] transition-all", vagueAnswerWarning ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-200/50"),
-							children: [currentStep === QUESTIONS$1.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+							children: [currentStep === QUESTIONS$2.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
 						})]
 					})]
 				})
@@ -31969,6 +32037,393 @@ function ManagerVision() {
 		})]
 	});
 }
+var QUESTIONS = [
+	{
+		key: "reason",
+		title: "Razão de Existir (Propósito)",
+		description: "Em uma única frase, por que a clínica existe além do lucro? Qual impacto ela gera na vida das pessoas?",
+		placeholder: "Ex: Proporcionar qualidade de vida através de uma reabilitação humanizada e acessível.",
+		type: "textarea",
+		icon: FingerprintPattern
+	},
+	{
+		key: "recognitionGoal",
+		title: "Meta de Reconhecimento (3 Anos)",
+		description: "Como você quer que a clínica seja descrita pelos pacientes e mercado em 2029?",
+		placeholder: "Ex: Ser referência regional em tratamento de coluna com tecnologia não-invasiva.",
+		type: "textarea",
+		icon: Award
+	},
+	{
+		key: "values",
+		title: "Valores Inegociáveis",
+		description: "Quais princípios guiam suas decisões e comportamento da equipe? O que não toleram?",
+		placeholder: "Ex: Ética acima de tudo, pontualidade, escuta ativa...",
+		type: "textarea",
+		icon: FileText
+	},
+	{
+		key: "priorityAudience",
+		title: "Público Prioritário (2026)",
+		description: "Quem é o cliente ideal que vamos focar nossos esforços de marketing e vendas neste ciclo?",
+		placeholder: "Ex: Mulheres de 35-50 anos, praticantes de atividade física, classe B.",
+		type: "text",
+		icon: Users
+	},
+	{
+		key: "pricePositioning",
+		title: "Posicionamento de Preço",
+		description: "Como a clínica se posiciona em relação à média do mercado local?",
+		type: "radio",
+		icon: DollarSign,
+		options: [
+			{
+				value: "Acessível",
+				label: "Opção mais acessível",
+				description: "Foco em custo-benefício e entrada facilitada."
+			},
+			{
+				value: "Intermediária",
+				label: "Opção intermediária",
+				description: "Equilíbrio entre qualidade e preço de mercado."
+			},
+			{
+				value: "Premium",
+				label: "Opção mais premium/exclusiva",
+				description: "Alto valor agregado, ticket alto e exclusividade."
+			}
+		]
+	},
+	{
+		key: "strategyFocus",
+		title: "Foco da Estratégia de Crescimento",
+		description: "Qual será o motor principal de receita?",
+		type: "radio",
+		icon: TrendingUp,
+		options: [{
+			value: "Volume",
+			label: "Volume (muitos pacientes)",
+			description: "Giro rápido, agenda cheia, processos padronizados."
+		}, {
+			value: "Alto Ticket",
+			label: "Maior valor por paciente (ticket médio alto)",
+			description: "Menos pacientes, tratamentos complexos e relacionamento profundo."
+		}]
+	}
+];
+function Identity() {
+	const { identity: identity$1, updateIdentity, clinicConfig, relatorio_1 } = useStrategyStore();
+	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
+	const [localData, setLocalData] = (0, import_react.useState)(identity$1);
+	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
+	const currentQuestion = QUESTIONS[currentStep];
+	const progress = (currentStep + 1) / QUESTIONS.length * 100;
+	const isFormal = clinicConfig.tom_linguagem === "formal";
+	const handleNext = () => {
+		const value = localData[currentQuestion.key];
+		if (!value || value.trim() === "") {
+			toast.error("Por favor, responda a pergunta para continuar.");
+			return;
+		}
+		updateIdentity(localData);
+		if (currentStep < QUESTIONS.length - 1) setCurrentStep((prev) => prev + 1);
+		else {
+			setIsCompleted(true);
+			toast.success("Identidade estratégica definida com sucesso!");
+		}
+	};
+	const handleBack = () => {
+		if (currentStep > 0) setCurrentStep((prev) => prev - 1);
+	};
+	const handleInputChange = (value) => {
+		setLocalData((prev) => ({
+			...prev,
+			[currentQuestion.key]: value
+		}));
+	};
+	const generateSummary = () => {
+		const { reason, recognitionGoal, values, priorityAudience, pricePositioning, strategyFocus } = localData;
+		if (isFormal) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+				"A ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "identidade organizacional" }),
+				" da",
+				" ",
+				clinicConfig.nome_clinica,
+				" fundamenta-se no propósito de",
+				" ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
+					"\"",
+					reason,
+					"\""
+				] }),
+				". Projetamos, para o horizonte de três anos, consolidar nossa reputação como: ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
+					"\"",
+					recognitionGoal,
+					"\""
+				] }),
+				"."
+			] }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-4",
+				children: [
+					"Nossa conduta é regida inegociavelmente pelos valores de",
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("em", { children: values }),
+					". Para o ciclo estratégico de 2026, direcionaremos nossos esforços para o segmento de",
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: priorityAudience }),
+					"."
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-4",
+				children: [
+					"Estrategicamente, adotaremos um posicionamento de preço",
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: pricePositioning }),
+					", sustentado por um modelo de crescimento focado em ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: strategyFocus }),
+					"."
+				]
+			})
+		] });
+		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+				"A ",
+				clinicConfig.nome_clinica,
+				" existe para ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
+					"\"",
+					reason,
+					"\""
+				] }),
+				". Daqui a 3 anos, queremos ser reconhecidos por: ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
+					"\"",
+					recognitionGoal,
+					"\""
+				] }),
+				"."
+			] }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-4",
+				children: [
+					"Nossos valores inegociáveis são: ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("em", { children: values }),
+					". Em 2026, nosso foco total será no público: ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: priorityAudience }),
+					"."
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-4",
+				children: [
+					"Para vencer no mercado, escolhemos ser uma opção",
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: pricePositioning }),
+					", com uma estratégia de crescimento baseada em ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: strategyFocus }),
+					"."
+				]
+			})
+		] });
+	};
+	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-8 animate-fade-in max-w-4xl mx-auto pb-10",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col items-center text-center space-y-4",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "bg-indigo-100 p-3 rounded-full",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FingerprintPattern, { className: "size-8 text-indigo-600" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-3xl font-bold tracking-tight text-slate-900 dark:text-white",
+					children: "3A – Identidade e Posicionamento Desejado"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-slate-500 max-w-lg",
+					children: "Definição estratégica da marca e do rumo do negócio para o próximo ciclo."
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-t-4 border-t-indigo-500 shadow-lg",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+					className: "bg-slate-50 border-b border-slate-100",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex justify-between items-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-xl text-slate-800",
+							children: "Manifesto de Identidade 2026"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Documento consolidado de posicionamento." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+							className: "bg-indigo-600 hover:bg-indigo-700",
+							children: "Definido"
+						})]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+					className: "p-8 text-slate-700 text-lg leading-relaxed",
+					children: generateSummary()
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+					className: "bg-slate-50 border-t border-slate-100 p-6 flex justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						variant: "outline",
+						onClick: () => setIsCompleted(false),
+						children: "Revisar Respostas"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						asChild: true,
+						className: "bg-indigo-600 hover:bg-indigo-700 text-white",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/estrategia",
+							children: ["Ir para Estratégia (3B) ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+						})
+					})]
+				})
+			]
+		})]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "container max-w-3xl mx-auto py-10 px-4 min-h-[80vh] flex flex-col justify-center animate-fade-in-up",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mb-8 space-y-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-1",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+							className: "text-2xl font-bold text-slate-900",
+							children: "Identidade Estratégica"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm text-slate-500",
+							children: "Módulo 3A • Definindo quem somos e onde vamos jogar"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full",
+						children: [
+							"Passo ",
+							currentStep + 1,
+							" de ",
+							QUESTIONS.length
+						]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
+					value: progress,
+					className: "h-2"
+				})]
+			}),
+			relatorio_1 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex gap-3 text-sm text-blue-900 animate-fade-in",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lightbulb, { className: "size-5 shrink-0 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "font-semibold mb-1",
+					children: "Contexto do Diagnóstico:"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+					"Lembre-se que sua análise SWOT apontou como principal força:",
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
+						"\"",
+						relatorio_1.swot.strengths[0],
+						"\""
+					] }),
+					" e o principal problema a resolver é:",
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
+						"\"",
+						relatorio_1.swot.weaknesses[0],
+						"\""
+					] }),
+					"."
+				] })] })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "border-t-4 border-t-indigo-500 shadow-md transition-all duration-300",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+						className: "space-y-4",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-start gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "bg-indigo-100 p-3 rounded-xl mt-1 shrink-0",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(currentQuestion.icon, { className: "size-6 text-indigo-700" })
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									className: "text-2xl text-slate-800 leading-tight",
+									children: currentQuestion.title
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+									className: "text-base text-slate-600",
+									children: currentQuestion.description
+								})]
+							})]
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+						className: "pt-4 pb-8",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-4",
+							children: [
+								currentQuestion.type === "textarea" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+									autoFocus: true,
+									value: localData[currentQuestion.key],
+									onChange: (e) => handleInputChange(e.target.value),
+									placeholder: currentQuestion.placeholder,
+									className: "text-base min-h-[140px] border-slate-300 focus-visible:ring-indigo-500"
+								}),
+								currentQuestion.type === "text" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+									autoFocus: true,
+									value: localData[currentQuestion.key],
+									onChange: (e) => handleInputChange(e.target.value),
+									placeholder: currentQuestion.placeholder,
+									className: "text-lg h-12 border-slate-300 focus-visible:ring-indigo-500"
+								}),
+								currentQuestion.type === "radio" && currentQuestion.options && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
+									value: localData[currentQuestion.key],
+									onValueChange: handleInputChange,
+									className: "grid gap-4",
+									children: currentQuestion.options.map((option) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: cn("flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors", localData[currentQuestion.key] === option.value ? "border-indigo-500 bg-indigo-50" : "border-slate-200"),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+											value: option.value,
+											id: option.value
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+											htmlFor: option.value,
+											className: "flex-1 cursor-pointer",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "font-medium text-slate-900 text-base",
+												children: option.label
+											}), option.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "text-slate-500 text-sm mt-1",
+												children: option.description
+											})]
+										})]
+									}, option.value))
+								})
+							]
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+						className: "flex justify-between border-t bg-slate-50/50 p-6",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							variant: "ghost",
+							onClick: handleBack,
+							disabled: currentStep === 0,
+							className: cn(currentStep === 0 && "invisible"),
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "mr-2 size-4" }), " Voltar"]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							onClick: handleNext,
+							className: "bg-indigo-600 hover:bg-indigo-700 text-white min-w-[140px]",
+							children: [currentStep === QUESTIONS.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+						})]
+					})
+				]
+			})
+		]
+	});
+}
 var NotFound = () => {
 	const location = useLocation();
 	(0, import_react.useEffect)(() => {
@@ -32029,6 +32484,10 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ManagerVision, {})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					path: "/identidade",
+					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Identity, {})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 					path: "/estrategia",
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Strategy, {})
 				}),
@@ -32054,4 +32513,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-qY7NQy8s.js.map
+//# sourceMappingURL=index-aFg0L5Xt.js.map
