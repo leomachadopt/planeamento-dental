@@ -26389,7 +26389,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				value,
 				getSnapshot
 			]);
-			useEffect$1(function() {
+			useEffect$2(function() {
 				checkIfSnapshotChanged(inst) && forceUpdate({ inst });
 				return subscribe$1(function() {
 					checkIfSnapshotChanged(inst) && forceUpdate({ inst });
@@ -26412,7 +26412,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$3.useState, useEffect$1 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$3.useState, useEffect$2 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$3.useSyncExternalStore ? React$3.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26770,7 +26770,7 @@ var require_with_selector_development = /* @__PURE__ */ __commonJSMin(((exports)
 			return x$1 === y && (0 !== x$1 || 1 / x$1 === 1 / y) || x$1 !== x$1 && y !== y;
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$3 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore$1 = shim.useSyncExternalStore, useRef = React$3.useRef, useEffect$1 = React$3.useEffect, useMemo$1 = React$3.useMemo, useDebugValue$1 = React$3.useDebugValue;
+		var React$3 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore$1 = shim.useSyncExternalStore, useRef = React$3.useRef, useEffect$2 = React$3.useEffect, useMemo$1 = React$3.useMemo, useDebugValue$1 = React$3.useDebugValue;
 		exports.useSyncExternalStoreWithSelector = function(subscribe$1, getSnapshot, getServerSnapshot, selector, isEqual) {
 			var instRef = useRef(null);
 			if (null === instRef.current) {
@@ -26812,7 +26812,7 @@ var require_with_selector_development = /* @__PURE__ */ __commonJSMin(((exports)
 				isEqual
 			]);
 			var value = useSyncExternalStore$1(subscribe$1, instRef[0], instRef[1]);
-			useEffect$1(function() {
+			useEffect$2(function() {
 				inst.hasValue = !0;
 				inst.value = value;
 			}, [value]);
@@ -33067,186 +33067,202 @@ var PopoverContent = import_react.forwardRef(({ className, align = "center", sid
 	...props
 }) }));
 PopoverContent.displayName = Content2.displayName;
-var CLINIC_TYPES = [
-	"Fisioterapia",
-	"Odontologia",
-	"Clínica Geral",
-	"Psicologia",
-	"Nutrição",
-	"Estética",
-	"Pilates",
-	"Multidisciplinar",
-	"Dermatologia",
-	"Pediatria",
-	"Outro"
+var DENTAL_CLINIC_TYPES = [
+	"Clínica Generalista",
+	"Clínica de Especialidades",
+	"Consultório Privado",
+	"Grupo Dentário",
+	"Franquia Odontológica",
+	"Hospital Dentário",
+	"Clínica de Ortodontia",
+	"Clínica de Implantologia",
+	"Clínica de Estética",
+	"Odontopediatria"
 ];
-var NICHES_MAP = {
-	Fisioterapia: [
-		"Traumatologia",
-		"Esportiva",
-		"Neurologia",
-		"Respiratória",
-		"Pélvica",
-		"Geriatria",
-		"Osteopatia"
+var DENTAL_NICHES_MAP = {
+	"Clínica Generalista": [
+		"Medicina Dentária Geral",
+		"Prevenção e Higiene Oral",
+		"Prótese Dentária",
+		"Cirurgia Oral Menor"
 	],
-	Odontologia: [
+	"Clínica de Especialidades": [
+		"Reabilitação Oral",
+		"Implantologia Avançada",
 		"Ortodontia",
-		"Implantodontia",
-		"Estética",
+		"Periodontia",
 		"Endodontia",
+		"Harmonização Orofacial"
+	],
+	"Consultório Privado": [
+		"Medicina Dentária Geral",
+		"Atendimento Personalizado",
+		"Estética Dentária",
+		"Prótese sobre Implante"
+	],
+	"Grupo Dentário": [
+		"Multidisciplinar",
+		"Implantologia",
+		"Ortodontia",
+		"Todas as Especialidades"
+	],
+	"Franquia Odontológica": [
+		"Ortodontia (Alinhadores)",
+		"Implantologia",
+		"Branqueamento e Estética",
+		"Clínica Geral"
+	],
+	"Clínica de Ortodontia": [
+		"Ortodontia Fixa",
+		"Alinhadores Invisíveis",
+		"Ortopedia Facial",
+		"Ortodontia Lingual"
+	],
+	"Clínica de Implantologia": [
+		"Carga Imediata",
+		"All-on-4 / All-on-6",
+		"Enxertos Ósseos",
+		"Implantes Zigomáticos"
+	],
+	"Clínica de Estética": [
+		"Facetas e Lentes",
+		"Harmonização Orofacial",
+		"Branqueamento Dentário",
+		"Design do Sorriso"
+	],
+	Odontopediatria: [
 		"Odontopediatria",
-		"Harmonização Facial"
-	],
-	"Clínica Geral": [
-		"Medicina da Família",
-		"Check-up Executivo",
-		"Preventiva",
-		"Atendimento Popular"
-	],
-	Psicologia: [
-		"TCC",
-		"Psicanálise",
-		"Comportamental",
-		"Infantil",
-		"Terapia de Casal",
-		"Neuropsicologia"
-	],
-	Nutrição: [
-		"Esportiva",
-		"Emagrecimento",
-		"Clínica",
-		"Comportamental",
-		"Materno-Infantil"
-	],
-	Estética: [
-		"Facial",
-		"Corporal",
-		"Biomédica",
-		"Laser",
-		"Injetáveis",
-		"Pré e Pós Operatório"
-	],
-	Pilates: [
-		"Solo",
-		"Aparelhos",
-		"Reabilitação",
-		"Fitness",
-		"Gestantes"
-	],
-	Multidisciplinar: [
-		"Saúde Integrativa",
-		"Dor Crônica",
-		"Bem-estar",
-		"Emagrecimento"
-	],
-	Outro: [
-		"Especialidades Diversas",
-		"Nicho Específico",
-		"Consultório Isolado"
+		"Ortodontia Preventiva",
+		"Sedação Consciente",
+		"Pacientes Especiais"
 	]
 };
-var CITIES_BRAZIL = [
-	"São Paulo, SP",
-	"Rio de Janeiro, RJ",
-	"Belo Horizonte, MG",
-	"Brasília, DF",
-	"Curitiba, PR",
-	"Porto Alegre, RS",
-	"Salvador, BA",
-	"Recife, PE",
-	"Fortaleza, CE",
-	"Goiânia, GO",
-	"Campinas, SP",
-	"Florianópolis, SC",
-	"Manaus, AM",
-	"Belém, PA",
-	"Vitória, ES"
+var ALL_DENTAL_SPECIALTIES = [
+	"Medicina Dentária Geral",
+	"Implantologia",
+	"Ortodontia",
+	"Endodontia",
+	"Periodontia",
+	"Odontopediatria",
+	"Cirurgia Oral",
+	"Prótese Dentária",
+	"Estética Dentária",
+	"Harmonização Orofacial",
+	"Oclusão e ATM",
+	"Higiene Oral"
 ];
-var CITIES_PORTUGAL = [
+var PORTUGAL_LOCATIONS = [
 	"Lisboa, Lisboa",
 	"Porto, Porto",
+	"Vila Nova de Gaia, Porto",
+	"Amadora, Lisboa",
 	"Braga, Braga",
+	"Funchal, Madeira",
 	"Coimbra, Coimbra",
 	"Setúbal, Setúbal",
+	"Almada, Setúbal",
+	"Agualva-Cacém, Lisboa",
+	"Queluz, Lisboa",
+	"Rio Tinto, Porto",
+	"Barreiro, Setúbal",
 	"Aveiro, Aveiro",
-	"Faro, Faro",
 	"Viseu, Viseu",
+	"Odivelas, Lisboa",
 	"Leiria, Leiria",
-	"Funchal, Madeira"
+	"Guimarães, Braga",
+	"Évora, Évora",
+	"Faro, Faro",
+	"Portimão, Faro",
+	"Cascais, Lisboa",
+	"Oeiras, Lisboa",
+	"Sintra, Lisboa",
+	"Loures, Lisboa",
+	"Matosinhos, Porto",
+	"Ponta Delgada, Açores",
+	"Castelo Branco, Castelo Branco",
+	"Viana do Castelo, Viana do Castelo",
+	"Santarém, Santarém",
+	"Vila Real, Vila Real",
+	"Guarda, Guarda",
+	"Beja, Beja",
+	"Bragança, Bragança",
+	"Portalegre, Portalegre"
 ];
-var GOALS_OPTIONS = [
-	"Crescer faturamento",
-	"Organizar processos internos",
-	"Expandir unidades",
-	"Melhorar experiência do paciente",
-	"Aumentar lucro líquido",
-	"Construir autoridade digital",
-	"Reter pacientes atuais",
-	"Profissionalizar a gestão",
-	"Lançar novos serviços"
+var DENTAL_GOALS_OPTIONS = [
+	"Aumentar Faturação em Implantes",
+	"Reduzir Taxa de No-shows (Faltas)",
+	"Aumentar Taxa de Aceitação de Orçamentos",
+	"Atrair Mais Pacientes Particulares",
+	"Fidelização de Pacientes (Recorrência)",
+	"Otimizar Ocupação dos Gabinetes",
+	"Aumentar Ticket Médio por Consulta",
+	"Expansão de Carteira de Seguros",
+	"Digitalizar Processos (Paperless)",
+	"Melhorar Reputação Online (Reviews)",
+	"Lançar Harmonização Orofacial",
+	"Expansão Física (Novas Cadeiras)"
 ];
 var STAGE_OPTIONS = [
-	"Iniciante",
-	"Em Crescimento",
-	"Consolidada",
-	"Em Crise",
-	"Outro"
+	"Iniciante (Consultório Novo)",
+	"Em Crescimento (Expansão)",
+	"Consolidada (Estável)",
+	"Em Reestruturação (Crise)",
+	"Transição de Gestão"
 ];
 var STEPS_CONFIG = [
 	{
 		id: "identity",
-		title: "Identidade da Clínica",
-		description: "Selecione as categorias que melhor representam sua atuação.",
+		title: "Modelo de Negócio",
+		description: "Selecione o tipo de estrutura da sua clínica dentária.",
 		icon: Settings2,
 		category: "Identidade"
 	},
 	{
 		id: "name",
-		title: "Nome da Clínica",
-		description: "Como ela é conhecida no mercado.",
+		title: "Identificação",
+		description: "Nome da Clínica ou Consultório.",
 		icon: Settings2,
 		category: "Identidade"
 	},
 	{
 		id: "location",
 		title: "Localização",
-		description: "Onde a clínica está situada?",
+		description: "Em que Concelho/Distrito de Portugal está situada?",
 		icon: MapPin,
 		category: "Identidade"
 	},
 	{
 		id: "niche",
-		title: "Nicho de Atuação",
-		description: "Qual é o foco principal dos seus atendimentos?",
-		icon: Target,
+		title: "Foco Clínico",
+		description: "Qual é a principal área de especialização?",
+		icon: Stethoscope,
 		category: "Contexto"
 	},
 	{
 		id: "stage",
-		title: "Estágio do Negócio",
-		description: "Em qual momento a clínica se encontra?",
+		title: "Estágio Atual",
+		description: "Em que momento o negócio se encontra?",
 		icon: Building2,
 		category: "Contexto"
 	},
 	{
 		id: "staff",
-		title: "Composição da Equipe",
-		description: "Quem faz parte do time atualmente?",
+		title: "Equipa Clínica e Apoio",
+		description: "Defina a composição do seu corpo clínico e staff.",
 		icon: Users,
 		category: "Contexto"
 	},
 	{
 		id: "goals",
-		title: "Objetivos Estratégicos",
-		description: "Quais são as prioridades para 2026? (Máx. 3)",
+		title: "Objetivos 2026",
+		description: "Quais as prioridades estratégicas? (Máx. 3)",
 		icon: Rocket,
 		category: "Estratégia"
 	},
 	{
 		id: "tone",
-		title: "Tom de Linguagem",
-		description: "Como devemos nos comunicar nos relatórios?",
+		title: "Comunicação",
+		description: "Tom de voz para os relatórios estratégicos.",
 		icon: MessageSquare,
 		category: "Estratégia"
 	}
@@ -33257,7 +33273,7 @@ function SetupWizard() {
 	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
 	const [identityTypes, setIdentityTypes] = (0, import_react.useState)([]);
 	const [clinicName, setClinicName] = (0, import_react.useState)("");
-	const [country, setCountry] = (0, import_react.useState)("");
+	const [country, setCountry] = (0, import_react.useState)("Portugal");
 	const [city, setCity] = (0, import_react.useState)("");
 	const [openCityCombo, setOpenCityCombo] = (0, import_react.useState)(false);
 	const [niche, setNiche] = (0, import_react.useState)("");
@@ -33274,26 +33290,20 @@ function SetupWizard() {
 	});
 	const [selectedGoals, setSelectedGoals] = (0, import_react.useState)([]);
 	const [tone, setTone] = (0, import_react.useState)("");
-	(0, import_react.useMemo)(() => {
+	(0, import_react.useEffect)(() => {
 		if (savedConfig.nome_clinica) setClinicName(savedConfig.nome_clinica);
 		if (savedConfig.tipo_clinica) setIdentityTypes(savedConfig.tipo_clinica.split(", "));
 		if (savedConfig.estagio_clinica) setStage(savedConfig.estagio_clinica);
 		if (savedConfig.objetivo_geral_2026) setSelectedGoals(savedConfig.objetivo_geral_2026.split(", "));
 		if (savedConfig.tom_linguagem) setTone(savedConfig.tom_linguagem);
-		if (savedConfig.localizacao) {
-			const parts = savedConfig.localizacao.split(", ");
-			if (parts.length > 1) {
-				const potentialCountry = parts[parts.length - 1];
-				if (["Brasil", "Portugal"].includes(potentialCountry)) {
-					setCountry(potentialCountry);
-					setCity(parts.slice(0, -1).join(", "));
-				} else setCity(savedConfig.localizacao);
-			} else setCity(savedConfig.localizacao);
-		}
-	}, []);
+		if (savedConfig.localizacao) if (savedConfig.localizacao.includes("Portugal")) {
+			setCountry("Portugal");
+			setCity(savedConfig.localizacao.replace(", Portugal", "").trim());
+		} else setCity(savedConfig.localizacao);
+	}, [savedConfig]);
 	const handleNext = () => {
 		if (currentStep === 0 && identityTypes.length === 0) {
-			toast.error("Selecione pelo menos um tipo de clínica.");
+			toast.error("Selecione pelo menos um modelo de negócio.");
 			return;
 		}
 		if (currentStep === 1 && !clinicName.trim()) {
@@ -33301,11 +33311,11 @@ function SetupWizard() {
 			return;
 		}
 		if (currentStep === 2 && (!country || !city)) {
-			toast.error("Selecione o país e a cidade.");
+			toast.error("Selecione a localização completa.");
 			return;
 		}
 		if (currentStep === 3 && !niche) {
-			toast.error("Selecione um nicho de atuação.");
+			toast.error("Selecione uma área de foco clínico.");
 			return;
 		}
 		if (currentStep === 4 && !stage) {
@@ -33313,7 +33323,7 @@ function SetupWizard() {
 			return;
 		}
 		if (currentStep === 6 && selectedGoals.length === 0) {
-			toast.error("Selecione pelo menos um objetivo.");
+			toast.error("Selecione pelo menos um objetivo estratégico.");
 			return;
 		}
 		if (currentStep === 7 && !tone) {
@@ -33329,7 +33339,7 @@ function SetupWizard() {
 	const finishWizard = () => {
 		const staffString = Object.entries(staffMembers).filter(([_$1, members]) => members.length > 0).map(([role, members]) => {
 			const details = members.map((m$1) => `${m$1.name} (${m$1.role})`).join(", ");
-			return `${members.length} ${role === "secretaries" ? "Secretárias" : role === "specialists" ? "Especialistas" : "Gestores"}: ${details}`;
+			return `${members.length} ${role === "secretaries" ? "Assistentes/Secretárias" : role === "specialists" ? "Médicos Dentistas" : "Gestores"}: ${details}`;
 		}).join("; ");
 		setConfigInicial({
 			tipo_clinica: identityTypes.join(", "),
@@ -33337,25 +33347,25 @@ function SetupWizard() {
 			localizacao: `${city}, ${country}`,
 			publico_principal: niche,
 			estagio_clinica: stage,
-			gestores_principais: staffString || "Equipe não detalhada",
+			gestores_principais: staffString || "Equipa não detalhada",
 			objetivo_geral_2026: selectedGoals.join(", "),
 			tamanho_relatorio: "resumido_20",
 			tom_linguagem: tone
 		});
 		setIsCompleted(true);
-		toast.success("Configuração concluída com sucesso!");
+		toast.success("Configuração da Clínica Dentária concluída!");
 	};
 	const toggleIdentity = (type) => {
 		setIdentityTypes((prev) => prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]);
 	};
-	const currentCities = country === "Brasil" ? CITIES_BRAZIL : country === "Portugal" ? CITIES_PORTUGAL : [];
 	const availableNiches = (0, import_react.useMemo)(() => {
+		if (identityTypes.length === 0) return ALL_DENTAL_SPECIALTIES;
 		const options$1 = /* @__PURE__ */ new Set();
-		if (identityTypes.length === 0) Object.values(NICHES_MAP).flat().forEach((n) => options$1.add(n));
-		else identityTypes.forEach((type) => {
-			(NICHES_MAP[type] || NICHES_MAP["Outro"]).forEach((n) => options$1.add(n));
+		identityTypes.forEach((type) => {
+			const related = DENTAL_NICHES_MAP[type];
+			if (related) related.forEach((n) => options$1.add(n));
 		});
-		return Array.from(options$1);
+		return options$1.size > 0 ? Array.from(options$1) : ALL_DENTAL_SPECIALTIES;
 	}, [identityTypes]);
 	const updateStaffCount = (role, delta) => {
 		const current = staffCounts[role];
@@ -33368,10 +33378,14 @@ function SetupWizard() {
 			const currentList = prev[role];
 			if (newCount > currentList.length) {
 				const toAdd = newCount - currentList.length;
+				let defaultRole = "";
+				if (role === "secretaries") defaultRole = "Assistente Dentária";
+				if (role === "specialists") defaultRole = "Médico Dentista";
+				if (role === "managers") defaultRole = "Diretor Clínico";
 				const newItems = Array.from({ length: toAdd }).map(() => ({
 					id: Math.random().toString(36).substr(2, 9),
 					name: "",
-					role: role === "secretaries" ? "Secretária" : role === "managers" ? "Gerente" : "Especialista"
+					role: defaultRole
 				}));
 				return {
 					...prev,
@@ -33401,7 +33415,7 @@ function SetupWizard() {
 		setSelectedGoals((prev) => {
 			if (prev.includes(goal)) return prev.filter((g) => g !== goal);
 			if (prev.length >= 3) {
-				toast.warning("Máximo de 3 objetivos atingido.");
+				toast.warning("Máximo de 3 objetivos permitido.");
 				return prev;
 			}
 			return [...prev, goal];
@@ -33422,7 +33436,7 @@ function SetupWizard() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-slate-500 mb-8 text-center max-w-md",
-				children: "Configuração finalizada. O sistema agora possui os dados necessários para gerar sua estratégia."
+				children: "Configuração finalizada. O sistema agora possui os dados da sua clínica para gerar a estratégia."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 				onClick: () => window.location.href = "/",
@@ -33480,7 +33494,7 @@ function SetupWizard() {
 					children: [
 						currentStep === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "flex flex-wrap gap-2",
-							children: CLINIC_TYPES.map((type) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+							children: DENTAL_CLINIC_TYPES.map((type) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
 								variant: identityTypes.includes(type) ? "default" : "outline",
 								className: cn("text-base py-2 px-4 cursor-pointer hover:bg-slate-100 transition-colors", identityTypes.includes(type) && "bg-teal-600 hover:bg-teal-700 text-white"),
 								onClick: () => toggleIdentity(type),
@@ -33491,68 +33505,84 @@ function SetupWizard() {
 							autoFocus: true,
 							value: clinicName,
 							onChange: (e) => setClinicName(e.target.value),
-							placeholder: "Ex: Clínica Vida Plena",
+							placeholder: "Ex: Clínica Dentária Sorriso Radiante",
 							className: "text-lg h-12",
 							onKeyDown: (e) => e.key === "Enter" && handleNext()
 						}),
 						currentStep === 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid gap-4",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "space-y-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "País" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-									value: country,
-									onValueChange: setCountry,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-										className: "h-11",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione o país" })
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										value: "Brasil",
-										children: "Brasil"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										value: "Portugal",
-										children: "Portugal"
-									})] })]
-								})]
-							}), country && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "space-y-2 animate-fade-in",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: country === "Brasil" ? "Cidade" : "Concelho/Distrito" }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Popover, {
-										open: openCityCombo,
-										onOpenChange: setOpenCityCombo,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverTrigger, {
-											asChild: true,
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-												variant: "outline",
-												role: "combobox",
-												"aria-expanded": openCityCombo,
-												className: "w-full justify-between h-11",
-												children: [city || "Selecione ou digite...", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronsUpDown, { className: "ml-2 h-4 w-4 shrink-0 opacity-50" })]
-											})
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContent, {
-											className: "w-[400px] p-0",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Command, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandInput, { placeholder: "Buscar cidade..." }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CommandList, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandEmpty, { children: "Nenhuma cidade encontrada." }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandGroup, { children: currentCities.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CommandItem, {
-												value: c,
-												onSelect: (currentValue) => {
-													setCity(currentValue);
-													setOpenCityCombo(false);
-												},
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: cn("mr-2 h-4 w-4", city === c ? "opacity-100" : "opacity-0") }), c]
-											}, c)) })] })] })
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-xs text-muted-foreground",
-										children: "*Lista de sugestões baseada nas principais cidades."
-									})
-								]
-							})]
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "País" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										value: country,
+										onValueChange: setCountry,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+											className: "h-11",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione o país" })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+											value: "Portugal",
+											children: "Portugal"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+											value: "Brasil",
+											children: "Brasil"
+										})] })]
+									})]
+								}),
+								country === "Portugal" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2 animate-fade-in",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "Concelho / Distrito" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Popover, {
+											open: openCityCombo,
+											onOpenChange: setOpenCityCombo,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverTrigger, {
+												asChild: true,
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+													variant: "outline",
+													role: "combobox",
+													"aria-expanded": openCityCombo,
+													className: "w-full justify-between h-11",
+													children: [city || "Pesquisar Concelho ou Distrito...", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronsUpDown, { className: "ml-2 h-4 w-4 shrink-0 opacity-50" })]
+												})
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContent, {
+												className: "w-[400px] p-0",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Command, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandInput, { placeholder: "Escreva o nome..." }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CommandList, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandEmpty, { children: "Nenhuma localização encontrada." }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandGroup, {
+													heading: "Principais Localizações",
+													children: PORTUGAL_LOCATIONS.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CommandItem, {
+														value: c,
+														onSelect: (currentValue) => {
+															setCity(currentValue);
+															setOpenCityCombo(false);
+														},
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: cn("mr-2 h-4 w-4", city === c ? "opacity-100" : "opacity-0") }), c]
+													}, c))
+												})] })] })
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-muted-foreground",
+											children: "*Selecione a sua área de atuação principal."
+										})
+									]
+								}),
+								country !== "Portugal" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+									value: city,
+									onChange: (e) => setCity(e.target.value),
+									placeholder: "Digite sua cidade...",
+									className: "h-11"
+								})
+							]
 						}),
 						currentStep === 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "space-y-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "text-sm text-slate-500 mb-2",
-								children: ["Opções baseadas em: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: identityTypes.join(", ") })]
+								children: [
+									"Especialidades baseadas em:",
+									" ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: identityTypes.join(", ") || "Medicina Dentária" })
+								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
 								value: niche,
 								onValueChange: setNiche,
@@ -33595,7 +33625,7 @@ function SetupWizard() {
 									},
 									{
 										id: "specialists",
-										label: "Especialistas"
+										label: "Médicos"
 									},
 									{
 										id: "managers",
@@ -33631,21 +33661,20 @@ function SetupWizard() {
 								className: "space-y-4 max-h-[300px] overflow-y-auto pr-2",
 								children: Object.entries(staffMembers).map(([role, members]) => {
 									if (members.length === 0) return null;
-									const label = role === "secretaries" ? "Secretárias" : role === "managers" ? "Gestores" : "Especialistas";
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "space-y-3",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
 											className: "font-semibold text-sm uppercase text-slate-500 border-b pb-1",
-											children: label
+											children: role === "secretaries" ? "Assistentes / Receção" : role === "managers" ? "Direção / Gestão" : "Corpo Clínico"
 										}), members.map((member, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "flex gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-												placeholder: `Nome da ${label.slice(0, -1)}`,
+												placeholder: "Nome",
 												value: member.name,
 												onChange: (e) => updateStaffMember(role, idx, "name", e.target.value),
 												className: "flex-1"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-												placeholder: "Cargo/Função",
+												placeholder: "Função (Ex: Higienista, Ortodontista)",
 												value: member.role,
 												onChange: (e) => updateStaffMember(role, idx, "role", e.target.value),
 												className: "flex-1"
@@ -33659,13 +33688,13 @@ function SetupWizard() {
 							className: "space-y-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex justify-between items-center text-sm text-slate-500",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Selecione até 3 opções" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Selecione até 3 prioridades" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: cn(selectedGoals.length === 3 ? "text-red-500 font-bold" : "text-teal-600"),
 									children: [selectedGoals.length, "/3"]
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "flex flex-wrap gap-2",
-								children: GOALS_OPTIONS.map((goal) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+								children: DENTAL_GOALS_OPTIONS.map((goal) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
 									variant: selectedGoals.includes(goal) ? "default" : "outline",
 									className: cn("text-sm py-3 px-4 cursor-pointer hover:bg-slate-100 transition-all border-slate-200", selectedGoals.includes(goal) && "bg-teal-600 hover:bg-teal-700 text-white border-teal-600"),
 									onClick: () => toggleGoal(goal),
@@ -33680,18 +33709,18 @@ function SetupWizard() {
 							children: [
 								{
 									value: "formal",
-									label: "Formal",
-									desc: "Corporativo e técnico"
+									label: "Formal (Institucional)",
+									desc: "Comunicação clínica, séria e corporativa."
 								},
 								{
 									value: "intermediario",
-									label: "Intermediário",
-									desc: "Profissional mas acessível"
+									label: "Profissional Acessível",
+									desc: "Equilíbrio entre técnica e proximidade."
 								},
 								{
 									value: "informal",
-									label: "Informal",
-									desc: "Próximo e motivacional"
+									label: "Próximo (Humanizado)",
+									desc: "Foco total na empatia e acolhimento."
 								}
 							].map((opt) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
 								className: cn("flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-slate-50", tone === opt.value ? "border-teal-500 bg-teal-50" : "border-slate-200"),
@@ -36853,4 +36882,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-CTfV8zFJ.js.map
+//# sourceMappingURL=index-BcS7gSMY.js.map

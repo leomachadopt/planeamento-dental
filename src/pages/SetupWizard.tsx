@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useStrategyStore, ConfigInicial } from '@/stores/useStrategyStore'
 import {
   Card,
@@ -48,188 +48,217 @@ import {
   Rocket,
   Plus,
   Minus,
+  Stethoscope,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
 // --- Constants & Data ---
 
-const CLINIC_TYPES = [
-  'Fisioterapia',
-  'Odontologia',
-  'Clínica Geral',
-  'Psicologia',
-  'Nutrição',
-  'Estética',
-  'Pilates',
-  'Multidisciplinar',
-  'Dermatologia',
-  'Pediatria',
-  'Outro',
+const DENTAL_CLINIC_TYPES = [
+  'Clínica Generalista',
+  'Clínica de Especialidades',
+  'Consultório Privado',
+  'Grupo Dentário',
+  'Franquia Odontológica',
+  'Hospital Dentário',
+  'Clínica de Ortodontia',
+  'Clínica de Implantologia',
+  'Clínica de Estética',
+  'Odontopediatria',
 ]
 
-const NICHES_MAP: Record<string, string[]> = {
-  Fisioterapia: [
-    'Traumatologia',
-    'Esportiva',
-    'Neurologia',
-    'Respiratória',
-    'Pélvica',
-    'Geriatria',
-    'Osteopatia',
+// Mapping identities to specific dental niches/specialties
+const DENTAL_NICHES_MAP: Record<string, string[]> = {
+  'Clínica Generalista': [
+    'Medicina Dentária Geral',
+    'Prevenção e Higiene Oral',
+    'Prótese Dentária',
+    'Cirurgia Oral Menor',
   ],
-  Odontologia: [
+  'Clínica de Especialidades': [
+    'Reabilitação Oral',
+    'Implantologia Avançada',
     'Ortodontia',
-    'Implantodontia',
-    'Estética',
+    'Periodontia',
     'Endodontia',
+    'Harmonização Orofacial',
+  ],
+  'Consultório Privado': [
+    'Medicina Dentária Geral',
+    'Atendimento Personalizado',
+    'Estética Dentária',
+    'Prótese sobre Implante',
+  ],
+  'Grupo Dentário': [
+    'Multidisciplinar',
+    'Implantologia',
+    'Ortodontia',
+    'Todas as Especialidades',
+  ],
+  'Franquia Odontológica': [
+    'Ortodontia (Alinhadores)',
+    'Implantologia',
+    'Branqueamento e Estética',
+    'Clínica Geral',
+  ],
+  'Clínica de Ortodontia': [
+    'Ortodontia Fixa',
+    'Alinhadores Invisíveis',
+    'Ortopedia Facial',
+    'Ortodontia Lingual',
+  ],
+  'Clínica de Implantologia': [
+    'Carga Imediata',
+    'All-on-4 / All-on-6',
+    'Enxertos Ósseos',
+    'Implantes Zigomáticos',
+  ],
+  'Clínica de Estética': [
+    'Facetas e Lentes',
+    'Harmonização Orofacial',
+    'Branqueamento Dentário',
+    'Design do Sorriso',
+  ],
+  Odontopediatria: [
     'Odontopediatria',
-    'Harmonização Facial',
+    'Ortodontia Preventiva',
+    'Sedação Consciente',
+    'Pacientes Especiais',
   ],
-  'Clínica Geral': [
-    'Medicina da Família',
-    'Check-up Executivo',
-    'Preventiva',
-    'Atendimento Popular',
-  ],
-  Psicologia: [
-    'TCC',
-    'Psicanálise',
-    'Comportamental',
-    'Infantil',
-    'Terapia de Casal',
-    'Neuropsicologia',
-  ],
-  Nutrição: [
-    'Esportiva',
-    'Emagrecimento',
-    'Clínica',
-    'Comportamental',
-    'Materno-Infantil',
-  ],
-  Estética: [
-    'Facial',
-    'Corporal',
-    'Biomédica',
-    'Laser',
-    'Injetáveis',
-    'Pré e Pós Operatório',
-  ],
-  Pilates: ['Solo', 'Aparelhos', 'Reabilitação', 'Fitness', 'Gestantes'],
-  Multidisciplinar: [
-    'Saúde Integrativa',
-    'Dor Crônica',
-    'Bem-estar',
-    'Emagrecimento',
-  ],
-  Outro: ['Especialidades Diversas', 'Nicho Específico', 'Consultório Isolado'],
 }
 
-const CITIES_BRAZIL = [
-  'São Paulo, SP',
-  'Rio de Janeiro, RJ',
-  'Belo Horizonte, MG',
-  'Brasília, DF',
-  'Curitiba, PR',
-  'Porto Alegre, RS',
-  'Salvador, BA',
-  'Recife, PE',
-  'Fortaleza, CE',
-  'Goiânia, GO',
-  'Campinas, SP',
-  'Florianópolis, SC',
-  'Manaus, AM',
-  'Belém, PA',
-  'Vitória, ES',
+// Generic dental specialties fallback
+const ALL_DENTAL_SPECIALTIES = [
+  'Medicina Dentária Geral',
+  'Implantologia',
+  'Ortodontia',
+  'Endodontia',
+  'Periodontia',
+  'Odontopediatria',
+  'Cirurgia Oral',
+  'Prótese Dentária',
+  'Estética Dentária',
+  'Harmonização Orofacial',
+  'Oclusão e ATM',
+  'Higiene Oral',
 ]
 
-const CITIES_PORTUGAL = [
+const PORTUGAL_LOCATIONS = [
   'Lisboa, Lisboa',
   'Porto, Porto',
+  'Vila Nova de Gaia, Porto',
+  'Amadora, Lisboa',
   'Braga, Braga',
+  'Funchal, Madeira',
   'Coimbra, Coimbra',
   'Setúbal, Setúbal',
+  'Almada, Setúbal',
+  'Agualva-Cacém, Lisboa',
+  'Queluz, Lisboa',
+  'Rio Tinto, Porto',
+  'Barreiro, Setúbal',
   'Aveiro, Aveiro',
-  'Faro, Faro',
   'Viseu, Viseu',
+  'Odivelas, Lisboa',
   'Leiria, Leiria',
-  'Funchal, Madeira',
+  'Guimarães, Braga',
+  'Évora, Évora',
+  'Faro, Faro',
+  'Portimão, Faro',
+  'Cascais, Lisboa',
+  'Oeiras, Lisboa',
+  'Sintra, Lisboa',
+  'Loures, Lisboa',
+  'Matosinhos, Porto',
+  'Ponta Delgada, Açores',
+  'Castelo Branco, Castelo Branco',
+  'Viana do Castelo, Viana do Castelo',
+  'Santarém, Santarém',
+  'Vila Real, Vila Real',
+  'Guarda, Guarda',
+  'Beja, Beja',
+  'Bragança, Bragança',
+  'Portalegre, Portalegre',
 ]
 
-const GOALS_OPTIONS = [
-  'Crescer faturamento',
-  'Organizar processos internos',
-  'Expandir unidades',
-  'Melhorar experiência do paciente',
-  'Aumentar lucro líquido',
-  'Construir autoridade digital',
-  'Reter pacientes atuais',
-  'Profissionalizar a gestão',
-  'Lançar novos serviços',
+const DENTAL_GOALS_OPTIONS = [
+  'Aumentar Faturação em Implantes',
+  'Reduzir Taxa de No-shows (Faltas)',
+  'Aumentar Taxa de Aceitação de Orçamentos',
+  'Atrair Mais Pacientes Particulares',
+  'Fidelização de Pacientes (Recorrência)',
+  'Otimizar Ocupação dos Gabinetes',
+  'Aumentar Ticket Médio por Consulta',
+  'Expansão de Carteira de Seguros',
+  'Digitalizar Processos (Paperless)',
+  'Melhorar Reputação Online (Reviews)',
+  'Lançar Harmonização Orofacial',
+  'Expansão Física (Novas Cadeiras)',
 ]
 
 const STAGE_OPTIONS = [
-  'Iniciante',
-  'Em Crescimento',
-  'Consolidada',
-  'Em Crise',
-  'Outro',
+  'Iniciante (Consultório Novo)',
+  'Em Crescimento (Expansão)',
+  'Consolidada (Estável)',
+  'Em Reestruturação (Crise)',
+  'Transição de Gestão',
 ]
 
 const STEPS_CONFIG = [
   {
     id: 'identity',
-    title: 'Identidade da Clínica',
-    description: 'Selecione as categorias que melhor representam sua atuação.',
+    title: 'Modelo de Negócio',
+    description: 'Selecione o tipo de estrutura da sua clínica dentária.',
     icon: Settings2,
     category: 'Identidade',
   },
   {
     id: 'name',
-    title: 'Nome da Clínica',
-    description: 'Como ela é conhecida no mercado.',
+    title: 'Identificação',
+    description: 'Nome da Clínica ou Consultório.',
     icon: Settings2,
     category: 'Identidade',
   },
   {
     id: 'location',
     title: 'Localização',
-    description: 'Onde a clínica está situada?',
+    description: 'Em que Concelho/Distrito de Portugal está situada?',
     icon: MapPin,
     category: 'Identidade',
   },
   {
     id: 'niche',
-    title: 'Nicho de Atuação',
-    description: 'Qual é o foco principal dos seus atendimentos?',
-    icon: Target,
+    title: 'Foco Clínico',
+    description: 'Qual é a principal área de especialização?',
+    icon: Stethoscope,
     category: 'Contexto',
   },
   {
     id: 'stage',
-    title: 'Estágio do Negócio',
-    description: 'Em qual momento a clínica se encontra?',
+    title: 'Estágio Atual',
+    description: 'Em que momento o negócio se encontra?',
     icon: Building2,
     category: 'Contexto',
   },
   {
     id: 'staff',
-    title: 'Composição da Equipe',
-    description: 'Quem faz parte do time atualmente?',
+    title: 'Equipa Clínica e Apoio',
+    description: 'Defina a composição do seu corpo clínico e staff.',
     icon: Users,
     category: 'Contexto',
   },
   {
     id: 'goals',
-    title: 'Objetivos Estratégicos',
-    description: 'Quais são as prioridades para 2026? (Máx. 3)',
+    title: 'Objetivos 2026',
+    description: 'Quais as prioridades estratégicas? (Máx. 3)',
     icon: Rocket,
     category: 'Estratégia',
   },
   {
     id: 'tone',
-    title: 'Tom de Linguagem',
-    description: 'Como devemos nos comunicar nos relatórios?',
+    title: 'Comunicação',
+    description: 'Tom de voz para os relatórios estratégicos.',
     icon: MessageSquare,
     category: 'Estratégia',
   },
@@ -250,7 +279,7 @@ export default function SetupWizard() {
   // -- FORM STATES --
   const [identityTypes, setIdentityTypes] = useState<string[]>([])
   const [clinicName, setClinicName] = useState('')
-  const [country, setCountry] = useState('')
+  const [country, setCountry] = useState('Portugal') // Default to Portugal
   const [city, setCity] = useState('')
   const [openCityCombo, setOpenCityCombo] = useState(false)
   const [niche, setNiche] = useState('')
@@ -274,7 +303,8 @@ export default function SetupWizard() {
   const [tone, setTone] = useState('')
 
   // -- INITIALIZATION --
-  useMemo(() => {
+  useEffect(() => {
+    // Basic init if saved data exists
     if (savedConfig.nome_clinica) setClinicName(savedConfig.nome_clinica)
     if (savedConfig.tipo_clinica)
       setIdentityTypes(savedConfig.tipo_clinica.split(', '))
@@ -282,29 +312,27 @@ export default function SetupWizard() {
     if (savedConfig.objetivo_geral_2026)
       setSelectedGoals(savedConfig.objetivo_geral_2026.split(', '))
     if (savedConfig.tom_linguagem) setTone(savedConfig.tom_linguagem)
+
+    // Improved Location parsing
     if (savedConfig.localizacao) {
-      const parts = savedConfig.localizacao.split(', ')
-      if (parts.length > 1) {
-        const potentialCountry = parts[parts.length - 1]
-        if (['Brasil', 'Portugal'].includes(potentialCountry)) {
-          setCountry(potentialCountry)
-          setCity(parts.slice(0, -1).join(', '))
-        } else {
-          setCity(savedConfig.localizacao)
-        }
+      if (savedConfig.localizacao.includes('Portugal')) {
+        setCountry('Portugal')
+        const cityName = savedConfig.localizacao
+          .replace(', Portugal', '')
+          .trim()
+        setCity(cityName)
       } else {
         setCity(savedConfig.localizacao)
       }
     }
-    // Note: Parsing complex staff string back to state is complex, skipping for MVP simplicity (assuming wizard is for setup)
-  }, []) // Run once on mount
+  }, [savedConfig])
 
   // -- HANDLERS --
 
   const handleNext = () => {
     // Validation
     if (currentStep === 0 && identityTypes.length === 0) {
-      toast.error('Selecione pelo menos um tipo de clínica.')
+      toast.error('Selecione pelo menos um modelo de negócio.')
       return
     }
     if (currentStep === 1 && !clinicName.trim()) {
@@ -312,11 +340,11 @@ export default function SetupWizard() {
       return
     }
     if (currentStep === 2 && (!country || !city)) {
-      toast.error('Selecione o país e a cidade.')
+      toast.error('Selecione a localização completa.')
       return
     }
     if (currentStep === 3 && !niche) {
-      toast.error('Selecione um nicho de atuação.')
+      toast.error('Selecione uma área de foco clínico.')
       return
     }
     if (currentStep === 4 && !stage) {
@@ -324,7 +352,7 @@ export default function SetupWizard() {
       return
     }
     if (currentStep === 6 && selectedGoals.length === 0) {
-      toast.error('Selecione pelo menos um objetivo.')
+      toast.error('Selecione pelo menos um objetivo estratégico.')
       return
     }
     if (currentStep === 7 && !tone) {
@@ -352,9 +380,9 @@ export default function SetupWizard() {
         const count = members.length
         const label =
           role === 'secretaries'
-            ? 'Secretárias'
+            ? 'Assistentes/Secretárias'
             : role === 'specialists'
-              ? 'Especialistas'
+              ? 'Médicos Dentistas'
               : 'Gestores'
         return `${count} ${label}: ${details}`
       })
@@ -366,15 +394,15 @@ export default function SetupWizard() {
       localizacao: `${city}, ${country}`,
       publico_principal: niche,
       estagio_clinica: stage as any,
-      gestores_principais: staffString || 'Equipe não detalhada',
+      gestores_principais: staffString || 'Equipa não detalhada',
       objetivo_geral_2026: selectedGoals.join(', '),
-      tamanho_relatorio: 'resumido_20', // Defaulting as step was removed
+      tamanho_relatorio: 'resumido_20',
       tom_linguagem: tone as any,
     }
 
     setConfigInicial(finalConfig)
     setIsCompleted(true)
-    toast.success('Configuração concluída com sucesso!')
+    toast.success('Configuração da Clínica Dentária concluída!')
   }
 
   // Identity Logic
@@ -384,28 +412,20 @@ export default function SetupWizard() {
     )
   }
 
-  // Location Logic
-  const currentCities =
-    country === 'Brasil'
-      ? CITIES_BRAZIL
-      : country === 'Portugal'
-        ? CITIES_PORTUGAL
-        : []
-
-  // Niche Logic
+  // Niche Logic - Filter based on identity
   const availableNiches = useMemo(() => {
+    if (identityTypes.length === 0) return ALL_DENTAL_SPECIALTIES
+
     const options = new Set<string>()
-    if (identityTypes.length === 0) {
-      Object.values(NICHES_MAP)
-        .flat()
-        .forEach((n) => options.add(n))
-    } else {
-      identityTypes.forEach((type) => {
-        const niches = NICHES_MAP[type] || NICHES_MAP['Outro']
-        niches.forEach((n) => options.add(n))
-      })
-    }
-    return Array.from(options)
+    identityTypes.forEach((type) => {
+      const related = DENTAL_NICHES_MAP[type]
+      if (related) {
+        related.forEach((n) => options.add(n))
+      }
+    })
+
+    // If no specific map found, return generic list, otherwise return mapped + generic unique
+    return options.size > 0 ? Array.from(options) : ALL_DENTAL_SPECIALTIES
   }, [identityTypes])
 
   // Staff Logic
@@ -419,15 +439,15 @@ export default function SetupWizard() {
       if (newCount > currentList.length) {
         // Add
         const toAdd = newCount - currentList.length
+        let defaultRole = ''
+        if (role === 'secretaries') defaultRole = 'Assistente Dentária'
+        if (role === 'specialists') defaultRole = 'Médico Dentista'
+        if (role === 'managers') defaultRole = 'Diretor Clínico'
+
         const newItems = Array.from({ length: toAdd }).map(() => ({
           id: Math.random().toString(36).substr(2, 9),
           name: '',
-          role:
-            role === 'secretaries'
-              ? 'Secretária'
-              : role === 'managers'
-                ? 'Gerente'
-                : 'Especialista',
+          role: defaultRole,
         }))
         return { ...prev, [role]: [...currentList, ...newItems] }
       } else if (newCount < currentList.length) {
@@ -456,7 +476,7 @@ export default function SetupWizard() {
     setSelectedGoals((prev) => {
       if (prev.includes(goal)) return prev.filter((g) => g !== goal)
       if (prev.length >= 3) {
-        toast.warning('Máximo de 3 objetivos atingido.')
+        toast.warning('Máximo de 3 objetivos permitido.')
         return prev
       }
       return [...prev, goal]
@@ -477,8 +497,8 @@ export default function SetupWizard() {
           Tudo Pronto!
         </h1>
         <p className="text-slate-500 mb-8 text-center max-w-md">
-          Configuração finalizada. O sistema agora possui os dados necessários
-          para gerar sua estratégia.
+          Configuração finalizada. O sistema agora possui os dados da sua
+          clínica para gerar a estratégia.
         </p>
         <Button onClick={() => (window.location.href = '/')}>
           Ir para Dashboard
@@ -525,10 +545,10 @@ export default function SetupWizard() {
         </CardHeader>
 
         <CardContent className="pt-4 pb-8 pl-[3.25rem] pr-6">
-          {/* STEP 1: IDENTITY */}
+          {/* STEP 1: IDENTITY (Dental) */}
           {currentStep === 0 && (
             <div className="flex flex-wrap gap-2">
-              {CLINIC_TYPES.map((type) => (
+              {DENTAL_CLINIC_TYPES.map((type) => (
                 <Badge
                   key={type}
                   variant={identityTypes.includes(type) ? 'default' : 'outline'}
@@ -551,13 +571,13 @@ export default function SetupWizard() {
               autoFocus
               value={clinicName}
               onChange={(e) => setClinicName(e.target.value)}
-              placeholder="Ex: Clínica Vida Plena"
+              placeholder="Ex: Clínica Dentária Sorriso Radiante"
               className="text-lg h-12"
               onKeyDown={(e) => e.key === 'Enter' && handleNext()}
             />
           )}
 
-          {/* STEP 3: LOCATION */}
+          {/* STEP 3: LOCATION (Portugal Focus) */}
           {currentStep === 2 && (
             <div className="grid gap-4">
               <div className="space-y-2">
@@ -567,17 +587,15 @@ export default function SetupWizard() {
                     <SelectValue placeholder="Selecione o país" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Brasil">Brasil</SelectItem>
                     <SelectItem value="Portugal">Portugal</SelectItem>
+                    <SelectItem value="Brasil">Brasil</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              {country && (
+              {country === 'Portugal' && (
                 <div className="space-y-2 animate-fade-in">
-                  <Label>
-                    {country === 'Brasil' ? 'Cidade' : 'Concelho/Distrito'}
-                  </Label>
+                  <Label>Concelho / Distrito</Label>
                   <Popover open={openCityCombo} onOpenChange={setOpenCityCombo}>
                     <PopoverTrigger asChild>
                       <Button
@@ -586,19 +604,19 @@ export default function SetupWizard() {
                         aria-expanded={openCityCombo}
                         className="w-full justify-between h-11"
                       >
-                        {city || 'Selecione ou digite...'}
+                        {city || 'Pesquisar Concelho ou Distrito...'}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[400px] p-0">
                       <Command>
-                        <CommandInput placeholder="Buscar cidade..." />
+                        <CommandInput placeholder="Escreva o nome..." />
                         <CommandList>
                           <CommandEmpty>
-                            Nenhuma cidade encontrada.
+                            Nenhuma localização encontrada.
                           </CommandEmpty>
-                          <CommandGroup>
-                            {currentCities.map((c) => (
+                          <CommandGroup heading="Principais Localizações">
+                            {PORTUGAL_LOCATIONS.map((c) => (
                               <CommandItem
                                 key={c}
                                 value={c}
@@ -622,18 +640,30 @@ export default function SetupWizard() {
                     </PopoverContent>
                   </Popover>
                   <p className="text-xs text-muted-foreground">
-                    *Lista de sugestões baseada nas principais cidades.
+                    *Selecione a sua área de atuação principal.
                   </p>
                 </div>
+              )}
+
+              {country !== 'Portugal' && (
+                <Input
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="Digite sua cidade..."
+                  className="h-11"
+                />
               )}
             </div>
           )}
 
-          {/* STEP 4: NICHE (Conditional) */}
+          {/* STEP 4: NICHE (Specialties) */}
           {currentStep === 3 && (
             <div className="space-y-4">
               <div className="text-sm text-slate-500 mb-2">
-                Opções baseadas em: <strong>{identityTypes.join(', ')}</strong>
+                Especialidades baseadas em:{' '}
+                <strong>
+                  {identityTypes.join(', ') || 'Medicina Dentária'}
+                </strong>
               </div>
               <RadioGroup
                 value={niche}
@@ -684,14 +714,14 @@ export default function SetupWizard() {
             </RadioGroup>
           )}
 
-          {/* STEP 6: STAFF (Dynamic) */}
+          {/* STEP 6: STAFF (Dental Roles) */}
           {currentStep === 5 && (
             <div className="space-y-8">
               {/* Counters */}
               <div className="grid grid-cols-3 gap-4">
                 {[
                   { id: 'secretaries', label: 'Secretárias' },
-                  { id: 'specialists', label: 'Especialistas' },
+                  { id: 'specialists', label: 'Médicos' },
                   { id: 'managers', label: 'Gestores' },
                 ].map((role) => (
                   <div key={role.id} className="text-center space-y-2">
@@ -730,10 +760,10 @@ export default function SetupWizard() {
                   if (members.length === 0) return null
                   const label =
                     role === 'secretaries'
-                      ? 'Secretárias'
+                      ? 'Assistentes / Receção'
                       : role === 'managers'
-                        ? 'Gestores'
-                        : 'Especialistas'
+                        ? 'Direção / Gestão'
+                        : 'Corpo Clínico'
                   return (
                     <div key={role} className="space-y-3">
                       <h4 className="font-semibold text-sm uppercase text-slate-500 border-b pb-1">
@@ -742,7 +772,7 @@ export default function SetupWizard() {
                       {members.map((member, idx) => (
                         <div key={member.id} className="flex gap-2">
                           <Input
-                            placeholder={`Nome da ${label.slice(0, -1)}`}
+                            placeholder="Nome"
                             value={member.name}
                             onChange={(e) =>
                               updateStaffMember(
@@ -755,7 +785,7 @@ export default function SetupWizard() {
                             className="flex-1"
                           />
                           <Input
-                            placeholder="Cargo/Função"
+                            placeholder="Função (Ex: Higienista, Ortodontista)"
                             value={member.role}
                             onChange={(e) =>
                               updateStaffMember(
@@ -776,11 +806,11 @@ export default function SetupWizard() {
             </div>
           )}
 
-          {/* STEP 7: GOALS */}
+          {/* STEP 7: GOALS (Dental) */}
           {currentStep === 6 && (
             <div className="space-y-4">
               <div className="flex justify-between items-center text-sm text-slate-500">
-                <span>Selecione até 3 opções</span>
+                <span>Selecione até 3 prioridades</span>
                 <span
                   className={cn(
                     selectedGoals.length === 3
@@ -792,7 +822,7 @@ export default function SetupWizard() {
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
-                {GOALS_OPTIONS.map((goal) => (
+                {DENTAL_GOALS_OPTIONS.map((goal) => (
                   <Badge
                     key={goal}
                     variant={
@@ -825,18 +855,18 @@ export default function SetupWizard() {
               {[
                 {
                   value: 'formal',
-                  label: 'Formal',
-                  desc: 'Corporativo e técnico',
+                  label: 'Formal (Institucional)',
+                  desc: 'Comunicação clínica, séria e corporativa.',
                 },
                 {
                   value: 'intermediario',
-                  label: 'Intermediário',
-                  desc: 'Profissional mas acessível',
+                  label: 'Profissional Acessível',
+                  desc: 'Equilíbrio entre técnica e proximidade.',
                 },
                 {
                   value: 'informal',
-                  label: 'Informal',
-                  desc: 'Próximo e motivacional',
+                  label: 'Próximo (Humanizado)',
+                  desc: 'Foco total na empatia e acolhimento.',
                 },
               ].map((opt) => (
                 <Label
