@@ -4,6 +4,7 @@ import {
   Report2,
   Report3,
   Report4,
+  Report5,
   SWOT,
 } from '@/stores/useStrategyStore'
 
@@ -574,5 +575,344 @@ export const generateTacticalPlanReport = (state: StrategyState): Report4 => {
       const priorityOrder = { Alta: 3, Média: 2, Baixa: 1 }
       return priorityOrder[b.priority] - priorityOrder[a.priority]
     }),
+  }
+}
+
+export const generateOperationalPlanReport = (
+  state: StrategyState,
+): Report5 => {
+  const { clinicConfig } = state
+  const clinicName = clinicConfig.nome_clinica || 'a Clínica'
+
+  // 1. Routines
+  const routines = [
+    {
+      area: 'Recepção',
+      routines: [
+        {
+          frequency: 'Diária' as const,
+          tasks: [
+            'Verificar agenda do dia seguinte e confirmar presenças via WhatsApp.',
+            'Organizar prontuários e fichas dos pacientes agendados.',
+            'Realizar abertura de caixa e conferência de troco.',
+            'Responder mensagens pendentes no WhatsApp Business e redes sociais.',
+            'Higienizar balcão e área de espera a cada 2 horas.',
+          ],
+        },
+        {
+          frequency: 'Semanal' as const,
+          tasks: [
+            'Revisar lista de espera e tentar encaixes.',
+            'Solicitar reposição de material de escritório e café.',
+            'Enviar lembretes de retorno para pacientes inativos há 6 meses.',
+          ],
+        },
+        {
+          frequency: 'Mensal' as const,
+          tasks: [
+            'Relatório de atendimentos realizados vs. cancelados (No-show).',
+            'Treinamento rápido de script de vendas e atendimento.',
+          ],
+        },
+      ],
+    },
+    {
+      area: 'Atendimento Clínico',
+      routines: [
+        {
+          frequency: 'Diária' as const,
+          tasks: [
+            'Revisar prontuários antes do início dos atendimentos.',
+            'Evoluir prontuários imediatamente após cada consulta.',
+            'Verificar estoque de insumos da sala de procedimentos.',
+          ],
+        },
+        {
+          frequency: 'Semanal' as const,
+          tasks: [
+            'Reunião de discussão de casos clínicos complexos.',
+            'Esterilização e manutenção preventiva de equipamentos leves.',
+          ],
+        },
+        {
+          frequency: 'Mensal' as const,
+          tasks: [
+            'Revisão de protocolos assistenciais.',
+            'Inventário de insumos médicos e medicamentos.',
+          ],
+        },
+      ],
+    },
+    {
+      area: 'Administrativo/Financeiro',
+      routines: [
+        {
+          frequency: 'Diária' as const,
+          tasks: [
+            'Conciliação bancária dos recebimentos do dia anterior.',
+            'Pagamento de contas vencendo no dia.',
+            'Lançamento de notas fiscais no sistema.',
+          ],
+        },
+        {
+          frequency: 'Semanal' as const,
+          tasks: [
+            'Projeção de fluxo de caixa para a próxima semana.',
+            'Faturamento de guias de convênio (se aplicável).',
+            'Pagamento de fornecedores e prestadores.',
+          ],
+        },
+        {
+          frequency: 'Mensal' as const,
+          tasks: [
+            'Fechamento contábil e apuração de DRE.',
+            'Pagamento da folha de pagamento e impostos.',
+            'Reunião de resultados com a diretoria.',
+          ],
+        },
+      ],
+    },
+    {
+      area: 'Marketing',
+      routines: [
+        {
+          frequency: 'Diária' as const,
+          tasks: [
+            'Repostar stories de pacientes e interagir com comentários.',
+            'Captar fotos/vídeos do dia a dia da clínica (bastidores).',
+          ],
+        },
+        {
+          frequency: 'Semanal' as const,
+          tasks: [
+            'Planejar posts da semana seguinte (conteúdo educativo).',
+            'Disparar e-mail marketing ou lista de transmissão com dicas de saúde.',
+          ],
+        },
+        {
+          frequency: 'Mensal' as const,
+          tasks: [
+            'Analisar métricas (ROI, CAC, novos seguidores).',
+            'Planejar campanha sazonal do próximo mês.',
+          ],
+        },
+      ],
+    },
+  ]
+
+  // 2. SOPs (Standard Operating Procedures)
+  const sops = [
+    {
+      id: 'sop1',
+      title: 'Boas-vindas e Recepção',
+      objective:
+        'Garantir que todo paciente se sinta acolhido e orientado desde a entrada.',
+      responsible: 'Recepção',
+      steps: [
+        'Cumprimentar o paciente pelo nome, com sorriso e contato visual ao entrar.',
+        'Confirmar dados cadastrais rapidamente (endereço, telefone, convênio).',
+        'Oferecer água, café ou wi-fi enquanto aguarda.',
+        'Informar ao médico/especialista que o paciente chegou via sistema.',
+        'Caso haja atraso > 10min, informar o paciente proativamente e pedir desculpas.',
+      ],
+    },
+    {
+      id: 'sop2',
+      title: 'Agendamento e Confirmação',
+      objective: 'Maximizar a ocupação da agenda e reduzir faltas.',
+      responsible: 'Recepção',
+      steps: [
+        'Oferecer sempre duas opções de horário ("Temos terça às 10h ou quinta às 14h?").',
+        'Registrar agendamento no sistema com nome completo e telefone.',
+        'Enviar confirmação via WhatsApp 24h antes da consulta.',
+        'Se o paciente não responder até 4h antes, ligar para confirmar.',
+        'Em caso de cancelamento, acionar imediatamente a Lista de Espera.',
+      ],
+    },
+    {
+      id: 'sop3',
+      title: 'Atendimento Clínico Padrão',
+      objective:
+        'Assegurar qualidade técnica e percepção de valor na consulta.',
+      responsible: 'Corpo Clínico',
+      steps: [
+        'Chamar o paciente na porta ou recepção (evitar gritar).',
+        'Realizar anamnese detalhada ouvindo as queixas sem interromper.',
+        'Explicar o diagnóstico e tratamento em linguagem simples.',
+        'Entregar receita/orientações impressas ou digitais legíveis.',
+        'Acompanhar o paciente até a porta do consultório ao finalizar.',
+      ],
+    },
+    {
+      id: 'sop4',
+      title: 'Pós-Venda e Fidelização',
+      objective: 'Aumentar o retorno e indicação de pacientes.',
+      responsible: 'CRC / Recepção',
+      steps: [
+        'Enviar mensagem de "Como você está?" 2 a 3 dias após o procedimento/consulta.',
+        'Enviar pesquisa de satisfação (NPS) via link.',
+        'Agendar o retorno preventivo no sistema antes do paciente sair (se possível).',
+        'Enviar felicitações no dia do aniversário do paciente.',
+      ],
+    },
+  ]
+
+  // 3. Checklists
+  const checklists = [
+    {
+      id: 'chk1',
+      title: 'Abertura da Clínica',
+      items: [
+        'Destrancar portas e desligar alarme.',
+        'Ligar luzes, ar-condicionado e som ambiente.',
+        'Verificar limpeza da recepção e banheiros.',
+        'Ligar computadores e abrir sistema de gestão.',
+        'Preparar café e água para pacientes.',
+        'Conferir agenda do dia impresso ou na tela.',
+      ],
+    },
+    {
+      id: 'chk2',
+      title: 'Fechamento da Clínica',
+      items: [
+        'Conferir se todos os pacientes foram atendidos.',
+        'Arquivar prontuários físicos utilizados.',
+        'Realizar fechamento de caixa e guardar valores no cofre.',
+        'Desligar equipamentos médicos, computadores e luzes.',
+        'Verificar trancas de janelas e portas.',
+        'Ligar alarme ao sair.',
+      ],
+    },
+    {
+      id: 'chk3',
+      title: 'Preparação de Consultório',
+      items: [
+        'Higienizar maca/cadeira com álcool 70%.',
+        'Trocar lençol de papel descartável.',
+        'Verificar disponibilidade de luvas, máscaras e instrumentos.',
+        'Testar funcionamento de equipamentos específicos.',
+        'Organizar mesa do médico (canetas, receituários).',
+      ],
+    },
+  ]
+
+  // 4. 2026 Calendar
+  const calendar = [
+    {
+      month: 'Janeiro',
+      theme: 'Janeiro Branco (Saúde Mental)',
+      events: [
+        'Planejamento Anual com a Equipe',
+        'Campanha: Comece o ano cuidando de você',
+        'Revisão de contratos anuais',
+      ],
+    },
+    {
+      month: 'Fevereiro',
+      theme: 'Prevenção e Check-up',
+      events: [
+        'Treinamento de Atendimento (SOPs)',
+        'Ação de Carnaval: Kits de saúde',
+        'Auditoria de estoques',
+      ],
+    },
+    {
+      month: 'Março',
+      theme: 'Dia da Mulher / Março Lilás',
+      events: [
+        'Campanha Especial Mês da Mulher',
+        'Fechamento do Trimestre (Q1) e Análise de OKRs',
+        'Pesquisa de Clima Organizacional',
+      ],
+    },
+    {
+      month: 'Abril',
+      theme: 'Dia Mundial da Saúde',
+      events: [
+        'Semana da Saúde: Palestras ou Lives',
+        'Revisão de preços e tabela de serviços',
+        'Treinamento Técnico para Corpo Clínico',
+      ],
+    },
+    {
+      month: 'Maio',
+      theme: 'Mês das Mães',
+      events: [
+        'Campanha: Presenteie com Saúde',
+        'Review de Processos de Atendimento',
+        'Manutenção preventiva predial',
+      ],
+    },
+    {
+      month: 'Junho',
+      theme: 'Junho Vermelho (Doação de Sangue)',
+      events: [
+        'Ação social comunitária',
+        'Fechamento do Trimestre (Q2) e Análise de OKRs',
+        'Festa Junina interna da equipe',
+      ],
+    },
+    {
+      month: 'Julho',
+      theme: 'Julho Amarelo (Hepatites)',
+      events: [
+        'Campanha de Férias: Check-up para viagem',
+        'Treinamento de Vendas para Recepção',
+        'Feedback semestral individual',
+      ],
+    },
+    {
+      month: 'Agosto',
+      theme: 'Agosto Dourado / Dia dos Pais',
+      events: [
+        'Campanha Saúde do Homem',
+        'Revisão do planejamento estratégico',
+        'Renegociação com fornecedores',
+      ],
+    },
+    {
+      month: 'Setembro',
+      theme: 'Setembro Amarelo (Valorização da Vida)',
+      events: [
+        'Ações de conscientização',
+        'Fechamento do Trimestre (Q3) e Análise de OKRs',
+        'Planejamento da Black Friday (se aplicável)',
+      ],
+    },
+    {
+      month: 'Outubro',
+      theme: 'Outubro Rosa (Saúde da Mulher)',
+      events: [
+        'Grande Campanha de Prevenção',
+        'Decoração temática da clínica',
+        'Evento para pacientes VIPs',
+      ],
+    },
+    {
+      month: 'Novembro',
+      theme: 'Novembro Azul (Saúde do Homem)',
+      events: [
+        'Campanha focada em público masculino',
+        'Black Friday: Condições especiais para tratamentos',
+        'Definição de metas para o ano seguinte',
+      ],
+    },
+    {
+      month: 'Dezembro',
+      theme: 'Dezembro Vermelho / Festas',
+      events: [
+        'Fechamento do Ano (Q4) e Celebração de Resultados',
+        'Confraternização da equipe',
+        'Recesso coletivo (se houver) e escalas',
+      ],
+    },
+  ]
+
+  return {
+    generatedAt: new Date().toISOString(),
+    routines,
+    sops,
+    checklists,
+    calendar,
   }
 }

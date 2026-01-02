@@ -195,6 +195,44 @@ export interface Report4 {
   }[]
 }
 
+export interface RoutineTask {
+  frequency: 'Diária' | 'Semanal' | 'Mensal'
+  tasks: string[]
+}
+
+export interface AreaRoutines {
+  area: string
+  routines: RoutineTask[]
+}
+
+export interface SOP {
+  id: string
+  title: string
+  objective: string
+  responsible: string
+  steps: string[]
+}
+
+export interface Checklist {
+  id: string
+  title: string
+  items: string[]
+}
+
+export interface CalendarMonth {
+  month: string
+  theme: string
+  events: string[]
+}
+
+export interface Report5 {
+  generatedAt: string
+  routines: AreaRoutines[]
+  sops: SOP[]
+  checklists: Checklist[]
+  calendar: CalendarMonth[]
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -234,6 +272,7 @@ export interface StrategyState {
   relatorio_2: Report2 | null
   relatorio_3: Report3 | null
   relatorio_4: Report4 | null
+  relatorio_5: Report5 | null
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -256,6 +295,7 @@ export interface StrategyState {
   setRelatorio2: (report: Report2) => void
   setRelatorio3: (report: Report3) => void
   setRelatorio4: (report: Report4) => void
+  setRelatorio5: (report: Report5) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -416,6 +456,7 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   relatorio_2: null,
   relatorio_3: null,
   relatorio_4: null,
+  relatorio_5: null,
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -466,4 +507,5 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
   setRelatorio3: (report) => set(() => ({ relatorio_3: report })),
   setRelatorio4: (report) => set(() => ({ relatorio_4: report })),
+  setRelatorio5: (report) => set(() => ({ relatorio_5: report })),
 }))

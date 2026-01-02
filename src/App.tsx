@@ -10,6 +10,7 @@ import Diagnostic from './pages/Diagnostic'
 import Strategy from './pages/Strategy'
 import StrategicMap from './pages/StrategicMap'
 import TacticalPlan from './pages/TacticalPlan'
+import OperationalPlan from './pages/OperationalPlan'
 import Execution from './pages/Execution'
 import SetupWizard from './pages/SetupWizard'
 import OperationalAssessment from './pages/OperationalAssessment'
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/analise-avancada" element={<AdvancedAnalysis />} />
           <Route path="/mapa-estrategico" element={<StrategicMap />} />
           <Route path="/plano-tatico" element={<TacticalPlan />} />
+          <Route path="/plano-operacional" element={<OperationalPlan />} />
           <Route path="/execucao" element={<Execution />} />
           <Route path="/configuracao" element={<SetupWizard />} />
         </Route>

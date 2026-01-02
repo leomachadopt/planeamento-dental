@@ -15,6 +15,7 @@ import {
   Fingerprint,
   BrainCircuit,
   ListTodo,
+  FileText,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -44,6 +45,7 @@ const menuItems = [
   { title: 'Análise Avançada', url: '/analise-avancada', icon: BrainCircuit },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
   { title: 'Plano Tático (4)', url: '/plano-tatico', icon: ListTodo },
+  { title: 'Plano Operacional (5)', url: '/plano-operacional', icon: FileText },
   { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
   { title: 'Configuração', url: '/configuracao', icon: Settings },
 ]
