@@ -15,8 +15,5 @@
     "api/**/*.ts": {
       "runtime": "nodejs20.x"
     }
-  },
-  "env": {
-    "DATABASE_URL": "@database_url"
   }
 }
