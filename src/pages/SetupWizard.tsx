@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Select,
@@ -26,18 +25,46 @@ import {
   MessageSquare,
   Rocket,
   Settings2,
+  ChevronLeft,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
-const QUESTIONS = [
+interface QuestionOption {
+  value: string
+  label: string
+  description?: string
+}
+
+interface Question {
+  key: keyof ConfigInicial
+  title: string
+  description: string
+  type: 'text' | 'select' | 'composite' | 'radio'
+  options?: (string | QuestionOption)[]
+  placeholder?: string
+  allowOther?: boolean
+}
+
+const QUESTIONS: Question[] = [
   {
     key: 'tipo_clinica',
     title: 'Qual é o tipo da sua clínica?',
-    description:
-      'Ex: Fisioterapia, Odontologia, Dermatologia, Multidisciplinar.',
-    type: 'text',
-    placeholder: 'Digite o tipo da clínica...',
+    description: 'Selecione a categoria que melhor representa sua atuação.',
+    type: 'select',
+    allowOther: true,
+    options: [
+      'Fisioterapia',
+      'Odontologia',
+      'Clínica Geral',
+      'Psicologia',
+      'Nutrição',
+      'Estética',
+      'Pilates',
+      'Multidisciplinar',
+      'Outro',
+    ],
+    placeholder: 'Selecione o tipo...',
   },
   {
     key: 'nome_clinica',
@@ -56,16 +83,25 @@ const QUESTIONS = [
   {
     key: 'publico_principal',
     title: 'Quem é o seu público principal?',
-    description:
-      'Descreva brevemente o perfil dos seus pacientes (Ex: Atletas, Idosos, Classe A/B).',
-    type: 'text',
-    placeholder: 'Descreva seu público alvo...',
+    description: 'Selecione o perfil predominante dos seus pacientes.',
+    type: 'select',
+    allowOther: true,
+    options: [
+      'Reabilitação',
+      'Atletas',
+      'Idosos',
+      'Crianças',
+      'Saúde da Mulher',
+      'Outro',
+    ],
+    placeholder: 'Selecione o público...',
   },
   {
     key: 'estagio_clinica',
     title: 'Em qual estágio de negócio a clínica se encontra?',
     description: 'Selecione a opção que melhor descreve o momento atual.',
     type: 'select',
+    allowOther: true,
     options: [
       'Iniciante',
       'Em Crescimento',
@@ -73,6 +109,7 @@ const QUESTIONS = [
       'Em Crise',
       'Outro',
     ],
+    placeholder: 'Selecione o estágio...',
   },
   {
     key: 'gestores_principais',
@@ -86,9 +123,17 @@ const QUESTIONS = [
     title: 'Qual é o principal objetivo estratégico para 2026?',
     description:
       'O que seria um grande sucesso se alcançado até o final do ano?',
-    type: 'textarea',
-    placeholder:
-      'Ex: Dobrar o faturamento, abrir nova unidade, digitalizar processos...',
+    type: 'select',
+    allowOther: true,
+    options: [
+      'Crescer faturamento',
+      'Organizar processos',
+      'Expandir unidades',
+      'Melhorar experiência do paciente',
+      'Aumentar lucro',
+      'Outro',
+    ],
+    placeholder: 'Selecione o objetivo...',
   },
   {
     key: 'tamanho_relatorio',
@@ -98,11 +143,13 @@ const QUESTIONS = [
     options: [
       {
         value: 'resumido_20',
-        label: 'Resumido (~20 páginas) - Foco em ação rápida',
+        label: 'Resumido (20 páginas)',
+        description: 'Foco em ação rápida',
       },
       {
         value: 'detalhado_40',
-        label: 'Detalhado (~40 páginas) - Análise profunda',
+        label: 'Detalhado (40 páginas)',
+        description: 'Análise profunda',
       },
     ],
   },
@@ -112,12 +159,21 @@ const QUESTIONS = [
     description: 'Como a consultoria deve se comunicar com sua equipe.',
     type: 'radio',
     options: [
-      { value: 'formal', label: 'Formal - Corporativo e técnico' },
+      {
+        value: 'formal',
+        label: 'Formal',
+        description: 'Corporativo e técnico',
+      },
       {
         value: 'intermediario',
-        label: 'Intermediário - Profissional mas acessível',
+        label: 'Intermediário',
+        description: 'Profissional mas acessível',
       },
-      { value: 'informal', label: 'Informal - Próximo e motivacional' },
+      {
+        value: 'informal',
+        label: 'Informal',
+        description: 'Próximo e motivacional',
+      },
     ],
   },
 ]
@@ -128,7 +184,7 @@ export default function SetupWizard() {
   const [answers, setAnswers] = useState<Partial<ConfigInicial>>(savedConfig)
   const [isCompleted, setIsCompleted] = useState(false)
 
-  // Custom state for step 6 (Management)
+  // Custom state for composite step (Management)
   const [managerCount, setManagerCount] = useState('')
   const [managerRoles, setManagerRoles] = useState('')
 
@@ -143,23 +199,27 @@ export default function SetupWizard() {
       if (savedConfig.gestores_principais.includes('gestores:')) {
         const [countPart, rolesPart] =
           savedConfig.gestores_principais.split('gestores:')
-        setManagerCount(countPart.trim())
+        const count = countPart.trim()
+        setManagerCount(
+          ['1', '2-3', '4+'].includes(count) ? count : '1', // fallback to valid option if mismatch
+        )
         setManagerRoles(rolesPart.trim())
       } else {
+        // Legacy or unexpected format handling
         setManagerRoles(savedConfig.gestores_principais)
       }
     }
   }, [currentQuestion.key, savedConfig.gestores_principais])
 
   const handleNext = () => {
-    // Handling Composite Question 6
+    // Handling Composite Question
     if (currentQuestion.key === 'gestores_principais') {
-      if (!managerCount || !managerRoles) {
-        toast.error('Por favor, preencha a quantidade e os cargos.')
+      if (!managerCount) {
+        toast.error('Por favor, selecione a quantidade de gestores.')
         return
       }
-      // Save composite string
-      const compositeValue = `${managerCount} gestores: ${managerRoles}`
+      // Save composite string - roles are optional
+      const compositeValue = `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ''}`
       setAnswers((prev) => ({ ...prev, gestores_principais: compositeValue }))
 
       if (currentStep < QUESTIONS.length - 1) {
@@ -168,12 +228,11 @@ export default function SetupWizard() {
       }
     }
 
-    const key = currentQuestion.key as keyof ConfigInicial
-
-    // For normal questions check answers state
-    if (currentQuestion.key !== 'gestores_principais') {
+    // Validation for normal questions
+    const key = currentQuestion.key
+    if (key !== 'gestores_principais') {
       const value = answers[key]
-      if (!value) {
+      if (!value || (typeof value === 'string' && !value.trim())) {
         toast.error('Por favor, preencha o campo para continuar.')
         return
       }
@@ -183,17 +242,23 @@ export default function SetupWizard() {
       setCurrentStep((prev) => prev + 1)
     } else {
       setIsCompleted(true)
-      // Final save.
+      // Final save
       const finalConfig = {
         ...answers,
         gestores_principais:
           currentQuestion.key === 'gestores_principais'
-            ? `${managerCount} gestores: ${managerRoles}`
+            ? `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ''}`
             : answers.gestores_principais || '',
       } as ConfigInicial
 
       setConfigInicial(finalConfig)
       toast.success('Configuração concluída com sucesso!')
+    }
+  }
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1)
     }
   }
 
@@ -204,12 +269,37 @@ export default function SetupWizard() {
     }))
   }
 
+  const handleSelectChange = (value: string) => {
+    handleInputChange(value === 'Outro' ? '' : value)
+  }
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && currentQuestion.type !== 'textarea') {
-      handleNext()
+    if (e.key === 'Enter') {
+      // Prevent submit if it's a textarea or if inside a select that captures enter
+      if (
+        document.activeElement?.tagName !== 'TEXTAREA' &&
+        currentQuestion.type !== 'select'
+      ) {
+        handleNext()
+      }
     }
   }
 
+  // Logic to determine if "Outro" is selected in the UI
+  const getCurrentSelectValue = () => {
+    const val = answers[currentQuestion.key] as string
+    if (!val) return ''
+
+    const options = currentQuestion.options?.map((opt) =>
+      typeof opt === 'string' ? opt : opt.value,
+    )
+
+    if (options?.includes(val)) return val
+    if (currentQuestion.allowOther && val) return 'Outro'
+    return ''
+  }
+
+  const isOtherSelected = getCurrentSelectValue() === 'Outro'
   const progress = ((currentStep + 1) / QUESTIONS.length) * 100
 
   if (isCompleted) {
@@ -269,7 +359,7 @@ export default function SetupWizard() {
         </div>
       </div>
 
-      <Card className="border-t-4 border-t-teal-500 shadow-lg animate-fade-in-up">
+      <Card className="border-t-4 border-t-teal-500 shadow-lg animate-fade-in-up transition-all duration-300">
         <CardHeader className="space-y-1">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-teal-100 p-2 rounded-lg">
@@ -298,6 +388,7 @@ export default function SetupWizard() {
         </CardHeader>
         <CardContent className="pt-6 pb-8">
           <div className="space-y-4">
+            {/* TEXT INPUT */}
             {currentQuestion.type === 'text' && (
               <Input
                 autoFocus
@@ -313,46 +404,56 @@ export default function SetupWizard() {
               />
             )}
 
-            {currentQuestion.type === 'textarea' && (
-              <Textarea
-                autoFocus
-                value={
-                  (answers[
-                    currentQuestion.key as keyof ConfigInicial
-                  ] as string) || ''
-                }
-                onChange={(e) => handleInputChange(e.target.value)}
-                placeholder={currentQuestion.placeholder}
-                className="text-base min-h-[120px] resize-none"
-              />
-            )}
-
+            {/* SELECT INPUT */}
             {currentQuestion.type === 'select' && (
-              <Select
-                value={
-                  (answers[
-                    currentQuestion.key as keyof ConfigInicial
-                  ] as string) || ''
-                }
-                onValueChange={handleInputChange}
-              >
-                <SelectTrigger className="h-12 text-lg">
-                  <SelectValue placeholder="Selecione uma opção" />
-                </SelectTrigger>
-                <SelectContent>
-                  {currentQuestion.options?.map((opt: any) => (
-                    <SelectItem
-                      key={opt}
-                      value={opt}
-                      className="text-base py-3"
-                    >
-                      {opt}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="space-y-4">
+                <Select
+                  value={getCurrentSelectValue()}
+                  onValueChange={handleSelectChange}
+                >
+                  <SelectTrigger className="h-12 text-lg">
+                    <SelectValue placeholder={currentQuestion.placeholder} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currentQuestion.options?.map((opt) => {
+                      const value = typeof opt === 'string' ? opt : opt.value
+                      const label = typeof opt === 'string' ? opt : opt.label
+                      return (
+                        <SelectItem
+                          key={value}
+                          value={value}
+                          className="text-base py-3"
+                        >
+                          {label}
+                        </SelectItem>
+                      )
+                    })}
+                  </SelectContent>
+                </Select>
+
+                {isOtherSelected && (
+                  <div className="animate-fade-in-down space-y-2">
+                    <Label className="text-sm text-slate-500">
+                      Especifique a opção "Outro":
+                    </Label>
+                    <Input
+                      autoFocus
+                      value={
+                        (answers[
+                          currentQuestion.key as keyof ConfigInicial
+                        ] as string) || ''
+                      }
+                      onChange={(e) => handleInputChange(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      placeholder="Digite sua resposta específica..."
+                      className="text-lg h-12 border-teal-200 focus-visible:ring-teal-500"
+                    />
+                  </div>
+                )}
+              </div>
             )}
 
+            {/* COMPOSITE INPUT (GESTORES) */}
             {currentQuestion.type === 'composite' && (
               <div className="grid gap-6">
                 <div className="space-y-2">
@@ -371,7 +472,12 @@ export default function SetupWizard() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-base">Quais são os cargos?</Label>
+                  <Label className="text-base">
+                    Quais são os cargos?{' '}
+                    <span className="text-slate-400 font-normal text-sm">
+                      (Opcional)
+                    </span>
+                  </Label>
                   <Input
                     value={managerRoles}
                     onChange={(e) => setManagerRoles(e.target.value)}
@@ -382,6 +488,7 @@ export default function SetupWizard() {
               </div>
             )}
 
+            {/* RADIO INPUT */}
             {currentQuestion.type === 'radio' && (
               <RadioGroup
                 value={
@@ -392,39 +499,52 @@ export default function SetupWizard() {
                 onValueChange={handleInputChange}
                 className="grid gap-3"
               >
-                {currentQuestion.options?.map((opt: any) => (
-                  <div
-                    key={opt.value}
-                    className={cn(
-                      'flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors',
-                      answers[currentQuestion.key as keyof ConfigInicial] ===
-                        opt.value
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-slate-200',
-                    )}
-                  >
-                    <RadioGroupItem value={opt.value} id={opt.value} />
-                    <Label
-                      htmlFor={opt.value}
-                      className="flex-1 cursor-pointer text-base font-medium text-slate-700"
-                    >
-                      <div className="font-semibold">{opt.label}</div>
-                      {opt.description && (
-                        <div className="text-sm font-normal text-slate-500 mt-1">
-                          {opt.description}
-                        </div>
+                {currentQuestion.options?.map((opt) => {
+                  const value = typeof opt === 'string' ? opt : opt.value
+                  const label = typeof opt === 'string' ? opt : opt.label
+                  const desc = typeof opt === 'object' ? opt.description : null
+
+                  return (
+                    <div
+                      key={value}
+                      className={cn(
+                        'flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors',
+                        answers[currentQuestion.key as keyof ConfigInicial] ===
+                          value
+                          ? 'border-teal-500 bg-teal-50 shadow-sm ring-1 ring-teal-500/20'
+                          : 'border-slate-200',
                       )}
-                    </Label>
-                  </div>
-                ))}
+                      onClick={() => handleInputChange(value)}
+                    >
+                      <RadioGroupItem value={value} id={value} />
+                      <Label
+                        htmlFor={value}
+                        className="flex-1 cursor-pointer text-base font-medium text-slate-700"
+                      >
+                        <div className="font-semibold">{label}</div>
+                        {desc && (
+                          <div className="text-sm font-normal text-slate-500 mt-1">
+                            {desc}
+                          </div>
+                        )}
+                      </Label>
+                    </div>
+                  )
+                })}
               </RadioGroup>
             )}
           </div>
         </CardContent>
         <CardFooter className="flex justify-between border-t bg-slate-50/50 p-6">
-          <div className="text-xs text-slate-400">
-            Pressione <strong>Enter</strong> para continuar
-          </div>
+          <Button
+            variant="ghost"
+            onClick={handleBack}
+            disabled={currentStep === 0}
+            className={cn('text-slate-500', currentStep === 0 && 'invisible')}
+          >
+            <ChevronLeft className="mr-2 size-4" /> Voltar
+          </Button>
+
           <Button
             onClick={handleNext}
             size="lg"

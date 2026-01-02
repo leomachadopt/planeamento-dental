@@ -32266,9 +32266,21 @@ var QUESTIONS$1 = [
 	{
 		key: "tipo_clinica",
 		title: "Qual é o tipo da sua clínica?",
-		description: "Ex: Fisioterapia, Odontologia, Dermatologia, Multidisciplinar.",
-		type: "text",
-		placeholder: "Digite o tipo da clínica..."
+		description: "Selecione a categoria que melhor representa sua atuação.",
+		type: "select",
+		allowOther: true,
+		options: [
+			"Fisioterapia",
+			"Odontologia",
+			"Clínica Geral",
+			"Psicologia",
+			"Nutrição",
+			"Estética",
+			"Pilates",
+			"Multidisciplinar",
+			"Outro"
+		],
+		placeholder: "Selecione o tipo..."
 	},
 	{
 		key: "nome_clinica",
@@ -32287,22 +32299,33 @@ var QUESTIONS$1 = [
 	{
 		key: "publico_principal",
 		title: "Quem é o seu público principal?",
-		description: "Descreva brevemente o perfil dos seus pacientes (Ex: Atletas, Idosos, Classe A/B).",
-		type: "text",
-		placeholder: "Descreva seu público alvo..."
+		description: "Selecione o perfil predominante dos seus pacientes.",
+		type: "select",
+		allowOther: true,
+		options: [
+			"Reabilitação",
+			"Atletas",
+			"Idosos",
+			"Crianças",
+			"Saúde da Mulher",
+			"Outro"
+		],
+		placeholder: "Selecione o público..."
 	},
 	{
 		key: "estagio_clinica",
 		title: "Em qual estágio de negócio a clínica se encontra?",
 		description: "Selecione a opção que melhor descreve o momento atual.",
 		type: "select",
+		allowOther: true,
 		options: [
 			"Iniciante",
 			"Em Crescimento",
 			"Consolidada",
 			"Em Crise",
 			"Outro"
-		]
+		],
+		placeholder: "Selecione o estágio..."
 	},
 	{
 		key: "gestores_principais",
@@ -32314,8 +32337,17 @@ var QUESTIONS$1 = [
 		key: "objetivo_geral_2026",
 		title: "Qual é o principal objetivo estratégico para 2026?",
 		description: "O que seria um grande sucesso se alcançado até o final do ano?",
-		type: "textarea",
-		placeholder: "Ex: Dobrar o faturamento, abrir nova unidade, digitalizar processos..."
+		type: "select",
+		allowOther: true,
+		options: [
+			"Crescer faturamento",
+			"Organizar processos",
+			"Expandir unidades",
+			"Melhorar experiência do paciente",
+			"Aumentar lucro",
+			"Outro"
+		],
+		placeholder: "Selecione o objetivo..."
 	},
 	{
 		key: "tamanho_relatorio",
@@ -32324,10 +32356,12 @@ var QUESTIONS$1 = [
 		type: "radio",
 		options: [{
 			value: "resumido_20",
-			label: "Resumido (~20 páginas) - Foco em ação rápida"
+			label: "Resumido (20 páginas)",
+			description: "Foco em ação rápida"
 		}, {
 			value: "detalhado_40",
-			label: "Detalhado (~40 páginas) - Análise profunda"
+			label: "Detalhado (40 páginas)",
+			description: "Análise profunda"
 		}]
 	},
 	{
@@ -32338,15 +32372,18 @@ var QUESTIONS$1 = [
 		options: [
 			{
 				value: "formal",
-				label: "Formal - Corporativo e técnico"
+				label: "Formal",
+				description: "Corporativo e técnico"
 			},
 			{
 				value: "intermediario",
-				label: "Intermediário - Profissional mas acessível"
+				label: "Intermediário",
+				description: "Profissional mas acessível"
 			},
 			{
 				value: "informal",
-				label: "Informal - Próximo e motivacional"
+				label: "Informal",
+				description: "Próximo e motivacional"
 			}
 		]
 	}
@@ -32362,17 +32399,22 @@ function SetupWizard() {
 	(0, import_react.useEffect)(() => {
 		if (currentQuestion.key === "gestores_principais" && savedConfig.gestores_principais) if (savedConfig.gestores_principais.includes("gestores:")) {
 			const [countPart, rolesPart] = savedConfig.gestores_principais.split("gestores:");
-			setManagerCount(countPart.trim());
+			const count$3 = countPart.trim();
+			setManagerCount([
+				"1",
+				"2-3",
+				"4+"
+			].includes(count$3) ? count$3 : "1");
 			setManagerRoles(rolesPart.trim());
 		} else setManagerRoles(savedConfig.gestores_principais);
 	}, [currentQuestion.key, savedConfig.gestores_principais]);
 	const handleNext = () => {
 		if (currentQuestion.key === "gestores_principais") {
-			if (!managerCount || !managerRoles) {
-				toast.error("Por favor, preencha a quantidade e os cargos.");
+			if (!managerCount) {
+				toast.error("Por favor, selecione a quantidade de gestores.");
 				return;
 			}
-			const compositeValue = `${managerCount} gestores: ${managerRoles}`;
+			const compositeValue = `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ""}`;
 			setAnswers((prev) => ({
 				...prev,
 				gestores_principais: compositeValue
@@ -32383,8 +32425,9 @@ function SetupWizard() {
 			}
 		}
 		const key = currentQuestion.key;
-		if (currentQuestion.key !== "gestores_principais") {
-			if (!answers[key]) {
+		if (key !== "gestores_principais") {
+			const value = answers[key];
+			if (!value || typeof value === "string" && !value.trim()) {
 				toast.error("Por favor, preencha o campo para continuar.");
 				return;
 			}
@@ -32394,10 +32437,13 @@ function SetupWizard() {
 			setIsCompleted(true);
 			setConfigInicial({
 				...answers,
-				gestores_principais: currentQuestion.key === "gestores_principais" ? `${managerCount} gestores: ${managerRoles}` : answers.gestores_principais || ""
+				gestores_principais: currentQuestion.key === "gestores_principais" ? `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ""}` : answers.gestores_principais || ""
 			});
 			toast.success("Configuração concluída com sucesso!");
 		}
+	};
+	const handleBack = () => {
+		if (currentStep > 0) setCurrentStep((prev) => prev - 1);
 	};
 	const handleInputChange = (value) => {
 		setAnswers((prev) => ({
@@ -32405,9 +32451,22 @@ function SetupWizard() {
 			[currentQuestion.key]: value
 		}));
 	};
-	const handleKeyPress = (e) => {
-		if (e.key === "Enter" && currentQuestion.type !== "textarea") handleNext();
+	const handleSelectChange = (value) => {
+		handleInputChange(value === "Outro" ? "" : value);
 	};
+	const handleKeyPress = (e) => {
+		if (e.key === "Enter") {
+			if (document.activeElement?.tagName !== "TEXTAREA" && currentQuestion.type !== "select") handleNext();
+		}
+	};
+	const getCurrentSelectValue = () => {
+		const val = answers[currentQuestion.key];
+		if (!val) return "";
+		if ((currentQuestion.options?.map((opt) => typeof opt === "string" ? opt : opt.value))?.includes(val)) return val;
+		if (currentQuestion.allowOther && val) return "Outro";
+		return "";
+	};
+	const isOtherSelected = getCurrentSelectValue() === "Outro";
 	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
 	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "flex flex-col items-center justify-center min-h-[80vh] animate-fade-in p-4",
@@ -32479,7 +32538,7 @@ function SetupWizard() {
 				})
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			className: "border-t-4 border-t-teal-500 shadow-lg animate-fade-in-up",
+			className: "border-t-4 border-t-teal-500 shadow-lg animate-fade-in-up transition-all duration-300",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 					className: "space-y-1",
@@ -32521,24 +32580,36 @@ function SetupWizard() {
 								placeholder: currentQuestion.placeholder,
 								className: "text-lg h-12"
 							}),
-							currentQuestion.type === "textarea" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-								autoFocus: true,
-								value: answers[currentQuestion.key] || "",
-								onChange: (e) => handleInputChange(e.target.value),
-								placeholder: currentQuestion.placeholder,
-								className: "text-base min-h-[120px] resize-none"
-							}),
-							currentQuestion.type === "select" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-								value: answers[currentQuestion.key] || "",
-								onValueChange: handleInputChange,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-									className: "h-12 text-lg",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione uma opção" })
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: currentQuestion.options?.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-									value: opt,
-									className: "text-base py-3",
-									children: opt
-								}, opt)) })]
+							currentQuestion.type === "select" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+									value: getCurrentSelectValue(),
+									onValueChange: handleSelectChange,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+										className: "h-12 text-lg",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: currentQuestion.placeholder })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: currentQuestion.options?.map((opt) => {
+										const value = typeof opt === "string" ? opt : opt.value;
+										return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+											value,
+											className: "text-base py-3",
+											children: typeof opt === "string" ? opt : opt.label
+										}, value);
+									}) })]
+								}), isOtherSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "animate-fade-in-down space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+										className: "text-sm text-slate-500",
+										children: "Especifique a opção \"Outro\":"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										autoFocus: true,
+										value: answers[currentQuestion.key] || "",
+										onChange: (e) => handleInputChange(e.target.value),
+										onKeyDown: handleKeyPress,
+										placeholder: "Digite sua resposta específica...",
+										className: "text-lg h-12 border-teal-200 focus-visible:ring-teal-500"
+									})]
+								})]
 							}),
 							currentQuestion.type === "composite" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "grid gap-6",
@@ -32570,9 +32641,16 @@ function SetupWizard() {
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "space-y-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
 										className: "text-base",
-										children: "Quais são os cargos?"
+										children: [
+											"Quais são os cargos?",
+											" ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-slate-400 font-normal text-sm",
+												children: "(Opcional)"
+											})
+										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
 										value: managerRoles,
 										onChange: (e) => setManagerRoles(e.target.value),
@@ -32585,36 +32663,41 @@ function SetupWizard() {
 								value: answers[currentQuestion.key] || "",
 								onValueChange: handleInputChange,
 								className: "grid gap-3",
-								children: currentQuestion.options?.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: cn("flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors", answers[currentQuestion.key] === opt.value ? "border-teal-500 bg-teal-50" : "border-slate-200"),
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
-										value: opt.value,
-										id: opt.value
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-										htmlFor: opt.value,
-										className: "flex-1 cursor-pointer text-base font-medium text-slate-700",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "font-semibold",
-											children: opt.label
-										}), opt.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "text-sm font-normal text-slate-500 mt-1",
-											children: opt.description
+								children: currentQuestion.options?.map((opt) => {
+									const value = typeof opt === "string" ? opt : opt.value;
+									const label = typeof opt === "string" ? opt : opt.label;
+									const desc = typeof opt === "object" ? opt.description : null;
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: cn("flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors", answers[currentQuestion.key] === value ? "border-teal-500 bg-teal-50 shadow-sm ring-1 ring-teal-500/20" : "border-slate-200"),
+										onClick: () => handleInputChange(value),
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+											value,
+											id: value
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+											htmlFor: value,
+											className: "flex-1 cursor-pointer text-base font-medium text-slate-700",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "font-semibold",
+												children: label
+											}), desc && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "text-sm font-normal text-slate-500 mt-1",
+												children: desc
+											})]
 										})]
-									})]
-								}, opt.value))
+									}, value);
+								})
 							})
 						]
 					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
 					className: "flex justify-between border-t bg-slate-50/50 p-6",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "text-xs text-slate-400",
-						children: [
-							"Pressione ",
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Enter" }),
-							" para continuar"
-						]
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						variant: "ghost",
+						onClick: handleBack,
+						disabled: currentStep === 0,
+						className: cn("text-slate-500", currentStep === 0 && "invisible"),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "mr-2 size-4" }), " Voltar"]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 						onClick: handleNext,
 						size: "lg",
@@ -35748,4 +35831,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-H-qXxNrz.js.map
+//# sourceMappingURL=index-h19xy1Al.js.map
