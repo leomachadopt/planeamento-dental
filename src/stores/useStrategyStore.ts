@@ -56,6 +56,17 @@ export interface OperationalAssessment {
   processes_disorganized: string
 }
 
+export interface MarketAssessment {
+  marketDescription: string
+  competitors: string
+  clinicStrengths: string
+  competitorStrengths: string
+  acquisitionChannels: string
+  patientComplaints: string
+  patientCompliments: string
+  patientLoss: string
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -88,6 +99,7 @@ export interface StrategyState {
   okrs: OKR[]
   actions: ActionItem[]
   operationalAssessment: OperationalAssessment
+  marketAssessment: MarketAssessment
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -103,6 +115,7 @@ export interface StrategyState {
   addAction: (action: ActionItem) => void
   updateActionStatus: (id: string, status: ActionStatus) => void
   updateOperationalAssessment: (data: Partial<OperationalAssessment>) => void
+  updateMarketAssessment: (data: Partial<MarketAssessment>) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -225,6 +238,16 @@ export const useStrategyStore = create<StrategyState>((set) => ({
     processes_well_defined: '',
     processes_disorganized: '',
   },
+  marketAssessment: {
+    marketDescription: '',
+    competitors: '',
+    clinicStrengths: '',
+    competitorStrengths: '',
+    acquisitionChannels: '',
+    patientComplaints: '',
+    patientCompliments: '',
+    patientLoss: '',
+  },
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -258,5 +281,9 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   updateOperationalAssessment: (data) =>
     set((state) => ({
       operationalAssessment: { ...state.operationalAssessment, ...data },
+    })),
+  updateMarketAssessment: (data) =>
+    set((state) => ({
+      marketAssessment: { ...state.marketAssessment, ...data },
     })),
 }))

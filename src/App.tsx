@@ -12,6 +12,7 @@ import StrategicMap from './pages/StrategicMap'
 import Execution from './pages/Execution'
 import SetupWizard from './pages/SetupWizard'
 import OperationalAssessment from './pages/OperationalAssessment'
+import MarketAssessment from './pages/MarketAssessment'
 import NotFound from './pages/NotFound'
 
 const App = () => (
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/diagnostico" element={<Diagnostic />} />
           <Route path="/operacao" element={<OperationalAssessment />} />
+          <Route path="/mercado" element={<MarketAssessment />} />
           <Route path="/estrategia" element={<Strategy />} />
           <Route path="/mapa-estrategico" element={<StrategicMap />} />
           <Route path="/execucao" element={<Execution />} />

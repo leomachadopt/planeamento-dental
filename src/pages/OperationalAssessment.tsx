@@ -285,11 +285,10 @@ export default function OperationalAssessment() {
             </Button>
             <Button
               asChild
-              className="bg-teal-600 hover:bg-teal-700 text-white"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-              <Link to="/diagnostico">
-                Ir para Diagnóstico (Rumelt){' '}
-                <ArrowRight className="ml-2 size-4" />
+              <Link to="/mercado">
+                Ir para Mercado (2B) <ArrowRight className="ml-2 size-4" />
               </Link>
             </Button>
           </CardFooter>

@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Settings,
   ClipboardList,
+  Globe,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -31,6 +32,7 @@ import { Button } from '@/components/ui/button'
 const menuItems = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
   { title: 'Operação (2A)', url: '/operacao', icon: ClipboardList },
+  { title: 'Mercado (2B)', url: '/mercado', icon: Globe },
   { title: 'Diagnóstico', url: '/diagnostico', icon: Stethoscope },
   { title: 'Estratégia', url: '/estrategia', icon: Lightbulb },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
@@ -73,7 +75,7 @@ export default function Layout() {
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
-                </SidebarMenuItem>
+                SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarContent>
