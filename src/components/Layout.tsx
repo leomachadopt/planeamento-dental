@@ -9,6 +9,7 @@ import {
   Bell,
   ChevronDown,
   Settings,
+  ClipboardList,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -29,6 +30,7 @@ import { Button } from '@/components/ui/button'
 
 const menuItems = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
+  { title: 'Operação (2A)', url: '/operacao', icon: ClipboardList },
   { title: 'Diagnóstico', url: '/diagnostico', icon: Stethoscope },
   { title: 'Estratégia', url: '/estrategia', icon: Lightbulb },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },

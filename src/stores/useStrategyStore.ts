@@ -45,6 +45,17 @@ export interface ClinicConfig {
   tom_linguagem: 'formal' | 'informal' | 'intermediario' | ''
 }
 
+export interface OperationalAssessment {
+  services: string
+  infrastructure: string
+  team_composition: string
+  working_hours: string
+  patient_management: string
+  financial_management: string
+  processes_well_defined: string
+  processes_disorganized: string
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -76,6 +87,7 @@ export interface StrategyState {
   }[]
   okrs: OKR[]
   actions: ActionItem[]
+  operationalAssessment: OperationalAssessment
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -90,6 +102,7 @@ export interface StrategyState {
   addOKR: (okr: OKR) => void
   addAction: (action: ActionItem) => void
   updateActionStatus: (id: string, status: ActionStatus) => void
+  updateOperationalAssessment: (data: Partial<OperationalAssessment>) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -202,6 +215,16 @@ export const useStrategyStore = create<StrategyState>((set) => ({
       okrId: '1',
     },
   ],
+  operationalAssessment: {
+    services: '',
+    infrastructure: '',
+    team_composition: '',
+    working_hours: '',
+    patient_management: '',
+    financial_management: '',
+    processes_well_defined: '',
+    processes_disorganized: '',
+  },
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -231,5 +254,9 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   updateActionStatus: (id, status) =>
     set((state) => ({
       actions: state.actions.map((a) => (a.id === id ? { ...a, status } : a)),
+    })),
+  updateOperationalAssessment: (data) =>
+    set((state) => ({
+      operationalAssessment: { ...state.operationalAssessment, ...data },
     })),
 }))
