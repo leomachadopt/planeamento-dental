@@ -1159,10 +1159,6 @@ section[aria-label='Notifications alt+T'] {
   max-height: 300px;
 }
 
-.max-h-\[400px\]{
-  max-height: 400px;
-}
-
 .max-h-\[var\(--radix-dropdown-menu-content-available-height\)\]{
   max-height: var(--radix-dropdown-menu-content-available-height);
 }
@@ -1323,6 +1319,10 @@ section[aria-label='Notifications alt+T'] {
   width: 300px;
 }
 
+.w-\[400px\]{
+  width: 400px;
+}
+
 .w-auto{
   width: auto;
 }
@@ -1395,10 +1395,6 @@ section[aria-label='Notifications alt+T'] {
 
 .min-w-\[var\(--radix-select-trigger-width\)\]{
   min-width: var(--radix-select-trigger-width);
-}
-
-.max-w-2xl{
-  max-width: 42rem;
 }
 
 .max-w-3xl{
@@ -1695,6 +1691,12 @@ section[aria-label='Notifications alt+T'] {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.25rem * var(--tw-space-x-reverse));
   margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-x-2 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .space-x-3 > :not([hidden]) ~ :not([hidden]){
@@ -2079,6 +2081,11 @@ section[aria-label='Notifications alt+T'] {
 .border-teal-500{
   --tw-border-opacity: 1;
   border-color: rgb(20 184 166 / var(--tw-border-opacity, 1));
+}
+
+.border-teal-600{
+  --tw-border-opacity: 1;
+  border-color: rgb(13 148 136 / var(--tw-border-opacity, 1));
 }
 
 .border-transparent{
@@ -2748,6 +2755,10 @@ section[aria-label='Notifications alt+T'] {
   padding-left: 2.25rem;
 }
 
+.pl-\[3\.25rem\]{
+  padding-left: 3.25rem;
+}
+
 .pr-1{
   padding-right: 0.25rem;
 }
@@ -2762,6 +2773,10 @@ section[aria-label='Notifications alt+T'] {
 
 .pr-4{
   padding-right: 1rem;
+}
+
+.pr-6{
+  padding-right: 1.5rem;
 }
 
 .pr-8{
@@ -3267,6 +3282,10 @@ section[aria-label='Notifications alt+T'] {
   opacity: 0;
 }
 
+.opacity-100{
+  opacity: 1;
+}
+
 .opacity-50{
   opacity: 0.5;
 }
@@ -3376,8 +3395,9 @@ section[aria-label='Notifications alt+T'] {
   --tw-ring-color: hsl(var(--sidebar-ring));
 }
 
-.ring-teal-500\/20{
-  --tw-ring-color: rgb(20 184 166 / 0.2);
+.ring-teal-500{
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(20 184 166 / var(--tw-ring-opacity, 1));
 }
 
 .ring-white{
@@ -4834,11 +4854,6 @@ section[aria-label='Notifications alt+T'] {
   .sm\:text-lg{
     font-size: 1.125rem;
     line-height: 1.75rem;
-  }
-
-  .sm\:text-sm{
-    font-size: 0.875rem;
-    line-height: 1.25rem;
   }
 
   .data-\[state\=open\]\:sm\:slide-in-from-bottom-full[data-state="open"]{

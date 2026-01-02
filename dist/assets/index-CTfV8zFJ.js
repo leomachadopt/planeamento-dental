@@ -9,7 +9,7 @@ var __copyProps = (to, from, except, desc) => {
 	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
 		key = keys[i];
 		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
-			get: ((k) => from[k]).bind(null, key),
+			get: ((k$2) => from[k$2]).bind(null, key),
 			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
 		});
 	}
@@ -2467,7 +2467,7 @@ var require_react_dom_client_development = /* @__PURE__ */ __commonJSMin(((expor
 			return indentation(indent) + describeTextNode(clientText, maxLength) + "\n";
 		}
 		function objectName(object) {
-			return Object.prototype.toString.call(object).replace(/^\[object (.*)\]$/, function(m, p0) {
+			return Object.prototype.toString.call(object).replace(/^\[object (.*)\]$/, function(m$1, p0) {
 				return p0;
 			});
 		}
@@ -15367,7 +15367,7 @@ const __vitePreload = function preload(baseModule, deps, importerUrl) {
 		const cspNonceMeta = document.querySelector("meta[property=csp-nonce]");
 		const cspNonce = cspNonceMeta?.nonce || cspNonceMeta?.getAttribute("nonce");
 		function allSettled(promises$2) {
-			return Promise.all(promises$2.map((p) => Promise.resolve(p).then((value$1) => ({
+			return Promise.all(promises$2.map((p$1) => Promise.resolve(p$1).then((value$1) => ({
 				status: "fulfilled",
 				value: value$1
 			}), (reason) => ({
@@ -15865,7 +15865,7 @@ function isRouteErrorResponse(error) {
 	return error != null && typeof error.status === "number" && typeof error.statusText === "string" && typeof error.internal === "boolean" && "data" in error;
 }
 function getRoutePattern(matches) {
-	return matches.map((m) => m.route.path).filter(Boolean).join("/").replace(/\/\/*/g, "/") || "/";
+	return matches.map((m$1) => m$1.route.path).filter(Boolean).join("/").replace(/\/\/*/g, "/") || "/";
 }
 var isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
 function parseToInfo(_to, basename) {
@@ -16155,7 +16155,7 @@ function _renderMatches(matches, parentMatches = [], dataRouterState = null, onE
 	let renderedMatches = matches;
 	let errors = dataRouterState?.errors;
 	if (errors != null) {
-		let errorIndex = renderedMatches.findIndex((m) => m.route.id && errors?.[m.route.id] !== void 0);
+		let errorIndex = renderedMatches.findIndex((m$1) => m$1.route.id && errors?.[m$1.route.id] !== void 0);
 		invariant(errorIndex >= 0, `Could not find a matching route for errors on route IDs: ${Object.keys(errors).join(",")}`);
 		renderedMatches = renderedMatches.slice(0, Math.min(renderedMatches.length, errorIndex + 1));
 	}
@@ -16267,7 +16267,7 @@ function useNavigation() {
 }
 function useMatches() {
 	let { matches, loaderData } = useDataRouterState("useMatches");
-	return import_react.useMemo(() => matches.map((m) => convertRouteMatchToUiMatch(m, loaderData)), [matches, loaderData]);
+	return import_react.useMemo(() => matches.map((m$1) => convertRouteMatchToUiMatch(m$1, loaderData)), [matches, loaderData]);
 }
 function useRouteError() {
 	let error = import_react.useContext(RouteErrorContext);
@@ -16740,16 +16740,16 @@ function PrefetchPageLinksImpl({ page, matches: nextMatches, ...linkProps }) {
 		if (page === location.pathname + location.search + location.hash) return [];
 		let routesParams = /* @__PURE__ */ new Set();
 		let foundOptOutRoute = false;
-		nextMatches.forEach((m) => {
-			let manifestRoute = manifest.routes[m.route.id];
+		nextMatches.forEach((m$1) => {
+			let manifestRoute = manifest.routes[m$1.route.id];
 			if (!manifestRoute || !manifestRoute.hasLoader) return;
-			if (!newMatchesForData.some((m2) => m2.route.id === m.route.id) && m.route.id in loaderData && routeModules[m.route.id]?.shouldRevalidate) foundOptOutRoute = true;
+			if (!newMatchesForData.some((m2) => m2.route.id === m$1.route.id) && m$1.route.id in loaderData && routeModules[m$1.route.id]?.shouldRevalidate) foundOptOutRoute = true;
 			else if (manifestRoute.hasClientLoader) foundOptOutRoute = true;
-			else routesParams.add(m.route.id);
+			else routesParams.add(m$1.route.id);
 		});
 		if (routesParams.size === 0) return [];
 		let url = singleFetchUrl(page, basename, "data");
-		if (foundOptOutRoute && routesParams.size > 0) url.searchParams.set("_routes", nextMatches.filter((m) => routesParams.has(m.route.id)).map((m) => m.route.id).join(","));
+		if (foundOptOutRoute && routesParams.size > 0) url.searchParams.set("_routes", nextMatches.filter((m$1) => routesParams.has(m$1.route.id)).map((m$1) => m$1.route.id).join(","));
 		return [url.pathname + url.search];
 	}, [
 		basename,
@@ -17498,8 +17498,8 @@ var require_react_jsx_runtime_development = /* @__PURE__ */ __commonJSMin(((expo
 			else validateChildKeys(children);
 			if (hasOwnProperty.call(config, "key")) {
 				children = getComponentNameFromType(type);
-				var keys = Object.keys(config).filter(function(k) {
-					return "key" !== k;
+				var keys = Object.keys(config).filter(function(k$2) {
+					return "key" !== k$2;
 				});
 				isStaticChildren = 0 < keys.length ? "{key: someKey, " + keys.join(": ..., ") + ": ...}" : "{key: someKey}";
 				didWarnAboutKeySpread[children + isStaticChildren] || (keys = 0 < keys.length ? "{" + keys.join(": ..., ") + ": ...}" : "{}", console.error("A props object containing a \"key\" prop is being spread into JSX:\n  let props = %s;\n  <%s {...props} />\nReact keys must be passed directly to JSX without using spread:\n  let props = %s;\n  <%s key={someKey} {...props} />", isStaticChildren, children, keys, children), didWarnAboutKeySpread[children + isStaticChildren] = !0);
@@ -17805,10 +17805,10 @@ var Primitive = [
 	"svg",
 	"ul"
 ].reduce((primitive, node) => {
-	const Slot$3 = /* @__PURE__ */ createSlot(`Primitive.${node}`);
+	const Slot$4 = /* @__PURE__ */ createSlot(`Primitive.${node}`);
 	const Node$1 = import_react.forwardRef((props, forwardedRef) => {
 		const { asChild, ...primitiveProps } = props;
-		const Comp = asChild ? Slot$3 : node;
+		const Comp = asChild ? Slot$4 : node;
 		if (typeof window !== "undefined") window[Symbol.for("radix-ui")] = true;
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Comp, {
 			...primitiveProps,
@@ -18017,7 +18017,7 @@ var Root$10 = DismissableLayer;
 var Branch = DismissableLayerBranch;
 var useLayoutEffect2 = globalThis?.document ? import_react.useLayoutEffect : () => {};
 var import_react_dom$5 = /* @__PURE__ */ __toESM(require_react_dom(), 1);
-var PORTAL_NAME$3 = "Portal";
+var PORTAL_NAME$4 = "Portal";
 var Portal = import_react.forwardRef((props, forwardedRef) => {
 	const { container: containerProp, ...portalProps } = props;
 	const [mounted, setMounted] = import_react.useState(false);
@@ -18028,7 +18028,7 @@ var Portal = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	}), container) : null;
 });
-Portal.displayName = PORTAL_NAME$3;
+Portal.displayName = PORTAL_NAME$4;
 function useStateMachine(initialState, machine) {
 	return import_react.useReducer((state, event) => {
 		return machine[state][event] ?? state;
@@ -18641,10 +18641,10 @@ var ToastAction$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 ToastAction$1.displayName = ACTION_NAME;
-var CLOSE_NAME$1 = "ToastClose";
+var CLOSE_NAME$2 = "ToastClose";
 var ToastClose$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeToast, ...closeProps } = props;
-	const interactiveContext = useToastInteractiveContext(CLOSE_NAME$1, __scopeToast);
+	const interactiveContext = useToastInteractiveContext(CLOSE_NAME$2, __scopeToast);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToastAnnounceExclude, {
 		asChild: true,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
@@ -18655,7 +18655,7 @@ var ToastClose$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-ToastClose$1.displayName = CLOSE_NAME$1;
+ToastClose$1.displayName = CLOSE_NAME$2;
 var ToastAnnounceExclude = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeToast, altText, ...announceExcludeProps } = props;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
@@ -18733,7 +18733,7 @@ function focusFirst$2(candidates) {
 }
 var Provider$1 = ToastProvider$1;
 var Viewport$1 = ToastViewport$1;
-var Root2$5 = Toast$2;
+var Root2$6 = Toast$2;
 var Title$1 = ToastTitle$1;
 var Description$1 = ToastDescription$1;
 var Action = ToastAction$1;
@@ -18982,6 +18982,28 @@ var BrainCircuit = createLucideIcon("brain-circuit", [
 		key: "1e43v0"
 	}]
 ]);
+var Building2 = createLucideIcon("building-2", [
+	["path", {
+		d: "M10 12h4",
+		key: "a56b0p"
+	}],
+	["path", {
+		d: "M10 8h4",
+		key: "1sr2af"
+	}],
+	["path", {
+		d: "M14 21v-3a2 2 0 0 0-4 0v3",
+		key: "1rgiei"
+	}],
+	["path", {
+		d: "M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2",
+		key: "secmi2"
+	}],
+	["path", {
+		d: "M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16",
+		key: "16ra0t"
+	}]
+]);
 var CalendarCheck = createLucideIcon("calendar-check", [
 	["path", {
 		d: "M8 2v4",
@@ -19101,6 +19123,13 @@ var ChevronRight = createLucideIcon("chevron-right", [["path", {
 var ChevronUp = createLucideIcon("chevron-up", [["path", {
 	d: "m18 15-6-6-6 6",
 	key: "153udz"
+}]]);
+var ChevronsUpDown = createLucideIcon("chevrons-up-down", [["path", {
+	d: "m7 15 5 5 5-5",
+	key: "1hf1tw"
+}], ["path", {
+	d: "m7 9 5-5 5 5",
+	key: "sgt6xg"
 }]]);
 var CircleAlert = createLucideIcon("circle-alert", [
 	["circle", {
@@ -19391,6 +19420,15 @@ var ListTodo = createLucideIcon("list-todo", [
 		key: "cif1o7"
 	}]
 ]);
+var MapPin = createLucideIcon("map-pin", [["path", {
+	d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",
+	key: "1r0f0z"
+}], ["circle", {
+	cx: "12",
+	cy: "10",
+	r: "3",
+	key: "ilqhr7"
+}]]);
 var Map$1 = createLucideIcon("map", [
 	["path", {
 		d: "M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z",
@@ -19408,6 +19446,10 @@ var Map$1 = createLucideIcon("map", [
 var MessageSquare = createLucideIcon("message-square", [["path", {
 	d: "M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z",
 	key: "18887p"
+}]]);
+var Minus = createLucideIcon("minus", [["path", {
+	d: "M5 12h14",
+	key: "1ays0h"
 }]]);
 var PanelLeft = createLucideIcon("panel-left", [["rect", {
 	width: "18",
@@ -19733,7 +19775,7 @@ var Waves = createLucideIcon("waves", [
 		key: "rd2r6e"
 	}]
 ]);
-var X = createLucideIcon("x", [["path", {
+var X$1 = createLucideIcon("x", [["path", {
 	d: "M18 6 6 18",
 	key: "1bl5f8"
 }], ["path", {
@@ -19983,8 +20025,8 @@ var toValue = (mix) => {
 	if (typeof mix === "string") return mix;
 	let resolvedValue;
 	let string = "";
-	for (let k = 0; k < mix.length; k++) if (mix[k]) {
-		if (resolvedValue = toValue(mix[k])) {
+	for (let k$2 = 0; k$2 < mix.length; k$2++) if (mix[k$2]) {
+		if (resolvedValue = toValue(mix[k$2])) {
 			string && (string += " ");
 			string += resolvedValue;
 		}
@@ -21147,13 +21189,13 @@ var toastVariants = cva("group pointer-events-auto relative flex w-full items-ce
 	defaultVariants: { variant: "default" }
 });
 var Toast$1 = import_react.forwardRef(({ className, variant, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$5, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$6, {
 		ref,
 		className: cn(toastVariants({ variant }), className),
 		...props
 	});
 });
-Toast$1.displayName = Root2$5.displayName;
+Toast$1.displayName = Root2$6.displayName;
 var ToastAction = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Action, {
 	ref,
 	className: cn("inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive", className),
@@ -21165,7 +21207,7 @@ var ToastClose = import_react.forwardRef(({ className, ...props }, ref) => /* @_
 	className: cn("absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600", className),
 	"toast-close": "",
 	...props,
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-4 w-4" })
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "h-4 w-4" })
 }));
 ToastClose.displayName = Close$1.displayName;
 var ToastTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Title$1, {
@@ -21196,12 +21238,12 @@ function Toaster() {
 		}, id);
 	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToastViewport, {})] });
 }
-var M = (e, i, s, u, m, a, l, h) => {
+var M = (e, i, s, u$1, m$1, a, l, h) => {
 	let d = document.documentElement, w = ["light", "dark"];
-	function p(n) {
+	function p$1(n) {
 		(Array.isArray(e) ? e : [e]).forEach((y) => {
-			let k = y === "class", S = k && a ? m.map((f) => a[f] || f) : m;
-			k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
+			let k$2 = y === "class", S = k$2 && a ? m$1.map((f) => a[f] || f) : m$1;
+			k$2 ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
 		}), R(n);
 	}
 	function R(n) {
@@ -21210,34 +21252,34 @@ var M = (e, i, s, u, m, a, l, h) => {
 	function c() {
 		return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 	}
-	if (u) p(u);
+	if (u$1) p$1(u$1);
 	else try {
 		let n = localStorage.getItem(i) || s;
-		p(l && n === "system" ? c() : n);
+		p$1(l && n === "system" ? c() : n);
 	} catch (n) {}
-}, x = import_react.createContext(void 0), U = {
+}, x = import_react.createContext(void 0), U$1 = {
 	setTheme: (e) => {},
 	themes: []
 }, z = () => {
 	var e;
-	return (e = import_react.useContext(x)) != null ? e : U;
+	return (e = import_react.useContext(x)) != null ? e : U$1;
 };
-import_react.memo(({ forcedTheme: e, storageKey: i, attribute: s, enableSystem: u, enableColorScheme: m, defaultTheme: a, value: l, themes: h, nonce: d, scriptProps: w }) => {
-	let p = JSON.stringify([
+import_react.memo(({ forcedTheme: e, storageKey: i, attribute: s, enableSystem: u$1, enableColorScheme: m$1, defaultTheme: a, value: l, themes: h, nonce: d, scriptProps: w }) => {
+	let p$1 = JSON.stringify([
 		s,
 		i,
 		a,
 		e,
 		h,
 		l,
-		u,
-		m
+		u$1,
+		m$1
 	]).slice(1, -1);
 	return import_react.createElement("script", {
 		...w,
 		suppressHydrationWarning: !0,
 		nonce: typeof window == "undefined" ? d : "",
-		dangerouslySetInnerHTML: { __html: `(${M.toString()})(${p})` }
+		dangerouslySetInnerHTML: { __html: `(${M.toString()})(${p$1})` }
 	});
 });
 var import_react_dom$3 = /* @__PURE__ */ __toESM(require_react_dom(), 1);
@@ -21462,10 +21504,10 @@ var Observer = class {
 				message: data.loading,
 				description: typeof data.description !== "function" ? data.description : void 0
 			});
-			const p = Promise.resolve(promise instanceof Function ? promise() : promise);
+			const p$1 = Promise.resolve(promise instanceof Function ? promise() : promise);
 			let shouldDismiss = id !== void 0;
 			let result;
-			const originalPromise = p.then(async (response) => {
+			const originalPromise = p$1.then(async (response) => {
 				result = ["resolve", response];
 				if (import_react.isValidElement(response)) {
 					shouldDismiss = false;
@@ -21533,10 +21575,10 @@ var Observer = class {
 			if (typeof id !== "string" && typeof id !== "number") return { unwrap };
 			else return Object.assign(id, { unwrap });
 		};
-		this.custom = (jsx$28, data) => {
+		this.custom = (jsx$29, data) => {
 			const id = (data == null ? void 0 : data.id) || toastsCounter++;
 			this.create({
-				jsx: jsx$28(id),
+				jsx: jsx$29(id),
 				id,
 				...data
 			});
@@ -22851,7 +22893,7 @@ function isTopLayer(element) {
 	return topLayerSelectors.some((selector) => {
 		try {
 			return element.matches(selector);
-		} catch (_e) {
+		} catch (_e$1) {
 			return false;
 		}
 	});
@@ -22968,9 +23010,9 @@ function getScale(element) {
 	const domElement = unwrapElement(element);
 	if (!isHTMLElement(domElement)) return createCoords(1);
 	const rect = domElement.getBoundingClientRect();
-	const { width, height, $ } = getCssDimensions(domElement);
-	let x$1 = ($ ? round(rect.width) : rect.width) / width;
-	let y = ($ ? round(rect.height) : rect.height) / height;
+	const { width, height, $: $$1 } = getCssDimensions(domElement);
+	let x$1 = ($$1 ? round(rect.width) : rect.width) / width;
+	let y = ($$1 ? round(rect.height) : rect.height) / height;
 	if (!x$1 || !Number.isFinite(x$1)) x$1 = 1;
 	if (!y || !Number.isFinite(y)) y = 1;
 	return {
@@ -23339,7 +23381,7 @@ function observeMove(element, onMove) {
 				...options$1,
 				root: root.ownerDocument
 			});
-		} catch (_e) {
+		} catch (_e$1) {
 			io = new IntersectionObserver(handleObserve, options$1);
 		}
 		io.observe(element);
@@ -23721,10 +23763,10 @@ var Popper = (props) => {
 	});
 };
 Popper.displayName = POPPER_NAME;
-var ANCHOR_NAME = "PopperAnchor";
+var ANCHOR_NAME$1 = "PopperAnchor";
 var PopperAnchor = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopePopper, virtualRef, ...anchorProps } = props;
-	const context = usePopperContext(ANCHOR_NAME, __scopePopper);
+	const context = usePopperContext(ANCHOR_NAME$1, __scopePopper);
 	const ref = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, ref);
 	const anchorRef = import_react.useRef(null);
@@ -23738,12 +23780,12 @@ var PopperAnchor = import_react.forwardRef((props, forwardedRef) => {
 		ref: composedRefs
 	});
 });
-PopperAnchor.displayName = ANCHOR_NAME;
-var CONTENT_NAME$6 = "PopperContent";
-var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$6);
+PopperAnchor.displayName = ANCHOR_NAME$1;
+var CONTENT_NAME$7 = "PopperContent";
+var [PopperContentProvider, useContentContext] = createPopperContext(CONTENT_NAME$7);
 var PopperContent = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopePopper, side = "bottom", sideOffset = 0, align = "center", alignOffset = 0, arrowPadding = 0, avoidCollisions = true, collisionBoundary = [], collisionPadding: collisionPaddingProp = 0, sticky = "partial", hideWhenDetached = false, updatePositionStrategy = "optimized", onPlaced, ...contentProps } = props;
-	const context = usePopperContext(CONTENT_NAME$6, __scopePopper);
+	const context = usePopperContext(CONTENT_NAME$7, __scopePopper);
 	const [content, setContent] = import_react.useState(null);
 	const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
 	const [arrow$3, setArrow] = import_react.useState(null);
@@ -23856,8 +23898,8 @@ var PopperContent = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-PopperContent.displayName = CONTENT_NAME$6;
-var ARROW_NAME$2 = "PopperArrow";
+PopperContent.displayName = CONTENT_NAME$7;
+var ARROW_NAME$3 = "PopperArrow";
 var OPPOSITE_SIDE = {
 	top: "bottom",
 	right: "left",
@@ -23866,7 +23908,7 @@ var OPPOSITE_SIDE = {
 };
 var PopperArrow = import_react.forwardRef(function PopperArrow2(props, forwardedRef) {
 	const { __scopePopper, ...arrowProps } = props;
-	const contentContext = useContentContext(ARROW_NAME$2, __scopePopper);
+	const contentContext = useContentContext(ARROW_NAME$3, __scopePopper);
 	const baseSide = OPPOSITE_SIDE[contentContext.placedSide];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 		ref: contentContext.onArrowChange,
@@ -23899,7 +23941,7 @@ var PopperArrow = import_react.forwardRef(function PopperArrow2(props, forwarded
 		})
 	});
 });
-PopperArrow.displayName = ARROW_NAME$2;
+PopperArrow.displayName = ARROW_NAME$3;
 function isNotNull(value) {
 	return value !== null;
 }
@@ -23944,12 +23986,12 @@ function getSideAndAlignFromPlacement(placement) {
 	const [side, align = "center"] = placement.split("-");
 	return [side, align];
 }
-var Root2$4 = Popper;
+var Root2$5 = Popper;
 var Anchor = PopperAnchor;
 var Content$3 = PopperContent;
 var Arrow = PopperArrow;
 var [createTooltipContext, createTooltipScope] = createContextScope("Tooltip", [createPopperScope]);
-var usePopperScope$1 = createPopperScope();
+var usePopperScope$2 = createPopperScope();
 var PROVIDER_NAME = "TooltipProvider";
 var DEFAULT_DELAY_DURATION = 700;
 var TOOLTIP_OPEN = "tooltip.open";
@@ -23989,7 +24031,7 @@ var [TooltipContextProvider, useTooltipContext] = createTooltipContext(TOOLTIP_N
 var Tooltip$1 = (props) => {
 	const { __scopeTooltip, children, open: openProp, defaultOpen, onOpenChange, disableHoverableContent: disableHoverableContentProp, delayDuration: delayDurationProp } = props;
 	const providerContext = useTooltipProviderContext(TOOLTIP_NAME, props.__scopeTooltip);
-	const popperScope = usePopperScope$1(__scopeTooltip);
+	const popperScope = usePopperScope$2(__scopeTooltip);
 	const [trigger, setTrigger] = import_react.useState(null);
 	const contentId = useId();
 	const openTimerRef = import_react.useRef(0);
@@ -24038,7 +24080,7 @@ var Tooltip$1 = (props) => {
 			}
 		};
 	}, []);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$4, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$5, {
 		...popperScope,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TooltipContextProvider, {
 			scope: __scopeTooltip,
@@ -24070,12 +24112,12 @@ var Tooltip$1 = (props) => {
 	});
 };
 Tooltip$1.displayName = TOOLTIP_NAME;
-var TRIGGER_NAME$5 = "TooltipTrigger";
+var TRIGGER_NAME$6 = "TooltipTrigger";
 var TooltipTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTooltip, ...triggerProps } = props;
-	const context = useTooltipContext(TRIGGER_NAME$5, __scopeTooltip);
-	const providerContext = useTooltipProviderContext(TRIGGER_NAME$5, __scopeTooltip);
-	const popperScope = usePopperScope$1(__scopeTooltip);
+	const context = useTooltipContext(TRIGGER_NAME$6, __scopeTooltip);
+	const providerContext = useTooltipProviderContext(TRIGGER_NAME$6, __scopeTooltip);
+	const popperScope = usePopperScope$2(__scopeTooltip);
 	const composedRefs = useComposedRefs(forwardedRef, import_react.useRef(null), context.onTriggerChange);
 	const isPointerDownRef = import_react.useRef(false);
 	const hasPointerMoveOpenedRef = import_react.useRef(false);
@@ -24115,13 +24157,13 @@ var TooltipTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-TooltipTrigger$1.displayName = TRIGGER_NAME$5;
-var PORTAL_NAME$2 = "TooltipPortal";
-var [PortalProvider$1, usePortalContext$1] = createTooltipContext(PORTAL_NAME$2, { forceMount: void 0 });
+TooltipTrigger$1.displayName = TRIGGER_NAME$6;
+var PORTAL_NAME$3 = "TooltipPortal";
+var [PortalProvider$2, usePortalContext$2] = createTooltipContext(PORTAL_NAME$3, { forceMount: void 0 });
 var TooltipPortal = (props) => {
 	const { __scopeTooltip, forceMount, children, container } = props;
-	const context = useTooltipContext(PORTAL_NAME$2, __scopeTooltip);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider$1, {
+	const context = useTooltipContext(PORTAL_NAME$3, __scopeTooltip);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider$2, {
 		scope: __scopeTooltip,
 		forceMount,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
@@ -24134,12 +24176,12 @@ var TooltipPortal = (props) => {
 		})
 	});
 };
-TooltipPortal.displayName = PORTAL_NAME$2;
-var CONTENT_NAME$5 = "TooltipContent";
+TooltipPortal.displayName = PORTAL_NAME$3;
+var CONTENT_NAME$6 = "TooltipContent";
 var TooltipContent$1 = import_react.forwardRef((props, forwardedRef) => {
-	const portalContext = usePortalContext$1(CONTENT_NAME$5, props.__scopeTooltip);
+	const portalContext = usePortalContext$2(CONTENT_NAME$6, props.__scopeTooltip);
 	const { forceMount = portalContext.forceMount, side = "top", ...contentProps } = props;
-	const context = useTooltipContext(CONTENT_NAME$5, props.__scopeTooltip);
+	const context = useTooltipContext(CONTENT_NAME$6, props.__scopeTooltip);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 		present: forceMount || context.open,
 		children: context.disableHoverableContent ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TooltipContentImpl, {
@@ -24154,8 +24196,8 @@ var TooltipContent$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 var TooltipContentHoverable = import_react.forwardRef((props, forwardedRef) => {
-	const context = useTooltipContext(CONTENT_NAME$5, props.__scopeTooltip);
-	const providerContext = useTooltipProviderContext(CONTENT_NAME$5, props.__scopeTooltip);
+	const context = useTooltipContext(CONTENT_NAME$6, props.__scopeTooltip);
+	const providerContext = useTooltipProviderContext(CONTENT_NAME$6, props.__scopeTooltip);
 	const ref = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, ref);
 	const [pointerGraceArea, setPointerGraceArea] = import_react.useState(null);
@@ -24232,8 +24274,8 @@ var [VisuallyHiddenContentContextProvider, useVisuallyHiddenContentContext] = cr
 var Slottable = /* @__PURE__ */ createSlottable("TooltipContent");
 var TooltipContentImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTooltip, children, "aria-label": ariaLabel, onEscapeKeyDown, onPointerDownOutside, ...contentProps } = props;
-	const context = useTooltipContext(CONTENT_NAME$5, __scopeTooltip);
-	const popperScope = usePopperScope$1(__scopeTooltip);
+	const context = useTooltipContext(CONTENT_NAME$6, __scopeTooltip);
+	const popperScope = usePopperScope$2(__scopeTooltip);
 	const { onClose } = context;
 	import_react.useEffect(() => {
 		document.addEventListener(TOOLTIP_OPEN, onClose);
@@ -24280,18 +24322,18 @@ var TooltipContentImpl = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-TooltipContent$1.displayName = CONTENT_NAME$5;
-var ARROW_NAME$1 = "TooltipArrow";
+TooltipContent$1.displayName = CONTENT_NAME$6;
+var ARROW_NAME$2 = "TooltipArrow";
 var TooltipArrow = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTooltip, ...arrowProps } = props;
-	const popperScope = usePopperScope$1(__scopeTooltip);
-	return useVisuallyHiddenContentContext(ARROW_NAME$1, __scopeTooltip).isInside ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Arrow, {
+	const popperScope = usePopperScope$2(__scopeTooltip);
+	return useVisuallyHiddenContentContext(ARROW_NAME$2, __scopeTooltip).isInside ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Arrow, {
 		...popperScope,
 		...arrowProps,
 		ref: forwardedRef
 	});
 });
-TooltipArrow.displayName = ARROW_NAME$1;
+TooltipArrow.displayName = ARROW_NAME$2;
 function getExitSideFromRect(point, rect) {
 	const top = Math.abs(rect.top - point.y);
 	const bottom = Math.abs(rect.bottom - point.y);
@@ -24397,26 +24439,26 @@ function getHullPresorted(points) {
 	if (points.length <= 1) return points.slice();
 	const upperHull = [];
 	for (let i = 0; i < points.length; i++) {
-		const p = points[i];
+		const p$1 = points[i];
 		while (upperHull.length >= 2) {
 			const q = upperHull[upperHull.length - 1];
 			const r$1 = upperHull[upperHull.length - 2];
-			if ((q.x - r$1.x) * (p.y - r$1.y) >= (q.y - r$1.y) * (p.x - r$1.x)) upperHull.pop();
+			if ((q.x - r$1.x) * (p$1.y - r$1.y) >= (q.y - r$1.y) * (p$1.x - r$1.x)) upperHull.pop();
 			else break;
 		}
-		upperHull.push(p);
+		upperHull.push(p$1);
 	}
 	upperHull.pop();
 	const lowerHull = [];
 	for (let i = points.length - 1; i >= 0; i--) {
-		const p = points[i];
+		const p$1 = points[i];
 		while (lowerHull.length >= 2) {
 			const q = lowerHull[lowerHull.length - 1];
 			const r$1 = lowerHull[lowerHull.length - 2];
-			if ((q.x - r$1.x) * (p.y - r$1.y) >= (q.y - r$1.y) * (p.x - r$1.x)) lowerHull.pop();
+			if ((q.x - r$1.x) * (p$1.y - r$1.y) >= (q.y - r$1.y) * (p$1.x - r$1.x)) lowerHull.pop();
 			else break;
 		}
-		lowerHull.push(p);
+		lowerHull.push(p$1);
 	}
 	lowerHull.pop();
 	if (upperHull.length === 1 && lowerHull.length === 1 && upperHull[0].x === lowerHull[0].x && upperHull[0].y === lowerHull[0].y) return upperHull;
@@ -24424,18 +24466,18 @@ function getHullPresorted(points) {
 }
 var Provider = TooltipProvider$1;
 var Root3 = Tooltip$1;
-var Trigger$4 = TooltipTrigger$1;
-var Content2$2 = TooltipContent$1;
+var Trigger$5 = TooltipTrigger$1;
+var Content2$3 = TooltipContent$1;
 var TooltipProvider = Provider;
 var Tooltip = Root3;
-var TooltipTrigger = Trigger$4;
-var TooltipContent = import_react.forwardRef(({ className, sideOffset = 4, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2$2, {
+var TooltipTrigger = Trigger$5;
+var TooltipContent = import_react.forwardRef(({ className, sideOffset = 4, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2$3, {
 	ref,
 	sideOffset,
 	className: cn("z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-tooltip-content-transform-origin]", className),
 	...props
 }));
-TooltipContent.displayName = Content2$2.displayName;
+TooltipContent.displayName = Content2$3.displayName;
 var REACT_LAZY_TYPE = Symbol.for("react.lazy");
 var use = import_react[" use ".trim().toString()];
 function isPromiseLike(value) {
@@ -24475,7 +24517,7 @@ function createSlot$1(ownerName) {
 	Slot2.displayName = `${ownerName}.Slot`;
 	return Slot2;
 }
-var Slot$1 = /* @__PURE__ */ createSlot$1("Slot");
+var Slot$2 = /* @__PURE__ */ createSlot$1("Slot");
 /* @__NO_SIDE_EFFECTS__ */
 function createSlotClone(ownerName) {
 	const SlotClone = import_react.forwardRef((props, forwardedRef) => {
@@ -24565,7 +24607,7 @@ var buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespa
 	}
 });
 var Button = import_react.forwardRef(({ className, variant, size: size$3, asChild = false, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$1 : "button", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$2 : "button", {
 		className: cn(buttonVariants({
 			variant,
 			size: size$3,
@@ -24605,10 +24647,10 @@ var Primitive$1 = [
 	"svg",
 	"ul"
 ].reduce((primitive, node) => {
-	const Slot$3 = /* @__PURE__ */ createSlot$1(`Primitive.${node}`);
+	const Slot$4 = /* @__PURE__ */ createSlot$1(`Primitive.${node}`);
 	const Node$1 = import_react.forwardRef((props, forwardedRef) => {
 		const { asChild, ...primitiveProps } = props;
-		const Comp = asChild ? Slot$3 : node;
+		const Comp = asChild ? Slot$4 : node;
 		if (typeof window !== "undefined") window[Symbol.for("radix-ui")] = true;
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Comp, {
 			...primitiveProps,
@@ -24866,7 +24908,7 @@ var __assign = function() {
 	__assign = Object.assign || function __assign$1(t) {
 		for (var s, i = 1, n = arguments.length; i < n; i++) {
 			s = arguments[i];
-			for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+			for (var p$1 in s) if (Object.prototype.hasOwnProperty.call(s, p$1)) t[p$1] = s[p$1];
 		}
 		return t;
 	};
@@ -24874,9 +24916,9 @@ var __assign = function() {
 };
 function __rest(s, e) {
 	var t = {};
-	for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+	for (var p$1 in s) if (Object.prototype.hasOwnProperty.call(s, p$1) && e.indexOf(p$1) < 0) t[p$1] = s[p$1];
 	if (s != null && typeof Object.getOwnPropertySymbols === "function") {
-		for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+		for (var i = 0, p$1 = Object.getOwnPropertySymbols(s); i < p$1.length; i++) if (e.indexOf(p$1[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p$1[i])) t[p$1[i]] = s[p$1[i]];
 	}
 	return t;
 }
@@ -25582,29 +25624,29 @@ var Dialog$1 = (props) => {
 	});
 };
 Dialog$1.displayName = DIALOG_NAME;
-var TRIGGER_NAME$4 = "DialogTrigger";
+var TRIGGER_NAME$5 = "DialogTrigger";
 var DialogTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...triggerProps } = props;
-	const context = useDialogContext(TRIGGER_NAME$4, __scopeDialog);
+	const context = useDialogContext(TRIGGER_NAME$5, __scopeDialog);
 	const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
 		type: "button",
 		"aria-haspopup": "dialog",
 		"aria-expanded": context.open,
 		"aria-controls": context.contentId,
-		"data-state": getState$3(context.open),
+		"data-state": getState$4(context.open),
 		...triggerProps,
 		ref: composedTriggerRef,
 		onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
 	});
 });
-DialogTrigger$1.displayName = TRIGGER_NAME$4;
-var PORTAL_NAME$1 = "DialogPortal";
-var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME$1, { forceMount: void 0 });
+DialogTrigger$1.displayName = TRIGGER_NAME$5;
+var PORTAL_NAME$2 = "DialogPortal";
+var [PortalProvider$1, usePortalContext$1] = createDialogContext(PORTAL_NAME$2, { forceMount: void 0 });
 var DialogPortal$1 = (props) => {
 	const { __scopeDialog, forceMount, children, container } = props;
-	const context = useDialogContext(PORTAL_NAME$1, __scopeDialog);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider, {
+	const context = useDialogContext(PORTAL_NAME$2, __scopeDialog);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider$1, {
 		scope: __scopeDialog,
 		forceMount,
 		children: import_react.Children.map(children, (child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
@@ -25617,10 +25659,10 @@ var DialogPortal$1 = (props) => {
 		}))
 	});
 };
-DialogPortal$1.displayName = PORTAL_NAME$1;
+DialogPortal$1.displayName = PORTAL_NAME$2;
 var OVERLAY_NAME = "DialogOverlay";
 var DialogOverlay$1 = import_react.forwardRef((props, forwardedRef) => {
-	const portalContext = usePortalContext(OVERLAY_NAME, props.__scopeDialog);
+	const portalContext = usePortalContext$1(OVERLAY_NAME, props.__scopeDialog);
 	const { forceMount = portalContext.forceMount, ...overlayProps } = props;
 	const context = useDialogContext(OVERLAY_NAME, props.__scopeDialog);
 	return context.modal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
@@ -25632,16 +25674,16 @@ var DialogOverlay$1 = import_react.forwardRef((props, forwardedRef) => {
 	}) : null;
 });
 DialogOverlay$1.displayName = OVERLAY_NAME;
-var Slot$2 = /* @__PURE__ */ createSlot("DialogOverlay.RemoveScroll");
+var Slot$3 = /* @__PURE__ */ createSlot("DialogOverlay.RemoveScroll");
 var DialogOverlayImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...overlayProps } = props;
 	const context = useDialogContext(OVERLAY_NAME, __scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Combination_default, {
-		as: Slot$2,
+		as: Slot$3,
 		allowPinchZoom: true,
 		shards: [context.contentRef],
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-			"data-state": getState$3(context.open),
+			"data-state": getState$4(context.open),
 			...overlayProps,
 			ref: forwardedRef,
 			style: {
@@ -25651,11 +25693,11 @@ var DialogOverlayImpl = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-var CONTENT_NAME$4 = "DialogContent";
+var CONTENT_NAME$5 = "DialogContent";
 var DialogContent$1 = import_react.forwardRef((props, forwardedRef) => {
-	const portalContext = usePortalContext(CONTENT_NAME$4, props.__scopeDialog);
+	const portalContext = usePortalContext$1(CONTENT_NAME$5, props.__scopeDialog);
 	const { forceMount = portalContext.forceMount, ...contentProps } = props;
-	const context = useDialogContext(CONTENT_NAME$4, props.__scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, props.__scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 		present: forceMount || context.open,
 		children: context.modal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogContentModal, {
@@ -25667,9 +25709,9 @@ var DialogContent$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-DialogContent$1.displayName = CONTENT_NAME$4;
+DialogContent$1.displayName = CONTENT_NAME$5;
 var DialogContentModal = import_react.forwardRef((props, forwardedRef) => {
-	const context = useDialogContext(CONTENT_NAME$4, props.__scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, props.__scopeDialog);
 	const contentRef = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
 	import_react.useEffect(() => {
@@ -25694,7 +25736,7 @@ var DialogContentModal = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 var DialogContentNonModal = import_react.forwardRef((props, forwardedRef) => {
-	const context = useDialogContext(CONTENT_NAME$4, props.__scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, props.__scopeDialog);
 	const hasInteractedOutsideRef = import_react.useRef(false);
 	const hasPointerDownOutsideRef = import_react.useRef(false);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogContentImpl, {
@@ -25725,7 +25767,7 @@ var DialogContentNonModal = import_react.forwardRef((props, forwardedRef) => {
 });
 var DialogContentImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
-	const context = useDialogContext(CONTENT_NAME$4, __scopeDialog);
+	const context = useDialogContext(CONTENT_NAME$5, __scopeDialog);
 	const contentRef = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, contentRef);
 	useFocusGuards();
@@ -25740,7 +25782,7 @@ var DialogContentImpl = import_react.forwardRef((props, forwardedRef) => {
 			id: context.contentId,
 			"aria-describedby": context.descriptionId,
 			"aria-labelledby": context.titleId,
-			"data-state": getState$3(context.open),
+			"data-state": getState$4(context.open),
 			...contentProps,
 			ref: composedRefs,
 			onDismiss: () => context.onOpenChange(false)
@@ -25772,10 +25814,10 @@ var DialogDescription$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 DialogDescription$1.displayName = DESCRIPTION_NAME;
-var CLOSE_NAME = "DialogClose";
+var CLOSE_NAME$1 = "DialogClose";
 var DialogClose$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeDialog, ...closeProps } = props;
-	const context = useDialogContext(CLOSE_NAME, __scopeDialog);
+	const context = useDialogContext(CLOSE_NAME$1, __scopeDialog);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
 		type: "button",
 		...closeProps,
@@ -25783,13 +25825,13 @@ var DialogClose$1 = import_react.forwardRef((props, forwardedRef) => {
 		onClick: composeEventHandlers(props.onClick, () => context.onOpenChange(false))
 	});
 });
-DialogClose$1.displayName = CLOSE_NAME;
-function getState$3(open) {
+DialogClose$1.displayName = CLOSE_NAME$1;
+function getState$4(open) {
 	return open ? "open" : "closed";
 }
 var TITLE_WARNING_NAME = "DialogTitleWarning";
 var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
-	contentName: CONTENT_NAME$4,
+	contentName: CONTENT_NAME$5,
 	titleName: TITLE_NAME,
 	docsSlug: "dialog"
 });
@@ -25823,15 +25865,15 @@ var DescriptionWarning = ({ contentRef, descriptionId }) => {
 	return null;
 };
 var Root$6 = Dialog$1;
-var Trigger$3 = DialogTrigger$1;
-var Portal$2 = DialogPortal$1;
+var Trigger$4 = DialogTrigger$1;
+var Portal$3 = DialogPortal$1;
 var Overlay = DialogOverlay$1;
 var Content$2 = DialogContent$1;
 var Title = DialogTitle$1;
 var Description = DialogDescription$1;
 var Close = DialogClose$1;
 var Sheet = Root$6;
-var SheetPortal = Portal$2;
+var SheetPortal = Portal$3;
 var SheetOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
 	className: cn("fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
 	...props,
@@ -25853,7 +25895,7 @@ var SheetContent = import_react.forwardRef(({ side = "right", className, childre
 	...props,
 	children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Close, {
 		className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 			className: "sr-only",
 			children: "Close"
 		})]
@@ -26108,7 +26150,7 @@ var SidebarGroup = import_react.forwardRef(({ className, ...props }, ref) => {
 });
 SidebarGroup.displayName = "SidebarGroup";
 var SidebarGroupLabel = import_react.forwardRef(({ className, asChild = false, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$1 : "div", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$2 : "div", {
 		ref,
 		"data-sidebar": "group-label",
 		className: cn("flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0", "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0", className),
@@ -26117,7 +26159,7 @@ var SidebarGroupLabel = import_react.forwardRef(({ className, asChild = false, .
 });
 SidebarGroupLabel.displayName = "SidebarGroupLabel";
 var SidebarGroupAction = import_react.forwardRef(({ className, asChild = false, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$1 : "button", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$2 : "button", {
 		ref,
 		"data-sidebar": "group-action",
 		className: cn("absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0", "after:absolute after:-inset-2 after:md:hidden", "group-data-[collapsible=icon]:hidden", className),
@@ -26164,7 +26206,7 @@ var sidebarMenuButtonVariants = cva("peer/menu-button flex w-full items-center g
 	}
 });
 var SidebarMenuButton = import_react.forwardRef(({ asChild = false, isActive = false, variant = "default", size: size$3 = "default", tooltip, className, ...props }, ref) => {
-	const Comp = asChild ? Slot$1 : "button";
+	const Comp = asChild ? Slot$2 : "button";
 	const { isMobile, state } = useSidebar();
 	const button = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Comp, {
 		ref,
@@ -26191,7 +26233,7 @@ var SidebarMenuButton = import_react.forwardRef(({ asChild = false, isActive = f
 });
 SidebarMenuButton.displayName = "SidebarMenuButton";
 var SidebarMenuAction = import_react.forwardRef(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$1 : "button", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$2 : "button", {
 		ref,
 		"data-sidebar": "menu-action",
 		className: cn("absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0", "after:absolute after:-inset-2 after:md:hidden", "peer-data-[size=sm]/menu-button:top-1", "peer-data-[size=default]/menu-button:top-1.5", "peer-data-[size=lg]/menu-button:top-2.5", "group-data-[collapsible=icon]:hidden", showOnHover && "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0", className),
@@ -26239,7 +26281,7 @@ var SidebarMenuSubItem = import_react.forwardRef(({ ...props }, ref) => /* @__PU
 }));
 SidebarMenuSubItem.displayName = "SidebarMenuSubItem";
 var SidebarMenuSubButton = import_react.forwardRef(({ asChild = false, size: size$3 = "md", isActive, className, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$1 : "a", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot$2 : "a", {
 		ref,
 		"data-sidebar": "menu-sub-button",
 		"data-size": size$3,
@@ -26347,7 +26389,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				value,
 				getSnapshot
 			]);
-			useEffect$2(function() {
+			useEffect$1(function() {
 				checkIfSnapshotChanged(inst) && forceUpdate({ inst });
 				return subscribe$1(function() {
 					checkIfSnapshotChanged(inst) && forceUpdate({ inst });
@@ -26370,7 +26412,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$3.useState, useEffect$2 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$3.useState, useEffect$1 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$3.useSyncExternalStore ? React$3.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26692,7 +26734,7 @@ var createStoreImpl = (createState) => {
 			listeners$1.forEach((listener) => listener(state, previousState));
 		}
 	};
-	const getState$4 = () => state;
+	const getState$5 = () => state;
 	const getInitialState = () => initialState;
 	const subscribe$1 = (listener) => {
 		listeners$1.add(listener);
@@ -26704,12 +26746,12 @@ var createStoreImpl = (createState) => {
 	};
 	const api = {
 		setState,
-		getState: getState$4,
+		getState: getState$5,
 		getInitialState,
 		subscribe: subscribe$1,
 		destroy
 	};
-	const initialState = state = createState(setState, getState$4, api);
+	const initialState = state = createState(setState, getState$5, api);
 	return api;
 };
 var createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
@@ -26728,7 +26770,7 @@ var require_with_selector_development = /* @__PURE__ */ __commonJSMin(((exports)
 			return x$1 === y && (0 !== x$1 || 1 / x$1 === 1 / y) || x$1 !== x$1 && y !== y;
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$3 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore$1 = shim.useSyncExternalStore, useRef = React$3.useRef, useEffect$2 = React$3.useEffect, useMemo = React$3.useMemo, useDebugValue$1 = React$3.useDebugValue;
+		var React$3 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore$1 = shim.useSyncExternalStore, useRef = React$3.useRef, useEffect$1 = React$3.useEffect, useMemo$1 = React$3.useMemo, useDebugValue$1 = React$3.useDebugValue;
 		exports.useSyncExternalStoreWithSelector = function(subscribe$1, getSnapshot, getServerSnapshot, selector, isEqual) {
 			var instRef = useRef(null);
 			if (null === instRef.current) {
@@ -26738,7 +26780,7 @@ var require_with_selector_development = /* @__PURE__ */ __commonJSMin(((exports)
 				};
 				instRef.current = inst;
 			} else inst = instRef.current;
-			instRef = useMemo(function() {
+			instRef = useMemo$1(function() {
 				function memoizedSelector(nextSnapshot) {
 					if (!hasMemo) {
 						hasMemo = !0;
@@ -26770,7 +26812,7 @@ var require_with_selector_development = /* @__PURE__ */ __commonJSMin(((exports)
 				isEqual
 			]);
 			var value = useSyncExternalStore$1(subscribe$1, instRef[0], instRef[1]);
-			useEffect$2(function() {
+			useEffect$1(function() {
 				inst.hasValue = !0;
 				inst.value = value;
 			}, [value]);
@@ -28341,10 +28383,10 @@ var TabsList$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 TabsList$1.displayName = TAB_LIST_NAME;
-var TRIGGER_NAME$3 = "TabsTrigger";
+var TRIGGER_NAME$4 = "TabsTrigger";
 var TabsTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, value, disabled = false, ...triggerProps } = props;
-	const context = useTabsContext(TRIGGER_NAME$3, __scopeTabs);
+	const context = useTabsContext(TRIGGER_NAME$4, __scopeTabs);
 	const rovingFocusGroupScope = useRovingFocusGroupScope$1(__scopeTabs);
 	const triggerId = makeTriggerId(context.baseId, value);
 	const contentId = makeContentId(context.baseId, value);
@@ -28379,11 +28421,11 @@ var TabsTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-TabsTrigger$1.displayName = TRIGGER_NAME$3;
-var CONTENT_NAME$3 = "TabsContent";
+TabsTrigger$1.displayName = TRIGGER_NAME$4;
+var CONTENT_NAME$4 = "TabsContent";
 var TabsContent$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeTabs, value, forceMount, children, ...contentProps } = props;
-	const context = useTabsContext(CONTENT_NAME$3, __scopeTabs);
+	const context = useTabsContext(CONTENT_NAME$4, __scopeTabs);
 	const triggerId = makeTriggerId(context.baseId, value);
 	const contentId = makeContentId(context.baseId, value);
 	const isSelected = value === context.value;
@@ -28412,30 +28454,30 @@ var TabsContent$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-TabsContent$1.displayName = CONTENT_NAME$3;
+TabsContent$1.displayName = CONTENT_NAME$4;
 function makeTriggerId(baseId, value) {
 	return `${baseId}-trigger-${value}`;
 }
 function makeContentId(baseId, value) {
 	return `${baseId}-content-${value}`;
 }
-var Root2$3 = Tabs$1;
+var Root2$4 = Tabs$1;
 var List = TabsList$1;
-var Trigger$2 = TabsTrigger$1;
+var Trigger$3 = TabsTrigger$1;
 var Content$1 = TabsContent$1;
-var Tabs = Root2$3;
+var Tabs = Root2$4;
 var TabsList = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List, {
 	ref,
 	className: cn("inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground", className),
 	...props
 }));
 TabsList.displayName = List.displayName;
-var TabsTrigger = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trigger$2, {
+var TabsTrigger = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trigger$3, {
 	ref,
 	className: cn("inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm", className),
 	...props
 }));
-TabsTrigger.displayName = Trigger$2.displayName;
+TabsTrigger.displayName = Trigger$3.displayName;
 var TabsContent = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content$1, {
 	ref,
 	className: cn("mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2", className),
@@ -29339,7 +29381,7 @@ function Strategy() {
 										className: "pb-3",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
 											className: "text-red-700 flex items-center gap-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-5" }), " Eliminar"]
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "size-5" }), " Eliminar"]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "O que a indústria aceita mas não agrega valor?" })]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 										className: "space-y-2 mb-4",
@@ -29348,7 +29390,7 @@ function Strategy() {
 											children: [item, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => removeBlueOceanItem("eliminate", idx),
 												className: "text-red-400 hover:text-red-700",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-3" })
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "size-3" })
 											})]
 										}, idx))
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -29382,7 +29424,7 @@ function Strategy() {
 											children: [item, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => removeBlueOceanItem("reduce", idx),
 												className: "text-amber-400 hover:text-amber-700",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-3" })
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "size-3" })
 											})]
 										}, idx))
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -29413,7 +29455,7 @@ function Strategy() {
 											children: [item, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => removeBlueOceanItem("raise", idx),
 												className: "text-blue-400 hover:text-blue-700",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-3" })
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "size-3" })
 											})]
 										}, idx))
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -29444,7 +29486,7 @@ function Strategy() {
 											children: [item, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => removeBlueOceanItem("create", idx),
 												className: "text-green-400 hover:text-green-700",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-3" })
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "size-3" })
 											})]
 										}, idx))
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -29558,8 +29600,8 @@ function Lightbulb$1({ className }) {
 	});
 }
 var Dialog = Root$6;
-var DialogTrigger = Trigger$3;
-var DialogPortal = Portal$2;
+var DialogTrigger = Trigger$4;
+var DialogPortal = Portal$3;
 var DialogOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
 	ref,
 	className: cn("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
@@ -29572,7 +29614,7 @@ var DialogContent = import_react.forwardRef(({ className, children, ...props }, 
 	...props,
 	children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Close, {
 		className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 			className: "sr-only",
 			children: "Close"
 		})]
@@ -29628,12 +29670,12 @@ var SELECTION_KEYS = [" ", "Enter"];
 var SELECT_NAME = "Select";
 var [Collection$2, useCollection$2, createCollectionScope$2] = createCollection(SELECT_NAME);
 var [createSelectContext, createSelectScope] = createContextScope(SELECT_NAME, [createCollectionScope$2, createPopperScope]);
-var usePopperScope = createPopperScope();
+var usePopperScope$1 = createPopperScope();
 var [SelectProvider, useSelectContext] = createSelectContext(SELECT_NAME);
 var [SelectNativeOptionsProvider, useSelectNativeOptionsContext] = createSelectContext(SELECT_NAME);
 var Select$1 = (props) => {
 	const { __scopeSelect, children, open: openProp, defaultOpen, onOpenChange, value: valueProp, defaultValue, onValueChange, dir, name, autoComplete, disabled, required, form } = props;
-	const popperScope = usePopperScope(__scopeSelect);
+	const popperScope = usePopperScope$1(__scopeSelect);
 	const [trigger, setTrigger] = import_react.useState(null);
 	const [valueNode, setValueNode] = import_react.useState(null);
 	const [valueNodeHasChildren, setValueNodeHasChildren] = import_react.useState(false);
@@ -29654,7 +29696,7 @@ var Select$1 = (props) => {
 	const isFormControl = trigger ? form || !!trigger.closest("form") : true;
 	const [nativeOptionsSet, setNativeOptionsSet] = import_react.useState(/* @__PURE__ */ new Set());
 	const nativeSelectKey = Array.from(nativeOptionsSet).map((option) => option.props.value).join(";");
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$4, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$5, {
 		...popperScope,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectProvider, {
 			required,
@@ -29705,11 +29747,11 @@ var Select$1 = (props) => {
 	});
 };
 Select$1.displayName = SELECT_NAME;
-var TRIGGER_NAME$2 = "SelectTrigger";
+var TRIGGER_NAME$3 = "SelectTrigger";
 var SelectTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, disabled = false, ...triggerProps } = props;
-	const popperScope = usePopperScope(__scopeSelect);
-	const context = useSelectContext(TRIGGER_NAME$2, __scopeSelect);
+	const popperScope = usePopperScope$1(__scopeSelect);
+	const context = useSelectContext(TRIGGER_NAME$3, __scopeSelect);
 	const isDisabled = context.disabled || disabled;
 	const composedRefs = useComposedRefs(forwardedRef, context.onTriggerChange);
 	const getItems = useCollection$2(__scopeSelect);
@@ -29771,7 +29813,7 @@ var SelectTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-SelectTrigger$1.displayName = TRIGGER_NAME$2;
+SelectTrigger$1.displayName = TRIGGER_NAME$3;
 var VALUE_NAME = "SelectValue";
 var SelectValue$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, className, style, children, placeholder = "", ...valueProps } = props;
@@ -29801,17 +29843,17 @@ var SelectIcon = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 SelectIcon.displayName = ICON_NAME;
-var PORTAL_NAME = "SelectPortal";
+var PORTAL_NAME$1 = "SelectPortal";
 var SelectPortal = (props) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal, {
 		asChild: true,
 		...props
 	});
 };
-SelectPortal.displayName = PORTAL_NAME;
-var CONTENT_NAME$2 = "SelectContent";
+SelectPortal.displayName = PORTAL_NAME$1;
+var CONTENT_NAME$3 = "SelectContent";
 var SelectContent$1 = import_react.forwardRef((props, forwardedRef) => {
-	const context = useSelectContext(CONTENT_NAME$2, props.__scopeSelect);
+	const context = useSelectContext(CONTENT_NAME$3, props.__scopeSelect);
 	const [fragment, setFragment] = import_react.useState();
 	useLayoutEffect2(() => {
 		setFragment(new DocumentFragment());
@@ -29831,14 +29873,14 @@ var SelectContent$1 = import_react.forwardRef((props, forwardedRef) => {
 		ref: forwardedRef
 	});
 });
-SelectContent$1.displayName = CONTENT_NAME$2;
+SelectContent$1.displayName = CONTENT_NAME$3;
 var CONTENT_MARGIN = 10;
-var [SelectContentProvider, useSelectContentContext] = createSelectContext(CONTENT_NAME$2);
+var [SelectContentProvider, useSelectContentContext] = createSelectContext(CONTENT_NAME$3);
 var CONTENT_IMPL_NAME = "SelectContentImpl";
-var Slot = /* @__PURE__ */ createSlot("SelectContent.RemoveScroll");
+var Slot$1 = /* @__PURE__ */ createSlot("SelectContent.RemoveScroll");
 var SelectContentImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, position = "item-aligned", onCloseAutoFocus, onEscapeKeyDown, onPointerDownOutside, side, sideOffset, align, alignOffset, arrowPadding, collisionBoundary, collisionPadding, sticky, hideWhenDetached, avoidCollisions, ...contentProps } = props;
-	const context = useSelectContext(CONTENT_NAME$2, __scopeSelect);
+	const context = useSelectContext(CONTENT_NAME$3, __scopeSelect);
 	const [content, setContent] = import_react.useState(null);
 	const [viewport, setViewport] = import_react.useState(null);
 	const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
@@ -29962,7 +30004,7 @@ var SelectContentImpl = import_react.forwardRef((props, forwardedRef) => {
 		isPositioned,
 		searchRef,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Combination_default, {
-			as: Slot,
+			as: Slot$1,
 			allowPinchZoom: true,
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FocusScope, {
 				asChild: true,
@@ -30028,8 +30070,8 @@ SelectContentImpl.displayName = CONTENT_IMPL_NAME;
 var ITEM_ALIGNED_POSITION_NAME = "SelectItemAlignedPosition";
 var SelectItemAlignedPosition = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, onPlaced, ...popperProps } = props;
-	const context = useSelectContext(CONTENT_NAME$2, __scopeSelect);
-	const contentContext = useSelectContentContext(CONTENT_NAME$2, __scopeSelect);
+	const context = useSelectContext(CONTENT_NAME$3, __scopeSelect);
+	const contentContext = useSelectContentContext(CONTENT_NAME$3, __scopeSelect);
 	const [contentWrapper, setContentWrapper] = import_react.useState(null);
 	const [content, setContent] = import_react.useState(null);
 	const composedRefs = useComposedRefs(forwardedRef, (node) => setContent(node));
@@ -30154,7 +30196,7 @@ SelectItemAlignedPosition.displayName = ITEM_ALIGNED_POSITION_NAME;
 var POPPER_POSITION_NAME = "SelectPopperPosition";
 var SelectPopperPosition = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, align = "start", collisionPadding = CONTENT_MARGIN, ...popperProps } = props;
-	const popperScope = usePopperScope(__scopeSelect);
+	const popperScope = usePopperScope$1(__scopeSelect);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content$3, {
 		...popperScope,
 		...popperProps,
@@ -30173,7 +30215,7 @@ var SelectPopperPosition = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 SelectPopperPosition.displayName = POPPER_POSITION_NAME;
-var [SelectViewportProvider, useSelectViewportContext] = createSelectContext(CONTENT_NAME$2, {});
+var [SelectViewportProvider, useSelectViewportContext] = createSelectContext(CONTENT_NAME$3, {});
 var VIEWPORT_NAME = "SelectViewport";
 var SelectViewport = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, nonce, ...viewportProps } = props;
@@ -30473,19 +30515,19 @@ var SelectSeparator$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 SelectSeparator$1.displayName = SEPARATOR_NAME;
-var ARROW_NAME = "SelectArrow";
+var ARROW_NAME$1 = "SelectArrow";
 var SelectArrow = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeSelect, ...arrowProps } = props;
-	const popperScope = usePopperScope(__scopeSelect);
-	const context = useSelectContext(ARROW_NAME, __scopeSelect);
-	const contentContext = useSelectContentContext(ARROW_NAME, __scopeSelect);
+	const popperScope = usePopperScope$1(__scopeSelect);
+	const context = useSelectContext(ARROW_NAME$1, __scopeSelect);
+	const contentContext = useSelectContentContext(ARROW_NAME$1, __scopeSelect);
 	return context.open && contentContext.position === "popper" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Arrow, {
 		...popperScope,
 		...arrowProps,
 		ref: forwardedRef
 	}) : null;
 });
-SelectArrow.displayName = ARROW_NAME;
+SelectArrow.displayName = ARROW_NAME$1;
 var BUBBLE_INPUT_NAME$2 = "SelectBubbleInput";
 var SelectBubbleInput = import_react.forwardRef(({ __scopeSelect, value, ...props }, forwardedRef) => {
 	const ref = import_react.useRef(null);
@@ -30553,12 +30595,12 @@ function findNextItem(items, search, currentItem) {
 function wrapArray(array, startIndex) {
 	return array.map((_$1, index$1) => array[(startIndex + index$1) % array.length]);
 }
-var Root2$2 = Select$1;
-var Trigger$1 = SelectTrigger$1;
+var Root2$3 = Select$1;
+var Trigger$2 = SelectTrigger$1;
 var Value = SelectValue$1;
 var Icon = SelectIcon;
-var Portal$1 = SelectPortal;
-var Content2$1 = SelectContent$1;
+var Portal$2 = SelectPortal;
+var Content2$2 = SelectContent$1;
 var Viewport = SelectViewport;
 var Label$1 = SelectLabel$1;
 var Item$1 = SelectItem$1;
@@ -30567,9 +30609,9 @@ var ItemIndicator = SelectItemIndicator;
 var ScrollUpButton = SelectScrollUpButton$1;
 var ScrollDownButton = SelectScrollDownButton$1;
 var Separator$1 = SelectSeparator$1;
-var Select = Root2$2;
+var Select = Root2$3;
 var SelectValue = Value;
-var SelectTrigger = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Trigger$1, {
+var SelectTrigger = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Trigger$2, {
 	ref,
 	className: cn("flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background data-[placeholder]:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1", className),
 	...props,
@@ -30578,7 +30620,7 @@ var SelectTrigger = import_react.forwardRef(({ className, children, ...props }, 
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: "h-4 w-4 opacity-50" })
 	})]
 }));
-SelectTrigger.displayName = Trigger$1.displayName;
+SelectTrigger.displayName = Trigger$2.displayName;
 var SelectScrollUpButton = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollUpButton, {
 	ref,
 	className: cn("flex cursor-default items-center justify-center py-1", className),
@@ -30593,7 +30635,7 @@ var SelectScrollDownButton = import_react.forwardRef(({ className, ...props }, r
 	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: "h-4 w-4" })
 }));
 SelectScrollDownButton.displayName = ScrollDownButton.displayName;
-var SelectContent = import_react.forwardRef(({ className, children, position = "popper", ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$1, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Content2$1, {
+var SelectContent = import_react.forwardRef(({ className, children, position = "popper", ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$2, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Content2$2, {
 	ref,
 	className: cn("relative z-50 max-h-[--radix-select-content-available-height] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-select-content-transform-origin]", position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1", className),
 	position,
@@ -30607,7 +30649,7 @@ var SelectContent = import_react.forwardRef(({ className, children, position = "
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectScrollDownButton, {})
 	]
 }) }));
-SelectContent.displayName = Content2$1.displayName;
+SelectContent.displayName = Content2$2.displayName;
 var SelectLabel = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label$1, {
 	ref,
 	className: cn("py-1.5 pl-8 pr-2 text-sm font-semibold", className),
@@ -30681,10 +30723,10 @@ function StrategicMap() {
 									"Clientes",
 									"Processos",
 									"Aprendizado"
-								].map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-									value: p,
-									children: p
-								}, p)) })]
+								].map((p$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+									value: p$1,
+									children: p$1
+								}, p$1)) })]
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "space-y-2",
@@ -30883,8 +30925,8 @@ function TacticalPlan() {
 			toast.success("Plano Tático 2026 gerado com sucesso!");
 		}, 2e3);
 	};
-	const getPriorityColor = (p) => {
-		switch (p) {
+	const getPriorityColor = (p$1) => {
+		switch (p$1) {
 			case "Alta": return "bg-red-100 text-red-800 hover:bg-red-200";
 			case "Média": return "bg-amber-100 text-amber-800 hover:bg-amber-200";
 			default: return "bg-blue-100 text-blue-800 hover:bg-blue-200";
@@ -31199,7 +31241,7 @@ var Collapsible = import_react.forwardRef((props, forwardedRef) => {
 		open,
 		onOpenToggle: import_react.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-			"data-state": getState$2(open),
+			"data-state": getState$3(open),
 			"data-disabled": disabled ? "" : void 0,
 			...collapsibleProps,
 			ref: forwardedRef
@@ -31207,15 +31249,15 @@ var Collapsible = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Collapsible.displayName = COLLAPSIBLE_NAME;
-var TRIGGER_NAME$1 = "CollapsibleTrigger";
+var TRIGGER_NAME$2 = "CollapsibleTrigger";
 var CollapsibleTrigger = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeCollapsible, ...triggerProps } = props;
-	const context = useCollapsibleContext(TRIGGER_NAME$1, __scopeCollapsible);
+	const context = useCollapsibleContext(TRIGGER_NAME$2, __scopeCollapsible);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
 		type: "button",
 		"aria-controls": context.contentId,
 		"aria-expanded": context.open || false,
-		"data-state": getState$2(context.open),
+		"data-state": getState$3(context.open),
 		"data-disabled": context.disabled ? "" : void 0,
 		disabled: context.disabled,
 		...triggerProps,
@@ -31223,11 +31265,11 @@ var CollapsibleTrigger = import_react.forwardRef((props, forwardedRef) => {
 		onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
 	});
 });
-CollapsibleTrigger.displayName = TRIGGER_NAME$1;
-var CONTENT_NAME$1 = "CollapsibleContent";
+CollapsibleTrigger.displayName = TRIGGER_NAME$2;
+var CONTENT_NAME$2 = "CollapsibleContent";
 var CollapsibleContent = import_react.forwardRef((props, forwardedRef) => {
 	const { forceMount, ...contentProps } = props;
-	const context = useCollapsibleContext(CONTENT_NAME$1, props.__scopeCollapsible);
+	const context = useCollapsibleContext(CONTENT_NAME$2, props.__scopeCollapsible);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 		present: forceMount || context.open,
 		children: ({ present }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CollapsibleContentImpl, {
@@ -31237,10 +31279,10 @@ var CollapsibleContent = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-CollapsibleContent.displayName = CONTENT_NAME$1;
+CollapsibleContent.displayName = CONTENT_NAME$2;
 var CollapsibleContentImpl = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeCollapsible, present, children, ...contentProps } = props;
-	const context = useCollapsibleContext(CONTENT_NAME$1, __scopeCollapsible);
+	const context = useCollapsibleContext(CONTENT_NAME$2, __scopeCollapsible);
 	const [isPresent, setIsPresent] = import_react.useState(present);
 	const ref = import_react.useRef(null);
 	const composedRefs = useComposedRefs(forwardedRef, ref);
@@ -31275,7 +31317,7 @@ var CollapsibleContentImpl = import_react.forwardRef((props, forwardedRef) => {
 		}
 	}, [context.open, present]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
-		"data-state": getState$2(context.open),
+		"data-state": getState$3(context.open),
 		"data-disabled": context.disabled ? "" : void 0,
 		id: context.contentId,
 		hidden: !isOpen,
@@ -31289,11 +31331,11 @@ var CollapsibleContentImpl = import_react.forwardRef((props, forwardedRef) => {
 		children: isOpen && children
 	});
 });
-function getState$2(open) {
+function getState$3(open) {
 	return open ? "open" : "closed";
 }
 var Root$1 = Collapsible;
-var Trigger = CollapsibleTrigger;
+var Trigger$1 = CollapsibleTrigger;
 var Content = CollapsibleContent;
 var ACCORDION_NAME = "Accordion";
 var ACCORDION_KEYS = [
@@ -31455,7 +31497,7 @@ var AccordionItem$1 = import_react.forwardRef((props, forwardedRef) => {
 		triggerId,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
 			"data-orientation": accordionContext.orientation,
-			"data-state": getState$1(open),
+			"data-state": getState$2(open),
 			...collapsibleScope,
 			...accordionItemProps,
 			ref: forwardedRef,
@@ -31476,23 +31518,23 @@ var AccordionHeader = import_react.forwardRef((props, forwardedRef) => {
 	const itemContext = useAccordionItemContext(HEADER_NAME, __scopeAccordion);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.h3, {
 		"data-orientation": accordionContext.orientation,
-		"data-state": getState$1(itemContext.open),
+		"data-state": getState$2(itemContext.open),
 		"data-disabled": itemContext.disabled ? "" : void 0,
 		...headerProps,
 		ref: forwardedRef
 	});
 });
 AccordionHeader.displayName = HEADER_NAME;
-var TRIGGER_NAME = "AccordionTrigger";
+var TRIGGER_NAME$1 = "AccordionTrigger";
 var AccordionTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeAccordion, ...triggerProps } = props;
 	const accordionContext = useAccordionContext(ACCORDION_NAME, __scopeAccordion);
-	const itemContext = useAccordionItemContext(TRIGGER_NAME, __scopeAccordion);
-	const collapsibleContext = useAccordionCollapsibleContext(TRIGGER_NAME, __scopeAccordion);
+	const itemContext = useAccordionItemContext(TRIGGER_NAME$1, __scopeAccordion);
+	const collapsibleContext = useAccordionCollapsibleContext(TRIGGER_NAME$1, __scopeAccordion);
 	const collapsibleScope = useCollapsibleScope(__scopeAccordion);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$1.ItemSlot, {
 		scope: __scopeAccordion,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trigger, {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trigger$1, {
 			"aria-disabled": itemContext.open && !collapsibleContext.collapsible || void 0,
 			"data-orientation": accordionContext.orientation,
 			id: itemContext.triggerId,
@@ -31502,12 +31544,12 @@ var AccordionTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
 		})
 	});
 });
-AccordionTrigger$1.displayName = TRIGGER_NAME;
-var CONTENT_NAME = "AccordionContent";
+AccordionTrigger$1.displayName = TRIGGER_NAME$1;
+var CONTENT_NAME$1 = "AccordionContent";
 var AccordionContent$1 = import_react.forwardRef((props, forwardedRef) => {
 	const { __scopeAccordion, ...contentProps } = props;
 	const accordionContext = useAccordionContext(ACCORDION_NAME, __scopeAccordion);
-	const itemContext = useAccordionItemContext(CONTENT_NAME, __scopeAccordion);
+	const itemContext = useAccordionItemContext(CONTENT_NAME$1, __scopeAccordion);
 	const collapsibleScope = useCollapsibleScope(__scopeAccordion);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content, {
 		role: "region",
@@ -31523,16 +31565,16 @@ var AccordionContent$1 = import_react.forwardRef((props, forwardedRef) => {
 		}
 	});
 });
-AccordionContent$1.displayName = CONTENT_NAME;
-function getState$1(open) {
+AccordionContent$1.displayName = CONTENT_NAME$1;
+function getState$2(open) {
 	return open ? "open" : "closed";
 }
-var Root2$1 = Accordion$1;
+var Root2$2 = Accordion$1;
 var Item = AccordionItem$1;
 var Header = AccordionHeader;
 var Trigger2 = AccordionTrigger$1;
-var Content2 = AccordionContent$1;
-var Accordion = Root2$1;
+var Content2$1 = AccordionContent$1;
+var Accordion = Root2$2;
 var AccordionItem = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item, {
 	ref,
 	className: cn("border-b", className),
@@ -31549,7 +31591,7 @@ var AccordionTrigger = import_react.forwardRef(({ className, children, ...props 
 	})
 }));
 AccordionTrigger.displayName = Trigger2.displayName;
-var AccordionContent = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2, {
+var AccordionContent = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2$1, {
 	ref,
 	className: "overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
 	...props,
@@ -31558,7 +31600,7 @@ var AccordionContent = import_react.forwardRef(({ className, children, ...props 
 		children
 	})
 }));
-AccordionContent.displayName = Content2.displayName;
+AccordionContent.displayName = Content2$1.displayName;
 function OperationalPlan() {
 	const state = useStrategyStore();
 	const { relatorio_5, setRelatorio5, config_inicial } = state;
@@ -32051,7 +32093,7 @@ var Radio = import_react.forwardRef((props, forwardedRef) => {
 			type: "button",
 			role: "radio",
 			"aria-checked": checked,
-			"data-state": getState(checked),
+			"data-state": getState$1(checked),
 			"data-disabled": disabled ? "" : void 0,
 			disabled,
 			value,
@@ -32085,7 +32127,7 @@ var RadioIndicator = import_react.forwardRef((props, forwardedRef) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
 		present: forceMount || context.checked,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.span, {
-			"data-state": getState(context.checked),
+			"data-state": getState$1(context.checked),
 			"data-disabled": context.disabled ? "" : void 0,
 			...indicatorProps,
 			ref: forwardedRef
@@ -32132,7 +32174,7 @@ var RadioBubbleInput = import_react.forwardRef(({ __scopeRadio, control, checked
 	});
 });
 RadioBubbleInput.displayName = BUBBLE_INPUT_NAME$1;
-function getState(checked) {
+function getState$1(checked) {
 	return checked ? "checked" : "unchecked";
 }
 var ARROW_KEYS$1 = [
@@ -32239,17 +32281,17 @@ var RadioGroupIndicator = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 RadioGroupIndicator.displayName = INDICATOR_NAME2;
-var Root2 = RadioGroup$1;
+var Root2$1 = RadioGroup$1;
 var Item2 = RadioGroupItem$1;
 var Indicator = RadioGroupIndicator;
 var RadioGroup = import_react.forwardRef(({ className, ...props }, ref) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$1, {
 		className: cn("grid gap-2", className),
 		...props,
 		ref
 	});
 });
-RadioGroup.displayName = Root2.displayName;
+RadioGroup.displayName = Root2$1.displayName;
 var RadioGroupItem = import_react.forwardRef(({ className, ...props }, ref) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Item2, {
 		ref,
@@ -32262,212 +32304,1111 @@ var RadioGroupItem = import_react.forwardRef(({ className, ...props }, ref) => {
 	});
 });
 RadioGroupItem.displayName = Item2.displayName;
-var QUESTIONS$1 = [
-	{
-		key: "tipo_clinica",
-		title: "Qual é o tipo da sua clínica?",
-		description: "Selecione a categoria que melhor representa sua atuação.",
-		type: "select",
-		allowOther: true,
-		options: [
-			"Fisioterapia",
-			"Odontologia",
-			"Clínica Geral",
-			"Psicologia",
-			"Nutrição",
-			"Estética",
-			"Pilates",
-			"Multidisciplinar",
-			"Outro"
-		],
-		placeholder: "Selecione o tipo..."
-	},
-	{
-		key: "nome_clinica",
-		title: "Qual é o nome da sua clínica?",
-		description: "Como ela é conhecida no mercado.",
-		type: "text",
-		placeholder: "Nome da clínica..."
-	},
-	{
-		key: "localizacao",
-		title: "Onde a clínica está localizada?",
-		description: "Cidade, Estado e/ou País.",
-		type: "text",
-		placeholder: "Ex: São Paulo, SP"
-	},
-	{
-		key: "publico_principal",
-		title: "Quem é o seu público principal?",
-		description: "Selecione o perfil predominante dos seus pacientes.",
-		type: "select",
-		allowOther: true,
-		options: [
-			"Reabilitação",
-			"Atletas",
-			"Idosos",
-			"Crianças",
-			"Saúde da Mulher",
-			"Outro"
-		],
-		placeholder: "Selecione o público..."
-	},
-	{
-		key: "estagio_clinica",
-		title: "Em qual estágio de negócio a clínica se encontra?",
-		description: "Selecione a opção que melhor descreve o momento atual.",
-		type: "select",
-		allowOther: true,
-		options: [
-			"Iniciante",
-			"Em Crescimento",
-			"Consolidada",
-			"Em Crise",
-			"Outro"
-		],
-		placeholder: "Selecione o estágio..."
-	},
-	{
-		key: "gestores_principais",
-		title: "Estrutura de Gestão",
-		description: "Quantos gestores participam da estratégia e quais seus cargos?",
-		type: "composite"
-	},
-	{
-		key: "objetivo_geral_2026",
-		title: "Qual é o principal objetivo estratégico para 2026?",
-		description: "O que seria um grande sucesso se alcançado até o final do ano?",
-		type: "select",
-		allowOther: true,
-		options: [
-			"Crescer faturamento",
-			"Organizar processos",
-			"Expandir unidades",
-			"Melhorar experiência do paciente",
-			"Aumentar lucro",
-			"Outro"
-		],
-		placeholder: "Selecione o objetivo..."
-	},
-	{
-		key: "tamanho_relatorio",
-		title: "Qual a profundidade desejada para o relatório estratégico?",
-		description: "Escolha o nível de detalhamento do output final.",
-		type: "radio",
-		options: [{
-			value: "resumido_20",
-			label: "Resumido (20 páginas)",
-			description: "Foco em ação rápida"
-		}, {
-			value: "detalhado_40",
-			label: "Detalhado (40 páginas)",
-			description: "Análise profunda"
-		}]
-	},
-	{
-		key: "tom_linguagem",
-		title: "Qual o tom de linguagem preferido para os relatórios?",
-		description: "Como a consultoria deve se comunicar com sua equipe.",
-		type: "radio",
-		options: [
-			{
-				value: "formal",
-				label: "Formal",
-				description: "Corporativo e técnico"
-			},
-			{
-				value: "intermediario",
-				label: "Intermediário",
-				description: "Profissional mas acessível"
-			},
-			{
-				value: "informal",
-				label: "Informal",
-				description: "Próximo e motivacional"
+var U = 1, Y$1 = .9, H = .8, J = .17, p = .1, u = .999, $ = .9999;
+var k$1 = .99, m = /[\\\/_+.#"@\[\(\{&]/, B$1 = /[\\\/_+.#"@\[\(\{&]/g, K$1 = /[\s-]/, X = /[\s-]/g;
+function G(_$1, C, h, P$1, A, f, O$1) {
+	if (f === C.length) return A === _$1.length ? U : k$1;
+	var T$1 = `${A},${f}`;
+	if (O$1[T$1] !== void 0) return O$1[T$1];
+	for (var L$1 = P$1.charAt(f), c = h.indexOf(L$1, A), S = 0, E$1, N$2, R, M$1; c >= 0;) E$1 = G(_$1, C, h, P$1, c + 1, f + 1, O$1), E$1 > S && (c === A ? E$1 *= U : m.test(_$1.charAt(c - 1)) ? (E$1 *= H, R = _$1.slice(A, c - 1).match(B$1), R && A > 0 && (E$1 *= Math.pow(u, R.length))) : K$1.test(_$1.charAt(c - 1)) ? (E$1 *= Y$1, M$1 = _$1.slice(A, c - 1).match(X), M$1 && A > 0 && (E$1 *= Math.pow(u, M$1.length))) : (E$1 *= J, A > 0 && (E$1 *= Math.pow(u, c - A))), _$1.charAt(c) !== C.charAt(f) && (E$1 *= $)), (E$1 < p && h.charAt(c - 1) === P$1.charAt(f + 1) || P$1.charAt(f + 1) === P$1.charAt(f) && h.charAt(c - 1) !== P$1.charAt(f)) && (N$2 = G(_$1, C, h, P$1, c + 1, f + 2, O$1), N$2 * p > E$1 && (E$1 = N$2 * p)), E$1 > S && (S = E$1), c = h.indexOf(L$1, c + 1);
+	return O$1[T$1] = S, S;
+}
+function D(_$1) {
+	return _$1.toLowerCase().replace(X, " ");
+}
+function W(_$1, C, h) {
+	return _$1 = h && h.length > 0 ? `${_$1 + " " + h.join(" ")}` : _$1, G(_$1, C, D(_$1), D(C), 0, 0, {});
+}
+var N = "[cmdk-group=\"\"]", Y = "[cmdk-group-items=\"\"]", be = "[cmdk-group-heading=\"\"]", le = "[cmdk-item=\"\"]", ce = `${le}:not([aria-disabled="true"])`, Z = "cmdk-item-select", T = "data-value", Re = (r$1, o, n) => W(r$1, o, n), ue = import_react.createContext(void 0), K = () => import_react.useContext(ue), de = import_react.createContext(void 0), ee = () => import_react.useContext(de), fe = import_react.createContext(void 0), me = import_react.forwardRef((r$1, o) => {
+	let n = L(() => {
+		var e, a;
+		return {
+			search: "",
+			value: (a = (e = r$1.value) != null ? e : r$1.defaultValue) != null ? a : "",
+			selectedItemId: void 0,
+			filtered: {
+				count: 0,
+				items: /* @__PURE__ */ new Map(),
+				groups: /* @__PURE__ */ new Set()
 			}
-		]
+		};
+	}), u$1 = L(() => /* @__PURE__ */ new Set()), c = L(() => /* @__PURE__ */ new Map()), d = L(() => /* @__PURE__ */ new Map()), f = L(() => /* @__PURE__ */ new Set()), p$1 = pe(r$1), { label: b$1, children: m$1, value: R, onValueChange: x$1, filter: C, shouldFilter: S, loop: A, disablePointerSelection: ge = !1, vimBindings: j = !0, ...O$1 } = r$1, $$1 = useId(), q = useId(), _$1 = useId(), I$1 = import_react.useRef(null), v = ke();
+	k(() => {
+		if (R !== void 0) {
+			let e = R.trim();
+			n.current.value = e, E$1.emit();
+		}
+	}, [R]), k(() => {
+		v(6, ne);
+	}, []);
+	let E$1 = import_react.useMemo(() => ({
+		subscribe: (e) => (f.current.add(e), () => f.current.delete(e)),
+		snapshot: () => n.current,
+		setState: (e, a, s) => {
+			var i, l, g, y;
+			if (!Object.is(n.current[e], a)) {
+				if (n.current[e] = a, e === "search") J$2(), z$1(), v(1, W$2);
+				else if (e === "value") {
+					if (document.activeElement.hasAttribute("cmdk-input") || document.activeElement.hasAttribute("cmdk-root")) {
+						let h = document.getElementById(_$1);
+						h ? h.focus() : (i = document.getElementById($$1)) == null || i.focus();
+					}
+					if (v(7, () => {
+						var h;
+						n.current.selectedItemId = (h = M$1()) == null ? void 0 : h.id, E$1.emit();
+					}), s || v(5, ne), ((l = p$1.current) == null ? void 0 : l.value) !== void 0) {
+						let h = a != null ? a : "";
+						(y = (g = p$1.current).onValueChange) == null || y.call(g, h);
+						return;
+					}
+				}
+				E$1.emit();
+			}
+		},
+		emit: () => {
+			f.current.forEach((e) => e());
+		}
+	}), []), U$2 = import_react.useMemo(() => ({
+		value: (e, a, s) => {
+			var i;
+			a !== ((i = d.current.get(e)) == null ? void 0 : i.value) && (d.current.set(e, {
+				value: a,
+				keywords: s
+			}), n.current.filtered.items.set(e, te(a, s)), v(2, () => {
+				z$1(), E$1.emit();
+			}));
+		},
+		item: (e, a) => (u$1.current.add(e), a && (c.current.has(a) ? c.current.get(a).add(e) : c.current.set(a, new Set([e]))), v(3, () => {
+			J$2(), z$1(), n.current.value || W$2(), E$1.emit();
+		}), () => {
+			d.current.delete(e), u$1.current.delete(e), n.current.filtered.items.delete(e);
+			let s = M$1();
+			v(4, () => {
+				J$2(), (s == null ? void 0 : s.getAttribute("id")) === e && W$2(), E$1.emit();
+			});
+		}),
+		group: (e) => (c.current.has(e) || c.current.set(e, /* @__PURE__ */ new Set()), () => {
+			d.current.delete(e), c.current.delete(e);
+		}),
+		filter: () => p$1.current.shouldFilter,
+		label: b$1 || r$1["aria-label"],
+		getDisablePointerSelection: () => p$1.current.disablePointerSelection,
+		listId: $$1,
+		inputId: _$1,
+		labelId: q,
+		listInnerRef: I$1
+	}), []);
+	function te(e, a) {
+		var i, l;
+		let s = (l = (i = p$1.current) == null ? void 0 : i.filter) != null ? l : Re;
+		return e ? s(e, n.current.search, a) : 0;
+	}
+	function z$1() {
+		if (!n.current.search || p$1.current.shouldFilter === !1) return;
+		let e = n.current.filtered.items, a = [];
+		n.current.filtered.groups.forEach((i) => {
+			let l = c.current.get(i), g = 0;
+			l.forEach((y) => {
+				let h = e.get(y);
+				g = Math.max(h, g);
+			}), a.push([i, g]);
+		});
+		let s = I$1.current;
+		V$1().sort((i, l) => {
+			var h, F;
+			let g = i.getAttribute("id"), y = l.getAttribute("id");
+			return ((h = e.get(y)) != null ? h : 0) - ((F = e.get(g)) != null ? F : 0);
+		}).forEach((i) => {
+			let l = i.closest(Y);
+			l ? l.appendChild(i.parentElement === l ? i : i.closest(`${Y} > *`)) : s.appendChild(i.parentElement === s ? i : i.closest(`${Y} > *`));
+		}), a.sort((i, l) => l[1] - i[1]).forEach((i) => {
+			var g;
+			let l = (g = I$1.current) == null ? void 0 : g.querySelector(`${N}[${T}="${encodeURIComponent(i[0])}"]`);
+			l?.parentElement.appendChild(l);
+		});
+	}
+	function W$2() {
+		let e = V$1().find((s) => s.getAttribute("aria-disabled") !== "true"), a = e == null ? void 0 : e.getAttribute(T);
+		E$1.setState("value", a || void 0);
+	}
+	function J$2() {
+		var a, s, i, l;
+		if (!n.current.search || p$1.current.shouldFilter === !1) {
+			n.current.filtered.count = u$1.current.size;
+			return;
+		}
+		n.current.filtered.groups = /* @__PURE__ */ new Set();
+		let e = 0;
+		for (let g of u$1.current) {
+			let F = te((s = (a = d.current.get(g)) == null ? void 0 : a.value) != null ? s : "", (l = (i = d.current.get(g)) == null ? void 0 : i.keywords) != null ? l : []);
+			n.current.filtered.items.set(g, F), F > 0 && e++;
+		}
+		for (let [g, y] of c.current) for (let h of y) if (n.current.filtered.items.get(h) > 0) {
+			n.current.filtered.groups.add(g);
+			break;
+		}
+		n.current.filtered.count = e;
+	}
+	function ne() {
+		var a, s, i;
+		let e = M$1();
+		e && (((a = e.parentElement) == null ? void 0 : a.firstChild) === e && ((i = (s = e.closest(N)) == null ? void 0 : s.querySelector(be)) == null || i.scrollIntoView({ block: "nearest" })), e.scrollIntoView({ block: "nearest" }));
+	}
+	function M$1() {
+		var e;
+		return (e = I$1.current) == null ? void 0 : e.querySelector(`${le}[aria-selected="true"]`);
+	}
+	function V$1() {
+		var e;
+		return Array.from(((e = I$1.current) == null ? void 0 : e.querySelectorAll(ce)) || []);
+	}
+	function X$2(e) {
+		let s = V$1()[e];
+		s && E$1.setState("value", s.getAttribute(T));
+	}
+	function Q(e) {
+		var g;
+		let a = M$1(), s = V$1(), i = s.findIndex((y) => y === a), l = s[i + e];
+		(g = p$1.current) != null && g.loop && (l = i + e < 0 ? s[s.length - 1] : i + e === s.length ? s[0] : s[i + e]), l && E$1.setState("value", l.getAttribute(T));
+	}
+	function re(e) {
+		let a = M$1(), s = a == null ? void 0 : a.closest(N), i;
+		for (; s && !i;) s = e > 0 ? we(s, N) : De(s, N), i = s == null ? void 0 : s.querySelector(ce);
+		i ? E$1.setState("value", i.getAttribute(T)) : Q(e);
+	}
+	let oe = () => X$2(V$1().length - 1), ie = (e) => {
+		e.preventDefault(), e.metaKey ? oe() : e.altKey ? re(1) : Q(1);
+	}, se = (e) => {
+		e.preventDefault(), e.metaKey ? X$2(0) : e.altKey ? re(-1) : Q(-1);
+	};
+	return import_react.createElement(Primitive$1.div, {
+		ref: o,
+		tabIndex: -1,
+		...O$1,
+		"cmdk-root": "",
+		onKeyDown: (e) => {
+			var s;
+			(s = O$1.onKeyDown) == null || s.call(O$1, e);
+			let a = e.nativeEvent.isComposing || e.keyCode === 229;
+			if (!(e.defaultPrevented || a)) switch (e.key) {
+				case "n":
+				case "j":
+					j && e.ctrlKey && ie(e);
+					break;
+				case "ArrowDown":
+					ie(e);
+					break;
+				case "p":
+				case "k":
+					j && e.ctrlKey && se(e);
+					break;
+				case "ArrowUp":
+					se(e);
+					break;
+				case "Home":
+					e.preventDefault(), X$2(0);
+					break;
+				case "End":
+					e.preventDefault(), oe();
+					break;
+				case "Enter": {
+					e.preventDefault();
+					let i = M$1();
+					if (i) {
+						let l = new Event(Z);
+						i.dispatchEvent(l);
+					}
+				}
+			}
+		}
+	}, import_react.createElement("label", {
+		"cmdk-label": "",
+		htmlFor: U$2.inputId,
+		id: U$2.labelId,
+		style: Te
+	}, b$1), B(r$1, (e) => import_react.createElement(de.Provider, { value: E$1 }, import_react.createElement(ue.Provider, { value: U$2 }, e))));
+}), he = import_react.forwardRef((r$1, o) => {
+	var _$1, I$1;
+	let n = useId(), u$1 = import_react.useRef(null), c = import_react.useContext(fe), d = K(), f = pe(r$1), p$1 = (I$1 = (_$1 = f.current) == null ? void 0 : _$1.forceMount) != null ? I$1 : c == null ? void 0 : c.forceMount;
+	k(() => {
+		if (!p$1) return d.item(n, c == null ? void 0 : c.id);
+	}, [p$1]);
+	let b$1 = ve(n, u$1, [
+		r$1.value,
+		r$1.children,
+		u$1
+	], r$1.keywords), m$1 = ee(), R = P((v) => v.value && v.value === b$1.current), x$1 = P((v) => p$1 || d.filter() === !1 ? !0 : v.search ? v.filtered.items.get(n) > 0 : !0);
+	import_react.useEffect(() => {
+		let v = u$1.current;
+		if (!(!v || r$1.disabled)) return v.addEventListener(Z, C), () => v.removeEventListener(Z, C);
+	}, [
+		x$1,
+		r$1.onSelect,
+		r$1.disabled
+	]);
+	function C() {
+		var v, E$1;
+		S(), (E$1 = (v = f.current).onSelect) == null || E$1.call(v, b$1.current);
+	}
+	function S() {
+		m$1.setState("value", b$1.current, !0);
+	}
+	if (!x$1) return null;
+	let { disabled: A, value: ge, onSelect: j, forceMount: O$1, keywords: $$1, ...q } = r$1;
+	return import_react.createElement(Primitive$1.div, {
+		ref: composeRefs(u$1, o),
+		...q,
+		id: n,
+		"cmdk-item": "",
+		role: "option",
+		"aria-disabled": !!A,
+		"aria-selected": !!R,
+		"data-disabled": !!A,
+		"data-selected": !!R,
+		onPointerMove: A || d.getDisablePointerSelection() ? void 0 : S,
+		onClick: A ? void 0 : C
+	}, r$1.children);
+}), Ee = import_react.forwardRef((r$1, o) => {
+	let { heading: n, children: u$1, forceMount: c, ...d } = r$1, f = useId(), p$1 = import_react.useRef(null), b$1 = import_react.useRef(null), m$1 = useId(), R = K(), x$1 = P((S) => c || R.filter() === !1 ? !0 : S.search ? S.filtered.groups.has(f) : !0);
+	k(() => R.group(f), []), ve(f, p$1, [
+		r$1.value,
+		r$1.heading,
+		b$1
+	]);
+	let C = import_react.useMemo(() => ({
+		id: f,
+		forceMount: c
+	}), [c]);
+	return import_react.createElement(Primitive$1.div, {
+		ref: composeRefs(p$1, o),
+		...d,
+		"cmdk-group": "",
+		role: "presentation",
+		hidden: x$1 ? void 0 : !0
+	}, n && import_react.createElement("div", {
+		ref: b$1,
+		"cmdk-group-heading": "",
+		"aria-hidden": !0,
+		id: m$1
+	}, n), B(r$1, (S) => import_react.createElement("div", {
+		"cmdk-group-items": "",
+		role: "group",
+		"aria-labelledby": n ? m$1 : void 0
+	}, import_react.createElement(fe.Provider, { value: C }, S))));
+}), ye = import_react.forwardRef((r$1, o) => {
+	let { alwaysRender: n, ...u$1 } = r$1, c = import_react.useRef(null), d = P((f) => !f.search);
+	return !n && !d ? null : import_react.createElement(Primitive$1.div, {
+		ref: composeRefs(c, o),
+		...u$1,
+		"cmdk-separator": "",
+		role: "separator"
+	});
+}), Se = import_react.forwardRef((r$1, o) => {
+	let { onValueChange: n, ...u$1 } = r$1, c = r$1.value != null, d = ee(), f = P((m$1) => m$1.search), p$1 = P((m$1) => m$1.selectedItemId), b$1 = K();
+	return import_react.useEffect(() => {
+		r$1.value != null && d.setState("search", r$1.value);
+	}, [r$1.value]), import_react.createElement(Primitive$1.input, {
+		ref: o,
+		...u$1,
+		"cmdk-input": "",
+		autoComplete: "off",
+		autoCorrect: "off",
+		spellCheck: !1,
+		"aria-autocomplete": "list",
+		role: "combobox",
+		"aria-expanded": !0,
+		"aria-controls": b$1.listId,
+		"aria-labelledby": b$1.labelId,
+		"aria-activedescendant": p$1,
+		id: b$1.inputId,
+		type: "text",
+		value: c ? r$1.value : f,
+		onChange: (m$1) => {
+			c || d.setState("search", m$1.target.value), n?.(m$1.target.value);
+		}
+	});
+}), Ce = import_react.forwardRef((r$1, o) => {
+	let { children: n, label: u$1 = "Suggestions", ...c } = r$1, d = import_react.useRef(null), f = import_react.useRef(null), p$1 = P((m$1) => m$1.selectedItemId), b$1 = K();
+	return import_react.useEffect(() => {
+		if (f.current && d.current) {
+			let m$1 = f.current, R = d.current, x$1, C = new ResizeObserver(() => {
+				x$1 = requestAnimationFrame(() => {
+					let S = m$1.offsetHeight;
+					R.style.setProperty("--cmdk-list-height", S.toFixed(1) + "px");
+				});
+			});
+			return C.observe(m$1), () => {
+				cancelAnimationFrame(x$1), C.unobserve(m$1);
+			};
+		}
+	}, []), import_react.createElement(Primitive$1.div, {
+		ref: composeRefs(d, o),
+		...c,
+		"cmdk-list": "",
+		role: "listbox",
+		tabIndex: -1,
+		"aria-activedescendant": p$1,
+		"aria-label": u$1,
+		id: b$1.listId
+	}, B(r$1, (m$1) => import_react.createElement("div", {
+		ref: composeRefs(f, b$1.listInnerRef),
+		"cmdk-list-sizer": ""
+	}, m$1)));
+}), xe = import_react.forwardRef((r$1, o) => {
+	let { open: n, onOpenChange: u$1, overlayClassName: c, contentClassName: d, container: f, ...p$1 } = r$1;
+	return import_react.createElement(Root$6, {
+		open: n,
+		onOpenChange: u$1
+	}, import_react.createElement(Portal$3, { container: f }, import_react.createElement(Overlay, {
+		"cmdk-overlay": "",
+		className: c
+	}), import_react.createElement(Content$2, {
+		"aria-label": r$1.label,
+		"cmdk-dialog": "",
+		className: d
+	}, import_react.createElement(me, {
+		ref: o,
+		...p$1
+	}))));
+}), Ie = import_react.forwardRef((r$1, o) => P((u$1) => u$1.filtered.count === 0) ? import_react.createElement(Primitive$1.div, {
+	ref: o,
+	...r$1,
+	"cmdk-empty": "",
+	role: "presentation"
+}) : null), Pe = import_react.forwardRef((r$1, o) => {
+	let { progress: n, children: u$1, label: c = "Loading...", ...d } = r$1;
+	return import_react.createElement(Primitive$1.div, {
+		ref: o,
+		...d,
+		"cmdk-loading": "",
+		role: "progressbar",
+		"aria-valuenow": n,
+		"aria-valuemin": 0,
+		"aria-valuemax": 100,
+		"aria-label": c
+	}, B(r$1, (f) => import_react.createElement("div", { "aria-hidden": !0 }, f)));
+}), _e = Object.assign(me, {
+	List: Ce,
+	Item: he,
+	Input: Se,
+	Group: Ee,
+	Separator: ye,
+	Dialog: xe,
+	Empty: Ie,
+	Loading: Pe
+});
+function we(r$1, o) {
+	let n = r$1.nextElementSibling;
+	for (; n;) {
+		if (n.matches(o)) return n;
+		n = n.nextElementSibling;
+	}
+}
+function De(r$1, o) {
+	let n = r$1.previousElementSibling;
+	for (; n;) {
+		if (n.matches(o)) return n;
+		n = n.previousElementSibling;
+	}
+}
+function pe(r$1) {
+	let o = import_react.useRef(r$1);
+	return k(() => {
+		o.current = r$1;
+	}), o;
+}
+var k = typeof window == "undefined" ? import_react.useEffect : import_react.useLayoutEffect;
+function L(r$1) {
+	let o = import_react.useRef();
+	return o.current === void 0 && (o.current = r$1()), o;
+}
+function P(r$1) {
+	let o = ee(), n = () => r$1(o.snapshot());
+	return import_react.useSyncExternalStore(o.subscribe, n, n);
+}
+function ve(r$1, o, n, u$1 = []) {
+	let c = import_react.useRef(), d = K();
+	return k(() => {
+		var b$1;
+		let f = (() => {
+			var m$1;
+			for (let R of n) {
+				if (typeof R == "string") return R.trim();
+				if (typeof R == "object" && "current" in R) return R.current ? (m$1 = R.current.textContent) == null ? void 0 : m$1.trim() : c.current;
+			}
+		})(), p$1 = u$1.map((m$1) => m$1.trim());
+		d.value(r$1, f, p$1), (b$1 = o.current) == null || b$1.setAttribute(T, f), c.current = f;
+	}), c;
+}
+var ke = () => {
+	let [r$1, o] = import_react.useState(), n = L(() => /* @__PURE__ */ new Map());
+	return k(() => {
+		n.current.forEach((u$1) => u$1()), n.current = /* @__PURE__ */ new Map();
+	}, [r$1]), (u$1, c) => {
+		n.current.set(u$1, c), o({});
+	};
+};
+function Me(r$1) {
+	let o = r$1.type;
+	return typeof o == "function" ? o(r$1.props) : "render" in o ? o.render(r$1.props) : r$1;
+}
+function B({ asChild: r$1, children: o }, n) {
+	return r$1 && import_react.isValidElement(o) ? import_react.cloneElement(Me(o), { ref: o.ref }, n(o.props.children)) : n(o);
+}
+var Te = {
+	position: "absolute",
+	width: "1px",
+	height: "1px",
+	padding: "0",
+	margin: "-1px",
+	overflow: "hidden",
+	clip: "rect(0, 0, 0, 0)",
+	whiteSpace: "nowrap",
+	borderWidth: "0"
+};
+var Command = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(_e, {
+	ref,
+	className: cn("flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground", className),
+	...props
+}));
+Command.displayName = _e.displayName;
+var CommandInput = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	className: "flex items-center border-b px-3",
+	"cmdk-input-wrapper": "",
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "mr-2 h-4 w-4 shrink-0 opacity-50" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(_e.Input, {
+		ref,
+		className: cn("flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50", className),
+		...props
+	})]
+}));
+CommandInput.displayName = _e.Input.displayName;
+var CommandList = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(_e.List, {
+	ref,
+	className: cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className),
+	...props
+}));
+CommandList.displayName = _e.List.displayName;
+var CommandEmpty = import_react.forwardRef((props, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(_e.Empty, {
+	ref,
+	className: "py-6 text-center text-sm",
+	...props
+}));
+CommandEmpty.displayName = _e.Empty.displayName;
+var CommandGroup = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(_e.Group, {
+	ref,
+	className: cn("overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground", className),
+	...props
+}));
+CommandGroup.displayName = _e.Group.displayName;
+var CommandSeparator = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(_e.Separator, {
+	ref,
+	className: cn("-mx-1 h-px bg-border", className),
+	...props
+}));
+CommandSeparator.displayName = _e.Separator.displayName;
+var CommandItem = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(_e.Item, {
+	ref,
+	className: cn("relative flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected='true']:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", className),
+	...props
+}));
+CommandItem.displayName = _e.Item.displayName;
+var CommandShortcut = ({ className, ...props }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		className: cn("ml-auto text-xs tracking-widest text-muted-foreground", className),
+		...props
+	});
+};
+CommandShortcut.displayName = "CommandShortcut";
+var POPOVER_NAME = "Popover";
+var [createPopoverContext, createPopoverScope] = createContextScope(POPOVER_NAME, [createPopperScope]);
+var usePopperScope = createPopperScope();
+var [PopoverProvider, usePopoverContext] = createPopoverContext(POPOVER_NAME);
+var Popover$1 = (props) => {
+	const { __scopePopover, children, open: openProp, defaultOpen, onOpenChange, modal = false } = props;
+	const popperScope = usePopperScope(__scopePopover);
+	const triggerRef = import_react.useRef(null);
+	const [hasCustomAnchor, setHasCustomAnchor] = import_react.useState(false);
+	const [open, setOpen] = useControllableState({
+		prop: openProp,
+		defaultProp: defaultOpen ?? false,
+		onChange: onOpenChange,
+		caller: POPOVER_NAME
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root2$5, {
+		...popperScope,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverProvider, {
+			scope: __scopePopover,
+			contentId: useId(),
+			triggerRef,
+			open,
+			onOpenChange: setOpen,
+			onOpenToggle: import_react.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
+			hasCustomAnchor,
+			onCustomAnchorAdd: import_react.useCallback(() => setHasCustomAnchor(true), []),
+			onCustomAnchorRemove: import_react.useCallback(() => setHasCustomAnchor(false), []),
+			modal,
+			children
+		})
+	});
+};
+Popover$1.displayName = POPOVER_NAME;
+var ANCHOR_NAME = "PopoverAnchor";
+var PopoverAnchor = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopePopover, ...anchorProps } = props;
+	const context = usePopoverContext(ANCHOR_NAME, __scopePopover);
+	const popperScope = usePopperScope(__scopePopover);
+	const { onCustomAnchorAdd, onCustomAnchorRemove } = context;
+	import_react.useEffect(() => {
+		onCustomAnchorAdd();
+		return () => onCustomAnchorRemove();
+	}, [onCustomAnchorAdd, onCustomAnchorRemove]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Anchor, {
+		...popperScope,
+		...anchorProps,
+		ref: forwardedRef
+	});
+});
+PopoverAnchor.displayName = ANCHOR_NAME;
+var TRIGGER_NAME = "PopoverTrigger";
+var PopoverTrigger$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopePopover, ...triggerProps } = props;
+	const context = usePopoverContext(TRIGGER_NAME, __scopePopover);
+	const popperScope = usePopperScope(__scopePopover);
+	const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
+	const trigger = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
+		type: "button",
+		"aria-haspopup": "dialog",
+		"aria-expanded": context.open,
+		"aria-controls": context.contentId,
+		"data-state": getState(context.open),
+		...triggerProps,
+		ref: composedTriggerRef,
+		onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
+	});
+	return context.hasCustomAnchor ? trigger : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Anchor, {
+		asChild: true,
+		...popperScope,
+		children: trigger
+	});
+});
+PopoverTrigger$1.displayName = TRIGGER_NAME;
+var PORTAL_NAME = "PopoverPortal";
+var [PortalProvider, usePortalContext] = createPopoverContext(PORTAL_NAME, { forceMount: void 0 });
+var PopoverPortal = (props) => {
+	const { __scopePopover, forceMount, children, container } = props;
+	const context = usePopoverContext(PORTAL_NAME, __scopePopover);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PortalProvider, {
+		scope: __scopePopover,
+		forceMount,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+			present: forceMount || context.open,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal, {
+				asChild: true,
+				container,
+				children
+			})
+		})
+	});
+};
+PopoverPortal.displayName = PORTAL_NAME;
+var CONTENT_NAME = "PopoverContent";
+var PopoverContent$1 = import_react.forwardRef((props, forwardedRef) => {
+	const portalContext = usePortalContext(CONTENT_NAME, props.__scopePopover);
+	const { forceMount = portalContext.forceMount, ...contentProps } = props;
+	const context = usePopoverContext(CONTENT_NAME, props.__scopePopover);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presence, {
+		present: forceMount || context.open,
+		children: context.modal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContentModal, {
+			...contentProps,
+			ref: forwardedRef
+		}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContentNonModal, {
+			...contentProps,
+			ref: forwardedRef
+		})
+	});
+});
+PopoverContent$1.displayName = CONTENT_NAME;
+var Slot = /* @__PURE__ */ createSlot("PopoverContent.RemoveScroll");
+var PopoverContentModal = import_react.forwardRef((props, forwardedRef) => {
+	const context = usePopoverContext(CONTENT_NAME, props.__scopePopover);
+	const contentRef = import_react.useRef(null);
+	const composedRefs = useComposedRefs(forwardedRef, contentRef);
+	const isRightClickOutsideRef = import_react.useRef(false);
+	import_react.useEffect(() => {
+		const content = contentRef.current;
+		if (content) return hideOthers(content);
+	}, []);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Combination_default, {
+		as: Slot,
+		allowPinchZoom: true,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContentImpl, {
+			...props,
+			ref: composedRefs,
+			trapFocus: context.open,
+			disableOutsidePointerEvents: true,
+			onCloseAutoFocus: composeEventHandlers(props.onCloseAutoFocus, (event) => {
+				event.preventDefault();
+				if (!isRightClickOutsideRef.current) context.triggerRef.current?.focus();
+			}),
+			onPointerDownOutside: composeEventHandlers(props.onPointerDownOutside, (event) => {
+				const originalEvent = event.detail.originalEvent;
+				const ctrlLeftClick = originalEvent.button === 0 && originalEvent.ctrlKey === true;
+				isRightClickOutsideRef.current = originalEvent.button === 2 || ctrlLeftClick;
+			}, { checkForDefaultPrevented: false }),
+			onFocusOutside: composeEventHandlers(props.onFocusOutside, (event) => event.preventDefault(), { checkForDefaultPrevented: false })
+		})
+	});
+});
+var PopoverContentNonModal = import_react.forwardRef((props, forwardedRef) => {
+	const context = usePopoverContext(CONTENT_NAME, props.__scopePopover);
+	const hasInteractedOutsideRef = import_react.useRef(false);
+	const hasPointerDownOutsideRef = import_react.useRef(false);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContentImpl, {
+		...props,
+		ref: forwardedRef,
+		trapFocus: false,
+		disableOutsidePointerEvents: false,
+		onCloseAutoFocus: (event) => {
+			props.onCloseAutoFocus?.(event);
+			if (!event.defaultPrevented) {
+				if (!hasInteractedOutsideRef.current) context.triggerRef.current?.focus();
+				event.preventDefault();
+			}
+			hasInteractedOutsideRef.current = false;
+			hasPointerDownOutsideRef.current = false;
+		},
+		onInteractOutside: (event) => {
+			props.onInteractOutside?.(event);
+			if (!event.defaultPrevented) {
+				hasInteractedOutsideRef.current = true;
+				if (event.detail.originalEvent.type === "pointerdown") hasPointerDownOutsideRef.current = true;
+			}
+			const target = event.target;
+			if (context.triggerRef.current?.contains(target)) event.preventDefault();
+			if (event.detail.originalEvent.type === "focusin" && hasPointerDownOutsideRef.current) event.preventDefault();
+		}
+	});
+});
+var PopoverContentImpl = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopePopover, trapFocus, onOpenAutoFocus, onCloseAutoFocus, disableOutsidePointerEvents, onEscapeKeyDown, onPointerDownOutside, onFocusOutside, onInteractOutside, ...contentProps } = props;
+	const context = usePopoverContext(CONTENT_NAME, __scopePopover);
+	const popperScope = usePopperScope(__scopePopover);
+	useFocusGuards();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FocusScope, {
+		asChild: true,
+		loop: true,
+		trapped: trapFocus,
+		onMountAutoFocus: onOpenAutoFocus,
+		onUnmountAutoFocus: onCloseAutoFocus,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DismissableLayer, {
+			asChild: true,
+			disableOutsidePointerEvents,
+			onInteractOutside,
+			onEscapeKeyDown,
+			onPointerDownOutside,
+			onFocusOutside,
+			onDismiss: () => context.onOpenChange(false),
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content$3, {
+				"data-state": getState(context.open),
+				role: "dialog",
+				id: context.contentId,
+				...popperScope,
+				...contentProps,
+				ref: forwardedRef,
+				style: {
+					...contentProps.style,
+					"--radix-popover-content-transform-origin": "var(--radix-popper-transform-origin)",
+					"--radix-popover-content-available-width": "var(--radix-popper-available-width)",
+					"--radix-popover-content-available-height": "var(--radix-popper-available-height)",
+					"--radix-popover-trigger-width": "var(--radix-popper-anchor-width)",
+					"--radix-popover-trigger-height": "var(--radix-popper-anchor-height)"
+				}
+			})
+		})
+	});
+});
+var CLOSE_NAME = "PopoverClose";
+var PopoverClose = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopePopover, ...closeProps } = props;
+	const context = usePopoverContext(CLOSE_NAME, __scopePopover);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.button, {
+		type: "button",
+		...closeProps,
+		ref: forwardedRef,
+		onClick: composeEventHandlers(props.onClick, () => context.onOpenChange(false))
+	});
+});
+PopoverClose.displayName = CLOSE_NAME;
+var ARROW_NAME = "PopoverArrow";
+var PopoverArrow = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopePopover, ...arrowProps } = props;
+	const popperScope = usePopperScope(__scopePopover);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Arrow, {
+		...popperScope,
+		...arrowProps,
+		ref: forwardedRef
+	});
+});
+PopoverArrow.displayName = ARROW_NAME;
+function getState(open) {
+	return open ? "open" : "closed";
+}
+var Root2 = Popover$1;
+var Trigger = PopoverTrigger$1;
+var Portal$1 = PopoverPortal;
+var Content2 = PopoverContent$1;
+var Popover = Root2;
+var PopoverTrigger = Trigger;
+var PopoverContent = import_react.forwardRef(({ className, align = "center", sideOffset = 4, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Portal$1, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Content2, {
+	ref,
+	align,
+	sideOffset,
+	className: cn("z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-popover-content-transform-origin]", className),
+	...props
+}) }));
+PopoverContent.displayName = Content2.displayName;
+var CLINIC_TYPES = [
+	"Fisioterapia",
+	"Odontologia",
+	"Clínica Geral",
+	"Psicologia",
+	"Nutrição",
+	"Estética",
+	"Pilates",
+	"Multidisciplinar",
+	"Dermatologia",
+	"Pediatria",
+	"Outro"
+];
+var NICHES_MAP = {
+	Fisioterapia: [
+		"Traumatologia",
+		"Esportiva",
+		"Neurologia",
+		"Respiratória",
+		"Pélvica",
+		"Geriatria",
+		"Osteopatia"
+	],
+	Odontologia: [
+		"Ortodontia",
+		"Implantodontia",
+		"Estética",
+		"Endodontia",
+		"Odontopediatria",
+		"Harmonização Facial"
+	],
+	"Clínica Geral": [
+		"Medicina da Família",
+		"Check-up Executivo",
+		"Preventiva",
+		"Atendimento Popular"
+	],
+	Psicologia: [
+		"TCC",
+		"Psicanálise",
+		"Comportamental",
+		"Infantil",
+		"Terapia de Casal",
+		"Neuropsicologia"
+	],
+	Nutrição: [
+		"Esportiva",
+		"Emagrecimento",
+		"Clínica",
+		"Comportamental",
+		"Materno-Infantil"
+	],
+	Estética: [
+		"Facial",
+		"Corporal",
+		"Biomédica",
+		"Laser",
+		"Injetáveis",
+		"Pré e Pós Operatório"
+	],
+	Pilates: [
+		"Solo",
+		"Aparelhos",
+		"Reabilitação",
+		"Fitness",
+		"Gestantes"
+	],
+	Multidisciplinar: [
+		"Saúde Integrativa",
+		"Dor Crônica",
+		"Bem-estar",
+		"Emagrecimento"
+	],
+	Outro: [
+		"Especialidades Diversas",
+		"Nicho Específico",
+		"Consultório Isolado"
+	]
+};
+var CITIES_BRAZIL = [
+	"São Paulo, SP",
+	"Rio de Janeiro, RJ",
+	"Belo Horizonte, MG",
+	"Brasília, DF",
+	"Curitiba, PR",
+	"Porto Alegre, RS",
+	"Salvador, BA",
+	"Recife, PE",
+	"Fortaleza, CE",
+	"Goiânia, GO",
+	"Campinas, SP",
+	"Florianópolis, SC",
+	"Manaus, AM",
+	"Belém, PA",
+	"Vitória, ES"
+];
+var CITIES_PORTUGAL = [
+	"Lisboa, Lisboa",
+	"Porto, Porto",
+	"Braga, Braga",
+	"Coimbra, Coimbra",
+	"Setúbal, Setúbal",
+	"Aveiro, Aveiro",
+	"Faro, Faro",
+	"Viseu, Viseu",
+	"Leiria, Leiria",
+	"Funchal, Madeira"
+];
+var GOALS_OPTIONS = [
+	"Crescer faturamento",
+	"Organizar processos internos",
+	"Expandir unidades",
+	"Melhorar experiência do paciente",
+	"Aumentar lucro líquido",
+	"Construir autoridade digital",
+	"Reter pacientes atuais",
+	"Profissionalizar a gestão",
+	"Lançar novos serviços"
+];
+var STAGE_OPTIONS = [
+	"Iniciante",
+	"Em Crescimento",
+	"Consolidada",
+	"Em Crise",
+	"Outro"
+];
+var STEPS_CONFIG = [
+	{
+		id: "identity",
+		title: "Identidade da Clínica",
+		description: "Selecione as categorias que melhor representam sua atuação.",
+		icon: Settings2,
+		category: "Identidade"
+	},
+	{
+		id: "name",
+		title: "Nome da Clínica",
+		description: "Como ela é conhecida no mercado.",
+		icon: Settings2,
+		category: "Identidade"
+	},
+	{
+		id: "location",
+		title: "Localização",
+		description: "Onde a clínica está situada?",
+		icon: MapPin,
+		category: "Identidade"
+	},
+	{
+		id: "niche",
+		title: "Nicho de Atuação",
+		description: "Qual é o foco principal dos seus atendimentos?",
+		icon: Target,
+		category: "Contexto"
+	},
+	{
+		id: "stage",
+		title: "Estágio do Negócio",
+		description: "Em qual momento a clínica se encontra?",
+		icon: Building2,
+		category: "Contexto"
+	},
+	{
+		id: "staff",
+		title: "Composição da Equipe",
+		description: "Quem faz parte do time atualmente?",
+		icon: Users,
+		category: "Contexto"
+	},
+	{
+		id: "goals",
+		title: "Objetivos Estratégicos",
+		description: "Quais são as prioridades para 2026? (Máx. 3)",
+		icon: Rocket,
+		category: "Estratégia"
+	},
+	{
+		id: "tone",
+		title: "Tom de Linguagem",
+		description: "Como devemos nos comunicar nos relatórios?",
+		icon: MessageSquare,
+		category: "Estratégia"
 	}
 ];
 function SetupWizard() {
 	const { setConfigInicial, config_inicial: savedConfig } = useStrategyStore();
 	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
-	const [answers, setAnswers] = (0, import_react.useState)(savedConfig);
 	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
-	const [managerCount, setManagerCount] = (0, import_react.useState)("");
-	const [managerRoles, setManagerRoles] = (0, import_react.useState)("");
-	const currentQuestion = QUESTIONS$1[currentStep];
-	(0, import_react.useEffect)(() => {
-		if (currentQuestion.key === "gestores_principais" && savedConfig.gestores_principais) if (savedConfig.gestores_principais.includes("gestores:")) {
-			const [countPart, rolesPart] = savedConfig.gestores_principais.split("gestores:");
-			const count$3 = countPart.trim();
-			setManagerCount([
-				"1",
-				"2-3",
-				"4+"
-			].includes(count$3) ? count$3 : "1");
-			setManagerRoles(rolesPart.trim());
-		} else setManagerRoles(savedConfig.gestores_principais);
-	}, [currentQuestion.key, savedConfig.gestores_principais]);
+	const [identityTypes, setIdentityTypes] = (0, import_react.useState)([]);
+	const [clinicName, setClinicName] = (0, import_react.useState)("");
+	const [country, setCountry] = (0, import_react.useState)("");
+	const [city, setCity] = (0, import_react.useState)("");
+	const [openCityCombo, setOpenCityCombo] = (0, import_react.useState)(false);
+	const [niche, setNiche] = (0, import_react.useState)("");
+	const [stage, setStage] = (0, import_react.useState)("");
+	const [staffCounts, setStaffCounts] = (0, import_react.useState)({
+		secretaries: 0,
+		specialists: 0,
+		managers: 0
+	});
+	const [staffMembers, setStaffMembers] = (0, import_react.useState)({
+		secretaries: [],
+		specialists: [],
+		managers: []
+	});
+	const [selectedGoals, setSelectedGoals] = (0, import_react.useState)([]);
+	const [tone, setTone] = (0, import_react.useState)("");
+	(0, import_react.useMemo)(() => {
+		if (savedConfig.nome_clinica) setClinicName(savedConfig.nome_clinica);
+		if (savedConfig.tipo_clinica) setIdentityTypes(savedConfig.tipo_clinica.split(", "));
+		if (savedConfig.estagio_clinica) setStage(savedConfig.estagio_clinica);
+		if (savedConfig.objetivo_geral_2026) setSelectedGoals(savedConfig.objetivo_geral_2026.split(", "));
+		if (savedConfig.tom_linguagem) setTone(savedConfig.tom_linguagem);
+		if (savedConfig.localizacao) {
+			const parts = savedConfig.localizacao.split(", ");
+			if (parts.length > 1) {
+				const potentialCountry = parts[parts.length - 1];
+				if (["Brasil", "Portugal"].includes(potentialCountry)) {
+					setCountry(potentialCountry);
+					setCity(parts.slice(0, -1).join(", "));
+				} else setCity(savedConfig.localizacao);
+			} else setCity(savedConfig.localizacao);
+		}
+	}, []);
 	const handleNext = () => {
-		if (currentQuestion.key === "gestores_principais") {
-			if (!managerCount) {
-				toast.error("Por favor, selecione a quantidade de gestores.");
-				return;
-			}
-			const compositeValue = `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ""}`;
-			setAnswers((prev) => ({
-				...prev,
-				gestores_principais: compositeValue
-			}));
-			if (currentStep < QUESTIONS$1.length - 1) {
-				setCurrentStep((prev) => prev + 1);
-				return;
-			}
+		if (currentStep === 0 && identityTypes.length === 0) {
+			toast.error("Selecione pelo menos um tipo de clínica.");
+			return;
 		}
-		const key = currentQuestion.key;
-		if (key !== "gestores_principais") {
-			const value = answers[key];
-			if (!value || typeof value === "string" && !value.trim()) {
-				toast.error("Por favor, preencha o campo para continuar.");
-				return;
-			}
+		if (currentStep === 1 && !clinicName.trim()) {
+			toast.error("O nome da clínica é obrigatório.");
+			return;
 		}
-		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
-		else {
-			setIsCompleted(true);
-			setConfigInicial({
-				...answers,
-				gestores_principais: currentQuestion.key === "gestores_principais" ? `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ""}` : answers.gestores_principais || ""
-			});
-			toast.success("Configuração concluída com sucesso!");
+		if (currentStep === 2 && (!country || !city)) {
+			toast.error("Selecione o país e a cidade.");
+			return;
 		}
+		if (currentStep === 3 && !niche) {
+			toast.error("Selecione um nicho de atuação.");
+			return;
+		}
+		if (currentStep === 4 && !stage) {
+			toast.error("Selecione o estágio do negócio.");
+			return;
+		}
+		if (currentStep === 6 && selectedGoals.length === 0) {
+			toast.error("Selecione pelo menos um objetivo.");
+			return;
+		}
+		if (currentStep === 7 && !tone) {
+			toast.error("Selecione o tom de linguagem.");
+			return;
+		}
+		if (currentStep < STEPS_CONFIG.length - 1) setCurrentStep((prev) => prev + 1);
+		else finishWizard();
 	};
 	const handleBack = () => {
 		if (currentStep > 0) setCurrentStep((prev) => prev - 1);
 	};
-	const handleInputChange = (value) => {
-		setAnswers((prev) => ({
+	const finishWizard = () => {
+		const staffString = Object.entries(staffMembers).filter(([_$1, members]) => members.length > 0).map(([role, members]) => {
+			const details = members.map((m$1) => `${m$1.name} (${m$1.role})`).join(", ");
+			return `${members.length} ${role === "secretaries" ? "Secretárias" : role === "specialists" ? "Especialistas" : "Gestores"}: ${details}`;
+		}).join("; ");
+		setConfigInicial({
+			tipo_clinica: identityTypes.join(", "),
+			nome_clinica: clinicName,
+			localizacao: `${city}, ${country}`,
+			publico_principal: niche,
+			estagio_clinica: stage,
+			gestores_principais: staffString || "Equipe não detalhada",
+			objetivo_geral_2026: selectedGoals.join(", "),
+			tamanho_relatorio: "resumido_20",
+			tom_linguagem: tone
+		});
+		setIsCompleted(true);
+		toast.success("Configuração concluída com sucesso!");
+	};
+	const toggleIdentity = (type) => {
+		setIdentityTypes((prev) => prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]);
+	};
+	const currentCities = country === "Brasil" ? CITIES_BRAZIL : country === "Portugal" ? CITIES_PORTUGAL : [];
+	const availableNiches = (0, import_react.useMemo)(() => {
+		const options$1 = /* @__PURE__ */ new Set();
+		if (identityTypes.length === 0) Object.values(NICHES_MAP).flat().forEach((n) => options$1.add(n));
+		else identityTypes.forEach((type) => {
+			(NICHES_MAP[type] || NICHES_MAP["Outro"]).forEach((n) => options$1.add(n));
+		});
+		return Array.from(options$1);
+	}, [identityTypes]);
+	const updateStaffCount = (role, delta) => {
+		const current = staffCounts[role];
+		const newCount = Math.max(0, current + delta);
+		setStaffCounts((prev) => ({
 			...prev,
-			[currentQuestion.key]: value
+			[role]: newCount
 		}));
+		setStaffMembers((prev) => {
+			const currentList = prev[role];
+			if (newCount > currentList.length) {
+				const toAdd = newCount - currentList.length;
+				const newItems = Array.from({ length: toAdd }).map(() => ({
+					id: Math.random().toString(36).substr(2, 9),
+					name: "",
+					role: role === "secretaries" ? "Secretária" : role === "managers" ? "Gerente" : "Especialista"
+				}));
+				return {
+					...prev,
+					[role]: [...currentList, ...newItems]
+				};
+			} else if (newCount < currentList.length) return {
+				...prev,
+				[role]: currentList.slice(0, newCount)
+			};
+			return prev;
+		});
 	};
-	const handleSelectChange = (value) => {
-		handleInputChange(value === "Outro" ? "" : value);
+	const updateStaffMember = (role, index$1, field, val) => {
+		setStaffMembers((prev) => {
+			const newList = [...prev[role]];
+			newList[index$1] = {
+				...newList[index$1],
+				[field]: val
+			};
+			return {
+				...prev,
+				[role]: newList
+			};
+		});
 	};
-	const handleKeyPress = (e) => {
-		if (e.key === "Enter") {
-			if (document.activeElement?.tagName !== "TEXTAREA" && currentQuestion.type !== "select") handleNext();
-		}
+	const toggleGoal = (goal) => {
+		setSelectedGoals((prev) => {
+			if (prev.includes(goal)) return prev.filter((g) => g !== goal);
+			if (prev.length >= 3) {
+				toast.warning("Máximo de 3 objetivos atingido.");
+				return prev;
+			}
+			return [...prev, goal];
+		});
 	};
-	const getCurrentSelectValue = () => {
-		const val = answers[currentQuestion.key];
-		if (!val) return "";
-		if ((currentQuestion.options?.map((opt) => typeof opt === "string" ? opt : opt.value))?.includes(val)) return val;
-		if (currentQuestion.allowOther && val) return "Outro";
-		return "";
-	};
-	const isOtherSelected = getCurrentSelectValue() === "Outro";
-	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
+	const stepData = STEPS_CONFIG[currentStep];
+	const progress = (currentStep + 1) / STEPS_CONFIG.length * 100;
 	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "flex flex-col items-center justify-center min-h-[80vh] animate-fade-in p-4",
 		children: [
@@ -32477,41 +33418,15 @@ function SetupWizard() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 				className: "text-3xl font-bold text-slate-900 mb-2 text-center",
-				children: "Configuração Finalizada!"
+				children: "Tudo Pronto!"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-slate-500 mb-8 text-center max-w-md",
-				children: "Seus dados foram salvos e o sistema está pronto para gerar insights personalizados para o ciclo 2026."
+				children: "Configuração finalizada. O sistema agora possui os dados necessários para gerar sua estratégia."
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "w-full max-w-2xl bg-slate-50 border-slate-200 shadow-inner overflow-hidden",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-						className: "bg-slate-100 border-b border-slate-200",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							className: "text-sm font-mono text-slate-500 uppercase",
-							children: "Output JSON gerado (config_inicial)"
-						})
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-						className: "p-0",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", {
-							className: "p-4 overflow-auto text-xs sm:text-sm font-mono text-slate-700 bg-slate-50 max-h-[400px]",
-							children: JSON.stringify(answers, null, 2)
-						})
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
-						className: "p-4 border-t border-slate-200 bg-white justify-between",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							variant: "outline",
-							onClick: () => setIsCompleted(false),
-							children: "Editar Respostas"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-							onClick: () => window.location.href = "/",
-							children: "Ir para Dashboard"
-						})]
-					})
-				]
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				onClick: () => window.location.href = "/",
+				children: "Ir para Dashboard"
 			})
 		]
 	});
@@ -32521,14 +33436,18 @@ function SetupWizard() {
 			className: "mb-8 space-y-2",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex items-center justify-between text-sm text-slate-500 mb-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					className: "font-medium text-teal-600",
-					children: "Configuração Inicial"
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex items-center gap-2",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+						variant: "outline",
+						className: "bg-slate-50",
+						children: stepData.category
+					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
 					"Passo ",
 					currentStep + 1,
 					" de ",
-					QUESTIONS$1.length
+					STEPS_CONFIG.length
 				] })]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "h-2 w-full bg-slate-100 rounded-full overflow-hidden",
@@ -32542,153 +33461,256 @@ function SetupWizard() {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 					className: "space-y-1",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-3 mb-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "bg-teal-100 p-2 rounded-lg",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(stepData.icon, { className: "size-6 text-teal-700" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-2xl sm:text-3xl text-slate-800",
+							children: stepData.title
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+						className: "text-base sm:text-lg pl-[3.25rem]",
+						children: stepData.description
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+					className: "pt-4 pb-8 pl-[3.25rem] pr-6",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center gap-2 mb-2",
+						currentStep === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex flex-wrap gap-2",
+							children: CLINIC_TYPES.map((type) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+								variant: identityTypes.includes(type) ? "default" : "outline",
+								className: cn("text-base py-2 px-4 cursor-pointer hover:bg-slate-100 transition-colors", identityTypes.includes(type) && "bg-teal-600 hover:bg-teal-700 text-white"),
+								onClick: () => toggleIdentity(type),
+								children: type
+							}, type))
+						}),
+						currentStep === 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							autoFocus: true,
+							value: clinicName,
+							onChange: (e) => setClinicName(e.target.value),
+							placeholder: "Ex: Clínica Vida Plena",
+							className: "text-lg h-12",
+							onKeyDown: (e) => e.key === "Enter" && handleNext()
+						}),
+						currentStep === 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid gap-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "bg-teal-100 p-2 rounded-lg",
+								className: "space-y-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: "País" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+									value: country,
+									onValueChange: setCountry,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+										className: "h-11",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione o país" })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+										value: "Brasil",
+										children: "Brasil"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+										value: "Portugal",
+										children: "Portugal"
+									})] })]
+								})]
+							}), country && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-2 animate-fade-in",
 								children: [
-									currentStep < 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings2, { className: "size-5 text-teal-700" }),
-									currentStep >= 3 && currentStep < 6 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageSquare, { className: "size-5 text-teal-700" }),
-									currentStep >= 6 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Rocket, { className: "size-5 text-teal-700" })
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: country === "Brasil" ? "Cidade" : "Concelho/Distrito" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Popover, {
+										open: openCityCombo,
+										onOpenChange: setOpenCityCombo,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverTrigger, {
+											asChild: true,
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+												variant: "outline",
+												role: "combobox",
+												"aria-expanded": openCityCombo,
+												className: "w-full justify-between h-11",
+												children: [city || "Selecione ou digite...", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronsUpDown, { className: "ml-2 h-4 w-4 shrink-0 opacity-50" })]
+											})
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContent, {
+											className: "w-[400px] p-0",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Command, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandInput, { placeholder: "Buscar cidade..." }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CommandList, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandEmpty, { children: "Nenhuma cidade encontrada." }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CommandGroup, { children: currentCities.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CommandItem, {
+												value: c,
+												onSelect: (currentValue) => {
+													setCity(currentValue);
+													setOpenCityCombo(false);
+												},
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: cn("mr-2 h-4 w-4", city === c ? "opacity-100" : "opacity-0") }), c]
+											}, c)) })] })] })
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-muted-foreground",
+										children: "*Lista de sugestões baseada nas principais cidades."
+									})
 								]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-xs font-bold uppercase tracking-wider text-teal-600",
-								children: currentStep < 3 ? "Identidade" : currentStep < 6 ? "Contexto de Mercado" : "Direcionamento Estratégico"
 							})]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							className: "text-2xl sm:text-3xl text-slate-800",
-							children: currentQuestion.title
+						currentStep === 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "text-sm text-slate-500 mb-2",
+								children: ["Opções baseadas em: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: identityTypes.join(", ") })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
+								value: niche,
+								onValueChange: setNiche,
+								className: "grid sm:grid-cols-2 gap-3",
+								children: availableNiches.map((n) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+									className: cn("flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-slate-50 transition-all", niche === n ? "border-teal-500 bg-teal-50 ring-1 ring-teal-500" : "border-slate-200"),
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+										value: n,
+										id: n
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-medium text-slate-700",
+										children: n
+									})]
+								}, n))
+							})]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
-							className: "text-base sm:text-lg",
-							children: currentQuestion.description
-						})
-					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-					className: "pt-6 pb-8",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "space-y-4",
-						children: [
-							currentQuestion.type === "text" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								autoFocus: true,
-								value: answers[currentQuestion.key] || "",
-								onChange: (e) => handleInputChange(e.target.value),
-								onKeyDown: handleKeyPress,
-								placeholder: currentQuestion.placeholder,
-								className: "text-lg h-12"
-							}),
-							currentQuestion.type === "select" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "space-y-4",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-									value: getCurrentSelectValue(),
-									onValueChange: handleSelectChange,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-										className: "h-12 text-lg",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: currentQuestion.placeholder })
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: currentQuestion.options?.map((opt) => {
-										const value = typeof opt === "string" ? opt : opt.value;
-										return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-											value,
-											className: "text-base py-3",
-											children: typeof opt === "string" ? opt : opt.label
-										}, value);
-									}) })]
-								}), isOtherSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "animate-fade-in-down space-y-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-										className: "text-sm text-slate-500",
-										children: "Especifique a opção \"Outro\":"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										autoFocus: true,
-										value: answers[currentQuestion.key] || "",
-										onChange: (e) => handleInputChange(e.target.value),
-										onKeyDown: handleKeyPress,
-										placeholder: "Digite sua resposta específica...",
-										className: "text-lg h-12 border-teal-200 focus-visible:ring-teal-500"
-									})]
+						currentStep === 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
+							value: stage,
+							onValueChange: setStage,
+							className: "grid gap-3",
+							children: STAGE_OPTIONS.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+								className: cn("flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-slate-50", stage === opt ? "border-teal-500 bg-teal-50" : "border-slate-200"),
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+									value: opt,
+									id: opt
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-lg font-medium text-slate-700",
+									children: opt
 								})]
-							}),
-							currentQuestion.type === "composite" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid gap-6",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "space-y-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-										className: "text-base",
-										children: "Número de Gestores Principais"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-										value: managerCount,
-										onValueChange: setManagerCount,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-											className: "h-12 text-lg",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione a quantidade" })
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-												value: "1",
-												children: "1 Gestor"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-												value: "2-3",
-												children: "2 a 3 Gestores"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-												value: "4+",
-												children: "4 ou mais Gestores"
-											})
-										] })]
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "space-y-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-										className: "text-base",
+							}, opt))
+						}),
+						currentStep === 5 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-8",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-3 gap-4",
+								children: [
+									{
+										id: "secretaries",
+										label: "Secretárias"
+									},
+									{
+										id: "specialists",
+										label: "Especialistas"
+									},
+									{
+										id: "managers",
+										label: "Gestores"
+									}
+								].map((role) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-center space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, { children: role.label }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-center gap-2",
 										children: [
-											"Quais são os cargos?",
-											" ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+												variant: "outline",
+												size: "icon",
+												className: "h-8 w-8",
+												onClick: () => updateStaffCount(role.id, -1),
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "size-3" })
+											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-slate-400 font-normal text-sm",
-												children: "(Opcional)"
+												className: "w-8 text-center font-bold text-lg",
+												children: staffCounts[role.id]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+												variant: "outline",
+												size: "icon",
+												className: "h-8 w-8",
+												onClick: () => updateStaffCount(role.id, 1),
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "size-3" })
 											})
 										]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-										value: managerRoles,
-										onChange: (e) => setManagerRoles(e.target.value),
-										placeholder: "Ex: Diretor Técnico e Gerente Financeiro",
-										className: "h-12 text-lg"
+									})]
+								}, role.id))
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "space-y-4 max-h-[300px] overflow-y-auto pr-2",
+								children: Object.entries(staffMembers).map(([role, members]) => {
+									if (members.length === 0) return null;
+									const label = role === "secretaries" ? "Secretárias" : role === "managers" ? "Gestores" : "Especialistas";
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "space-y-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+											className: "font-semibold text-sm uppercase text-slate-500 border-b pb-1",
+											children: label
+										}), members.map((member, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												placeholder: `Nome da ${label.slice(0, -1)}`,
+												value: member.name,
+												onChange: (e) => updateStaffMember(role, idx, "name", e.target.value),
+												className: "flex-1"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												placeholder: "Cargo/Função",
+												value: member.role,
+												onChange: (e) => updateStaffMember(role, idx, "role", e.target.value),
+												className: "flex-1"
+											})]
+										}, member.id))]
+									}, role);
+								})
+							})]
+						}),
+						currentStep === 6 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex justify-between items-center text-sm text-slate-500",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Selecione até 3 opções" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: cn(selectedGoals.length === 3 ? "text-red-500 font-bold" : "text-teal-600"),
+									children: [selectedGoals.length, "/3"]
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex flex-wrap gap-2",
+								children: GOALS_OPTIONS.map((goal) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+									variant: selectedGoals.includes(goal) ? "default" : "outline",
+									className: cn("text-sm py-3 px-4 cursor-pointer hover:bg-slate-100 transition-all border-slate-200", selectedGoals.includes(goal) && "bg-teal-600 hover:bg-teal-700 text-white border-teal-600"),
+									onClick: () => toggleGoal(goal),
+									children: [goal, selectedGoals.includes(goal) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "ml-2 size-3" })]
+								}, goal))
+							})]
+						}),
+						currentStep === 7 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
+							value: tone,
+							onValueChange: setTone,
+							className: "grid gap-3",
+							children: [
+								{
+									value: "formal",
+									label: "Formal",
+									desc: "Corporativo e técnico"
+								},
+								{
+									value: "intermediario",
+									label: "Intermediário",
+									desc: "Profissional mas acessível"
+								},
+								{
+									value: "informal",
+									label: "Informal",
+									desc: "Próximo e motivacional"
+								}
+							].map((opt) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
+								className: cn("flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-slate-50", tone === opt.value ? "border-teal-500 bg-teal-50" : "border-slate-200"),
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
+									value: opt.value,
+									id: opt.value
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-col",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-lg font-medium text-slate-700",
+										children: opt.label
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-sm text-slate-500",
+										children: opt.desc
 									})]
 								})]
-							}),
-							currentQuestion.type === "radio" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
-								value: answers[currentQuestion.key] || "",
-								onValueChange: handleInputChange,
-								className: "grid gap-3",
-								children: currentQuestion.options?.map((opt) => {
-									const value = typeof opt === "string" ? opt : opt.value;
-									const label = typeof opt === "string" ? opt : opt.label;
-									const desc = typeof opt === "object" ? opt.description : null;
-									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: cn("flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors", answers[currentQuestion.key] === value ? "border-teal-500 bg-teal-50 shadow-sm ring-1 ring-teal-500/20" : "border-slate-200"),
-										onClick: () => handleInputChange(value),
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
-											value,
-											id: value
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
-											htmlFor: value,
-											className: "flex-1 cursor-pointer text-base font-medium text-slate-700",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "font-semibold",
-												children: label
-											}), desc && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "text-sm font-normal text-slate-500 mt-1",
-												children: desc
-											})]
-										})]
-									}, value);
-								})
-							})
-						]
-					})
+							}, opt.value))
+						})
+					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
 					className: "flex justify-between border-t bg-slate-50/50 p-6",
@@ -32702,7 +33724,7 @@ function SetupWizard() {
 						onClick: handleNext,
 						size: "lg",
 						className: "bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-200/50 pl-6 pr-4",
-						children: [currentStep === QUESTIONS$1.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+						children: [currentStep === STEPS_CONFIG.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
 					})]
 				})
 			]
@@ -32718,7 +33740,7 @@ function OperationalAssessment() {
 	const [vagueAnswerWarning, setVagueAnswerWarning] = (0, import_react.useState)(false);
 	const getClinicName = () => clinicConfig.nome_clinica || "sua clínica";
 	const getClinicType = () => clinicConfig.tipo_clinica || "saúde";
-	const QUESTIONS$2 = [
+	const QUESTIONS$1 = [
 		{
 			key: "services",
 			title: "Quais são os principais serviços oferecidos?",
@@ -32768,8 +33790,8 @@ function OperationalAssessment() {
 			placeholder: "Ex: Demora na confirmação de consultas, glosas de convênios, fila de espera..."
 		}
 	];
-	const currentQuestion = QUESTIONS$2[currentStep];
-	const progress = (currentStep + 1) / QUESTIONS$2.length * 100;
+	const currentQuestion = QUESTIONS$1[currentStep];
+	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
 	const handleInputChange = (value) => {
 		setLocalAnswers((prev) => ({
 			...prev,
@@ -32793,7 +33815,7 @@ function OperationalAssessment() {
 		}
 		setVagueAnswerWarning(false);
 		updateOperationalAssessment({ [currentQuestion.key]: currentAnswer });
-		if (currentStep < QUESTIONS$2.length - 1) setCurrentStep((prev) => prev + 1);
+		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
 		else {
 			setIsCompleted(true);
 			toast.success("Entrevista operacional concluída!");
@@ -32976,7 +33998,7 @@ function OperationalAssessment() {
 						"Passo ",
 						currentStep + 1,
 						" de ",
-						QUESTIONS$2.length
+						QUESTIONS$1.length
 					]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
@@ -33046,7 +34068,7 @@ function OperationalAssessment() {
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 							onClick: handleNext,
 							className: cn("min-w-[140px] transition-all", vagueAnswerWarning ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-200/50"),
-							children: [currentStep === QUESTIONS$2.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+							children: [currentStep === QUESTIONS$1.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
 						})]
 					})]
 				})
@@ -33063,7 +34085,7 @@ function MarketAssessment() {
 	const [vagueAnswerWarning, setVagueAnswerWarning] = (0, import_react.useState)(false);
 	const getClinicName = () => clinicConfig.nome_clinica || "sua clínica";
 	const getClinicLocation = () => clinicConfig.localizacao || "sua região";
-	const QUESTIONS$2 = [
+	const QUESTIONS$1 = [
 		{
 			key: "marketDescription",
 			title: "Como você descreveria o mercado de saúde local?",
@@ -33113,8 +34135,8 @@ function MarketAssessment() {
 			placeholder: "Ex: Sim, principalmente por preço ou porque o concorrente aceita o convênio X..."
 		}
 	];
-	const currentQuestion = QUESTIONS$2[currentStep];
-	const progress = (currentStep + 1) / QUESTIONS$2.length * 100;
+	const currentQuestion = QUESTIONS$1[currentStep];
+	const progress = (currentStep + 1) / QUESTIONS$1.length * 100;
 	const handleInputChange = (value) => {
 		setLocalAnswers((prev) => ({
 			...prev,
@@ -33138,7 +34160,7 @@ function MarketAssessment() {
 		}
 		setVagueAnswerWarning(false);
 		updateMarketAssessment({ [currentQuestion.key]: currentAnswer });
-		if (currentStep < QUESTIONS$2.length - 1) setCurrentStep((prev) => prev + 1);
+		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
 		else {
 			setIsCompleted(true);
 			toast.success("Análise de Mercado concluída!");
@@ -33333,7 +34355,7 @@ function MarketAssessment() {
 						"Passo ",
 						currentStep + 1,
 						" de ",
-						QUESTIONS$2.length
+						QUESTIONS$1.length
 					]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
@@ -33403,7 +34425,7 @@ function MarketAssessment() {
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 							onClick: handleNext,
 							className: cn("min-w-[140px] transition-all", vagueAnswerWarning ? "bg-amber-500 hover:bg-amber-600 text-white" : "bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-200/50"),
-							children: [currentStep === QUESTIONS$2.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
+							children: [currentStep === QUESTIONS$1.length - 1 ? "Finalizar" : "Próximo", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "ml-2 size-4" })]
 						})]
 					})]
 				})
@@ -33904,7 +34926,7 @@ function ManagerVision() {
 	const progress = (currentStep + 1) / STEPS.length * 100;
 	const handleNext = () => {
 		if (currentStepData.id === "problems") {
-			if (localData.problems.some((p) => !p.trim())) {
+			if (localData.problems.some((p$1) => !p$1.trim())) {
 				toast.error("Por favor, liste 3 problemas principais.");
 				return;
 			}
@@ -34037,7 +35059,7 @@ function ManagerVision() {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "size-4" }), " problemas principais"]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 									className: "space-y-2",
-									children: localData.problems.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+									children: localData.problems.map((p$1, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
 										className: "bg-red-50 p-3 rounded border border-red-100 text-slate-700 text-sm flex gap-2",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
@@ -34045,7 +35067,7 @@ function ManagerVision() {
 												children: [i + 1, "."]
 											}),
 											" ",
-											p
+											p$1
 										]
 									}, i))
 								})]
@@ -35288,7 +36310,7 @@ function AdvancedAnalysis() {
 											children: "Dores (Pains)"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 											className: "list-disc pl-5 text-sm text-slate-600 space-y-1",
-											children: relatorio_3.valueCanvas.pains.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: p }, i))
+											children: relatorio_3.valueCanvas.pains.map((p$1, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: p$1 }, i))
 										})] }),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
 											className: "font-semibold text-green-700 mb-2",
@@ -35580,7 +36602,7 @@ function FinalReport() {
 								children: "Políticas Orientadoras (Guiding Policies)"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 								className: "list-decimal pl-5 space-y-2 text-sm text-slate-700",
-								children: part3_advanced.policies.slice(0, 5).map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: p }, i))
+								children: part3_advanced.policies.slice(0, 5).map((p$1, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: p$1 }, i))
 							})]
 						})]
 					})] })]
@@ -35681,14 +36703,14 @@ function FinalReport() {
 									children: "Calendário de Ações"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "grid grid-cols-3 gap-2 text-xs",
-									children: part5_operational.calendar.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									children: part5_operational.calendar.map((m$1, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "border p-2 rounded text-center break-inside-avoid",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
 											className: "block text-slate-800",
-											children: m.month.substring(0, 3)
+											children: m$1.month.substring(0, 3)
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-slate-500 truncate block",
-											children: m.theme
+											children: m$1.theme
 										})]
 									}, i))
 								})]
@@ -35831,4 +36853,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-h19xy1Al.js.map
+//# sourceMappingURL=index-CTfV8zFJ.js.map

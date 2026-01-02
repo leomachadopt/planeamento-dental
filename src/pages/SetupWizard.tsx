@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useStrategyStore, ConfigInicial } from '@/stores/useStrategyStore'
 import {
   Card,
@@ -20,288 +20,453 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Badge } from '@/components/ui/badge'
+import {
   CheckCircle2,
   ChevronRight,
+  ChevronLeft,
+  Check,
+  ChevronsUpDown,
+  Settings2,
+  MapPin,
+  Users,
+  Building2,
+  Target,
   MessageSquare,
   Rocket,
-  Settings2,
-  ChevronLeft,
+  Plus,
+  Minus,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
-interface QuestionOption {
-  value: string
-  label: string
-  description?: string
+// --- Constants & Data ---
+
+const CLINIC_TYPES = [
+  'Fisioterapia',
+  'Odontologia',
+  'Clínica Geral',
+  'Psicologia',
+  'Nutrição',
+  'Estética',
+  'Pilates',
+  'Multidisciplinar',
+  'Dermatologia',
+  'Pediatria',
+  'Outro',
+]
+
+const NICHES_MAP: Record<string, string[]> = {
+  Fisioterapia: [
+    'Traumatologia',
+    'Esportiva',
+    'Neurologia',
+    'Respiratória',
+    'Pélvica',
+    'Geriatria',
+    'Osteopatia',
+  ],
+  Odontologia: [
+    'Ortodontia',
+    'Implantodontia',
+    'Estética',
+    'Endodontia',
+    'Odontopediatria',
+    'Harmonização Facial',
+  ],
+  'Clínica Geral': [
+    'Medicina da Família',
+    'Check-up Executivo',
+    'Preventiva',
+    'Atendimento Popular',
+  ],
+  Psicologia: [
+    'TCC',
+    'Psicanálise',
+    'Comportamental',
+    'Infantil',
+    'Terapia de Casal',
+    'Neuropsicologia',
+  ],
+  Nutrição: [
+    'Esportiva',
+    'Emagrecimento',
+    'Clínica',
+    'Comportamental',
+    'Materno-Infantil',
+  ],
+  Estética: [
+    'Facial',
+    'Corporal',
+    'Biomédica',
+    'Laser',
+    'Injetáveis',
+    'Pré e Pós Operatório',
+  ],
+  Pilates: ['Solo', 'Aparelhos', 'Reabilitação', 'Fitness', 'Gestantes'],
+  Multidisciplinar: [
+    'Saúde Integrativa',
+    'Dor Crônica',
+    'Bem-estar',
+    'Emagrecimento',
+  ],
+  Outro: ['Especialidades Diversas', 'Nicho Específico', 'Consultório Isolado'],
 }
 
-interface Question {
-  key: keyof ConfigInicial
-  title: string
-  description: string
-  type: 'text' | 'select' | 'composite' | 'radio'
-  options?: (string | QuestionOption)[]
-  placeholder?: string
-  allowOther?: boolean
-}
+const CITIES_BRAZIL = [
+  'São Paulo, SP',
+  'Rio de Janeiro, RJ',
+  'Belo Horizonte, MG',
+  'Brasília, DF',
+  'Curitiba, PR',
+  'Porto Alegre, RS',
+  'Salvador, BA',
+  'Recife, PE',
+  'Fortaleza, CE',
+  'Goiânia, GO',
+  'Campinas, SP',
+  'Florianópolis, SC',
+  'Manaus, AM',
+  'Belém, PA',
+  'Vitória, ES',
+]
 
-const QUESTIONS: Question[] = [
+const CITIES_PORTUGAL = [
+  'Lisboa, Lisboa',
+  'Porto, Porto',
+  'Braga, Braga',
+  'Coimbra, Coimbra',
+  'Setúbal, Setúbal',
+  'Aveiro, Aveiro',
+  'Faro, Faro',
+  'Viseu, Viseu',
+  'Leiria, Leiria',
+  'Funchal, Madeira',
+]
+
+const GOALS_OPTIONS = [
+  'Crescer faturamento',
+  'Organizar processos internos',
+  'Expandir unidades',
+  'Melhorar experiência do paciente',
+  'Aumentar lucro líquido',
+  'Construir autoridade digital',
+  'Reter pacientes atuais',
+  'Profissionalizar a gestão',
+  'Lançar novos serviços',
+]
+
+const STAGE_OPTIONS = [
+  'Iniciante',
+  'Em Crescimento',
+  'Consolidada',
+  'Em Crise',
+  'Outro',
+]
+
+const STEPS_CONFIG = [
   {
-    key: 'tipo_clinica',
-    title: 'Qual é o tipo da sua clínica?',
-    description: 'Selecione a categoria que melhor representa sua atuação.',
-    type: 'select',
-    allowOther: true,
-    options: [
-      'Fisioterapia',
-      'Odontologia',
-      'Clínica Geral',
-      'Psicologia',
-      'Nutrição',
-      'Estética',
-      'Pilates',
-      'Multidisciplinar',
-      'Outro',
-    ],
-    placeholder: 'Selecione o tipo...',
+    id: 'identity',
+    title: 'Identidade da Clínica',
+    description: 'Selecione as categorias que melhor representam sua atuação.',
+    icon: Settings2,
+    category: 'Identidade',
   },
   {
-    key: 'nome_clinica',
-    title: 'Qual é o nome da sua clínica?',
+    id: 'name',
+    title: 'Nome da Clínica',
     description: 'Como ela é conhecida no mercado.',
-    type: 'text',
-    placeholder: 'Nome da clínica...',
+    icon: Settings2,
+    category: 'Identidade',
   },
   {
-    key: 'localizacao',
-    title: 'Onde a clínica está localizada?',
-    description: 'Cidade, Estado e/ou País.',
-    type: 'text',
-    placeholder: 'Ex: São Paulo, SP',
+    id: 'location',
+    title: 'Localização',
+    description: 'Onde a clínica está situada?',
+    icon: MapPin,
+    category: 'Identidade',
   },
   {
-    key: 'publico_principal',
-    title: 'Quem é o seu público principal?',
-    description: 'Selecione o perfil predominante dos seus pacientes.',
-    type: 'select',
-    allowOther: true,
-    options: [
-      'Reabilitação',
-      'Atletas',
-      'Idosos',
-      'Crianças',
-      'Saúde da Mulher',
-      'Outro',
-    ],
-    placeholder: 'Selecione o público...',
+    id: 'niche',
+    title: 'Nicho de Atuação',
+    description: 'Qual é o foco principal dos seus atendimentos?',
+    icon: Target,
+    category: 'Contexto',
   },
   {
-    key: 'estagio_clinica',
-    title: 'Em qual estágio de negócio a clínica se encontra?',
-    description: 'Selecione a opção que melhor descreve o momento atual.',
-    type: 'select',
-    allowOther: true,
-    options: [
-      'Iniciante',
-      'Em Crescimento',
-      'Consolidada',
-      'Em Crise',
-      'Outro',
-    ],
-    placeholder: 'Selecione o estágio...',
+    id: 'stage',
+    title: 'Estágio do Negócio',
+    description: 'Em qual momento a clínica se encontra?',
+    icon: Building2,
+    category: 'Contexto',
   },
   {
-    key: 'gestores_principais',
-    title: 'Estrutura de Gestão',
-    description:
-      'Quantos gestores participam da estratégia e quais seus cargos?',
-    type: 'composite',
+    id: 'staff',
+    title: 'Composição da Equipe',
+    description: 'Quem faz parte do time atualmente?',
+    icon: Users,
+    category: 'Contexto',
   },
   {
-    key: 'objetivo_geral_2026',
-    title: 'Qual é o principal objetivo estratégico para 2026?',
-    description:
-      'O que seria um grande sucesso se alcançado até o final do ano?',
-    type: 'select',
-    allowOther: true,
-    options: [
-      'Crescer faturamento',
-      'Organizar processos',
-      'Expandir unidades',
-      'Melhorar experiência do paciente',
-      'Aumentar lucro',
-      'Outro',
-    ],
-    placeholder: 'Selecione o objetivo...',
+    id: 'goals',
+    title: 'Objetivos Estratégicos',
+    description: 'Quais são as prioridades para 2026? (Máx. 3)',
+    icon: Rocket,
+    category: 'Estratégia',
   },
   {
-    key: 'tamanho_relatorio',
-    title: 'Qual a profundidade desejada para o relatório estratégico?',
-    description: 'Escolha o nível de detalhamento do output final.',
-    type: 'radio',
-    options: [
-      {
-        value: 'resumido_20',
-        label: 'Resumido (20 páginas)',
-        description: 'Foco em ação rápida',
-      },
-      {
-        value: 'detalhado_40',
-        label: 'Detalhado (40 páginas)',
-        description: 'Análise profunda',
-      },
-    ],
-  },
-  {
-    key: 'tom_linguagem',
-    title: 'Qual o tom de linguagem preferido para os relatórios?',
-    description: 'Como a consultoria deve se comunicar com sua equipe.',
-    type: 'radio',
-    options: [
-      {
-        value: 'formal',
-        label: 'Formal',
-        description: 'Corporativo e técnico',
-      },
-      {
-        value: 'intermediario',
-        label: 'Intermediário',
-        description: 'Profissional mas acessível',
-      },
-      {
-        value: 'informal',
-        label: 'Informal',
-        description: 'Próximo e motivacional',
-      },
-    ],
+    id: 'tone',
+    title: 'Tom de Linguagem',
+    description: 'Como devemos nos comunicar nos relatórios?',
+    icon: MessageSquare,
+    category: 'Estratégia',
   },
 ]
+
+type StaffRole = 'secretaries' | 'specialists' | 'managers'
+interface StaffMember {
+  id: string
+  name: string
+  role: string
+}
 
 export default function SetupWizard() {
   const { setConfigInicial, config_inicial: savedConfig } = useStrategyStore()
   const [currentStep, setCurrentStep] = useState(0)
-  const [answers, setAnswers] = useState<Partial<ConfigInicial>>(savedConfig)
   const [isCompleted, setIsCompleted] = useState(false)
 
-  // Custom state for composite step (Management)
-  const [managerCount, setManagerCount] = useState('')
-  const [managerRoles, setManagerRoles] = useState('')
+  // -- FORM STATES --
+  const [identityTypes, setIdentityTypes] = useState<string[]>([])
+  const [clinicName, setClinicName] = useState('')
+  const [country, setCountry] = useState('')
+  const [city, setCity] = useState('')
+  const [openCityCombo, setOpenCityCombo] = useState(false)
+  const [niche, setNiche] = useState('')
+  const [stage, setStage] = useState('')
 
-  const currentQuestion = QUESTIONS[currentStep]
+  // Staff State
+  const [staffCounts, setStaffCounts] = useState<Record<StaffRole, number>>({
+    secretaries: 0,
+    specialists: 0,
+    managers: 0,
+  })
+  const [staffMembers, setStaffMembers] = useState<
+    Record<StaffRole, StaffMember[]>
+  >({
+    secretaries: [],
+    specialists: [],
+    managers: [],
+  })
 
-  // Initialize custom fields if data exists
-  useEffect(() => {
-    if (
-      currentQuestion.key === 'gestores_principais' &&
-      savedConfig.gestores_principais
-    ) {
-      if (savedConfig.gestores_principais.includes('gestores:')) {
-        const [countPart, rolesPart] =
-          savedConfig.gestores_principais.split('gestores:')
-        const count = countPart.trim()
-        setManagerCount(
-          ['1', '2-3', '4+'].includes(count) ? count : '1', // fallback to valid option if mismatch
-        )
-        setManagerRoles(rolesPart.trim())
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([])
+  const [tone, setTone] = useState('')
+
+  // -- INITIALIZATION --
+  useMemo(() => {
+    if (savedConfig.nome_clinica) setClinicName(savedConfig.nome_clinica)
+    if (savedConfig.tipo_clinica)
+      setIdentityTypes(savedConfig.tipo_clinica.split(', '))
+    if (savedConfig.estagio_clinica) setStage(savedConfig.estagio_clinica)
+    if (savedConfig.objetivo_geral_2026)
+      setSelectedGoals(savedConfig.objetivo_geral_2026.split(', '))
+    if (savedConfig.tom_linguagem) setTone(savedConfig.tom_linguagem)
+    if (savedConfig.localizacao) {
+      const parts = savedConfig.localizacao.split(', ')
+      if (parts.length > 1) {
+        const potentialCountry = parts[parts.length - 1]
+        if (['Brasil', 'Portugal'].includes(potentialCountry)) {
+          setCountry(potentialCountry)
+          setCity(parts.slice(0, -1).join(', '))
+        } else {
+          setCity(savedConfig.localizacao)
+        }
       } else {
-        // Legacy or unexpected format handling
-        setManagerRoles(savedConfig.gestores_principais)
+        setCity(savedConfig.localizacao)
       }
     }
-  }, [currentQuestion.key, savedConfig.gestores_principais])
+    // Note: Parsing complex staff string back to state is complex, skipping for MVP simplicity (assuming wizard is for setup)
+  }, []) // Run once on mount
+
+  // -- HANDLERS --
 
   const handleNext = () => {
-    // Handling Composite Question
-    if (currentQuestion.key === 'gestores_principais') {
-      if (!managerCount) {
-        toast.error('Por favor, selecione a quantidade de gestores.')
-        return
-      }
-      // Save composite string - roles are optional
-      const compositeValue = `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ''}`
-      setAnswers((prev) => ({ ...prev, gestores_principais: compositeValue }))
-
-      if (currentStep < QUESTIONS.length - 1) {
-        setCurrentStep((prev) => prev + 1)
-        return
-      }
+    // Validation
+    if (currentStep === 0 && identityTypes.length === 0) {
+      toast.error('Selecione pelo menos um tipo de clínica.')
+      return
+    }
+    if (currentStep === 1 && !clinicName.trim()) {
+      toast.error('O nome da clínica é obrigatório.')
+      return
+    }
+    if (currentStep === 2 && (!country || !city)) {
+      toast.error('Selecione o país e a cidade.')
+      return
+    }
+    if (currentStep === 3 && !niche) {
+      toast.error('Selecione um nicho de atuação.')
+      return
+    }
+    if (currentStep === 4 && !stage) {
+      toast.error('Selecione o estágio do negócio.')
+      return
+    }
+    if (currentStep === 6 && selectedGoals.length === 0) {
+      toast.error('Selecione pelo menos um objetivo.')
+      return
+    }
+    if (currentStep === 7 && !tone) {
+      toast.error('Selecione o tom de linguagem.')
+      return
     }
 
-    // Validation for normal questions
-    const key = currentQuestion.key
-    if (key !== 'gestores_principais') {
-      const value = answers[key]
-      if (!value || (typeof value === 'string' && !value.trim())) {
-        toast.error('Por favor, preencha o campo para continuar.')
-        return
-      }
-    }
-
-    if (currentStep < QUESTIONS.length - 1) {
+    if (currentStep < STEPS_CONFIG.length - 1) {
       setCurrentStep((prev) => prev + 1)
     } else {
-      setIsCompleted(true)
-      // Final save
-      const finalConfig = {
-        ...answers,
-        gestores_principais:
-          currentQuestion.key === 'gestores_principais'
-            ? `${managerCount} gestores:${managerRoles ? ` ${managerRoles}` : ''}`
-            : answers.gestores_principais || '',
-      } as ConfigInicial
-
-      setConfigInicial(finalConfig)
-      toast.success('Configuração concluída com sucesso!')
+      finishWizard()
     }
   }
 
   const handleBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1)
+    if (currentStep > 0) setCurrentStep((prev) => prev - 1)
+  }
+
+  const finishWizard = () => {
+    // Compile Staff String
+    const staffString = Object.entries(staffMembers)
+      .filter(([_, members]) => members.length > 0)
+      .map(([role, members]) => {
+        const details = members.map((m) => `${m.name} (${m.role})`).join(', ')
+        const count = members.length
+        const label =
+          role === 'secretaries'
+            ? 'Secretárias'
+            : role === 'specialists'
+              ? 'Especialistas'
+              : 'Gestores'
+        return `${count} ${label}: ${details}`
+      })
+      .join('; ')
+
+    const finalConfig: ConfigInicial = {
+      tipo_clinica: identityTypes.join(', '),
+      nome_clinica: clinicName,
+      localizacao: `${city}, ${country}`,
+      publico_principal: niche,
+      estagio_clinica: stage as any,
+      gestores_principais: staffString || 'Equipe não detalhada',
+      objetivo_geral_2026: selectedGoals.join(', '),
+      tamanho_relatorio: 'resumido_20', // Defaulting as step was removed
+      tom_linguagem: tone as any,
     }
+
+    setConfigInicial(finalConfig)
+    setIsCompleted(true)
+    toast.success('Configuração concluída com sucesso!')
   }
 
-  const handleInputChange = (value: string) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestion.key]: value,
-    }))
-  }
-
-  const handleSelectChange = (value: string) => {
-    handleInputChange(value === 'Outro' ? '' : value)
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      // Prevent submit if it's a textarea or if inside a select that captures enter
-      if (
-        document.activeElement?.tagName !== 'TEXTAREA' &&
-        currentQuestion.type !== 'select'
-      ) {
-        handleNext()
-      }
-    }
-  }
-
-  // Logic to determine if "Outro" is selected in the UI
-  const getCurrentSelectValue = () => {
-    const val = answers[currentQuestion.key] as string
-    if (!val) return ''
-
-    const options = currentQuestion.options?.map((opt) =>
-      typeof opt === 'string' ? opt : opt.value,
+  // Identity Logic
+  const toggleIdentity = (type: string) => {
+    setIdentityTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     )
-
-    if (options?.includes(val)) return val
-    if (currentQuestion.allowOther && val) return 'Outro'
-    return ''
   }
 
-  const isOtherSelected = getCurrentSelectValue() === 'Outro'
-  const progress = ((currentStep + 1) / QUESTIONS.length) * 100
+  // Location Logic
+  const currentCities =
+    country === 'Brasil'
+      ? CITIES_BRAZIL
+      : country === 'Portugal'
+        ? CITIES_PORTUGAL
+        : []
 
+  // Niche Logic
+  const availableNiches = useMemo(() => {
+    const options = new Set<string>()
+    if (identityTypes.length === 0) {
+      Object.values(NICHES_MAP)
+        .flat()
+        .forEach((n) => options.add(n))
+    } else {
+      identityTypes.forEach((type) => {
+        const niches = NICHES_MAP[type] || NICHES_MAP['Outro']
+        niches.forEach((n) => options.add(n))
+      })
+    }
+    return Array.from(options)
+  }, [identityTypes])
+
+  // Staff Logic
+  const updateStaffCount = (role: StaffRole, delta: number) => {
+    const current = staffCounts[role]
+    const newCount = Math.max(0, current + delta)
+    setStaffCounts((prev) => ({ ...prev, [role]: newCount }))
+
+    setStaffMembers((prev) => {
+      const currentList = prev[role]
+      if (newCount > currentList.length) {
+        // Add
+        const toAdd = newCount - currentList.length
+        const newItems = Array.from({ length: toAdd }).map(() => ({
+          id: Math.random().toString(36).substr(2, 9),
+          name: '',
+          role:
+            role === 'secretaries'
+              ? 'Secretária'
+              : role === 'managers'
+                ? 'Gerente'
+                : 'Especialista',
+        }))
+        return { ...prev, [role]: [...currentList, ...newItems] }
+      } else if (newCount < currentList.length) {
+        // Remove from end
+        return { ...prev, [role]: currentList.slice(0, newCount) }
+      }
+      return prev
+    })
+  }
+
+  const updateStaffMember = (
+    role: StaffRole,
+    index: number,
+    field: 'name' | 'role',
+    val: string,
+  ) => {
+    setStaffMembers((prev) => {
+      const newList = [...prev[role]]
+      newList[index] = { ...newList[index], [field]: val }
+      return { ...prev, [role]: newList }
+    })
+  }
+
+  // Goals Logic
+  const toggleGoal = (goal: string) => {
+    setSelectedGoals((prev) => {
+      if (prev.includes(goal)) return prev.filter((g) => g !== goal)
+      if (prev.length >= 3) {
+        toast.warning('Máximo de 3 objetivos atingido.')
+        return prev
+      }
+      return [...prev, goal]
+    })
+  }
+
+  const stepData = STEPS_CONFIG[currentStep]
+  const progress = ((currentStep + 1) / STEPS_CONFIG.length) * 100
+
+  // -- RENDER COMPLETION --
   if (isCompleted) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh] animate-fade-in p-4">
@@ -309,46 +474,31 @@ export default function SetupWizard() {
           <CheckCircle2 className="size-12 text-green-600" />
         </div>
         <h1 className="text-3xl font-bold text-slate-900 mb-2 text-center">
-          Configuração Finalizada!
+          Tudo Pronto!
         </h1>
         <p className="text-slate-500 mb-8 text-center max-w-md">
-          Seus dados foram salvos e o sistema está pronto para gerar insights
-          personalizados para o ciclo 2026.
+          Configuração finalizada. O sistema agora possui os dados necessários
+          para gerar sua estratégia.
         </p>
-
-        <Card className="w-full max-w-2xl bg-slate-50 border-slate-200 shadow-inner overflow-hidden">
-          <CardHeader className="bg-slate-100 border-b border-slate-200">
-            <CardTitle className="text-sm font-mono text-slate-500 uppercase">
-              Output JSON gerado (config_inicial)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <pre className="p-4 overflow-auto text-xs sm:text-sm font-mono text-slate-700 bg-slate-50 max-h-[400px]">
-              {JSON.stringify(answers, null, 2)}
-            </pre>
-          </CardContent>
-          <CardFooter className="p-4 border-t border-slate-200 bg-white justify-between">
-            <Button variant="outline" onClick={() => setIsCompleted(false)}>
-              Editar Respostas
-            </Button>
-            <Button onClick={() => (window.location.href = '/')}>
-              Ir para Dashboard
-            </Button>
-          </CardFooter>
-        </Card>
+        <Button onClick={() => (window.location.href = '/')}>
+          Ir para Dashboard
+        </Button>
       </div>
     )
   }
 
+  // -- RENDER WIZARD --
   return (
     <div className="container max-w-3xl mx-auto py-10 px-4 min-h-[80vh] flex flex-col justify-center">
       <div className="mb-8 space-y-2">
         <div className="flex items-center justify-between text-sm text-slate-500 mb-2">
-          <span className="font-medium text-teal-600">
-            Configuração Inicial
-          </span>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="bg-slate-50">
+              {stepData.category}
+            </Badge>
+          </div>
           <span>
-            Passo {currentStep + 1} de {QUESTIONS.length}
+            Passo {currentStep + 1} de {STEPS_CONFIG.length}
           </span>
         </div>
         <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
@@ -361,180 +511,356 @@ export default function SetupWizard() {
 
       <Card className="border-t-4 border-t-teal-500 shadow-lg animate-fade-in-up transition-all duration-300">
         <CardHeader className="space-y-1">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-3 mb-2">
             <div className="bg-teal-100 p-2 rounded-lg">
-              {currentStep < 3 && (
-                <Settings2 className="size-5 text-teal-700" />
-              )}
-              {currentStep >= 3 && currentStep < 6 && (
-                <MessageSquare className="size-5 text-teal-700" />
-              )}
-              {currentStep >= 6 && <Rocket className="size-5 text-teal-700" />}
+              <stepData.icon className="size-6 text-teal-700" />
             </div>
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-600">
-              {currentStep < 3
-                ? 'Identidade'
-                : currentStep < 6
-                  ? 'Contexto de Mercado'
-                  : 'Direcionamento Estratégico'}
-            </span>
+            <CardTitle className="text-2xl sm:text-3xl text-slate-800">
+              {stepData.title}
+            </CardTitle>
           </div>
-          <CardTitle className="text-2xl sm:text-3xl text-slate-800">
-            {currentQuestion.title}
-          </CardTitle>
-          <CardDescription className="text-base sm:text-lg">
-            {currentQuestion.description}
+          <CardDescription className="text-base sm:text-lg pl-[3.25rem]">
+            {stepData.description}
           </CardDescription>
         </CardHeader>
-        <CardContent className="pt-6 pb-8">
-          <div className="space-y-4">
-            {/* TEXT INPUT */}
-            {currentQuestion.type === 'text' && (
-              <Input
-                autoFocus
-                value={
-                  (answers[
-                    currentQuestion.key as keyof ConfigInicial
-                  ] as string) || ''
-                }
-                onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={handleKeyPress}
-                placeholder={currentQuestion.placeholder}
-                className="text-lg h-12"
-              />
-            )}
 
-            {/* SELECT INPUT */}
-            {currentQuestion.type === 'select' && (
-              <div className="space-y-4">
-                <Select
-                  value={getCurrentSelectValue()}
-                  onValueChange={handleSelectChange}
+        <CardContent className="pt-4 pb-8 pl-[3.25rem] pr-6">
+          {/* STEP 1: IDENTITY */}
+          {currentStep === 0 && (
+            <div className="flex flex-wrap gap-2">
+              {CLINIC_TYPES.map((type) => (
+                <Badge
+                  key={type}
+                  variant={identityTypes.includes(type) ? 'default' : 'outline'}
+                  className={cn(
+                    'text-base py-2 px-4 cursor-pointer hover:bg-slate-100 transition-colors',
+                    identityTypes.includes(type) &&
+                      'bg-teal-600 hover:bg-teal-700 text-white',
+                  )}
+                  onClick={() => toggleIdentity(type)}
                 >
-                  <SelectTrigger className="h-12 text-lg">
-                    <SelectValue placeholder={currentQuestion.placeholder} />
+                  {type}
+                </Badge>
+              ))}
+            </div>
+          )}
+
+          {/* STEP 2: NAME */}
+          {currentStep === 1 && (
+            <Input
+              autoFocus
+              value={clinicName}
+              onChange={(e) => setClinicName(e.target.value)}
+              placeholder="Ex: Clínica Vida Plena"
+              className="text-lg h-12"
+              onKeyDown={(e) => e.key === 'Enter' && handleNext()}
+            />
+          )}
+
+          {/* STEP 3: LOCATION */}
+          {currentStep === 2 && (
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <Label>País</Label>
+                <Select value={country} onValueChange={setCountry}>
+                  <SelectTrigger className="h-11">
+                    <SelectValue placeholder="Selecione o país" />
                   </SelectTrigger>
                   <SelectContent>
-                    {currentQuestion.options?.map((opt) => {
-                      const value = typeof opt === 'string' ? opt : opt.value
-                      const label = typeof opt === 'string' ? opt : opt.label
-                      return (
-                        <SelectItem
-                          key={value}
-                          value={value}
-                          className="text-base py-3"
-                        >
-                          {label}
-                        </SelectItem>
-                      )
-                    })}
+                    <SelectItem value="Brasil">Brasil</SelectItem>
+                    <SelectItem value="Portugal">Portugal</SelectItem>
                   </SelectContent>
                 </Select>
-
-                {isOtherSelected && (
-                  <div className="animate-fade-in-down space-y-2">
-                    <Label className="text-sm text-slate-500">
-                      Especifique a opção "Outro":
-                    </Label>
-                    <Input
-                      autoFocus
-                      value={
-                        (answers[
-                          currentQuestion.key as keyof ConfigInicial
-                        ] as string) || ''
-                      }
-                      onChange={(e) => handleInputChange(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      placeholder="Digite sua resposta específica..."
-                      className="text-lg h-12 border-teal-200 focus-visible:ring-teal-500"
-                    />
-                  </div>
-                )}
               </div>
-            )}
 
-            {/* COMPOSITE INPUT (GESTORES) */}
-            {currentQuestion.type === 'composite' && (
-              <div className="grid gap-6">
-                <div className="space-y-2">
-                  <Label className="text-base">
-                    Número de Gestores Principais
+              {country && (
+                <div className="space-y-2 animate-fade-in">
+                  <Label>
+                    {country === 'Brasil' ? 'Cidade' : 'Concelho/Distrito'}
                   </Label>
-                  <Select value={managerCount} onValueChange={setManagerCount}>
-                    <SelectTrigger className="h-12 text-lg">
-                      <SelectValue placeholder="Selecione a quantidade" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 Gestor</SelectItem>
-                      <SelectItem value="2-3">2 a 3 Gestores</SelectItem>
-                      <SelectItem value="4+">4 ou mais Gestores</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-base">
-                    Quais são os cargos?{' '}
-                    <span className="text-slate-400 font-normal text-sm">
-                      (Opcional)
-                    </span>
-                  </Label>
-                  <Input
-                    value={managerRoles}
-                    onChange={(e) => setManagerRoles(e.target.value)}
-                    placeholder="Ex: Diretor Técnico e Gerente Financeiro"
-                    className="h-12 text-lg"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* RADIO INPUT */}
-            {currentQuestion.type === 'radio' && (
-              <RadioGroup
-                value={
-                  (answers[
-                    currentQuestion.key as keyof ConfigInicial
-                  ] as string) || ''
-                }
-                onValueChange={handleInputChange}
-                className="grid gap-3"
-              >
-                {currentQuestion.options?.map((opt) => {
-                  const value = typeof opt === 'string' ? opt : opt.value
-                  const label = typeof opt === 'string' ? opt : opt.label
-                  const desc = typeof opt === 'object' ? opt.description : null
-
-                  return (
-                    <div
-                      key={value}
-                      className={cn(
-                        'flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors',
-                        answers[currentQuestion.key as keyof ConfigInicial] ===
-                          value
-                          ? 'border-teal-500 bg-teal-50 shadow-sm ring-1 ring-teal-500/20'
-                          : 'border-slate-200',
-                      )}
-                      onClick={() => handleInputChange(value)}
-                    >
-                      <RadioGroupItem value={value} id={value} />
-                      <Label
-                        htmlFor={value}
-                        className="flex-1 cursor-pointer text-base font-medium text-slate-700"
+                  <Popover open={openCityCombo} onOpenChange={setOpenCityCombo}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={openCityCombo}
+                        className="w-full justify-between h-11"
                       >
-                        <div className="font-semibold">{label}</div>
-                        {desc && (
-                          <div className="text-sm font-normal text-slate-500 mt-1">
-                            {desc}
-                          </div>
-                        )}
-                      </Label>
+                        {city || 'Selecione ou digite...'}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar cidade..." />
+                        <CommandList>
+                          <CommandEmpty>
+                            Nenhuma cidade encontrada.
+                          </CommandEmpty>
+                          <CommandGroup>
+                            {currentCities.map((c) => (
+                              <CommandItem
+                                key={c}
+                                value={c}
+                                onSelect={(currentValue) => {
+                                  setCity(currentValue)
+                                  setOpenCityCombo(false)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    'mr-2 h-4 w-4',
+                                    city === c ? 'opacity-100' : 'opacity-0',
+                                  )}
+                                />
+                                {c}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <p className="text-xs text-muted-foreground">
+                    *Lista de sugestões baseada nas principais cidades.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* STEP 4: NICHE (Conditional) */}
+          {currentStep === 3 && (
+            <div className="space-y-4">
+              <div className="text-sm text-slate-500 mb-2">
+                Opções baseadas em: <strong>{identityTypes.join(', ')}</strong>
+              </div>
+              <RadioGroup
+                value={niche}
+                onValueChange={setNiche}
+                className="grid sm:grid-cols-2 gap-3"
+              >
+                {availableNiches.map((n) => (
+                  <Label
+                    key={n}
+                    className={cn(
+                      'flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-slate-50 transition-all',
+                      niche === n
+                        ? 'border-teal-500 bg-teal-50 ring-1 ring-teal-500'
+                        : 'border-slate-200',
+                    )}
+                  >
+                    <RadioGroupItem value={n} id={n} />
+                    <span className="font-medium text-slate-700">{n}</span>
+                  </Label>
+                ))}
+              </RadioGroup>
+            </div>
+          )}
+
+          {/* STEP 5: STAGE */}
+          {currentStep === 4 && (
+            <RadioGroup
+              value={stage}
+              onValueChange={setStage}
+              className="grid gap-3"
+            >
+              {STAGE_OPTIONS.map((opt) => (
+                <Label
+                  key={opt}
+                  className={cn(
+                    'flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-slate-50',
+                    stage === opt
+                      ? 'border-teal-500 bg-teal-50'
+                      : 'border-slate-200',
+                  )}
+                >
+                  <RadioGroupItem value={opt} id={opt} />
+                  <span className="text-lg font-medium text-slate-700">
+                    {opt}
+                  </span>
+                </Label>
+              ))}
+            </RadioGroup>
+          )}
+
+          {/* STEP 6: STAFF (Dynamic) */}
+          {currentStep === 5 && (
+            <div className="space-y-8">
+              {/* Counters */}
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { id: 'secretaries', label: 'Secretárias' },
+                  { id: 'specialists', label: 'Especialistas' },
+                  { id: 'managers', label: 'Gestores' },
+                ].map((role) => (
+                  <div key={role.id} className="text-center space-y-2">
+                    <Label>{role.label}</Label>
+                    <div className="flex items-center justify-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() =>
+                          updateStaffCount(role.id as StaffRole, -1)
+                        }
+                      >
+                        <Minus className="size-3" />
+                      </Button>
+                      <span className="w-8 text-center font-bold text-lg">
+                        {staffCounts[role.id as StaffRole]}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() =>
+                          updateStaffCount(role.id as StaffRole, 1)
+                        }
+                      >
+                        <Plus className="size-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
+                {Object.entries(staffMembers).map(([role, members]) => {
+                  if (members.length === 0) return null
+                  const label =
+                    role === 'secretaries'
+                      ? 'Secretárias'
+                      : role === 'managers'
+                        ? 'Gestores'
+                        : 'Especialistas'
+                  return (
+                    <div key={role} className="space-y-3">
+                      <h4 className="font-semibold text-sm uppercase text-slate-500 border-b pb-1">
+                        {label}
+                      </h4>
+                      {members.map((member, idx) => (
+                        <div key={member.id} className="flex gap-2">
+                          <Input
+                            placeholder={`Nome da ${label.slice(0, -1)}`}
+                            value={member.name}
+                            onChange={(e) =>
+                              updateStaffMember(
+                                role as StaffRole,
+                                idx,
+                                'name',
+                                e.target.value,
+                              )
+                            }
+                            className="flex-1"
+                          />
+                          <Input
+                            placeholder="Cargo/Função"
+                            value={member.role}
+                            onChange={(e) =>
+                              updateStaffMember(
+                                role as StaffRole,
+                                idx,
+                                'role',
+                                e.target.value,
+                              )
+                            }
+                            className="flex-1"
+                          />
+                        </div>
+                      ))}
                     </div>
                   )
                 })}
-              </RadioGroup>
-            )}
-          </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 7: GOALS */}
+          {currentStep === 6 && (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center text-sm text-slate-500">
+                <span>Selecione até 3 opções</span>
+                <span
+                  className={cn(
+                    selectedGoals.length === 3
+                      ? 'text-red-500 font-bold'
+                      : 'text-teal-600',
+                  )}
+                >
+                  {selectedGoals.length}/3
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {GOALS_OPTIONS.map((goal) => (
+                  <Badge
+                    key={goal}
+                    variant={
+                      selectedGoals.includes(goal) ? 'default' : 'outline'
+                    }
+                    className={cn(
+                      'text-sm py-3 px-4 cursor-pointer hover:bg-slate-100 transition-all border-slate-200',
+                      selectedGoals.includes(goal) &&
+                        'bg-teal-600 hover:bg-teal-700 text-white border-teal-600',
+                    )}
+                    onClick={() => toggleGoal(goal)}
+                  >
+                    {goal}
+                    {selectedGoals.includes(goal) && (
+                      <Check className="ml-2 size-3" />
+                    )}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* STEP 8: TONE */}
+          {currentStep === 7 && (
+            <RadioGroup
+              value={tone}
+              onValueChange={setTone}
+              className="grid gap-3"
+            >
+              {[
+                {
+                  value: 'formal',
+                  label: 'Formal',
+                  desc: 'Corporativo e técnico',
+                },
+                {
+                  value: 'intermediario',
+                  label: 'Intermediário',
+                  desc: 'Profissional mas acessível',
+                },
+                {
+                  value: 'informal',
+                  label: 'Informal',
+                  desc: 'Próximo e motivacional',
+                },
+              ].map((opt) => (
+                <Label
+                  key={opt.value}
+                  className={cn(
+                    'flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-slate-50',
+                    tone === opt.value
+                      ? 'border-teal-500 bg-teal-50'
+                      : 'border-slate-200',
+                  )}
+                >
+                  <RadioGroupItem value={opt.value} id={opt.value} />
+                  <div className="flex flex-col">
+                    <span className="text-lg font-medium text-slate-700">
+                      {opt.label}
+                    </span>
+                    <span className="text-sm text-slate-500">{opt.desc}</span>
+                  </div>
+                </Label>
+              ))}
+            </RadioGroup>
+          )}
         </CardContent>
+
         <CardFooter className="flex justify-between border-t bg-slate-50/50 p-6">
           <Button
             variant="ghost"
@@ -550,7 +876,7 @@ export default function SetupWizard() {
             size="lg"
             className="bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-200/50 pl-6 pr-4"
           >
-            {currentStep === QUESTIONS.length - 1 ? 'Finalizar' : 'Próximo'}
+            {currentStep === STEPS_CONFIG.length - 1 ? 'Finalizar' : 'Próximo'}
             <ChevronRight className="ml-2 size-4" />
           </Button>
         </CardFooter>
