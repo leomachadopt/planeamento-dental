@@ -22,7 +22,6 @@ import {
   ChevronRight,
   ChevronLeft,
   Fingerprint,
-  Target,
   Award,
   Users,
   DollarSign,
@@ -134,7 +133,7 @@ const QUESTIONS: Question[] = [
 ]
 
 export default function Identity() {
-  const { identity, updateIdentity, clinicConfig, relatorio_1 } =
+  const { identity, updateIdentity, config_inicial, relatorio_1 } =
     useStrategyStore()
   const [currentStep, setCurrentStep] = useState(0)
   const [localData, setLocalData] = useState<IIdentityState>(identity)
@@ -143,8 +142,10 @@ export default function Identity() {
   const currentQuestion = QUESTIONS[currentStep]
   const progress = ((currentStep + 1) / QUESTIONS.length) * 100
 
-  // Tone of voice helper
-  const isFormal = clinicConfig.tom_linguagem === 'formal'
+  // Safe Property Access & Fallbacks
+  const getClinicName = () => config_inicial?.nome_clinica || 'Sua Clínica'
+  const getTone = () => config_inicial?.tom_linguagem || 'intermediario'
+  const isFormal = getTone() === 'formal'
 
   const handleNext = () => {
     const value = localData[currentQuestion.key]
@@ -186,14 +187,16 @@ export default function Identity() {
       strategyFocus,
     } = localData
 
+    const name = getClinicName()
+
     if (isFormal) {
       return (
         <>
           <p>
-            A <strong>identidade organizacional</strong> da{' '}
-            {clinicConfig.nome_clinica} fundamenta-se no propósito de{' '}
-            <em>"{reason}"</em>. Projetamos, para o horizonte de três anos,
-            consolidar nossa reputação como: <em>"{recognitionGoal}"</em>.
+            A <strong>identidade organizacional</strong> da {name} fundamenta-se
+            no propósito de <em>"{reason}"</em>. Projetamos, para o horizonte de
+            três anos, consolidar nossa reputação como:{' '}
+            <em>"{recognitionGoal}"</em>.
           </p>
           <p className="mt-4">
             Nossa conduta é regida inegociavelmente pelos valores de{' '}
@@ -214,8 +217,8 @@ export default function Identity() {
     return (
       <>
         <p>
-          A {clinicConfig.nome_clinica} existe para <em>"{reason}"</em>. Daqui a
-          3 anos, queremos ser reconhecidos por: <em>"{recognitionGoal}"</em>.
+          A {name} existe para <em>"{reason}"</em>. Daqui a 3 anos, queremos ser
+          reconhecidos por: <em>"{recognitionGoal}"</em>.
         </p>
         <p className="mt-4">
           Nossos valores inegociáveis são: <em>{values}</em>. Em 2026, nosso
@@ -309,9 +312,9 @@ export default function Identity() {
             <p className="font-semibold mb-1">Contexto do Diagnóstico:</p>
             <p>
               Lembre-se que sua análise SWOT apontou como principal força:{' '}
-              <strong>"{relatorio_1.swot.strengths[0]}"</strong> e o principal
-              problema a resolver é:{' '}
-              <strong>"{relatorio_1.swot.weaknesses[0]}"</strong>.
+              <strong>"{relatorio_1.swot.strengths[0] || 'N/A'}"</strong> e o
+              principal problema a resolver é:{' '}
+              <strong>"{relatorio_1.swot.weaknesses[0] || 'N/A'}"</strong>.
             </p>
           </div>
         </div>

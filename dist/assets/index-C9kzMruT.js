@@ -35530,13 +35530,15 @@ var QUESTIONS = [
 	}
 ];
 function Identity() {
-	const { identity: identity$1, updateIdentity, clinicConfig, relatorio_1 } = useStrategyStore();
+	const { identity: identity$1, updateIdentity, config_inicial, relatorio_1 } = useStrategyStore();
 	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
 	const [localData, setLocalData] = (0, import_react.useState)(identity$1);
 	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
 	const currentQuestion = QUESTIONS[currentStep];
 	const progress = (currentStep + 1) / QUESTIONS.length * 100;
-	const isFormal = clinicConfig.tom_linguagem === "formal";
+	const getClinicName = () => config_inicial?.nome_clinica || "Sua Clínica";
+	const getTone = () => config_inicial?.tom_linguagem || "intermediario";
+	const isFormal = getTone() === "formal";
 	const handleNext = () => {
 		const value = localData[currentQuestion.key];
 		if (!value || value.trim() === "") {
@@ -35561,21 +35563,21 @@ function Identity() {
 	};
 	const generateSummary = () => {
 		const { reason, recognitionGoal, values, priorityAudience, pricePositioning, strategyFocus } = localData;
+		const name = getClinicName();
 		if (isFormal) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
 				"A ",
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "identidade organizacional" }),
-				" da",
-				" ",
-				clinicConfig.nome_clinica,
-				" fundamenta-se no propósito de",
-				" ",
+				" da ",
+				name,
+				" fundamenta-se no propósito de ",
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
 					"\"",
 					reason,
 					"\""
 				] }),
-				". Projetamos, para o horizonte de três anos, consolidar nossa reputação como: ",
+				". Projetamos, para o horizonte de três anos, consolidar nossa reputação como:",
+				" ",
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
 					"\"",
 					recognitionGoal,
@@ -35610,7 +35612,7 @@ function Identity() {
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
 				"A ",
-				clinicConfig.nome_clinica,
+				name,
 				" existe para ",
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
 					"\"",
@@ -35744,14 +35746,14 @@ function Identity() {
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
 						"\"",
-						relatorio_1.swot.strengths[0],
+						relatorio_1.swot.strengths[0] || "N/A",
 						"\""
 					] }),
 					" e o principal problema a resolver é:",
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
 						"\"",
-						relatorio_1.swot.weaknesses[0],
+						relatorio_1.swot.weaknesses[0] || "N/A",
 						"\""
 					] }),
 					"."
@@ -36865,4 +36867,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-D-erRKVR.js.map
+//# sourceMappingURL=index-C9kzMruT.js.map
