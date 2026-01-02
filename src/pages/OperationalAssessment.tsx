@@ -14,17 +14,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
-import { Badge } from '@/components/ui/badge'
-import {
-  ArrowRight,
-  CheckCircle2,
-  ChevronRight,
-  ClipboardList,
-  AlertCircle,
-} from 'lucide-react'
+import { ChevronRight, ClipboardList, AlertCircle } from 'lucide-react'
 import { toast } from 'sonner'
-import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { OperationalSummary } from '@/components/OperationalSummary'
 
 const MIN_CHAR_LENGTH = 15
 
@@ -38,7 +31,7 @@ interface Question {
 }
 
 export default function OperationalAssessment() {
-  const { operationalAssessment, updateOperationalAssessment, clinicConfig } =
+  const { operationalAssessment, updateOperationalAssessment, config_inicial } =
     useStrategyStore()
 
   const [currentStep, setCurrentStep] = useState(0)
@@ -48,9 +41,9 @@ export default function OperationalAssessment() {
   const [isCompleted, setIsCompleted] = useState(false)
   const [vagueAnswerWarning, setVagueAnswerWarning] = useState(false)
 
-  // Dynamic context helper
-  const getClinicName = () => clinicConfig.nome_clinica || 'sua clínica'
-  const getClinicType = () => clinicConfig.tipo_clinica || 'saúde'
+  // Dynamic context helper with safe access
+  const getClinicName = () => config_inicial?.nome_clinica || 'sua clínica'
+  const getClinicType = () => config_inicial?.tipo_clinica || 'saúde'
 
   const QUESTIONS: Question[] = [
     {
@@ -121,7 +114,6 @@ export default function OperationalAssessment() {
       ...prev,
       [currentQuestion.key]: value,
     }))
-    // Reset warning when user types
     if (vagueAnswerWarning && value.length >= MIN_CHAR_LENGTH) {
       setVagueAnswerWarning(false)
     }
@@ -135,7 +127,6 @@ export default function OperationalAssessment() {
       return
     }
 
-    // Intelligent Interaction Check
     if (currentAnswer.length < MIN_CHAR_LENGTH && !vagueAnswerWarning) {
       setVagueAnswerWarning(true)
       toast.warning('Sua resposta parece curta.', {
@@ -166,134 +157,11 @@ export default function OperationalAssessment() {
 
   if (isCompleted) {
     return (
-      <div className="space-y-8 animate-fade-in max-w-4xl mx-auto pb-10">
-        <div className="flex flex-col items-center text-center space-y-4">
-          <div className="bg-green-100 p-3 rounded-full">
-            <ClipboardList className="size-8 text-green-600" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            2A – Operação Atual da Clínica
-          </h1>
-          <p className="text-slate-500 max-w-lg">
-            Diagnóstico operacional compilado com base na entrevista realizada.
-            Este documento serve como base para identificar gargalos e
-            oportunidades.
-          </p>
-        </div>
-
-        <Card className="border-t-4 border-t-teal-500 shadow-lg">
-          <CardHeader className="bg-slate-50 border-b border-slate-100">
-            <div className="flex justify-between items-center">
-              <div>
-                <CardTitle className="text-xl text-slate-800">
-                  Resumo Operacional Estruturado
-                </CardTitle>
-                <CardDescription>
-                  Visão geral da {getClinicName()}.
-                </CardDescription>
-              </div>
-              <Badge variant="outline" className="bg-white">
-                Status: Mapeado
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="p-8 space-y-8">
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                <div className="size-2 bg-teal-500 rounded-full" />
-                Serviços
-              </h3>
-              <p className="text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200">
-                {localAnswers.services}
-              </p>
-            </section>
-
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                <div className="size-2 bg-teal-500 rounded-full" />
-                Estrutura Física
-              </h3>
-              <div className="text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200 space-y-2">
-                <p>{localAnswers.infrastructure}</p>
-                {localAnswers.working_hours && (
-                  <p className="text-sm text-slate-500 mt-2">
-                    <span className="font-medium">Funcionamento:</span>{' '}
-                    {localAnswers.working_hours}
-                  </p>
-                )}
-              </div>
-            </section>
-
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                <div className="size-2 bg-teal-500 rounded-full" />
-                Equipe
-              </h3>
-              <p className="text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200">
-                {localAnswers.team_composition}
-              </p>
-            </section>
-
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                <div className="size-2 bg-teal-500 rounded-full" />
-                Jornada do Paciente
-              </h3>
-              <p className="text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200">
-                {localAnswers.patient_management}
-              </p>
-            </section>
-
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                <div className="size-2 bg-teal-500 rounded-full" />
-                Processos Internos
-              </h3>
-              <div className="pl-4 border-l-2 border-slate-200 space-y-4">
-                <div className="bg-green-50 p-3 rounded-md border border-green-100">
-                  <span className="text-xs font-bold text-green-700 uppercase mb-1 block">
-                    O que funciona bem
-                  </span>
-                  <p className="text-green-900">
-                    {localAnswers.processes_well_defined}
-                  </p>
-                </div>
-                <div className="bg-red-50 p-3 rounded-md border border-red-100">
-                  <span className="text-xs font-bold text-red-700 uppercase mb-1 block">
-                    Pontos de Atenção
-                  </span>
-                  <p className="text-red-900">
-                    {localAnswers.processes_disorganized}
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                <div className="size-2 bg-teal-500 rounded-full" />
-                Gestão Financeira
-              </h3>
-              <p className="text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200">
-                {localAnswers.financial_management}
-              </p>
-            </section>
-          </CardContent>
-          <CardFooter className="bg-slate-50 border-t border-slate-100 p-6 flex justify-between">
-            <Button variant="outline" onClick={() => setIsCompleted(false)}>
-              Revisar Respostas
-            </Button>
-            <Button
-              asChild
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Link to="/mercado">
-                Ir para Mercado (2B) <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+      <OperationalSummary
+        answers={localAnswers}
+        clinicName={getClinicName()}
+        onRevision={() => setIsCompleted(false)}
+      />
     )
   }
 

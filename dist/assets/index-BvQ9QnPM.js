@@ -33760,15 +33760,143 @@ function SetupWizard() {
 		})]
 	});
 }
+function OperationalSummary({ answers, clinicName, onRevision }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-8 animate-fade-in max-w-4xl mx-auto pb-10",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col items-center text-center space-y-4",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "bg-green-100 p-3 rounded-full",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClipboardList, { className: "size-8 text-green-600" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-3xl font-bold tracking-tight text-slate-900 dark:text-white",
+					children: "2A – Operação Atual da Clínica"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-slate-500 max-w-lg",
+					children: "Diagnóstico operacional compilado com base na entrevista realizada. Este documento serve como base para identificar gargalos e oportunidades."
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-t-4 border-t-teal-500 shadow-lg",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+					className: "bg-slate-50 border-b border-slate-100",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex justify-between items-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-xl text-slate-800",
+							children: "Resumo Operacional Estruturado"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardDescription, { children: [
+							"Visão geral da ",
+							clinicName,
+							"."
+						] })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+							variant: "outline",
+							className: "bg-white",
+							children: "Status: Mapeado"
+						})]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+					className: "p-8 space-y-8",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+							title: "Serviços",
+							content: answers.services
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+							title: "Estrutura Física",
+							content: answers.infrastructure,
+							extra: answers.working_hours ? `Funcionamento: ${answers.working_hours}` : void 0
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+							title: "Equipe",
+							content: answers.team_composition
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+							title: "Jornada do Paciente",
+							content: answers.patient_management
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							className: "space-y-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SectionHeader, { title: "Processos Internos" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "pl-4 border-l-2 border-slate-200 space-y-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-green-50 p-3 rounded-md border border-green-100",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-bold text-green-700 uppercase mb-1 block",
+										children: "O que funciona bem"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-green-900",
+										children: answers.processes_well_defined
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-red-50 p-3 rounded-md border border-red-100",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-bold text-red-700 uppercase mb-1 block",
+										children: "Pontos de Atenção"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-red-900",
+										children: answers.processes_disorganized
+									})]
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Section, {
+							title: "Gestão Financeira",
+							content: answers.financial_management
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+					className: "bg-slate-50 border-t border-slate-100 p-6 flex justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						variant: "outline",
+						onClick: onRevision,
+						children: "Revisar Respostas"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						asChild: true,
+						className: "bg-blue-600 hover:bg-blue-700 text-white",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/mercado",
+							children: ["Ir para Mercado (2B) ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "ml-2 size-4" })]
+						})
+					})]
+				})
+			]
+		})]
+	});
+}
+function Section({ title, content, extra }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "space-y-3",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SectionHeader, { title }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200 space-y-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: content }), extra && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm text-slate-500 mt-2 font-medium",
+				children: extra
+			})]
+		})]
+	});
+}
+function SectionHeader({ title }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+		className: "text-lg font-semibold text-teal-800 flex items-center gap-2",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-teal-500 rounded-full" }), title]
+	});
+}
 var MIN_CHAR_LENGTH$1 = 15;
 function OperationalAssessment() {
-	const { operationalAssessment, updateOperationalAssessment, clinicConfig } = useStrategyStore();
+	const { operationalAssessment, updateOperationalAssessment, config_inicial } = useStrategyStore();
 	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
 	const [localAnswers, setLocalAnswers] = (0, import_react.useState)(operationalAssessment);
 	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
 	const [vagueAnswerWarning, setVagueAnswerWarning] = (0, import_react.useState)(false);
-	const getClinicName = () => clinicConfig.nome_clinica || "sua clínica";
-	const getClinicType = () => clinicConfig.tipo_clinica || "saúde";
+	const getClinicName = () => config_inicial?.nome_clinica || "sua clínica";
+	const getClinicType = () => config_inicial?.tipo_clinica || "saúde";
 	const QUESTIONS$1 = [
 		{
 			key: "services",
@@ -33856,155 +33984,10 @@ function OperationalAssessment() {
 			handleNext();
 		}
 	};
-	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "space-y-8 animate-fade-in max-w-4xl mx-auto pb-10",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex flex-col items-center text-center space-y-4",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "bg-green-100 p-3 rounded-full",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClipboardList, { className: "size-8 text-green-600" })
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					className: "text-3xl font-bold tracking-tight text-slate-900 dark:text-white",
-					children: "2A – Operação Atual da Clínica"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-slate-500 max-w-lg",
-					children: "Diagnóstico operacional compilado com base na entrevista realizada. Este documento serve como base para identificar gargalos e oportunidades."
-				})
-			]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			className: "border-t-4 border-t-teal-500 shadow-lg",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-					className: "bg-slate-50 border-b border-slate-100",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex justify-between items-center",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							className: "text-xl text-slate-800",
-							children: "Resumo Operacional Estruturado"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardDescription, { children: [
-							"Visão geral da ",
-							getClinicName(),
-							"."
-						] })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-							variant: "outline",
-							className: "bg-white",
-							children: "Status: Mapeado"
-						})]
-					})
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-					className: "p-8 space-y-8",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-							className: "space-y-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-								className: "text-lg font-semibold text-teal-800 flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-teal-500 rounded-full" }), "Serviços"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200",
-								children: localAnswers.services
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-							className: "space-y-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-								className: "text-lg font-semibold text-teal-800 flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-teal-500 rounded-full" }), "Estrutura Física"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200 space-y-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: localAnswers.infrastructure }), localAnswers.working_hours && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									className: "text-sm text-slate-500 mt-2",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "font-medium",
-											children: "Funcionamento:"
-										}),
-										" ",
-										localAnswers.working_hours
-									]
-								})]
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-							className: "space-y-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-								className: "text-lg font-semibold text-teal-800 flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-teal-500 rounded-full" }), "Equipe"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200",
-								children: localAnswers.team_composition
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-							className: "space-y-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-								className: "text-lg font-semibold text-teal-800 flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-teal-500 rounded-full" }), "Jornada do Paciente"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200",
-								children: localAnswers.patient_management
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-							className: "space-y-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-								className: "text-lg font-semibold text-teal-800 flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-teal-500 rounded-full" }), "Processos Internos"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "pl-4 border-l-2 border-slate-200 space-y-4",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "bg-green-50 p-3 rounded-md border border-green-100",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-xs font-bold text-green-700 uppercase mb-1 block",
-										children: "O que funciona bem"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-green-900",
-										children: localAnswers.processes_well_defined
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "bg-red-50 p-3 rounded-md border border-red-100",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-xs font-bold text-red-700 uppercase mb-1 block",
-										children: "Pontos de Atenção"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-red-900",
-										children: localAnswers.processes_disorganized
-									})]
-								})]
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-							className: "space-y-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-								className: "text-lg font-semibold text-teal-800 flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-2 bg-teal-500 rounded-full" }), "Gestão Financeira"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200",
-								children: localAnswers.financial_management
-							})]
-						})
-					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
-					className: "bg-slate-50 border-t border-slate-100 p-6 flex justify-between",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						variant: "outline",
-						onClick: () => setIsCompleted(false),
-						children: "Revisar Respostas"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-						asChild: true,
-						className: "bg-blue-600 hover:bg-blue-700 text-white",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-							to: "/mercado",
-							children: ["Ir para Mercado (2B) ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "ml-2 size-4" })]
-						})
-					})]
-				})
-			]
-		})]
+	if (isCompleted) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OperationalSummary, {
+		answers: localAnswers,
+		clinicName: getClinicName(),
+		onRevision: () => setIsCompleted(false)
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "container max-w-3xl mx-auto py-10 px-4 min-h-[80vh] flex flex-col justify-center animate-fade-in-up",
@@ -36882,4 +36865,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BcS7gSMY.js.map
+//# sourceMappingURL=index-BvQ9QnPM.js.map
