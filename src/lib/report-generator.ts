@@ -5,8 +5,18 @@ import {
   Report3,
   Report4,
   Report5,
+  ReportFinal,
   SWOT,
 } from '@/stores/useStrategyStore'
+
+// Helper to determine tone and length settings
+const getSettings = (state: StrategyState) => {
+  const tone = state.clinicConfig.tom_linguagem || 'intermediario'
+  const length = state.clinicConfig.tamanho_relatorio || 'resumido_20'
+  const isFormal = tone === 'formal'
+  const isDetailed = length === 'detalhado_40'
+  return { tone, length, isFormal, isDetailed }
+}
 
 export const generateDiagnosticReport = (state: StrategyState): Report1 => {
   const { config, op, market, vision } = {
@@ -914,5 +924,90 @@ export const generateOperationalPlanReport = (
     sops,
     checklists,
     calendar,
+  }
+}
+
+export const generateFinalReport = (state: StrategyState): ReportFinal => {
+  const { isFormal, isDetailed } = getSettings(state)
+  const { clinicConfig } = state
+
+  // Ensure dependencies are generated if null (using live state)
+  const r1 = state.relatorio_1 || generateDiagnosticReport(state)
+  const r2 = state.relatorio_2 || generateStrategicDirectionReport(state)
+  const r3 = state.relatorio_3 || generateAdvancedStrategyReport(state)
+  const r4 = state.relatorio_4 || generateTacticalPlanReport(state)
+  const r5 = state.relatorio_5 || generateOperationalPlanReport(state)
+
+  const cover = {
+    title: 'Planejamento Estratégico Integrado 2026',
+    clinicName: clinicConfig.nome_clinica || 'Sua Clínica',
+    year: 2026,
+    subtitle: isFormal
+      ? 'Documento Oficial de Diretrizes e Ações'
+      : 'Guia de Sucesso para o Próximo Ano',
+  }
+
+  const introduction = {
+    context: isFormal
+      ? 'Este documento consolida o planejamento estratégico da organização para o ciclo anual de 2026. Fundamentado em metodologias consagradas de gestão (BSC, SWOT, Rumelt, Oceano Azul), ele visa alinhar a visão da diretoria com a execução operacional.'
+      : 'Bem-vindo ao mapa do sucesso da sua clínica para 2026! Juntamos aqui todas as análises, sonhos e planos práticos para garantir que todo o time esteja remando na mesma direção.',
+    objectives: isFormal
+      ? `O objetivo central é alcançar a meta de "${clinicConfig.objetivo_geral_2026}", garantindo sustentabilidade financeira e excelência na experiência do paciente.`
+      : `Nossa meta é clara: "${clinicConfig.objetivo_geral_2026}". Vamos transformar esse sonho em realidade, dia após dia.`,
+    methodology: isDetailed
+      ? 'A metodologia aplicada seguiu cinco etapas: 1) Diagnóstico Situacional profundo (Análise Interna e Externa); 2) Definição de Identidade e Direcionamento (Missão, Visão, Valores); 3) Análise Estratégica Avançada (Trade-offs e Diferenciação); 4) Planejamento Tático (OKRs e KPIs); e 5) Planejamento Operacional (Rotinas e Processos).'
+      : 'Utilizamos uma abordagem em 5 passos: Diagnóstico, Identidade, Estratégia, Tática e Operação.',
+  }
+
+  const part1_diagnosis = {
+    summary: r1.executiveSummary,
+    swot: r1.swot,
+    mainProblem: state.diagnosis.rumelt.challenge,
+  }
+
+  const part2_strategy = {
+    mission: r2.mission,
+    vision: r2.vision,
+    values: r2.values,
+    mapSummary: r2.strategicMapText,
+  }
+
+  const part3_advanced = {
+    policies: r3.guidingPolicies,
+    blueOceanSummary: `Para sair da competição irrelevante, focaremos em ELIMINAR ${r3.blueOcean.eliminate.join(', ')} e CRIAR ${r3.blueOcean.create.join(', ')}.`,
+  }
+
+  const part4_tactical = {
+    okrs: r4.okrs,
+    initiatives: r4.initiatives,
+  }
+
+  const part5_operational = {
+    routines: r5.routines,
+    calendar: r5.calendar,
+  }
+
+  const conclusion = {
+    closing: isFormal
+      ? 'A execução disciplinada deste plano é fundamental para o êxito organizacional. Recomenda-se a revisão trimestral das metas e o acompanhamento mensal dos indicadores chave (KPIs).'
+      : 'Agora é mão na massa! O plano é bom, mas o resultado vem da execução. Vamos acompanhar os números todo mês e celebrar cada vitória.',
+    nextSteps: [
+      'Divulgar a Missão e Visão para toda a equipe.',
+      'Configurar o CRM e ferramentas de gestão.',
+      'Iniciar as rotinas matinais (Daily) na recepção.',
+      'Revisar os OKRs ao final do Q1 (Março).',
+    ],
+  }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    cover,
+    introduction,
+    part1_diagnosis,
+    part2_strategy,
+    part3_advanced,
+    part4_tactical,
+    part5_operational,
+    conclusion,
   }
 }

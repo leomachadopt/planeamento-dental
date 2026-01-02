@@ -16,6 +16,7 @@ import {
   BrainCircuit,
   ListTodo,
   FileText,
+  BookOpenCheck,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -45,7 +46,12 @@ const menuItems = [
   { title: 'Análise Avançada', url: '/analise-avancada', icon: BrainCircuit },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
   { title: 'Plano Tático (4)', url: '/plano-tatico', icon: ListTodo },
-  { title: 'Plano Operacional (5)', url: '/plano-operacional', icon: FileText },
+  {
+    title: 'Plano Operacional (5)',
+    url: '/plano-operacional',
+    icon: FileText,
+  },
+  { title: 'Relatório Final', url: '/relatorio-final', icon: BookOpenCheck },
   { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
   { title: 'Configuração', url: '/configuracao', icon: Settings },
 ]
@@ -109,7 +115,7 @@ export default function Layout() {
         </Sidebar>
 
         <main className="flex-1 flex flex-col min-h-screen overflow-hidden transition-all duration-300 ease-in-out">
-          <header className="h-16 border-b border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm">
+          <header className="h-16 border-b border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm print:hidden">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="-ml-2" />
               <Separator orientation="vertical" className="h-6" />
@@ -142,7 +148,7 @@ export default function Layout() {
             <Outlet />
           </div>
 
-          <footer className="h-8 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 text-xs text-slate-500">
+          <footer className="h-8 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 text-xs text-slate-500 print:hidden">
             <span>Última sincronização: Hoje, 09:42</span>
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-green-500 animate-pulse" />

@@ -18899,6 +18899,20 @@ var Bell = createLucideIcon("bell", [["path", {
 	d: "M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326",
 	key: "11g9vi"
 }]]);
+var BookOpenCheck = createLucideIcon("book-open-check", [
+	["path", {
+		d: "M12 21V7",
+		key: "gj6g52"
+	}],
+	["path", {
+		d: "m16 12 2 2 4-4",
+		key: "mdajum"
+	}],
+	["path", {
+		d: "M22 6V4a1 1 0 0 0-1-1h-5a4 4 0 0 0-4 4 4 4 0 0 0-4-4H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h6a1 1 0 0 0 1-1v-1.3",
+		key: "8arnkb"
+	}]
+]);
 var BookOpen = createLucideIcon("book-open", [["path", {
 	d: "M12 7v14",
 	key: "1akyts"
@@ -26319,7 +26333,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$13({ inst: {
+			cachedValue = useState$14({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -26356,7 +26370,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$13 = React$3.useState, useEffect$1 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$3.useState, useEffect$1 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$3.useSyncExternalStore ? React$3.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26542,6 +26556,11 @@ var menuItems = [
 		icon: FileText
 	},
 	{
+		title: "Relatório Final",
+		url: "/relatorio-final",
+		icon: BookOpenCheck
+	},
+	{
 		title: "Execução (PDCA)",
 		url: "/execucao",
 		icon: Activity
@@ -26614,7 +26633,7 @@ function Layout() {
 			className: "flex-1 flex flex-col min-h-screen overflow-hidden transition-all duration-300 ease-in-out",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-					className: "h-16 border-b border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm",
+					className: "h-16 border-b border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm print:hidden",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-4",
 						children: [
@@ -26649,7 +26668,7 @@ function Layout() {
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("footer", {
-					className: "h-8 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 text-xs text-slate-500",
+					className: "h-8 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 text-xs text-slate-500 print:hidden",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Última sincronização: Hoje, 09:42" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "size-2 rounded-full bg-green-500 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -26946,6 +26965,7 @@ const useStrategyStore = create((set) => ({
 	relatorio_3: null,
 	relatorio_4: null,
 	relatorio_5: null,
+	relatorio_final: null,
 	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
@@ -26988,7 +27008,8 @@ const useStrategyStore = create((set) => ({
 	setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
 	setRelatorio3: (report) => set(() => ({ relatorio_3: report })),
 	setRelatorio4: (report) => set(() => ({ relatorio_4: report })),
-	setRelatorio5: (report) => set(() => ({ relatorio_5: report }))
+	setRelatorio5: (report) => set(() => ({ relatorio_5: report })),
+	setRelatorioFinal: (report) => set(() => ({ relatorio_final: report }))
 }));
 var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	ref,
@@ -27352,6 +27373,16 @@ function Index() {
 		]
 	});
 }
+var getSettings = (state) => {
+	const tone = state.clinicConfig.tom_linguagem || "intermediario";
+	const length = state.clinicConfig.tamanho_relatorio || "resumido_20";
+	return {
+		tone,
+		length,
+		isFormal: tone === "formal",
+		isDetailed: length === "detalhado_40"
+	};
+};
 const generateDiagnosticReport = (state) => {
 	const { config, op, market, vision } = {
 		config: state.clinicConfig,
@@ -28005,6 +28036,69 @@ const generateOperationalPlanReport = (state) => {
 				]
 			}
 		]
+	};
+};
+const generateFinalReport = (state) => {
+	const { isFormal, isDetailed } = getSettings(state);
+	const { clinicConfig } = state;
+	const r1 = state.relatorio_1 || generateDiagnosticReport(state);
+	const r2 = state.relatorio_2 || generateStrategicDirectionReport(state);
+	const r3 = state.relatorio_3 || generateAdvancedStrategyReport(state);
+	const r4 = state.relatorio_4 || generateTacticalPlanReport(state);
+	const r5 = state.relatorio_5 || generateOperationalPlanReport(state);
+	const cover = {
+		title: "Planejamento Estratégico Integrado 2026",
+		clinicName: clinicConfig.nome_clinica || "Sua Clínica",
+		year: 2026,
+		subtitle: isFormal ? "Documento Oficial de Diretrizes e Ações" : "Guia de Sucesso para o Próximo Ano"
+	};
+	const introduction = {
+		context: isFormal ? "Este documento consolida o planejamento estratégico da organização para o ciclo anual de 2026. Fundamentado em metodologias consagradas de gestão (BSC, SWOT, Rumelt, Oceano Azul), ele visa alinhar a visão da diretoria com a execução operacional." : "Bem-vindo ao mapa do sucesso da sua clínica para 2026! Juntamos aqui todas as análises, sonhos e planos práticos para garantir que todo o time esteja remando na mesma direção.",
+		objectives: isFormal ? `O objetivo central é alcançar a meta de "${clinicConfig.objetivo_geral_2026}", garantindo sustentabilidade financeira e excelência na experiência do paciente.` : `Nossa meta é clara: "${clinicConfig.objetivo_geral_2026}". Vamos transformar esse sonho em realidade, dia após dia.`,
+		methodology: isDetailed ? "A metodologia aplicada seguiu cinco etapas: 1) Diagnóstico Situacional profundo (Análise Interna e Externa); 2) Definição de Identidade e Direcionamento (Missão, Visão, Valores); 3) Análise Estratégica Avançada (Trade-offs e Diferenciação); 4) Planejamento Tático (OKRs e KPIs); e 5) Planejamento Operacional (Rotinas e Processos)." : "Utilizamos uma abordagem em 5 passos: Diagnóstico, Identidade, Estratégia, Tática e Operação."
+	};
+	const part1_diagnosis = {
+		summary: r1.executiveSummary,
+		swot: r1.swot,
+		mainProblem: state.diagnosis.rumelt.challenge
+	};
+	const part2_strategy = {
+		mission: r2.mission,
+		vision: r2.vision,
+		values: r2.values,
+		mapSummary: r2.strategicMapText
+	};
+	const part3_advanced = {
+		policies: r3.guidingPolicies,
+		blueOceanSummary: `Para sair da competição irrelevante, focaremos em ELIMINAR ${r3.blueOcean.eliminate.join(", ")} e CRIAR ${r3.blueOcean.create.join(", ")}.`
+	};
+	const part4_tactical = {
+		okrs: r4.okrs,
+		initiatives: r4.initiatives
+	};
+	const part5_operational = {
+		routines: r5.routines,
+		calendar: r5.calendar
+	};
+	const conclusion = {
+		closing: isFormal ? "A execução disciplinada deste plano é fundamental para o êxito organizacional. Recomenda-se a revisão trimestral das metas e o acompanhamento mensal dos indicadores chave (KPIs)." : "Agora é mão na massa! O plano é bom, mas o resultado vem da execução. Vamos acompanhar os números todo mês e celebrar cada vitória.",
+		nextSteps: [
+			"Divulgar a Missão e Visão para toda a equipe.",
+			"Configurar o CRM e ferramentas de gestão.",
+			"Iniciar as rotinas matinais (Daily) na recepção.",
+			"Revisar os OKRs ao final do Q1 (Março)."
+		]
+	};
+	return {
+		generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+		cover,
+		introduction,
+		part1_diagnosis,
+		part2_strategy,
+		part3_advanced,
+		part4_tactical,
+		part5_operational,
+		conclusion
 	};
 };
 var DirectionContext = import_react.createContext(void 0);
@@ -35082,6 +35176,394 @@ function AdvancedAnalysis() {
 		})]
 	});
 }
+function FinalReport() {
+	const state = useStrategyStore();
+	const { relatorio_final, setRelatorioFinal } = state;
+	const [isGenerating, setIsGenerating] = (0, import_react.useState)(false);
+	const handleGenerate = () => {
+		setIsGenerating(true);
+		setTimeout(() => {
+			setRelatorioFinal(generateFinalReport(state));
+			setIsGenerating(false);
+			toast.success("Relatório Final Integrado gerado com sucesso!");
+		}, 2500);
+	};
+	if (!relatorio_final) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex flex-col items-center justify-center min-h-[60vh] space-y-6 animate-fade-in text-center p-4",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "bg-slate-100 p-6 rounded-full",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, { className: "size-12 text-slate-500" })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "max-w-md space-y-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "text-2xl font-bold text-slate-900",
+					children: "Relatório Estratégico Final"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-slate-500",
+					children: "Consolide todos os dados gerados (Diagnóstico, Estratégia, Tática e Operação) em um documento único e profissional para 2026."
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				size: "lg",
+				onClick: handleGenerate,
+				disabled: isGenerating,
+				className: "bg-slate-900 text-white hover:bg-slate-800",
+				children: isGenerating ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "mr-2 size-4 animate-spin" }), "Compilando Dados..."] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BookOpen, { className: "mr-2 size-4" }), "Gerar Documento Oficial"] })
+			})
+		]
+	});
+	const { cover, introduction, part1_diagnosis, part2_strategy, part3_advanced, part4_tactical, part5_operational, conclusion } = relatorio_final;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-8 animate-fade-in pb-20",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-lg shadow-sm border border-slate-100 print:hidden sticky top-20 z-10",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "text-xl font-bold text-slate-900",
+				children: "Relatório Integrado 2026"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "text-sm text-slate-500",
+				children: ["Gerado em ", new Date(relatorio_final.generatedAt).toLocaleString()]
+			})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					variant: "outline",
+					onClick: handleGenerate,
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "mr-2 size-4" }), " Atualizar"]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					onClick: () => window.print(),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "mr-2 size-4" }), " Imprimir / PDF"]
+				})]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "max-w-[210mm] mx-auto bg-white shadow-lg print:shadow-none print:w-full",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "min-h-[297mm] p-16 flex flex-col justify-between border-b-2 border-slate-100 print:break-after-page",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-4",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-16 bg-slate-900 rounded-lg mb-8" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+								className: "text-5xl font-extrabold text-slate-900 tracking-tight leading-tight",
+								children: cover.title
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-2xl text-slate-500 font-light",
+								children: cover.subtitle
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-2 border-l-4 border-slate-900 pl-6",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-lg font-bold text-slate-900",
+							children: cover.clinicName
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-slate-500",
+							children: ["Ciclo Estratégico ", cover.year]
+						})]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "p-12 md:p-16 space-y-12 print:break-after-page",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "text-2xl font-bold text-slate-900 mb-4 border-b pb-2",
+						children: "1. Introdução"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-4 text-justify text-slate-700 leading-relaxed",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: introduction.context }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "font-medium bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400",
+								children: introduction.objectives
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm text-slate-500 italic",
+								children: introduction.methodology
+							})
+						]
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-2xl font-bold text-slate-900 mb-4 border-b pb-2",
+							children: "2. Diagnóstico Situacional"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-slate-700 mb-6",
+							children: part1_diagnosis.summary
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-6",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-green-50 p-4 rounded text-sm",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+										className: "text-green-800 block mb-2",
+										children: "FORÇAS"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "list-disc pl-4 space-y-1",
+										children: part1_diagnosis.swot.strengths.slice(0, 3).map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: s }, i))
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-red-50 p-4 rounded text-sm",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+										className: "text-red-800 block mb-2",
+										children: "FRAQUEZAS"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "list-disc pl-4 space-y-1",
+										children: part1_diagnosis.swot.weaknesses.slice(0, 3).map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: s }, i))
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "col-span-2 bg-slate-50 p-4 border border-slate-200 rounded text-center",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+										className: "block text-slate-500 text-xs uppercase mb-1",
+										children: "O Grande Desafio (Rumelt)"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "text-slate-900 font-medium",
+										children: [
+											"\"",
+											part1_diagnosis.mainProblem,
+											"\""
+										]
+									})]
+								})
+							]
+						})
+					] })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "p-12 md:p-16 space-y-12 bg-slate-50 print:break-after-page print:bg-white",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-2xl font-bold text-slate-900 mb-6 border-b pb-2",
+							children: "3. Identidade e Estratégia"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid md:grid-cols-3 gap-8 text-center mb-8",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "p-6 bg-white rounded-lg shadow-sm",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "size-8 mx-auto text-slate-400 mb-3" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+											className: "font-bold text-sm uppercase text-slate-500 mb-2",
+											children: "Missão"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-slate-800 text-sm leading-relaxed",
+											children: part2_strategy.mission
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "p-6 bg-white rounded-lg shadow-sm",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { className: "size-8 mx-auto text-slate-400 mb-3" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+											className: "font-bold text-sm uppercase text-slate-500 mb-2",
+											children: "Visão 2026"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-slate-800 text-sm leading-relaxed",
+											children: part2_strategy.vision
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "p-6 bg-white rounded-lg shadow-sm",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lightbulb, { className: "size-8 mx-auto text-slate-400 mb-3" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+											className: "font-bold text-sm uppercase text-slate-500 mb-2",
+											children: "Valores"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-slate-800 text-sm leading-relaxed",
+											children: part2_strategy.values.join(" • ")
+										})
+									]
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "bg-white p-6 rounded-lg shadow-sm",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+								className: "font-bold text-slate-800 mb-2",
+								children: "Lógica do Mapa Estratégico"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-slate-600 italic",
+								children: part2_strategy.mapSummary
+							})]
+						})
+					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "text-2xl font-bold text-slate-900 mb-6 border-b pb-2",
+						children: "4. Diretrizes Avançadas"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "bg-white p-6 rounded-lg border-l-4 border-blue-500",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+								className: "font-bold text-blue-900 mb-2",
+								children: "Movimento de Oceano Azul"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-slate-700",
+								children: part3_advanced.blueOceanSummary
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "bg-white p-6 rounded-lg",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+								className: "font-bold text-slate-800 mb-3",
+								children: "Políticas Orientadoras (Guiding Policies)"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+								className: "list-decimal pl-5 space-y-2 text-sm text-slate-700",
+								children: part3_advanced.policies.slice(0, 5).map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: p }, i))
+							})]
+						})]
+					})] })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "p-12 md:p-16 space-y-12 print:break-after-page",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "text-2xl font-bold text-slate-900 mb-6 border-b pb-2",
+						children: "5. Plano Tático (OKRs)"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-6",
+						children: part4_tactical.okrs.map((okr, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "border border-slate-200 rounded-lg",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bg-slate-50 px-4 py-2 border-b border-slate-200 flex justify-between items-center",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-bold text-slate-800 text-sm",
+									children: okr.objective
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+									variant: "outline",
+									children: okr.area
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "p-4",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+									className: "text-sm text-slate-600 space-y-1",
+									children: okr.krs.map((kr, kIdx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-1.5 bg-slate-300 rounded-full" }), kr]
+									}, kIdx))
+								})
+							})]
+						}, idx))
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "text-2xl font-bold text-slate-900 mb-6 border-b pb-2",
+						children: "Iniciativas Prioritárias (Roadmap)"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "grid grid-cols-2 gap-4",
+						children: [
+							"Q1",
+							"Q2",
+							"Q3",
+							"Q4"
+						].map((q) => {
+							const items = part4_tactical.initiatives.filter((i) => i.quarter === q);
+							if (items.length === 0) return null;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "border border-slate-200 rounded p-4 break-inside-avoid",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+									className: "font-bold text-slate-900 mb-3 border-b pb-1",
+									children: [q, " 2026"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+									className: "space-y-2",
+									children: items.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+										className: "text-sm flex justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-slate-700",
+											children: item.title
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-bold text-slate-400",
+											children: item.priority
+										})]
+									}, i))
+								})]
+							}, q);
+						})
+					})] })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "p-12 md:p-16 space-y-12",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "text-2xl font-bold text-slate-900 mb-6 border-b pb-2",
+						children: "6. Plano Operacional"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-6",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+								className: "font-bold text-slate-700",
+								children: "Rotinas Essenciais"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid md:grid-cols-2 gap-6",
+								children: part5_operational.routines.map((area, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-sm border border-slate-100 p-4 rounded bg-slate-50 break-inside-avoid",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+										className: "block mb-2 text-slate-900",
+										children: area.area
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+										className: "list-disc pl-4 text-slate-600 space-y-1",
+										children: area.routines[0].tasks.slice(0, 3).map((task, tIdx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: task }, tIdx))
+									})]
+								}, idx))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-8",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+									className: "font-bold text-slate-700 mb-4",
+									children: "Calendário de Ações"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "grid grid-cols-3 gap-2 text-xs",
+									children: part5_operational.calendar.map((m, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "border p-2 rounded text-center break-inside-avoid",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+											className: "block text-slate-800",
+											children: m.month.substring(0, 3)
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-slate-500 truncate block",
+											children: m.theme
+										})]
+									}, i))
+								})]
+							})
+						]
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+						className: "bg-slate-900 text-white p-8 rounded-lg mt-12 print:bg-white print:text-black print:border-2 print:border-black",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+								className: "text-2xl font-bold mb-4 flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "size-6" }), " Conclusão & Próximos Passos"]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mb-6 leading-relaxed opacity-90",
+								children: conclusion.closing
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "space-y-2",
+								children: conclusion.nextSteps.map((step, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "size-6 bg-white/10 rounded-full flex items-center justify-center text-xs font-bold print:bg-black/10",
+										children: idx + 1
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: step })]
+								}, idx))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-8 pt-6 border-t border-white/20 text-center text-sm opacity-50 print:border-black/20",
+								children: "Planejamento gerado via Clinique AI - Confidencial"
+							})
+						]
+					})]
+				})
+			]
+		})]
+	});
+}
 var NotFound = () => {
 	const location = useLocation();
 	(0, import_react.useEffect)(() => {
@@ -35166,6 +35648,10 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OperationalPlan, {})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					path: "/relatorio-final",
+					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinalReport, {})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 					path: "/execucao",
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Execution, {})
 				}),
@@ -35183,4 +35669,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-DV6g9Ix4.js.map
+//# sourceMappingURL=index-CkoL8cmj.js.map

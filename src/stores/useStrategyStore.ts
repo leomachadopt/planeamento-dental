@@ -233,6 +233,48 @@ export interface Report5 {
   calendar: CalendarMonth[]
 }
 
+export interface ReportFinal {
+  generatedAt: string
+  cover: {
+    title: string
+    clinicName: string
+    year: number
+    subtitle: string
+  }
+  introduction: {
+    context: string
+    objectives: string
+    methodology: string
+  }
+  part1_diagnosis: {
+    summary: string
+    swot: SWOT
+    mainProblem: string
+  }
+  part2_strategy: {
+    mission: string
+    vision: string
+    values: string[]
+    mapSummary: string
+  }
+  part3_advanced: {
+    policies: string[]
+    blueOceanSummary: string
+  }
+  part4_tactical: {
+    okrs: Report4['okrs']
+    initiatives: Report4['initiatives']
+  }
+  part5_operational: {
+    routines: AreaRoutines[]
+    calendar: CalendarMonth[]
+  }
+  conclusion: {
+    closing: string
+    nextSteps: string[]
+  }
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -273,6 +315,7 @@ export interface StrategyState {
   relatorio_3: Report3 | null
   relatorio_4: Report4 | null
   relatorio_5: Report5 | null
+  relatorio_final: ReportFinal | null
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -296,6 +339,7 @@ export interface StrategyState {
   setRelatorio3: (report: Report3) => void
   setRelatorio4: (report: Report4) => void
   setRelatorio5: (report: Report5) => void
+  setRelatorioFinal: (report: ReportFinal) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -457,6 +501,7 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   relatorio_3: null,
   relatorio_4: null,
   relatorio_5: null,
+  relatorio_final: null,
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -508,4 +553,5 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   setRelatorio3: (report) => set(() => ({ relatorio_3: report })),
   setRelatorio4: (report) => set(() => ({ relatorio_4: report })),
   setRelatorio5: (report) => set(() => ({ relatorio_5: report })),
+  setRelatorioFinal: (report) => set(() => ({ relatorio_final: report })),
 }))
