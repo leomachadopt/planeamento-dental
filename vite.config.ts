@@ -4,40 +4,56 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: '::',
-    port: 8080,
-  },
-  experimental: {
-    enableNativePlugin: true
-  },
-  build: {
-    minify: mode !== 'development',
-    sourcemap: mode === 'development',
-    rolldownOptions: {
-      onwarn(warning, warn) {
-        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
-          return
-        }
-        warn(warning)
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  
+  return {
+    server: {
+      host: '::',
+      port: 8080,
+      proxy: {
+        // Proxy para API routes durante desenvolvimento
+        '/api': {
+          target: env.VITE_API_URL || 'http://localhost:3000',
+          changeOrigin: true,
+          secure: false,
+        },
       },
     },
-  },
-  plugins: [react()],
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(mode ?? process.env.NODE_ENV ?? 'production'),
-  },
-  resolve: {
-    alias: [
-      {
-        find: '@',
-        replacement: path.resolve(__dirname, './src'),
+    experimental: {
+      enableNativePlugin: true
+    },
+    build: {
+      minify: mode !== 'development',
+      sourcemap: mode === 'development',
+      rolldownOptions: {
+        onwarn(warning, warn) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+            return
+          }
+          warn(warning)
+        },
       },
-      {
-        find: /zod\/v4\/core/,
-        replacement: path.resolve(__dirname, 'node_modules', 'zod', 'v4', 'core'),
-      }
-    ],
-  },
-}))
+    },
+    plugins: [react()],
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(mode ?? process.env.NODE_ENV ?? 'production'),
+    },
+    resolve: {
+      alias: [
+        {
+          find: '@',
+          replacement: path.resolve(__dirname, './src'),
+        },
+        {
+          find: /zod\/v4\/core/,
+          replacement: path.resolve(__dirname, 'node_modules', 'zod', 'v4', 'core'),
+        }
+      ],
+    },
+    // Excluir pg do bundle do frontend
+    optimizeDeps: {
+      exclude: ['pg'],
+    },
+  }
+})

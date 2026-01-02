@@ -34,6 +34,7 @@ import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import ClinicSelector from './ClinicSelector'
 
 const menuItems = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
@@ -119,10 +120,7 @@ export default function Layout() {
             <div className="flex items-center gap-4">
               <SidebarTrigger className="-ml-2" />
               <Separator orientation="vertical" className="h-6" />
-              <div className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 cursor-pointer hover:text-teal-600 transition-colors">
-                <span>Unidade Matriz - São Paulo</span>
-                <ChevronDown className="size-4" />
-              </div>
+              <ClinicSelector />
             </div>
 
             <div className="flex items-center gap-4">

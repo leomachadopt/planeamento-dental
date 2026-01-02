@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { api } from '@/lib/api'
+import { toast } from 'sonner'
 
 export type ActionStatus = 'Plan' | 'Do' | 'Check' | 'Act'
 
@@ -276,6 +278,12 @@ export interface ReportFinal {
 }
 
 export interface StrategyState {
+  // Database
+  currentClinicId: string | null
+  isLoading: boolean
+  isSaving: boolean
+
+  // Data
   clinicName: string
   config_inicial: ConfigInicial
   diagnosis: {
@@ -317,6 +325,7 @@ export interface StrategyState {
   relatorio_5: Report5 | null
   relatorio_final: ReportFinal | null
 
+  // Actions
   setConfigInicial: (config: ConfigInicial) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
   addBlueOceanItem: (
@@ -340,9 +349,20 @@ export interface StrategyState {
   setRelatorio4: (report: Report4) => void
   setRelatorio5: (report: Report5) => void
   setRelatorioFinal: (report: ReportFinal) => void
+
+  // Database actions
+  setCurrentClinicId: (clinicId: string | null) => void
+  loadClinicData: (clinicId: string) => Promise<void>
+  saveClinicData: () => Promise<void>
+  createNewClinic: (clinicName: string) => Promise<string>
 }
 
-export const useStrategyStore = create<StrategyState>((set) => ({
+export const useStrategyStore = create<StrategyState>((set, get) => ({
+  // Database state
+  currentClinicId: null,
+  isLoading: false,
+  isSaving: false,
+
   clinicName: 'Clínica Vida & Saúde',
   config_inicial: {
     tipo_clinica: '',
@@ -555,4 +575,58 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   setRelatorio4: (report) => set(() => ({ relatorio_4: report })),
   setRelatorio5: (report) => set(() => ({ relatorio_5: report })),
   setRelatorioFinal: (report) => set(() => ({ relatorio_final: report })),
+
+  // Database actions
+  setCurrentClinicId: (clinicId) => set({ currentClinicId: clinicId }),
+
+  loadClinicData: async (clinicId: string) => {
+    set({ isLoading: true })
+    try {
+      const data = await api.getClinic(clinicId)
+
+      set({
+        ...data,
+        currentClinicId: clinicId,
+        isLoading: false,
+      })
+
+      toast.success('Dados carregados com sucesso!')
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error)
+      toast.error('Erro ao carregar dados da clínica')
+      set({ isLoading: false })
+    }
+  },
+
+  saveClinicData: async () => {
+    const state = get()
+    if (!state.currentClinicId) {
+      toast.error('Nenhuma clínica selecionada')
+      return
+    }
+
+    set({ isSaving: true })
+    try {
+      await api.saveClinicData(state.currentClinicId, state)
+      toast.success('Dados salvos com sucesso!')
+      set({ isSaving: false })
+    } catch (error) {
+      console.error('Erro ao salvar dados:', error)
+      toast.error('Erro ao salvar dados')
+      set({ isSaving: false })
+    }
+  },
+
+  createNewClinic: async (clinicName: string) => {
+    try {
+      const { id } = await api.createClinic(clinicName)
+      set({ currentClinicId: id, clinicName: clinicName })
+      toast.success('Clínica criada com sucesso!')
+      return id
+    } catch (error) {
+      console.error('Erro ao criar clínica:', error)
+      toast.error('Erro ao criar clínica')
+      throw error
+    }
+  },
 }))
