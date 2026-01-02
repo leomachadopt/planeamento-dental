@@ -41,7 +41,7 @@ interface Question {
 }
 
 export default function MarketAssessment() {
-  const { marketAssessment, updateMarketAssessment, clinicConfig } =
+  const { marketAssessment, updateMarketAssessment, config_inicial } =
     useStrategyStore()
 
   const [currentStep, setCurrentStep] = useState(0)
@@ -50,8 +50,9 @@ export default function MarketAssessment() {
   const [isCompleted, setIsCompleted] = useState(false)
   const [vagueAnswerWarning, setVagueAnswerWarning] = useState(false)
 
-  const getClinicName = () => clinicConfig.nome_clinica || 'sua clínica'
-  const getClinicLocation = () => clinicConfig.localizacao || 'sua região'
+  // Safe access to configuration with fallbacks
+  const getClinicName = () => config_inicial?.nome_clinica || 'sua clínica'
+  const getClinicLocation = () => config_inicial?.localizacao || 'sua região'
 
   const QUESTIONS: Question[] = [
     {

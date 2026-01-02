@@ -34090,13 +34090,13 @@ function OperationalAssessment() {
 }
 var MIN_CHAR_LENGTH = 10;
 function MarketAssessment() {
-	const { marketAssessment, updateMarketAssessment, clinicConfig } = useStrategyStore();
+	const { marketAssessment, updateMarketAssessment, config_inicial } = useStrategyStore();
 	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
 	const [localAnswers, setLocalAnswers] = (0, import_react.useState)(marketAssessment);
 	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
 	const [vagueAnswerWarning, setVagueAnswerWarning] = (0, import_react.useState)(false);
-	const getClinicName = () => clinicConfig.nome_clinica || "sua clínica";
-	const getClinicLocation = () => clinicConfig.localizacao || "sua região";
+	const getClinicName = () => config_inicial?.nome_clinica || "sua clínica";
+	const getClinicLocation = () => config_inicial?.localizacao || "sua região";
 	const QUESTIONS$1 = [
 		{
 			key: "marketDescription",
@@ -36865,4 +36865,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BvQ9QnPM.js.map
+//# sourceMappingURL=index-D-erRKVR.js.map
