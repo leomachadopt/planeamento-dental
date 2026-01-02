@@ -84,6 +84,23 @@ export interface ManagerVision {
   }
 }
 
+export interface SWOT {
+  strengths: string[]
+  weaknesses: string[]
+  opportunities: string[]
+  threats: string[]
+}
+
+export interface Report1 {
+  generatedAt: string
+  executiveSummary: string
+  businessContext: string
+  operationAnalysis: string
+  marketAnalysis: string
+  swot: SWOT
+  insightsRisks: string[]
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -118,6 +135,7 @@ export interface StrategyState {
   operationalAssessment: OperationalAssessment
   marketAssessment: MarketAssessment
   managerVision: ManagerVision
+  relatorio_1: Report1 | null
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -135,6 +153,7 @@ export interface StrategyState {
   updateOperationalAssessment: (data: Partial<OperationalAssessment>) => void
   updateMarketAssessment: (data: Partial<MarketAssessment>) => void
   updateManagerVision: (data: Partial<ManagerVision>) => void
+  setRelatorio1: (report: Report1) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -283,6 +302,7 @@ export const useStrategyStore = create<StrategyState>((set) => ({
       satisfaction: { score: 5, justification: '' },
     },
   },
+  relatorio_1: null,
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -325,4 +345,5 @@ export const useStrategyStore = create<StrategyState>((set) => ({
     set((state) => ({
       managerVision: { ...state.managerVision, ...data },
     })),
+  setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
 }))

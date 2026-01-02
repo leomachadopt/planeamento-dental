@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useStrategyStore } from '@/stores/useStrategyStore'
+import { generateDiagnosticReport } from '@/lib/report-generator'
 import {
   Card,
   CardContent,
@@ -13,12 +14,34 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ShieldAlert, RefreshCw, Save, ArrowRight } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
+  ShieldAlert,
+  RefreshCw,
+  Save,
+  FileText,
+  BrainCircuit,
+  TrendingUp,
+  AlertTriangle,
+  Zap,
+  Target,
+} from 'lucide-react'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 export default function Diagnostic() {
-  const { diagnosis, updateRumelt } = useStrategyStore()
+  const state = useStrategyStore()
+  const { diagnosis, updateRumelt, relatorio_1, setRelatorio1 } = state
   const [rumeltData, setRumeltData] = useState(diagnosis.rumelt)
+  const [isGenerating, setIsGenerating] = useState(false)
 
   const handleSaveRumelt = () => {
     updateRumelt(rumeltData)
@@ -28,7 +51,6 @@ export default function Diagnostic() {
   }
 
   const generatePolicy = () => {
-    // Mock AI generation
     toast.info('Consultor AI está analisando seus dados...', { duration: 2000 })
     setTimeout(() => {
       setRumeltData((prev) => ({
@@ -40,6 +62,19 @@ export default function Diagnostic() {
     }, 2000)
   }
 
+  const handleGenerateReport = () => {
+    setIsGenerating(true)
+    // Simulate processing time for "AI" feel
+    setTimeout(() => {
+      const report = generateDiagnosticReport(state)
+      setRelatorio1(report)
+      setIsGenerating(false)
+      toast.success('Relatório gerado com sucesso!', {
+        description: 'Seu diagnóstico situacional está pronto.',
+      })
+    }, 1500)
+  }
+
   return (
     <div className="space-y-6 animate-fade-in-up">
       <div className="flex flex-col gap-2">
@@ -47,15 +82,276 @@ export default function Diagnostic() {
           Centro de Diagnóstico
         </h1>
         <p className="text-slate-500">
-          Identifique as forças do mercado e o desafio central da sua clínica.
+          Analise o cenário atual e gere relatórios estratégicos consolidados.
         </p>
       </div>
 
-      <Tabs defaultValue="porter" className="w-full">
-        <TabsList className="grid w-full md:w-[600px] grid-cols-2">
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full md:w-[800px] grid-cols-3">
+          <TabsTrigger value="overview">Relatório Consolidado</TabsTrigger>
           <TabsTrigger value="porter">Forças de Porter</TabsTrigger>
           <TabsTrigger value="rumelt">Diagnóstico de Rumelt</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="overview" className="mt-6 space-y-6">
+          {!relatorio_1 ? (
+            <Card className="border-2 border-dashed border-slate-200 bg-slate-50/50">
+              <CardContent className="flex flex-col items-center justify-center py-16 text-center space-y-4">
+                <div className="bg-teal-100 p-4 rounded-full">
+                  <FileText className="size-10 text-teal-600" />
+                </div>
+                <div className="space-y-2 max-w-md">
+                  <h3 className="text-xl font-semibold text-slate-900">
+                    Nenhum relatório gerado ainda
+                  </h3>
+                  <p className="text-slate-500">
+                    O sistema irá compilar os dados dos módulos 2A, 2B e 2C para
+                    criar um diagnóstico completo da sua clínica.
+                  </p>
+                </div>
+                <Button
+                  onClick={handleGenerateReport}
+                  disabled={isGenerating}
+                  className="bg-teal-600 hover:bg-teal-700 text-white min-w-[200px]"
+                >
+                  {isGenerating ? (
+                    <>
+                      <RefreshCw className="mr-2 size-4 animate-spin" />
+                      Gerando Análise...
+                    </>
+                  ) : (
+                    <>
+                      <BrainCircuit className="mr-2 size-4" />
+                      Gerar Diagnóstico 2026
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-8 animate-fade-in">
+              <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-slate-100">
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-teal-700 bg-teal-50">
+                    Gerado em:{' '}
+                    {new Date(relatorio_1.generatedAt).toLocaleDateString()}
+                  </Badge>
+                  <span className="text-xs text-slate-400">
+                    Versão 1.0 (Automática)
+                  </span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleGenerateReport}
+                  disabled={isGenerating}
+                >
+                  <RefreshCw
+                    className={cn(
+                      'mr-2 size-3',
+                      isGenerating && 'animate-spin',
+                    )}
+                  />
+                  Regerar
+                </Button>
+              </div>
+
+              {/* Executive Summary */}
+              <Card className="border-l-4 border-l-teal-500">
+                <CardHeader>
+                  <CardTitle>Sumário Executivo</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-700 leading-relaxed text-lg">
+                    {relatorio_1.executiveSummary}
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Context & Operations & Market Grid */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base text-slate-600 uppercase tracking-wide">
+                      Contexto & Operação
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm">
+                    <div className="bg-slate-50 p-3 rounded-md border border-slate-100">
+                      <h4 className="font-semibold text-slate-800 mb-1">
+                        Contexto do Negócio
+                      </h4>
+                      <p className="text-slate-600">
+                        {relatorio_1.businessContext}
+                      </p>
+                    </div>
+                    <div className="bg-slate-50 p-3 rounded-md border border-slate-100">
+                      <h4 className="font-semibold text-slate-800 mb-1">
+                        Análise Operacional
+                      </h4>
+                      <p className="text-slate-600">
+                        {relatorio_1.operationAnalysis}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base text-slate-600 uppercase tracking-wide">
+                      Mercado & Concorrência
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm">
+                    <div className="bg-blue-50 p-3 rounded-md border border-blue-100">
+                      <h4 className="font-semibold text-blue-800 mb-1">
+                        Panorama de Mercado
+                      </h4>
+                      <p className="text-slate-600">
+                        {relatorio_1.marketAnalysis}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* SWOT Matrix */}
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                  <Target className="size-5 text-teal-600" /> Matriz SWOT
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Strengths */}
+                  <Card className="bg-green-50/50 border-green-200 shadow-none">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-green-800 flex items-center gap-2 text-lg">
+                        <TrendingUp className="size-4" /> Forças (Strengths)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="list-disc pl-5 space-y-1 text-sm text-green-900">
+                        {relatorio_1.swot.strengths.length > 0 ? (
+                          relatorio_1.swot.strengths.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))
+                        ) : (
+                          <li className="italic opacity-50">
+                            Dados insuficientes
+                          </li>
+                        )}
+                      </ul>
+                    </CardContent>
+                  </Card>
+
+                  {/* Weaknesses */}
+                  <Card className="bg-red-50/50 border-red-200 shadow-none">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-red-800 flex items-center gap-2 text-lg">
+                        <AlertTriangle className="size-4" /> Fraquezas
+                        (Weaknesses)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="list-disc pl-5 space-y-1 text-sm text-red-900">
+                        {relatorio_1.swot.weaknesses.length > 0 ? (
+                          relatorio_1.swot.weaknesses.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))
+                        ) : (
+                          <li className="italic opacity-50">
+                            Dados insuficientes
+                          </li>
+                        )}
+                      </ul>
+                    </CardContent>
+                  </Card>
+
+                  {/* Opportunities */}
+                  <Card className="bg-blue-50/50 border-blue-200 shadow-none">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-blue-800 flex items-center gap-2 text-lg">
+                        <Zap className="size-4" /> Oportunidades (Opportunities)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="list-disc pl-5 space-y-1 text-sm text-blue-900">
+                        {relatorio_1.swot.opportunities.length > 0 ? (
+                          relatorio_1.swot.opportunities.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))
+                        ) : (
+                          <li className="italic opacity-50">
+                            Dados insuficientes
+                          </li>
+                        )}
+                      </ul>
+                    </CardContent>
+                  </Card>
+
+                  {/* Threats */}
+                  <Card className="bg-amber-50/50 border-amber-200 shadow-none">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-amber-800 flex items-center gap-2 text-lg">
+                        <ShieldAlert className="size-4" /> Ameaças (Threats)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="list-disc pl-5 space-y-1 text-sm text-amber-900">
+                        {relatorio_1.swot.threats.length > 0 ? (
+                          relatorio_1.swot.threats.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))
+                        ) : (
+                          <li className="italic opacity-50">
+                            Dados insuficientes
+                          </li>
+                        )}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Insights & Risks Table */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Insights Estratégicos & Riscos</CardTitle>
+                  <CardDescription>
+                    Pontos de atenção crítica para o planejamento 2026.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Insight / Risco Identificado</TableHead>
+                        <TableHead className="w-[150px] text-right">
+                          Prioridade
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {relatorio_1.insightsRisks.map((insight, idx) => (
+                        <TableRow key={idx}>
+                          <TableCell className="font-medium text-slate-700">
+                            {insight}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Badge
+                              variant={idx === 0 ? 'destructive' : 'secondary'}
+                            >
+                              {idx === 0 ? 'Alta' : 'Média'}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </TabsContent>
 
         <TabsContent value="porter" className="mt-6 space-y-6">
           <Card>

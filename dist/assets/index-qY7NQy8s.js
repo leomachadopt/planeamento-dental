@@ -18881,6 +18881,68 @@ var Bell = createLucideIcon("bell", [["path", {
 	d: "M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326",
 	key: "11g9vi"
 }]]);
+var BrainCircuit = createLucideIcon("brain-circuit", [
+	["path", {
+		d: "M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z",
+		key: "l5xja"
+	}],
+	["path", {
+		d: "M9 13a4.5 4.5 0 0 0 3-4",
+		key: "10igwf"
+	}],
+	["path", {
+		d: "M6.003 5.125A3 3 0 0 0 6.401 6.5",
+		key: "105sqy"
+	}],
+	["path", {
+		d: "M3.477 10.896a4 4 0 0 1 .585-.396",
+		key: "ql3yin"
+	}],
+	["path", {
+		d: "M6 18a4 4 0 0 1-1.967-.516",
+		key: "2e4loj"
+	}],
+	["path", {
+		d: "M12 13h4",
+		key: "1ku699"
+	}],
+	["path", {
+		d: "M12 18h6a2 2 0 0 1 2 2v1",
+		key: "105ag5"
+	}],
+	["path", {
+		d: "M12 8h8",
+		key: "1lhi5i"
+	}],
+	["path", {
+		d: "M16 8V5a2 2 0 0 1 2-2",
+		key: "u6izg6"
+	}],
+	["circle", {
+		cx: "16",
+		cy: "13",
+		r: ".5",
+		key: "ry7gng"
+	}],
+	["circle", {
+		cx: "18",
+		cy: "3",
+		r: ".5",
+		key: "1aiba7"
+	}],
+	["circle", {
+		cx: "20",
+		cy: "21",
+		r: ".5",
+		key: "yhc1fs"
+	}],
+	["circle", {
+		cx: "20",
+		cy: "8",
+		r: ".5",
+		key: "1e43v0"
+	}]
+]);
 var Calendar = createLucideIcon("calendar", [
 	["path", {
 		d: "M8 2v4",
@@ -19031,6 +19093,28 @@ var Eye = createLucideIcon("eye", [["path", {
 	r: "3",
 	key: "1v7zrd"
 }]]);
+var FileText = createLucideIcon("file-text", [
+	["path", {
+		d: "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",
+		key: "1oefj6"
+	}],
+	["path", {
+		d: "M14 2v5a1 1 0 0 0 1 1h5",
+		key: "wfsgrz"
+	}],
+	["path", {
+		d: "M10 9H8",
+		key: "b1mrlr"
+	}],
+	["path", {
+		d: "M16 13H8",
+		key: "t4e002"
+	}],
+	["path", {
+		d: "M16 17H8",
+		key: "z1uh3a"
+	}]
+]);
 var Globe = createLucideIcon("globe", [
 	["circle", {
 		cx: "12",
@@ -19388,6 +19472,10 @@ var X = createLucideIcon("x", [["path", {
 }], ["path", {
 	d: "m6 6 12 12",
 	key: "d8bk6v"
+}]]);
+var Zap = createLucideIcon("zap", [["path", {
+	d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
+	key: "1xq2db"
 }]]);
 var CLASS_PART_SEPARATOR = "-";
 var createClassGroupUtils = (config) => {
@@ -26572,6 +26660,7 @@ const useStrategyStore = create((set) => ({
 			}
 		}
 	},
+	relatorio_1: null,
 	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
@@ -26605,7 +26694,8 @@ const useStrategyStore = create((set) => ({
 	updateManagerVision: (data) => set((state) => ({ managerVision: {
 		...state.managerVision,
 		...data
-	} }))
+	} })),
+	setRelatorio1: (report) => set(() => ({ relatorio_1: report }))
 }));
 var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	ref,
@@ -26969,6 +27059,73 @@ function Index() {
 		]
 	});
 }
+const generateDiagnosticReport = (state) => {
+	const { config, op, market, vision } = {
+		config: state.clinicConfig,
+		op: state.operationalAssessment,
+		market: state.marketAssessment,
+		vision: state.managerVision
+	};
+	const tone = config.tom_linguagem || "intermediario";
+	const prefixes = {
+		formal: {
+			intro: "A presente análise tem como objetivo...",
+			context: "Conforme os dados coletados...",
+			swot: "A matriz SWOT evidencia...",
+			conclusion: "Conclui-se que o cenário atual..."
+		},
+		informal: {
+			intro: "Vamos dar uma olhada no diagnóstico da clínica...",
+			context: "Aqui está o que levantamos sobre o negócio...",
+			swot: "Separamos os pontos fortes e fracos...",
+			conclusion: "O que tudo isso quer dizer é..."
+		},
+		intermediario: {
+			intro: "Este relatório apresenta o diagnóstico situacional...",
+			context: "Com base nas informações da clínica...",
+			swot: "A análise SWOT destaca os seguintes pontos...",
+			conclusion: "Em resumo, identificamos que..."
+		}
+	};
+	const executiveSummary = `${(prefixes[tone] || prefixes.intermediario).intro} O objetivo estratégico para 2026 é "${config.objetivo_geral_2026 || "crescimento sustentável"}". Identificamos que a clínica está em estágio "${config.estagio_clinica || "de operação"}" e enfrenta desafios relacionados a "${vision.problems[0] || "gestão interna"}".`;
+	const businessContext = `A ${config.nome_clinica || "Clínica"}, localizada em ${config.localizacao || "local não informado"}, atua no segmento ${config.tipo_clinica} com foco no público ${config.publico_principal}. A gestão é composta por ${config.gestores_principais}.`;
+	const operationAnalysis = `A operação conta com uma equipe de ${op.team_composition || "profissionais diversos"} e estrutura física composta por ${op.infrastructure}. Os processos bem definidos incluem "${op.processes_well_defined}", enquanto os gargalos principais estão em "${op.processes_disorganized}". A gestão financeira é descrita como: ${op.financial_management}.`;
+	const marketAnalysis = `O mercado local é descrito como: ${market.marketDescription}. Os principais competidores identificados são ${market.competitors}. A clínica se diferencia por "${market.clinicStrengths}", mas enfrenta concorrência forte em "${market.competitorStrengths}". Os canais de aquisição principais são ${market.acquisitionChannels}.`;
+	const swot = {
+		strengths: [
+			op.processes_well_defined,
+			market.clinicStrengths,
+			market.patientCompliments
+		].filter((i) => i.length > 3),
+		weaknesses: [
+			op.processes_disorganized,
+			market.patientComplaints,
+			market.patientLoss ? `Perda de pacientes: ${market.patientLoss}` : "",
+			vision.problems[0]
+		].filter((i) => i.length > 3),
+		opportunities: vision.opportunities.filter((i) => i.length > 3),
+		threats: [
+			market.competitorStrengths,
+			vision.problems[1] || "",
+			vision.problems[2] || ""
+		].filter((i) => i.length > 3)
+	};
+	const insightsRisks = [
+		`Risco Crítico: ${vision.problems[0] || "Não identificado"}`,
+		`Oportunidade Imediata: ${vision.opportunities[0] || "Não identificada"}`,
+		`Atenção Financeira: Nota ${vision.ratings.financial.score}/10 - ${vision.ratings.financial.justification}`,
+		`Experiência do Paciente: Nota ${vision.ratings.satisfaction.score}/10 - ${vision.ratings.satisfaction.justification}`
+	];
+	return {
+		generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+		executiveSummary,
+		businessContext,
+		operationAnalysis,
+		marketAnalysis,
+		swot,
+		insightsRisks
+	};
+};
 var DirectionContext = import_react.createContext(void 0);
 function useDirection(localDir) {
 	const globalDir = import_react.useContext(DirectionContext);
@@ -27336,9 +27493,62 @@ var Label = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE
 	...props
 }));
 Label.displayName = Root$1.displayName;
+var Table = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	className: "relative w-full overflow-auto",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("table", {
+		ref,
+		className: cn("w-full caption-bottom text-sm", className),
+		...props
+	})
+}));
+Table.displayName = "Table";
+var TableHeader = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", {
+	ref,
+	className: cn("[&_tr]:border-b", className),
+	...props
+}));
+TableHeader.displayName = "TableHeader";
+var TableBody = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
+	ref,
+	className: cn("[&_tr:last-child]:border-0", className),
+	...props
+}));
+TableBody.displayName = "TableBody";
+var TableFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tfoot", {
+	ref,
+	className: cn("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className),
+	...props
+}));
+TableFooter.displayName = "TableFooter";
+var TableRow = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tr", {
+	ref,
+	className: cn("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className),
+	...props
+}));
+TableRow.displayName = "TableRow";
+var TableHead = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+	ref,
+	className: cn("h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", className),
+	...props
+}));
+TableHead.displayName = "TableHead";
+var TableCell = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+	ref,
+	className: cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className),
+	...props
+}));
+TableCell.displayName = "TableCell";
+var TableCaption = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("caption", {
+	ref,
+	className: cn("mt-4 text-sm text-muted-foreground", className),
+	...props
+}));
+TableCaption.displayName = "TableCaption";
 function Diagnostic() {
-	const { diagnosis, updateRumelt } = useStrategyStore();
+	const state = useStrategyStore();
+	const { diagnosis, updateRumelt, relatorio_1, setRelatorio1 } = state;
 	const [rumeltData, setRumeltData] = (0, import_react.useState)(diagnosis.rumelt);
+	const [isGenerating, setIsGenerating] = (0, import_react.useState)(false);
 	const handleSaveRumelt = () => {
 		updateRumelt(rumeltData);
 		toast.success("Diagnóstico atualizado com sucesso!", { description: "Sua política orientadora foi salva." });
@@ -27353,6 +27563,14 @@ function Diagnostic() {
 			toast.success("Política Orientadora sugerida!");
 		}, 2e3);
 	};
+	const handleGenerateReport = () => {
+		setIsGenerating(true);
+		setTimeout(() => {
+			setRelatorio1(generateDiagnosticReport(state));
+			setIsGenerating(false);
+			toast.success("Relatório gerado com sucesso!", { description: "Seu diagnóstico situacional está pronto." });
+		}, 1500);
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-6 animate-fade-in-up",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -27362,21 +27580,232 @@ function Diagnostic() {
 				children: "Centro de Diagnóstico"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-slate-500",
-				children: "Identifique as forças do mercado e o desafio central da sua clínica."
+				children: "Analise o cenário atual e gere relatórios estratégicos consolidados."
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs, {
-			defaultValue: "porter",
+			defaultValue: "overview",
 			className: "w-full",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsList, {
-					className: "grid w-full md:w-[600px] grid-cols-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-						value: "porter",
-						children: "Forças de Porter"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-						value: "rumelt",
-						children: "Diagnóstico de Rumelt"
-					})]
+					className: "grid w-full md:w-[800px] grid-cols-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "overview",
+							children: "Relatório Consolidado"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "porter",
+							children: "Forças de Porter"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "rumelt",
+							children: "Diagnóstico de Rumelt"
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "overview",
+					className: "mt-6 space-y-6",
+					children: !relatorio_1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+						className: "border-2 border-dashed border-slate-200 bg-slate-50/50",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+							className: "flex flex-col items-center justify-center py-16 text-center space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-teal-100 p-4 rounded-full",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, { className: "size-10 text-teal-600" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2 max-w-md",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-xl font-semibold text-slate-900",
+										children: "Nenhum relatório gerado ainda"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-slate-500",
+										children: "O sistema irá compilar os dados dos módulos 2A, 2B e 2C para criar um diagnóstico completo da sua clínica."
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									onClick: handleGenerateReport,
+									disabled: isGenerating,
+									className: "bg-teal-600 hover:bg-teal-700 text-white min-w-[200px]",
+									children: isGenerating ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "mr-2 size-4 animate-spin" }), "Gerando Análise..."] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrainCircuit, { className: "mr-2 size-4" }), "Gerar Diagnóstico 2026"] })
+								})
+							]
+						})
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-8 animate-fade-in",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-slate-100",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+										variant: "outline",
+										className: "text-teal-700 bg-teal-50",
+										children: [
+											"Gerado em:",
+											" ",
+											new Date(relatorio_1.generatedAt).toLocaleDateString()
+										]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs text-slate-400",
+										children: "Versão 1.0 (Automática)"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+									variant: "outline",
+									size: "sm",
+									onClick: handleGenerateReport,
+									disabled: isGenerating,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: cn("mr-2 size-3", isGenerating && "animate-spin") }), "Regerar"]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+								className: "border-l-4 border-l-teal-500",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, { children: "Sumário Executivo" }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-slate-700 leading-relaxed text-lg",
+									children: relatorio_1.executiveSummary
+								}) })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid md:grid-cols-2 gap-6",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+									className: "pb-2",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+										className: "text-base text-slate-600 uppercase tracking-wide",
+										children: "Contexto & Operação"
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+									className: "space-y-4 text-sm",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "bg-slate-50 p-3 rounded-md border border-slate-100",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+											className: "font-semibold text-slate-800 mb-1",
+											children: "Contexto do Negócio"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-slate-600",
+											children: relatorio_1.businessContext
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "bg-slate-50 p-3 rounded-md border border-slate-100",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+											className: "font-semibold text-slate-800 mb-1",
+											children: "Análise Operacional"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-slate-600",
+											children: relatorio_1.operationAnalysis
+										})]
+									})]
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+									className: "pb-2",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+										className: "text-base text-slate-600 uppercase tracking-wide",
+										children: "Mercado & Concorrência"
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+									className: "space-y-4 text-sm",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "bg-blue-50 p-3 rounded-md border border-blue-100",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+											className: "font-semibold text-blue-800 mb-1",
+											children: "Panorama de Mercado"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-slate-600",
+											children: relatorio_1.marketAnalysis
+										})]
+									})
+								})] })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+									className: "text-xl font-bold text-slate-800 flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { className: "size-5 text-teal-600" }), " Matriz SWOT"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+											className: "bg-green-50/50 border-green-200 shadow-none",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+												className: "pb-2",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+													className: "text-green-800 flex items-center gap-2 text-lg",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp$1, { className: "size-4" }), " Forças (Strengths)"]
+												})
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+												className: "list-disc pl-5 space-y-1 text-sm text-green-900",
+												children: relatorio_1.swot.strengths.length > 0 ? relatorio_1.swot.strengths.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: item }, i)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+													className: "italic opacity-50",
+													children: "Dados insuficientes"
+												})
+											}) })]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+											className: "bg-red-50/50 border-red-200 shadow-none",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+												className: "pb-2",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+													className: "text-red-800 flex items-center gap-2 text-lg",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "size-4" }), " Fraquezas (Weaknesses)"]
+												})
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+												className: "list-disc pl-5 space-y-1 text-sm text-red-900",
+												children: relatorio_1.swot.weaknesses.length > 0 ? relatorio_1.swot.weaknesses.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: item }, i)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+													className: "italic opacity-50",
+													children: "Dados insuficientes"
+												})
+											}) })]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+											className: "bg-blue-50/50 border-blue-200 shadow-none",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+												className: "pb-2",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+													className: "text-blue-800 flex items-center gap-2 text-lg",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Zap, { className: "size-4" }), " Oportunidades (Opportunities)"]
+												})
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+												className: "list-disc pl-5 space-y-1 text-sm text-blue-900",
+												children: relatorio_1.swot.opportunities.length > 0 ? relatorio_1.swot.opportunities.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: item }, i)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+													className: "italic opacity-50",
+													children: "Dados insuficientes"
+												})
+											}) })]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+											className: "bg-amber-50/50 border-amber-200 shadow-none",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+												className: "pb-2",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+													className: "text-amber-800 flex items-center gap-2 text-lg",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldAlert, { className: "size-4" }), " Ameaças (Threats)"]
+												})
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+												className: "list-disc pl-5 space-y-1 text-sm text-amber-900",
+												children: relatorio_1.swot.threats.length > 0 ? relatorio_1.swot.threats.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: item }, i)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+													className: "italic opacity-50",
+													children: "Dados insuficientes"
+												})
+											}) })]
+										})
+									]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, { children: "Insights Estratégicos & Riscos" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Pontos de atenção crítica para o planejamento 2026." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Insight / Risco Identificado" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+								className: "w-[150px] text-right",
+								children: "Prioridade"
+							})] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: relatorio_1.insightsRisks.map((insight, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "font-medium text-slate-700",
+								children: insight
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-right",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+									variant: idx === 0 ? "destructive" : "secondary",
+									children: idx === 0 ? "Alta" : "Média"
+								})
+							})] }, idx)) })] }) })] })
+						]
+					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
 					value: "porter",
@@ -29098,57 +29527,6 @@ function StrategicMap() {
 		})]
 	});
 }
-var Table = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-	className: "relative w-full overflow-auto",
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("table", {
-		ref,
-		className: cn("w-full caption-bottom text-sm", className),
-		...props
-	})
-}));
-Table.displayName = "Table";
-var TableHeader = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", {
-	ref,
-	className: cn("[&_tr]:border-b", className),
-	...props
-}));
-TableHeader.displayName = "TableHeader";
-var TableBody = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
-	ref,
-	className: cn("[&_tr:last-child]:border-0", className),
-	...props
-}));
-TableBody.displayName = "TableBody";
-var TableFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tfoot", {
-	ref,
-	className: cn("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className),
-	...props
-}));
-TableFooter.displayName = "TableFooter";
-var TableRow = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tr", {
-	ref,
-	className: cn("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className),
-	...props
-}));
-TableRow.displayName = "TableRow";
-var TableHead = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-	ref,
-	className: cn("h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", className),
-	...props
-}));
-TableHead.displayName = "TableHead";
-var TableCell = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-	ref,
-	className: cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className),
-	...props
-}));
-TableCell.displayName = "TableCell";
-var TableCaption = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("caption", {
-	ref,
-	className: cn("mt-4 text-sm text-muted-foreground", className),
-	...props
-}));
-TableCaption.displayName = "TableCaption";
 function Execution() {
 	const { actions, addAction, updateActionStatus } = useStrategyStore();
 	const [isModalOpen, setIsModalOpen] = (0, import_react.useState)(false);
@@ -31676,4 +32054,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-Uw7hO9VF.js.map
+//# sourceMappingURL=index-qY7NQy8s.js.map
