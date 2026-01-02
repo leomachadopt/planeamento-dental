@@ -26501,6 +26501,11 @@ var AvatarFallback = import_react.forwardRef(({ className, ...props }, ref) => /
 AvatarFallback.displayName = Fallback.displayName;
 var menuItems = [
 	{
+		title: "Passo 1",
+		url: "/configuracao",
+		icon: Settings
+	},
+	{
 		title: "Dashboard",
 		url: "/",
 		icon: LayoutDashboard
@@ -26564,11 +26569,6 @@ var menuItems = [
 		title: "Execução (PDCA)",
 		url: "/execucao",
 		icon: Activity
-	},
-	{
-		title: "Configuração",
-		url: "/configuracao",
-		icon: Settings
 	}
 ];
 function Layout() {
@@ -35748,4 +35748,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-CVBLv3_5.js.map
+//# sourceMappingURL=index-OUZeguv9.js.map

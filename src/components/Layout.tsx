@@ -36,6 +36,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 const menuItems = [
+  { title: 'Passo 1', url: '/configuracao', icon: Settings },
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
   { title: 'Operação (2A)', url: '/operacao', icon: ClipboardList },
   { title: 'Mercado (2B)', url: '/mercado', icon: Globe },
@@ -53,7 +54,6 @@ const menuItems = [
   },
   { title: 'Relatório Final', url: '/relatorio-final', icon: BookOpenCheck },
   { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
-  { title: 'Configuração', url: '/configuracao', icon: Settings },
 ]
 
 export default function Layout() {
