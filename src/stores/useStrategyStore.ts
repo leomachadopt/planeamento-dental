@@ -27,7 +27,7 @@ export interface OKR {
   keyResults: KeyResult[]
 }
 
-export interface ClinicConfig {
+export interface ConfigInicial {
   tipo_clinica: string
   nome_clinica: string
   localizacao: string
@@ -277,7 +277,7 @@ export interface ReportFinal {
 
 export interface StrategyState {
   clinicName: string
-  clinicConfig: ClinicConfig
+  config_inicial: ConfigInicial
   diagnosis: {
     porter: {
       rivalry: string
@@ -317,7 +317,7 @@ export interface StrategyState {
   relatorio_5: Report5 | null
   relatorio_final: ReportFinal | null
 
-  setClinicConfig: (config: ClinicConfig) => void
+  setConfigInicial: (config: ConfigInicial) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
   addBlueOceanItem: (
     category: 'eliminate' | 'reduce' | 'raise' | 'create',
@@ -344,7 +344,7 @@ export interface StrategyState {
 
 export const useStrategyStore = create<StrategyState>((set) => ({
   clinicName: 'Clínica Vida & Saúde',
-  clinicConfig: {
+  config_inicial: {
     tipo_clinica: '',
     nome_clinica: '',
     localizacao: '',
@@ -503,7 +503,8 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   relatorio_5: null,
   relatorio_final: null,
 
-  setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
+  setConfigInicial: (config) =>
+    set(() => ({ config_inicial: config, clinicName: config.nome_clinica })),
   updateRumelt: (data) =>
     set((state) => ({
       diagnosis: {

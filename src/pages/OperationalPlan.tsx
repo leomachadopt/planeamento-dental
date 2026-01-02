@@ -34,7 +34,7 @@ import {
 
 export default function OperationalPlan() {
   const state = useStrategyStore()
-  const { relatorio_5, setRelatorio5, clinicConfig } = state
+  const { relatorio_5, setRelatorio5, config_inicial } = state
   const [isGenerating, setIsGenerating] = useState(false)
 
   const handleGenerateReport = () => {

@@ -11,8 +11,8 @@ import {
 
 // Helper to determine tone and length settings
 const getSettings = (state: StrategyState) => {
-  const tone = state.clinicConfig.tom_linguagem || 'intermediario'
-  const length = state.clinicConfig.tamanho_relatorio || 'resumido_20'
+  const tone = state.config_inicial.tom_linguagem || 'intermediario'
+  const length = state.config_inicial.tamanho_relatorio || 'resumido_20'
   const isFormal = tone === 'formal'
   const isDetailed = length === 'detalhado_40'
   return { tone, length, isFormal, isDetailed }
@@ -20,7 +20,7 @@ const getSettings = (state: StrategyState) => {
 
 export const generateDiagnosticReport = (state: StrategyState): Report1 => {
   const { config, op, market, vision } = {
-    config: state.clinicConfig,
+    config: state.config_inicial,
     op: state.operationalAssessment,
     market: state.marketAssessment,
     vision: state.managerVision,
@@ -107,8 +107,9 @@ export const generateDiagnosticReport = (state: StrategyState): Report1 => {
 export const generateStrategicDirectionReport = (
   state: StrategyState,
 ): Report2 => {
-  const { identity, managerVision, diagnosis, jtbd, okrs, clinicConfig } = state
-  const tone = clinicConfig.tom_linguagem || 'intermediario'
+  const { identity, managerVision, diagnosis, jtbd, okrs, config_inicial } =
+    state
+  const tone = config_inicial.tom_linguagem || 'intermediario'
 
   // Helper for tone
   const t = (formal: string, informal: string) =>
@@ -232,11 +233,11 @@ export const generateAdvancedStrategyReport = (
     blueOcean,
     jtbd,
     relatorio_1,
-    clinicConfig,
+    config_inicial,
     managerVision,
     marketAssessment,
   } = state
-  const tone = clinicConfig.tom_linguagem || 'intermediario'
+  const tone = config_inicial.tom_linguagem || 'intermediario'
 
   // Tone helper
   const t = (formal: string, informal: string) =>
@@ -591,8 +592,8 @@ export const generateTacticalPlanReport = (state: StrategyState): Report4 => {
 export const generateOperationalPlanReport = (
   state: StrategyState,
 ): Report5 => {
-  const { clinicConfig } = state
-  const clinicName = clinicConfig.nome_clinica || 'a Clínica'
+  const { config_inicial } = state
+  const clinicName = config_inicial.nome_clinica || 'a Clínica'
 
   // 1. Routines
   const routines = [
@@ -929,7 +930,7 @@ export const generateOperationalPlanReport = (
 
 export const generateFinalReport = (state: StrategyState): ReportFinal => {
   const { isFormal, isDetailed } = getSettings(state)
-  const { clinicConfig } = state
+  const { config_inicial } = state
 
   // Ensure dependencies are generated if null (using live state)
   const r1 = state.relatorio_1 || generateDiagnosticReport(state)
@@ -940,7 +941,7 @@ export const generateFinalReport = (state: StrategyState): ReportFinal => {
 
   const cover = {
     title: 'Planejamento Estratégico Integrado 2026',
-    clinicName: clinicConfig.nome_clinica || 'Sua Clínica',
+    clinicName: config_inicial.nome_clinica || 'Sua Clínica',
     year: 2026,
     subtitle: isFormal
       ? 'Documento Oficial de Diretrizes e Ações'
@@ -952,8 +953,8 @@ export const generateFinalReport = (state: StrategyState): ReportFinal => {
       ? 'Este documento consolida o planejamento estratégico da organização para o ciclo anual de 2026. Fundamentado em metodologias consagradas de gestão (BSC, SWOT, Rumelt, Oceano Azul), ele visa alinhar a visão da diretoria com a execução operacional.'
       : 'Bem-vindo ao mapa do sucesso da sua clínica para 2026! Juntamos aqui todas as análises, sonhos e planos práticos para garantir que todo o time esteja remando na mesma direção.',
     objectives: isFormal
-      ? `O objetivo central é alcançar a meta de "${clinicConfig.objetivo_geral_2026}", garantindo sustentabilidade financeira e excelência na experiência do paciente.`
-      : `Nossa meta é clara: "${clinicConfig.objetivo_geral_2026}". Vamos transformar esse sonho em realidade, dia após dia.`,
+      ? `O objetivo central é alcançar a meta de "${config_inicial.objetivo_geral_2026}", garantindo sustentabilidade financeira e excelência na experiência do paciente.`
+      : `Nossa meta é clara: "${config_inicial.objetivo_geral_2026}". Vamos transformar esse sonho em realidade, dia após dia.`,
     methodology: isDetailed
       ? 'A metodologia aplicada seguiu cinco etapas: 1) Diagnóstico Situacional profundo (Análise Interna e Externa); 2) Definição de Identidade e Direcionamento (Missão, Visão, Valores); 3) Análise Estratégica Avançada (Trade-offs e Diferenciação); 4) Planejamento Tático (OKRs e KPIs); e 5) Planejamento Operacional (Rotinas e Processos).'
       : 'Utilizamos uma abordagem em 5 passos: Diagnóstico, Identidade, Estratégia, Tática e Operação.',

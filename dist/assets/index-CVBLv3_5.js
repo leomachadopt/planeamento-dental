@@ -26347,7 +26347,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				value,
 				getSnapshot
 			]);
-			useEffect$1(function() {
+			useEffect$2(function() {
 				checkIfSnapshotChanged(inst) && forceUpdate({ inst });
 				return subscribe$1(function() {
 					checkIfSnapshotChanged(inst) && forceUpdate({ inst });
@@ -26370,7 +26370,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$3.useState, useEffect$1 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$3 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$3.useState, useEffect$2 = React$3.useEffect, useLayoutEffect$1 = React$3.useLayoutEffect, useDebugValue$1 = React$3.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$3.useSyncExternalStore ? React$3.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26728,7 +26728,7 @@ var require_with_selector_development = /* @__PURE__ */ __commonJSMin(((exports)
 			return x$1 === y && (0 !== x$1 || 1 / x$1 === 1 / y) || x$1 !== x$1 && y !== y;
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$3 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore$1 = shim.useSyncExternalStore, useRef = React$3.useRef, useEffect$1 = React$3.useEffect, useMemo = React$3.useMemo, useDebugValue$1 = React$3.useDebugValue;
+		var React$3 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore$1 = shim.useSyncExternalStore, useRef = React$3.useRef, useEffect$2 = React$3.useEffect, useMemo = React$3.useMemo, useDebugValue$1 = React$3.useDebugValue;
 		exports.useSyncExternalStoreWithSelector = function(subscribe$1, getSnapshot, getServerSnapshot, selector, isEqual) {
 			var instRef = useRef(null);
 			if (null === instRef.current) {
@@ -26770,7 +26770,7 @@ var require_with_selector_development = /* @__PURE__ */ __commonJSMin(((exports)
 				isEqual
 			]);
 			var value = useSyncExternalStore$1(subscribe$1, instRef[0], instRef[1]);
-			useEffect$1(function() {
+			useEffect$2(function() {
 				inst.hasValue = !0;
 				inst.value = value;
 			}, [value]);
@@ -26806,7 +26806,7 @@ var createImpl = (createState) => {
 var create = (createState) => createState ? createImpl(createState) : createImpl;
 const useStrategyStore = create((set) => ({
 	clinicName: "Clínica Vida & Saúde",
-	clinicConfig: {
+	config_inicial: {
 		tipo_clinica: "",
 		nome_clinica: "",
 		localizacao: "",
@@ -26966,7 +26966,10 @@ const useStrategyStore = create((set) => ({
 	relatorio_4: null,
 	relatorio_5: null,
 	relatorio_final: null,
-	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
+	setConfigInicial: (config) => set(() => ({
+		config_inicial: config,
+		clinicName: config.nome_clinica
+	})),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
 		rumelt: {
@@ -27374,8 +27377,8 @@ function Index() {
 	});
 }
 var getSettings = (state) => {
-	const tone = state.clinicConfig.tom_linguagem || "intermediario";
-	const length = state.clinicConfig.tamanho_relatorio || "resumido_20";
+	const tone = state.config_inicial.tom_linguagem || "intermediario";
+	const length = state.config_inicial.tamanho_relatorio || "resumido_20";
 	return {
 		tone,
 		length,
@@ -27385,7 +27388,7 @@ var getSettings = (state) => {
 };
 const generateDiagnosticReport = (state) => {
 	const { config, op, market, vision } = {
-		config: state.clinicConfig,
+		config: state.config_inicial,
 		op: state.operationalAssessment,
 		market: state.marketAssessment,
 		vision: state.managerVision
@@ -27451,8 +27454,8 @@ const generateDiagnosticReport = (state) => {
 	};
 };
 const generateStrategicDirectionReport = (state) => {
-	const { identity: identity$1, managerVision, diagnosis, jtbd, okrs, clinicConfig } = state;
-	const tone = clinicConfig.tom_linguagem || "intermediario";
+	const { identity: identity$1, managerVision, diagnosis, jtbd, okrs, config_inicial } = state;
+	const tone = config_inicial.tom_linguagem || "intermediario";
 	const t = (formal, informal) => tone === "formal" ? formal : tone === "informal" ? informal : formal;
 	const mission = identity$1.reason || "Proporcionar saúde e bem-estar através de um atendimento de excelência.";
 	const vision = managerVision.vision2026 || identity$1.recognitionGoal || "Ser referência regional em qualidade assistencial e inovação até o final de 2026.";
@@ -27494,8 +27497,8 @@ const generateStrategicDirectionReport = (state) => {
 	};
 };
 const generateAdvancedStrategyReport = (state) => {
-	const { diagnosis, blueOcean, jtbd, relatorio_1, clinicConfig, managerVision, marketAssessment } = state;
-	clinicConfig.tom_linguagem;
+	const { diagnosis, blueOcean, jtbd, relatorio_1, config_inicial, managerVision, marketAssessment } = state;
+	config_inicial.tom_linguagem;
 	const portersForces = {
 		rivalry: diagnosis.porter.rivalry || "Alta rivalidade, com pressão por preços e marketing agressivo na região.",
 		entrants: diagnosis.porter.newEntrants || "Ameaça moderada, dependente de barreiras como capital inicial e reputação.",
@@ -27736,8 +27739,8 @@ const generateTacticalPlanReport = (state) => {
 	};
 };
 const generateOperationalPlanReport = (state) => {
-	const { clinicConfig } = state;
-	clinicConfig.nome_clinica;
+	const { config_inicial } = state;
+	config_inicial.nome_clinica;
 	return {
 		generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
 		routines: [
@@ -28040,7 +28043,7 @@ const generateOperationalPlanReport = (state) => {
 };
 const generateFinalReport = (state) => {
 	const { isFormal, isDetailed } = getSettings(state);
-	const { clinicConfig } = state;
+	const { config_inicial } = state;
 	const r1 = state.relatorio_1 || generateDiagnosticReport(state);
 	const r2 = state.relatorio_2 || generateStrategicDirectionReport(state);
 	const r3 = state.relatorio_3 || generateAdvancedStrategyReport(state);
@@ -28048,13 +28051,13 @@ const generateFinalReport = (state) => {
 	const r5 = state.relatorio_5 || generateOperationalPlanReport(state);
 	const cover = {
 		title: "Planejamento Estratégico Integrado 2026",
-		clinicName: clinicConfig.nome_clinica || "Sua Clínica",
+		clinicName: config_inicial.nome_clinica || "Sua Clínica",
 		year: 2026,
 		subtitle: isFormal ? "Documento Oficial de Diretrizes e Ações" : "Guia de Sucesso para o Próximo Ano"
 	};
 	const introduction = {
 		context: isFormal ? "Este documento consolida o planejamento estratégico da organização para o ciclo anual de 2026. Fundamentado em metodologias consagradas de gestão (BSC, SWOT, Rumelt, Oceano Azul), ele visa alinhar a visão da diretoria com a execução operacional." : "Bem-vindo ao mapa do sucesso da sua clínica para 2026! Juntamos aqui todas as análises, sonhos e planos práticos para garantir que todo o time esteja remando na mesma direção.",
-		objectives: isFormal ? `O objetivo central é alcançar a meta de "${clinicConfig.objetivo_geral_2026}", garantindo sustentabilidade financeira e excelência na experiência do paciente.` : `Nossa meta é clara: "${clinicConfig.objetivo_geral_2026}". Vamos transformar esse sonho em realidade, dia após dia.`,
+		objectives: isFormal ? `O objetivo central é alcançar a meta de "${config_inicial.objetivo_geral_2026}", garantindo sustentabilidade financeira e excelência na experiência do paciente.` : `Nossa meta é clara: "${config_inicial.objetivo_geral_2026}". Vamos transformar esse sonho em realidade, dia após dia.`,
 		methodology: isDetailed ? "A metodologia aplicada seguiu cinco etapas: 1) Diagnóstico Situacional profundo (Análise Interna e Externa); 2) Definição de Identidade e Direcionamento (Missão, Visão, Valores); 3) Análise Estratégica Avançada (Trade-offs e Diferenciação); 4) Planejamento Tático (OKRs e KPIs); e 5) Planejamento Operacional (Rotinas e Processos)." : "Utilizamos uma abordagem em 5 passos: Diagnóstico, Identidade, Estratégia, Tática e Operação."
 	};
 	const part1_diagnosis = {
@@ -31558,7 +31561,7 @@ var AccordionContent = import_react.forwardRef(({ className, children, ...props 
 AccordionContent.displayName = Content2.displayName;
 function OperationalPlan() {
 	const state = useStrategyStore();
-	const { relatorio_5, setRelatorio5, clinicConfig } = state;
+	const { relatorio_5, setRelatorio5, config_inicial } = state;
 	const [isGenerating, setIsGenerating] = (0, import_react.useState)(false);
 	const handleGenerateReport = () => {
 		setIsGenerating(true);
@@ -32303,10 +32306,9 @@ var QUESTIONS$1 = [
 	},
 	{
 		key: "gestores_principais",
-		title: "Quantos gestores participam da estratégia e quais seus cargos?",
-		description: "Ex: 2 gestores (Diretor Clínico e Gerente Administrativo).",
-		type: "text",
-		placeholder: "Descreva a estrutura de gestão..."
+		title: "Estrutura de Gestão",
+		description: "Quantos gestores participam da estratégia e quais seus cargos?",
+		type: "composite"
 	},
 	{
 		key: "objetivo_geral_2026",
@@ -32350,20 +32352,50 @@ var QUESTIONS$1 = [
 	}
 ];
 function SetupWizard() {
-	const { setClinicConfig, clinicConfig: savedConfig } = useStrategyStore();
+	const { setConfigInicial, config_inicial: savedConfig } = useStrategyStore();
 	const [currentStep, setCurrentStep] = (0, import_react.useState)(0);
 	const [answers, setAnswers] = (0, import_react.useState)(savedConfig);
 	const [isCompleted, setIsCompleted] = (0, import_react.useState)(false);
+	const [managerCount, setManagerCount] = (0, import_react.useState)("");
+	const [managerRoles, setManagerRoles] = (0, import_react.useState)("");
 	const currentQuestion = QUESTIONS$1[currentStep];
+	(0, import_react.useEffect)(() => {
+		if (currentQuestion.key === "gestores_principais" && savedConfig.gestores_principais) if (savedConfig.gestores_principais.includes("gestores:")) {
+			const [countPart, rolesPart] = savedConfig.gestores_principais.split("gestores:");
+			setManagerCount(countPart.trim());
+			setManagerRoles(rolesPart.trim());
+		} else setManagerRoles(savedConfig.gestores_principais);
+	}, [currentQuestion.key, savedConfig.gestores_principais]);
 	const handleNext = () => {
-		if (!answers[currentQuestion.key]) {
-			toast.error("Por favor, preencha o campo para continuar.");
-			return;
+		if (currentQuestion.key === "gestores_principais") {
+			if (!managerCount || !managerRoles) {
+				toast.error("Por favor, preencha a quantidade e os cargos.");
+				return;
+			}
+			const compositeValue = `${managerCount} gestores: ${managerRoles}`;
+			setAnswers((prev) => ({
+				...prev,
+				gestores_principais: compositeValue
+			}));
+			if (currentStep < QUESTIONS$1.length - 1) {
+				setCurrentStep((prev) => prev + 1);
+				return;
+			}
+		}
+		const key = currentQuestion.key;
+		if (currentQuestion.key !== "gestores_principais") {
+			if (!answers[key]) {
+				toast.error("Por favor, preencha o campo para continuar.");
+				return;
+			}
 		}
 		if (currentStep < QUESTIONS$1.length - 1) setCurrentStep((prev) => prev + 1);
 		else {
 			setIsCompleted(true);
-			setClinicConfig(answers);
+			setConfigInicial({
+				...answers,
+				gestores_principais: currentQuestion.key === "gestores_principais" ? `${managerCount} gestores: ${managerRoles}` : answers.gestores_principais || ""
+			});
 			toast.success("Configuração concluída com sucesso!");
 		}
 	};
@@ -32399,7 +32431,7 @@ function SetupWizard() {
 						className: "bg-slate-100 border-b border-slate-200",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 							className: "text-sm font-mono text-slate-500 uppercase",
-							children: "Output JSON gerado"
+							children: "Output JSON gerado (config_inicial)"
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
@@ -32508,6 +32540,47 @@ function SetupWizard() {
 									children: opt
 								}, opt)) })]
 							}),
+							currentQuestion.type === "composite" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid gap-6",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+										className: "text-base",
+										children: "Número de Gestores Principais"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										value: managerCount,
+										onValueChange: setManagerCount,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+											className: "h-12 text-lg",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione a quantidade" })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "1",
+												children: "1 Gestor"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "2-3",
+												children: "2 a 3 Gestores"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "4+",
+												children: "4 ou mais Gestores"
+											})
+										] })]
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+										className: "text-base",
+										children: "Quais são os cargos?"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										value: managerRoles,
+										onChange: (e) => setManagerRoles(e.target.value),
+										placeholder: "Ex: Diretor Técnico e Gerente Financeiro",
+										className: "h-12 text-lg"
+									})]
+								})]
+							}),
 							currentQuestion.type === "radio" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroup, {
 								value: answers[currentQuestion.key] || "",
 								onValueChange: handleInputChange,
@@ -32517,10 +32590,16 @@ function SetupWizard() {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RadioGroupItem, {
 										value: opt.value,
 										id: opt.value
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Label, {
 										htmlFor: opt.value,
 										className: "flex-1 cursor-pointer text-base font-medium text-slate-700",
-										children: opt.label
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "font-semibold",
+											children: opt.label
+										}), opt.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "text-sm font-normal text-slate-500 mt-1",
+											children: opt.description
+										})]
 									})]
 								}, opt.value))
 							})
@@ -35669,4 +35748,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-CkoL8cmj.js.map
+//# sourceMappingURL=index-CVBLv3_5.js.map

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useStrategyStore, ClinicConfig } from '@/stores/useStrategyStore'
+import { useState, useEffect } from 'react'
+import { useStrategyStore, ConfigInicial } from '@/stores/useStrategyStore'
 import {
   Card,
   CardContent,
@@ -76,10 +76,10 @@ const QUESTIONS = [
   },
   {
     key: 'gestores_principais',
-    title: 'Quantos gestores participam da estratégia e quais seus cargos?',
-    description: 'Ex: 2 gestores (Diretor Clínico e Gerente Administrativo).',
-    type: 'text',
-    placeholder: 'Descreva a estrutura de gestão...',
+    title: 'Estrutura de Gestão',
+    description:
+      'Quantos gestores participam da estratégia e quais seus cargos?',
+    type: 'composite',
   },
   {
     key: 'objetivo_geral_2026',
@@ -123,27 +123,76 @@ const QUESTIONS = [
 ]
 
 export default function SetupWizard() {
-  const { setClinicConfig, clinicConfig: savedConfig } = useStrategyStore()
+  const { setConfigInicial, config_inicial: savedConfig } = useStrategyStore()
   const [currentStep, setCurrentStep] = useState(0)
-  const [answers, setAnswers] = useState<Partial<ClinicConfig>>(savedConfig)
+  const [answers, setAnswers] = useState<Partial<ConfigInicial>>(savedConfig)
   const [isCompleted, setIsCompleted] = useState(false)
+
+  // Custom state for step 6 (Management)
+  const [managerCount, setManagerCount] = useState('')
+  const [managerRoles, setManagerRoles] = useState('')
 
   const currentQuestion = QUESTIONS[currentStep]
 
-  const handleNext = () => {
-    const key = currentQuestion.key as keyof ClinicConfig
-    const value = answers[key]
+  // Initialize custom fields if data exists
+  useEffect(() => {
+    if (
+      currentQuestion.key === 'gestores_principais' &&
+      savedConfig.gestores_principais
+    ) {
+      if (savedConfig.gestores_principais.includes('gestores:')) {
+        const [countPart, rolesPart] =
+          savedConfig.gestores_principais.split('gestores:')
+        setManagerCount(countPart.trim())
+        setManagerRoles(rolesPart.trim())
+      } else {
+        setManagerRoles(savedConfig.gestores_principais)
+      }
+    }
+  }, [currentQuestion.key, savedConfig.gestores_principais])
 
-    if (!value) {
-      toast.error('Por favor, preencha o campo para continuar.')
-      return
+  const handleNext = () => {
+    // Handling Composite Question 6
+    if (currentQuestion.key === 'gestores_principais') {
+      if (!managerCount || !managerRoles) {
+        toast.error('Por favor, preencha a quantidade e os cargos.')
+        return
+      }
+      // Save composite string
+      const compositeValue = `${managerCount} gestores: ${managerRoles}`
+      setAnswers((prev) => ({ ...prev, gestores_principais: compositeValue }))
+
+      if (currentStep < QUESTIONS.length - 1) {
+        setCurrentStep((prev) => prev + 1)
+        return
+      }
+    }
+
+    const key = currentQuestion.key as keyof ConfigInicial
+
+    // For normal questions check answers state
+    if (currentQuestion.key !== 'gestores_principais') {
+      const value = answers[key]
+      if (!value) {
+        toast.error('Por favor, preencha o campo para continuar.')
+        return
+      }
     }
 
     if (currentStep < QUESTIONS.length - 1) {
       setCurrentStep((prev) => prev + 1)
     } else {
       setIsCompleted(true)
-      setClinicConfig(answers as ClinicConfig)
+      // Final save.
+      const finalConfig = {
+        ...answers,
+        gestores_principais:
+          currentQuestion.key === 'gestores_principais'
+            ? `${managerCount} gestores: ${managerRoles}`
+            : answers.gestores_principais || '',
+      } as ConfigInicial
+
+      setConfigInicial(finalConfig)
       toast.success('Configuração concluída com sucesso!')
     }
   }
@@ -180,7 +229,7 @@ export default function SetupWizard() {
         <Card className="w-full max-w-2xl bg-slate-50 border-slate-200 shadow-inner overflow-hidden">
           <CardHeader className="bg-slate-100 border-b border-slate-200">
             <CardTitle className="text-sm font-mono text-slate-500 uppercase">
-              Output JSON gerado
+              Output JSON gerado (config_inicial)
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
@@ -254,7 +303,7 @@ export default function SetupWizard() {
                 autoFocus
                 value={
                   (answers[
-                    currentQuestion.key as keyof ClinicConfig
+                    currentQuestion.key as keyof ConfigInicial
                   ] as string) || ''
                 }
                 onChange={(e) => handleInputChange(e.target.value)}
@@ -269,7 +318,7 @@ export default function SetupWizard() {
                 autoFocus
                 value={
                   (answers[
-                    currentQuestion.key as keyof ClinicConfig
+                    currentQuestion.key as keyof ConfigInicial
                   ] as string) || ''
                 }
                 onChange={(e) => handleInputChange(e.target.value)}
@@ -282,7 +331,7 @@ export default function SetupWizard() {
               <Select
                 value={
                   (answers[
-                    currentQuestion.key as keyof ClinicConfig
+                    currentQuestion.key as keyof ConfigInicial
                   ] as string) || ''
                 }
                 onValueChange={handleInputChange}
@@ -304,11 +353,40 @@ export default function SetupWizard() {
               </Select>
             )}
 
+            {currentQuestion.type === 'composite' && (
+              <div className="grid gap-6">
+                <div className="space-y-2">
+                  <Label className="text-base">
+                    Número de Gestores Principais
+                  </Label>
+                  <Select value={managerCount} onValueChange={setManagerCount}>
+                    <SelectTrigger className="h-12 text-lg">
+                      <SelectValue placeholder="Selecione a quantidade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 Gestor</SelectItem>
+                      <SelectItem value="2-3">2 a 3 Gestores</SelectItem>
+                      <SelectItem value="4+">4 ou mais Gestores</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-base">Quais são os cargos?</Label>
+                  <Input
+                    value={managerRoles}
+                    onChange={(e) => setManagerRoles(e.target.value)}
+                    placeholder="Ex: Diretor Técnico e Gerente Financeiro"
+                    className="h-12 text-lg"
+                  />
+                </div>
+              </div>
+            )}
+
             {currentQuestion.type === 'radio' && (
               <RadioGroup
                 value={
                   (answers[
-                    currentQuestion.key as keyof ClinicConfig
+                    currentQuestion.key as keyof ConfigInicial
                   ] as string) || ''
                 }
                 onValueChange={handleInputChange}
@@ -319,7 +397,7 @@ export default function SetupWizard() {
                     key={opt.value}
                     className={cn(
                       'flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors',
-                      answers[currentQuestion.key as keyof ClinicConfig] ===
+                      answers[currentQuestion.key as keyof ConfigInicial] ===
                         opt.value
                         ? 'border-teal-500 bg-teal-50'
                         : 'border-slate-200',
@@ -330,7 +408,12 @@ export default function SetupWizard() {
                       htmlFor={opt.value}
                       className="flex-1 cursor-pointer text-base font-medium text-slate-700"
                     >
-                      {opt.label}
+                      <div className="font-semibold">{opt.label}</div>
+                      {opt.description && (
+                        <div className="text-sm font-normal text-slate-500 mt-1">
+                          {opt.description}
+                        </div>
+                      )}
                     </Label>
                   </div>
                 ))}
