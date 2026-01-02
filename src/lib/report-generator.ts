@@ -3,6 +3,7 @@ import {
   Report1,
   Report2,
   Report3,
+  Report4,
   SWOT,
 } from '@/stores/useStrategyStore'
 
@@ -402,5 +403,176 @@ export const generateAdvancedStrategyReport = (
     blueOcean: blueOceanFinal,
     guidingPolicies,
     tradeOffs,
+  }
+}
+
+export const generateTacticalPlanReport = (state: StrategyState): Report4 => {
+  const { managerVision, okrs, actions, blueOcean, diagnosis } = state
+
+  // 1. Generate OKRs
+  // Based on BSC perspectives and Manager Vision
+  const generatedOkrs = [
+    {
+      id: 'okr1',
+      objective: 'Maximizar a eficiência e a saúde financeira',
+      area: 'Financeiro',
+      krs: [
+        `Atingir faturamento mensal de ${managerVision.goals.revenue || 'R$ 150.000'}`,
+        'Manter margem líquida acima de 25%',
+        'Reduzir custos fixos em 10% via automação',
+      ],
+    },
+    {
+      id: 'okr2',
+      objective: 'Oferecer a melhor experiência do paciente na região',
+      area: 'Clientes',
+      krs: [
+        `Alcançar NPS de ${managerVision.goals.nps || '75'}`,
+        `Taxa de ocupação de ${managerVision.goals.occupancy || '80%'}`,
+        'Reduzir tempo de espera na recepção para < 10min',
+      ],
+    },
+    {
+      id: 'okr3',
+      objective: 'Digitalizar e agilizar a operação interna',
+      area: 'Processos',
+      krs: [
+        '100% dos agendamentos integrados ao CRM',
+        'Implantar pesquisa de satisfação automatizada',
+        'Reduzir taxa de no-show para < 5%',
+      ],
+    },
+    {
+      id: 'okr4',
+      objective: 'Construir um time de alta performance',
+      area: 'Pessoas',
+      krs: [
+        'Realizar treinamentos trimestrais com toda a equipe',
+        'Implementar avaliação de desempenho semestral',
+        'Manter turnover abaixo de 10%',
+      ],
+    },
+  ]
+
+  // Use existing OKRs if available to enrich or replace default ones logic could be complex,
+  // here we keep the generated ones as suggestions for the report or append existing ones if unique.
+  // For simplicity, we stick to the generated structure to ensure coverage.
+
+  // 2. KPIs by Area
+  const kpis = {
+    finance: [
+      'Faturamento Bruto',
+      'Margem de Contribuição',
+      'Ticket Médio',
+      'EBITDA',
+    ],
+    clients: [
+      'NPS (Net Promoter Score)',
+      'CAC (Custo de Aquisição)',
+      'LTV (Lifetime Value)',
+      'Taxa de Retorno',
+    ],
+    processes: [
+      'Taxa de Ocupação',
+      'Tempo Médio de Atendimento',
+      'Taxa de No-Show',
+      'Absenteísmo',
+    ],
+    people: [
+      'eNPS (Satisfação do Colaborador)',
+      'Turnover',
+      'Horas de Treinamento',
+      'Produtividade por Colaborador',
+    ],
+    marketing: [
+      'Leads Gerados',
+      'Taxa de Conversão',
+      'ROI de Campanhas',
+      'Custo por Lead (CPL)',
+    ],
+  }
+
+  // 3. Initiatives Mapping (BSC + Blue Ocean + Actions)
+  const initiatives = []
+
+  // Add Blue Ocean Initiatives
+  blueOcean.create.forEach((item, idx) => {
+    initiatives.push({
+      id: `bo-create-${idx}`,
+      title: `Criar: ${item}`,
+      relatedObjective: 'Inovação e Crescimento',
+      priority: 'Alta' as const,
+      impact: 'Alto' as const,
+      effort: 'Alto' as const,
+      quarter: idx % 2 === 0 ? ('Q1' as const) : ('Q2' as const),
+    })
+  })
+
+  blueOcean.eliminate.forEach((item, idx) => {
+    initiatives.push({
+      id: `bo-elim-${idx}`,
+      title: `Eliminar: ${item}`,
+      relatedObjective: 'Eficiência Operacional',
+      priority: 'Média' as const,
+      impact: 'Médio' as const,
+      effort: 'Baixo' as const,
+      quarter: 'Q1' as const,
+    })
+  })
+
+  // Add existing actions
+  actions.forEach((action) => {
+    initiatives.push({
+      id: action.id,
+      title: action.title,
+      relatedObjective: 'Execução Tática',
+      priority: 'Alta' as const,
+      impact: 'Médio' as const,
+      effort: 'Médio' as const,
+      quarter: 'Q1' as const, // Default to Q1 for existing actions
+    })
+  })
+
+  // Add generic initiatives based on diagnosis if few actions exist
+  if (initiatives.length < 5) {
+    initiatives.push(
+      {
+        id: 'gen-1',
+        title: 'Implementar pesquisa de NPS recorrente',
+        relatedObjective: 'Excelência em Clientes',
+        priority: 'Alta',
+        impact: 'Alto',
+        effort: 'Baixo',
+        quarter: 'Q1',
+      },
+      {
+        id: 'gen-2',
+        title: 'Revisão de precificação de procedimentos',
+        relatedObjective: 'Saúde Financeira',
+        priority: 'Alta',
+        impact: 'Alto',
+        effort: 'Médio',
+        quarter: 'Q2',
+      },
+      {
+        id: 'gen-3',
+        title: 'Treinamento de vendas para recepção',
+        relatedObjective: 'Crescimento de Receita',
+        priority: 'Média',
+        impact: 'Alto',
+        effort: 'Médio',
+        quarter: 'Q2',
+      },
+    )
+  }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    okrs: generatedOkrs,
+    kpis,
+    initiatives: initiatives.sort((a, b) => {
+      const priorityOrder = { Alta: 3, Média: 2, Baixa: 1 }
+      return priorityOrder[b.priority] - priorityOrder[a.priority]
+    }),
   }
 }

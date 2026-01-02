@@ -169,6 +169,32 @@ export interface Report3 {
   tradeOffs: string[]
 }
 
+export interface Report4 {
+  generatedAt: string
+  okrs: {
+    id: string
+    objective: string
+    area: string
+    krs: string[]
+  }[]
+  kpis: {
+    finance: string[]
+    clients: string[]
+    processes: string[]
+    people: string[]
+    marketing: string[]
+  }
+  initiatives: {
+    id: string
+    title: string
+    relatedObjective: string
+    priority: 'Alta' | 'Média' | 'Baixa'
+    impact: 'Alto' | 'Médio' | 'Baixo'
+    effort: 'Alto' | 'Médio' | 'Baixo'
+    quarter: 'Q1' | 'Q2' | 'Q3' | 'Q4'
+  }[]
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -207,6 +233,7 @@ export interface StrategyState {
   relatorio_1: Report1 | null
   relatorio_2: Report2 | null
   relatorio_3: Report3 | null
+  relatorio_4: Report4 | null
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -228,6 +255,7 @@ export interface StrategyState {
   setRelatorio1: (report: Report1) => void
   setRelatorio2: (report: Report2) => void
   setRelatorio3: (report: Report3) => void
+  setRelatorio4: (report: Report4) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -387,6 +415,7 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   relatorio_1: null,
   relatorio_2: null,
   relatorio_3: null,
+  relatorio_4: null,
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -436,4 +465,5 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
   setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
   setRelatorio3: (report) => set(() => ({ relatorio_3: report })),
+  setRelatorio4: (report) => set(() => ({ relatorio_4: report })),
 }))

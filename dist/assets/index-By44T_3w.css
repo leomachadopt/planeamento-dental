@@ -955,6 +955,11 @@ section[aria-label='Notifications alt+T'] {
   display: none;
 }
 
+.size-1{
+  width: 0.25rem;
+  height: 0.25rem;
+}
+
 .size-10{
   width: 2.5rem;
   height: 2.5rem;
@@ -1174,6 +1179,10 @@ section[aria-label='Notifications alt+T'] {
 
 .w-11{
   width: 2.75rem;
+}
+
+.w-12{
+  width: 3rem;
 }
 
 .w-2{
@@ -1531,6 +1540,10 @@ section[aria-label='Notifications alt+T'] {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.grid-cols-4{
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .flex-row{
   flex-direction: row;
 }
@@ -1782,6 +1795,10 @@ section[aria-label='Notifications alt+T'] {
   border-width: 1px;
 }
 
+.border-0{
+  border-width: 0px;
+}
+
 .border-2{
   border-width: 2px;
 }
@@ -1898,6 +1915,11 @@ section[aria-label='Notifications alt+T'] {
 
 .border-input{
   border-color: hsl(var(--input));
+}
+
+.border-orange-200{
+  --tw-border-opacity: 1;
+  border-color: rgb(254 215 170 / var(--tw-border-opacity, 1));
 }
 
 .border-primary{
@@ -2063,6 +2085,11 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--accent));
 }
 
+.bg-amber-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 243 199 / var(--tw-bg-opacity, 1));
+}
+
 .bg-amber-200{
   --tw-bg-opacity: 1;
   background-color: rgb(253 230 138 / var(--tw-bg-opacity, 1));
@@ -2203,6 +2230,21 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--muted) / 0.5);
 }
 
+.bg-orange-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 237 213 / var(--tw-bg-opacity, 1));
+}
+
+.bg-orange-50{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 247 237 / var(--tw-bg-opacity, 1));
+}
+
+.bg-orange-600{
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 88 12 / var(--tw-bg-opacity, 1));
+}
+
 .bg-popover{
   background-color: hsl(var(--popover));
 }
@@ -2229,6 +2271,11 @@ section[aria-label='Notifications alt+T'] {
 .bg-purple-600{
   --tw-bg-opacity: 1;
   background-color: rgb(147 51 234 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
 }
 
 .bg-red-200{
@@ -2336,6 +2383,18 @@ section[aria-label='Notifications alt+T'] {
   --tw-gradient-from: #fff var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-blue-50{
+  --tw-gradient-to: #eff6ff var(--tw-gradient-to-position);
+}
+
+.to-green-50{
+  --tw-gradient-to: #f0fdf4 var(--tw-gradient-to-position);
+}
+
+.to-orange-50{
+  --tw-gradient-to: #fff7ed var(--tw-gradient-to-position);
 }
 
 .to-slate-50{
@@ -2844,6 +2903,16 @@ section[aria-label='Notifications alt+T'] {
 .text-orange-600{
   --tw-text-opacity: 1;
   color: rgb(234 88 12 / var(--tw-text-opacity, 1));
+}
+
+.text-orange-700{
+  --tw-text-opacity: 1;
+  color: rgb(194 65 12 / var(--tw-text-opacity, 1));
+}
+
+.text-orange-800{
+  --tw-text-opacity: 1;
+  color: rgb(154 52 18 / var(--tw-text-opacity, 1));
 }
 
 .text-pink-700{
@@ -3372,6 +3441,11 @@ section[aria-label='Notifications alt+T'] {
   background-color: rgb(254 243 199 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-amber-200:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 230 138 / var(--tw-bg-opacity, 1));
+}
+
 .hover\:bg-amber-600:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(217 119 6 / var(--tw-bg-opacity, 1));
@@ -3380,6 +3454,11 @@ section[aria-label='Notifications alt+T'] {
 .hover\:bg-blue-100:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-blue-200:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-blue-700:hover{
@@ -3413,6 +3492,11 @@ section[aria-label='Notifications alt+T'] {
   background-color: hsl(var(--muted) / 0.5);
 }
 
+.hover\:bg-orange-700:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(194 65 12 / var(--tw-bg-opacity, 1));
+}
+
 .hover\:bg-primary\/80:hover{
   background-color: hsl(var(--primary) / 0.8);
 }
@@ -3429,6 +3513,11 @@ section[aria-label='Notifications alt+T'] {
 .hover\:bg-purple-700:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(126 34 206 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-red-200:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-secondary:hover{
@@ -4688,6 +4777,10 @@ section[aria-label='Notifications alt+T'] {
 
   .lg\:grid-cols-12{
     grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .lg\:grid-cols-4{

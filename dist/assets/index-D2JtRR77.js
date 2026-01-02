@@ -18961,6 +18961,44 @@ var BrainCircuit = createLucideIcon("brain-circuit", [
 		key: "1e43v0"
 	}]
 ]);
+var CalendarRange = createLucideIcon("calendar-range", [
+	["rect", {
+		width: "18",
+		height: "18",
+		x: "3",
+		y: "4",
+		rx: "2",
+		key: "1hopcy"
+	}],
+	["path", {
+		d: "M16 2v4",
+		key: "4m81vk"
+	}],
+	["path", {
+		d: "M3 10h18",
+		key: "8toen8"
+	}],
+	["path", {
+		d: "M8 2v4",
+		key: "1cmpym"
+	}],
+	["path", {
+		d: "M17 14h-6",
+		key: "bkmgh3"
+	}],
+	["path", {
+		d: "M13 18H7",
+		key: "bb0bb7"
+	}],
+	["path", {
+		d: "M7 14h.01",
+		key: "1qa3f1"
+	}],
+	["path", {
+		d: "M17 18h.01",
+		key: "1bdyru"
+	}]
+]);
 var Calendar = createLucideIcon("calendar", [
 	["path", {
 		d: "M8 2v4",
@@ -18981,6 +19019,20 @@ var Calendar = createLucideIcon("calendar", [
 	["path", {
 		d: "M3 10h18",
 		key: "8toen8"
+	}]
+]);
+var ChartNoAxesColumn = createLucideIcon("chart-no-axes-column", [
+	["path", {
+		d: "M5 21v-6",
+		key: "1hz6c0"
+	}],
+	["path", {
+		d: "M12 21V3",
+		key: "1lcnhd"
+	}],
+	["path", {
+		d: "M19 21V9",
+		key: "unv183"
 	}]
 ]);
 var Check = createLucideIcon("check", [["path", {
@@ -19264,6 +19316,32 @@ var Lightbulb = createLucideIcon("lightbulb", [
 	["path", {
 		d: "M10 22h4",
 		key: "ceow96"
+	}]
+]);
+var ListTodo = createLucideIcon("list-todo", [
+	["path", {
+		d: "M13 5h8",
+		key: "a7qcls"
+	}],
+	["path", {
+		d: "M13 12h8",
+		key: "h98zly"
+	}],
+	["path", {
+		d: "M13 19h8",
+		key: "c3s6r1"
+	}],
+	["path", {
+		d: "m3 17 2 2 4-4",
+		key: "1jhpwq"
+	}],
+	["rect", {
+		x: "3",
+		y: "4",
+		width: "6",
+		height: "6",
+		rx: "1",
+		key: "cif1o7"
 	}]
 ]);
 var Map$1 = createLucideIcon("map", [
@@ -26201,7 +26279,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$11({ inst: {
+			cachedValue = useState$12({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -26238,7 +26316,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$11 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$2 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$12 = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$2.useSyncExternalStore ? React$2.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -26412,6 +26490,11 @@ var menuItems = [
 		title: "Mapa Estratégico",
 		url: "/mapa-estrategico",
 		icon: Map$1
+	},
+	{
+		title: "Plano Tático (4)",
+		url: "/plano-tatico",
+		icon: ListTodo
 	},
 	{
 		title: "Execução (PDCA)",
@@ -26816,6 +26899,7 @@ const useStrategyStore = create((set) => ({
 	relatorio_1: null,
 	relatorio_2: null,
 	relatorio_3: null,
+	relatorio_4: null,
 	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
@@ -26856,7 +26940,8 @@ const useStrategyStore = create((set) => ({
 	} })),
 	setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
 	setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
-	setRelatorio3: (report) => set(() => ({ relatorio_3: report }))
+	setRelatorio3: (report) => set(() => ({ relatorio_3: report })),
+	setRelatorio4: (report) => set(() => ({ relatorio_4: report }))
 }));
 var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	ref,
@@ -27421,6 +27506,155 @@ const generateAdvancedStrategyReport = (state) => {
 		blueOcean: blueOceanFinal,
 		guidingPolicies,
 		tradeOffs
+	};
+};
+const generateTacticalPlanReport = (state) => {
+	const { managerVision, okrs, actions, blueOcean, diagnosis } = state;
+	const generatedOkrs = [
+		{
+			id: "okr1",
+			objective: "Maximizar a eficiência e a saúde financeira",
+			area: "Financeiro",
+			krs: [
+				`Atingir faturamento mensal de ${managerVision.goals.revenue || "R$ 150.000"}`,
+				"Manter margem líquida acima de 25%",
+				"Reduzir custos fixos em 10% via automação"
+			]
+		},
+		{
+			id: "okr2",
+			objective: "Oferecer a melhor experiência do paciente na região",
+			area: "Clientes",
+			krs: [
+				`Alcançar NPS de ${managerVision.goals.nps || "75"}`,
+				`Taxa de ocupação de ${managerVision.goals.occupancy || "80%"}`,
+				"Reduzir tempo de espera na recepção para < 10min"
+			]
+		},
+		{
+			id: "okr3",
+			objective: "Digitalizar e agilizar a operação interna",
+			area: "Processos",
+			krs: [
+				"100% dos agendamentos integrados ao CRM",
+				"Implantar pesquisa de satisfação automatizada",
+				"Reduzir taxa de no-show para < 5%"
+			]
+		},
+		{
+			id: "okr4",
+			objective: "Construir um time de alta performance",
+			area: "Pessoas",
+			krs: [
+				"Realizar treinamentos trimestrais com toda a equipe",
+				"Implementar avaliação de desempenho semestral",
+				"Manter turnover abaixo de 10%"
+			]
+		}
+	];
+	const kpis = {
+		finance: [
+			"Faturamento Bruto",
+			"Margem de Contribuição",
+			"Ticket Médio",
+			"EBITDA"
+		],
+		clients: [
+			"NPS (Net Promoter Score)",
+			"CAC (Custo de Aquisição)",
+			"LTV (Lifetime Value)",
+			"Taxa de Retorno"
+		],
+		processes: [
+			"Taxa de Ocupação",
+			"Tempo Médio de Atendimento",
+			"Taxa de No-Show",
+			"Absenteísmo"
+		],
+		people: [
+			"eNPS (Satisfação do Colaborador)",
+			"Turnover",
+			"Horas de Treinamento",
+			"Produtividade por Colaborador"
+		],
+		marketing: [
+			"Leads Gerados",
+			"Taxa de Conversão",
+			"ROI de Campanhas",
+			"Custo por Lead (CPL)"
+		]
+	};
+	const initiatives = [];
+	blueOcean.create.forEach((item, idx) => {
+		initiatives.push({
+			id: `bo-create-${idx}`,
+			title: `Criar: ${item}`,
+			relatedObjective: "Inovação e Crescimento",
+			priority: "Alta",
+			impact: "Alto",
+			effort: "Alto",
+			quarter: idx % 2 === 0 ? "Q1" : "Q2"
+		});
+	});
+	blueOcean.eliminate.forEach((item, idx) => {
+		initiatives.push({
+			id: `bo-elim-${idx}`,
+			title: `Eliminar: ${item}`,
+			relatedObjective: "Eficiência Operacional",
+			priority: "Média",
+			impact: "Médio",
+			effort: "Baixo",
+			quarter: "Q1"
+		});
+	});
+	actions.forEach((action) => {
+		initiatives.push({
+			id: action.id,
+			title: action.title,
+			relatedObjective: "Execução Tática",
+			priority: "Alta",
+			impact: "Médio",
+			effort: "Médio",
+			quarter: "Q1"
+		});
+	});
+	if (initiatives.length < 5) initiatives.push({
+		id: "gen-1",
+		title: "Implementar pesquisa de NPS recorrente",
+		relatedObjective: "Excelência em Clientes",
+		priority: "Alta",
+		impact: "Alto",
+		effort: "Baixo",
+		quarter: "Q1"
+	}, {
+		id: "gen-2",
+		title: "Revisão de precificação de procedimentos",
+		relatedObjective: "Saúde Financeira",
+		priority: "Alta",
+		impact: "Alto",
+		effort: "Médio",
+		quarter: "Q2"
+	}, {
+		id: "gen-3",
+		title: "Treinamento de vendas para recepção",
+		relatedObjective: "Crescimento de Receita",
+		priority: "Média",
+		impact: "Alto",
+		effort: "Médio",
+		quarter: "Q2"
+	});
+	return {
+		generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+		okrs: generatedOkrs,
+		kpis,
+		initiatives: initiatives.sort((a, b$1) => {
+			const priorityOrder = {
+				Alta: 3,
+				Média: 2,
+				Baixa: 1
+			};
+			return priorityOrder[b$1.priority] - priorityOrder[a.priority];
+		})
 	};
 };
 var DirectionContext = import_react.createContext(void 0);
@@ -30187,6 +30421,316 @@ function StrategicMap() {
 					})]
 				}, okr.id))]
 			})]
+		})]
+	});
+}
+function TacticalPlan() {
+	const state = useStrategyStore();
+	const { relatorio_4, setRelatorio4 } = state;
+	const [isGenerating, setIsGenerating] = (0, import_react.useState)(false);
+	const handleGenerateReport = () => {
+		setIsGenerating(true);
+		setTimeout(() => {
+			setRelatorio4(generateTacticalPlanReport(state));
+			setIsGenerating(false);
+			toast.success("Plano Tático 2026 gerado com sucesso!");
+		}, 2e3);
+	};
+	const getPriorityColor = (p) => {
+		switch (p) {
+			case "Alta": return "bg-red-100 text-red-800 hover:bg-red-200";
+			case "Média": return "bg-amber-100 text-amber-800 hover:bg-amber-200";
+			default: return "bg-blue-100 text-blue-800 hover:bg-blue-200";
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-6 animate-fade-in",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col gap-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "text-3xl font-bold tracking-tight text-slate-900 dark:text-white",
+				children: "Plano Tático 2026"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-slate-500",
+				children: "Relatório 4: Transformando estratégia em ação com OKRs, KPIs e Roadmap."
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs, {
+			defaultValue: "overview",
+			className: "w-full",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsList, {
+					className: "grid w-full md:w-[800px] grid-cols-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "overview",
+							children: "Visão Geral"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "okrs",
+							children: "OKRs & KPIs"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "initiatives",
+							children: "Iniciativas"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "roadmap",
+							children: "Roadmap Anual"
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "overview",
+					className: "mt-6 space-y-6",
+					children: !relatorio_4 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+						className: "border-2 border-dashed border-slate-200 bg-slate-50/50",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+							className: "flex flex-col items-center justify-center py-16 text-center space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-orange-100 p-4 rounded-full",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarRange, { className: "size-10 text-orange-600" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2 max-w-md",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-xl font-semibold text-slate-900",
+										children: "Gerar Plano Tático"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-slate-500",
+										children: "Consolide diagnósticos, estratégia e metas em um plano de execução claro para 2026."
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									onClick: handleGenerateReport,
+									disabled: isGenerating,
+									className: "bg-orange-600 hover:bg-orange-700 text-white min-w-[200px]",
+									children: isGenerating ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "mr-2 size-4 animate-spin" }), "Processando Tática..."] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListTodo, { className: "mr-2 size-4" }), "Gerar Relatório 4"] })
+								})
+							]
+						})
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-6 animate-fade-in",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-slate-100",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+									variant: "outline",
+									className: "text-orange-700 bg-orange-50",
+									children: [
+										"Gerado em:",
+										" ",
+										new Date(relatorio_4.generatedAt).toLocaleDateString()
+									]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-slate-400",
+									children: "Versão Final 2026"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+									variant: "outline",
+									size: "sm",
+									onClick: () => window.print(),
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "mr-2 size-3" }), " Imprimir"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+									variant: "outline",
+									size: "sm",
+									onClick: handleGenerateReport,
+									disabled: isGenerating,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: cn("mr-2 size-3", isGenerating && "animate-spin") }), "Regerar"]
+								})]
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid md:grid-cols-3 gap-6",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+									className: "bg-gradient-to-br from-white to-orange-50 border-orange-200",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+										className: "pb-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+											className: "text-orange-800 text-4xl font-bold",
+											children: relatorio_4.okrs.length
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+											className: "text-orange-700 font-medium",
+											children: "Objetivos Estratégicos"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-slate-500",
+										children: "Definidos para alavancar Financeiro, Clientes, Processos e Pessoas."
+									}) })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+									className: "bg-gradient-to-br from-white to-blue-50 border-blue-200",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+										className: "pb-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+											className: "text-blue-800 text-4xl font-bold",
+											children: Object.values(relatorio_4.kpis).flat().length
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+											className: "text-blue-700 font-medium",
+											children: "KPIs Monitorados"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-slate-500",
+										children: "Indicadores de performance distribuídos em 5 áreas de gestão."
+									}) })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+									className: "bg-gradient-to-br from-white to-green-50 border-green-200",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+										className: "pb-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+											className: "text-green-800 text-4xl font-bold",
+											children: relatorio_4.initiatives.length
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+											className: "text-green-700 font-medium",
+											children: "Iniciativas Táticas"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-slate-500",
+										children: "Ações concretas priorizadas por impacto e esforço."
+									}) })]
+								})
+							]
+						})]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "okrs",
+					className: "mt-6",
+					children: relatorio_4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-8",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "grid gap-6",
+							children: relatorio_4.okrs.map((okr, index$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+								className: "overflow-hidden",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-slate-50 p-4 border-b border-slate-100 flex justify-between items-center",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "bg-white border border-slate-200 rounded-md size-8 flex items-center justify-center font-bold text-slate-700",
+											children: ["O", index$1 + 1]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "font-semibold text-slate-800",
+											children: okr.objective
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+											variant: "secondary",
+											className: "mt-1 text-xs",
+											children: okr.area
+										})] })]
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+									className: "p-0",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
+										className: "bg-slate-50/50",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { className: "w-12" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Key Results (Resultados-Chave)" })]
+									}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: okr.krs.map((kr, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
+										className: "text-center font-mono text-xs text-slate-400",
+										children: ["KR", idx + 1]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+										className: "font-medium text-slate-700",
+										children: kr
+									})] }, idx)) })] })
+								})]
+							}, index$1))
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+							className: "flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChartNoAxesColumn, { className: "size-5 text-blue-600" }), " Dashboard de KPIs"]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Indicadores essenciais por área de gestão." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "grid md:grid-cols-2 lg:grid-cols-3 gap-6",
+							children: Object.entries(relatorio_4.kpis).map(([area, kpis]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "border rounded-lg p-4 bg-slate-50/50",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+									className: "font-bold text-slate-700 uppercase text-xs mb-3 flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "size-2 rounded-full bg-blue-500" }), area === "finance" ? "Financeiro" : area === "clients" ? "Clientes" : area === "processes" ? "Processos" : area === "people" ? "Pessoas" : "Marketing"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+									className: "space-y-2",
+									children: kpis.map((kpi, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+										className: "text-sm text-slate-600 flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "size-1 rounded-full bg-slate-300" }), kpi]
+									}, idx))
+								})]
+							}, area))
+						}) })] })]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "initiatives",
+					className: "mt-6",
+					children: relatorio_4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, { children: "Matriz de Priorização (Esforço x Impacto)" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Lista de iniciativas classificadas para execução." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Iniciativa Tática" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Objetivo Relacionado" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Prioridade" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Impacto" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Esforço" })
+					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: relatorio_4.initiatives.map((init) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "font-medium text-slate-800",
+							children: init.title
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-slate-500 text-xs",
+							children: init.relatedObjective
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+							variant: "outline",
+							className: cn("border-0", getPriorityColor(init.priority)),
+							children: init.priority
+						}) }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-sm text-slate-600",
+							children: init.impact
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-sm text-slate-600",
+							children: init.effort
+						})
+					] }, init.id)) })] }) })] })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "roadmap",
+					className: "mt-6",
+					children: relatorio_4 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "grid grid-cols-1 md:grid-cols-4 gap-4",
+						children: [
+							"Q1",
+							"Q2",
+							"Q3",
+							"Q4"
+						].map((quarter) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							className: "border-t-4 border-t-teal-500",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+								className: "bg-slate-50 pb-3",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+									className: "text-teal-800 text-lg",
+									children: [quarter, " 2026"]
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+								className: "pt-4 space-y-3 min-h-[200px]",
+								children: [relatorio_4.initiatives.filter((i) => i.quarter === quarter).map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "p-3 bg-white border border-slate-200 rounded shadow-sm text-sm hover:border-teal-300 transition-colors",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-medium text-slate-800 mb-1",
+										children: item.title
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between items-center",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] text-slate-400 uppercase font-bold",
+											children: item.priority
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { className: "size-3 text-slate-300" })]
+									})]
+								}, item.id)), relatorio_4.initiatives.filter((i) => i.quarter === quarter).length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "text-center text-xs text-slate-400 py-4 italic",
+									children: "Sem entregas previstas"
+								})]
+							})]
+						}, quarter))
+					})
+				})
+			]
 		})]
 	});
 }
@@ -33625,6 +34169,10 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StrategicMap, {})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					path: "/plano-tatico",
+					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TacticalPlan, {})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 					path: "/execucao",
 					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Execution, {})
 				}),
@@ -33642,4 +34190,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-Dt_OL0rw.js.map
+//# sourceMappingURL=index-D2JtRR77.js.map

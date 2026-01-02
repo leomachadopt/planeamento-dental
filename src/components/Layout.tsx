@@ -14,6 +14,7 @@ import {
   Eye,
   Fingerprint,
   BrainCircuit,
+  ListTodo,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -42,6 +43,7 @@ const menuItems = [
   { title: 'Estratégia (3B)', url: '/estrategia', icon: Lightbulb },
   { title: 'Análise Avançada', url: '/analise-avancada', icon: BrainCircuit },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
+  { title: 'Plano Tático (4)', url: '/plano-tatico', icon: ListTodo },
   { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
   { title: 'Configuração', url: '/configuracao', icon: Settings },
 ]
