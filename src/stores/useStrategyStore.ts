@@ -110,6 +110,24 @@ export interface Report1 {
   insightsRisks: string[]
 }
 
+export interface Report2 {
+  generatedAt: string
+  mission: string
+  vision: string
+  values: string[]
+  strategicPrinciples: string[]
+  valueProposition: string
+  valueChain: string
+  competitivePositioning: string
+  bscObjectives: {
+    financial: string[]
+    customers: string[]
+    processes: string[]
+    learning: string[]
+  }
+  strategicMapText: string
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -146,6 +164,7 @@ export interface StrategyState {
   managerVision: ManagerVision
   identity: IdentityState
   relatorio_1: Report1 | null
+  relatorio_2: Report2 | null
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -165,6 +184,7 @@ export interface StrategyState {
   updateManagerVision: (data: Partial<ManagerVision>) => void
   updateIdentity: (data: Partial<IdentityState>) => void
   setRelatorio1: (report: Report1) => void
+  setRelatorio2: (report: Report2) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -322,6 +342,7 @@ export const useStrategyStore = create<StrategyState>((set) => ({
     strategyFocus: '',
   },
   relatorio_1: null,
+  relatorio_2: null,
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -369,4 +390,5 @@ export const useStrategyStore = create<StrategyState>((set) => ({
       identity: { ...state.identity, ...data },
     })),
   setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
+  setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
 }))

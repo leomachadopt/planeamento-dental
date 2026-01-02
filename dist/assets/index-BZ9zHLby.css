@@ -1635,6 +1635,12 @@ section[aria-label='Notifications alt+T'] {
   margin-bottom: calc(0.375rem * var(--tw-space-y-reverse));
 }
 
+.space-y-10 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
+}
+
 .space-y-2 > :not([hidden]) ~ :not([hidden]){
   --tw-space-y-reverse: 0;
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
@@ -1858,6 +1864,11 @@ section[aria-label='Notifications alt+T'] {
   border-color: rgb(187 247 208 / var(--tw-border-opacity, 1));
 }
 
+.border-indigo-100{
+  --tw-border-opacity: 1;
+  border-color: rgb(224 231 255 / var(--tw-border-opacity, 1));
+}
+
 .border-indigo-500{
   --tw-border-opacity: 1;
   border-color: rgb(99 102 241 / var(--tw-border-opacity, 1));
@@ -1944,6 +1955,11 @@ section[aria-label='Notifications alt+T'] {
   border-left-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
 }
 
+.border-l-green-500{
+  --tw-border-opacity: 1;
+  border-left-color: rgb(34 197 94 / var(--tw-border-opacity, 1));
+}
+
 .border-l-purple-500{
   --tw-border-opacity: 1;
   border-left-color: rgb(168 85 247 / var(--tw-border-opacity, 1));
@@ -1976,6 +1992,11 @@ section[aria-label='Notifications alt+T'] {
 .border-t-indigo-500{
   --tw-border-opacity: 1;
   border-top-color: rgb(99 102 241 / var(--tw-border-opacity, 1));
+}
+
+.border-t-indigo-600{
+  --tw-border-opacity: 1;
+  border-top-color: rgb(79 70 229 / var(--tw-border-opacity, 1));
 }
 
 .border-t-purple-500{
@@ -2103,6 +2124,10 @@ section[aria-label='Notifications alt+T'] {
 .bg-indigo-50{
   --tw-bg-opacity: 1;
   background-color: rgb(238 242 255 / var(--tw-bg-opacity, 1));
+}
+
+.bg-indigo-50\/50{
+  background-color: rgb(238 242 255 / 0.5);
 }
 
 .bg-indigo-600{
@@ -2480,6 +2505,10 @@ section[aria-label='Notifications alt+T'] {
 
 .font-mono{
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.font-serif{
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 .text-2xl{
@@ -4336,6 +4365,10 @@ section[aria-label='Notifications alt+T'] {
     max-width: 24rem;
   }
 
+  .sm\:grid-cols-2{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .sm\:flex-row{
     flex-direction: row;
   }
@@ -4408,8 +4441,8 @@ section[aria-label='Notifications alt+T'] {
     width: 12rem;
   }
 
-  .md\:w-\[400px\]{
-    width: 400px;
+  .md\:w-\[600px\]{
+    width: 600px;
   }
 
   .md\:w-\[800px\]{
@@ -4452,8 +4485,16 @@ section[aria-label='Notifications alt+T'] {
     border-left-width: 1px;
   }
 
+  .md\:p-12{
+    padding: 3rem;
+  }
+
   .md\:p-8{
     padding: 2rem;
+  }
+
+  .md\:font-sans{
+    font-family: Inter var, SF Pro Display, system-ui, sans-serif;
   }
 
   .md\:text-sm{
@@ -4521,6 +4562,15 @@ section[aria-label='Notifications alt+T'] {
 
   .lg\:grid-cols-7{
     grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+@media print{
+
+  .print\:shadow-none{
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
 }
 

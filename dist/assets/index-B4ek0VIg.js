@@ -19087,6 +19087,15 @@ var Clock = createLucideIcon("clock", [["path", {
 	r: "10",
 	key: "1mglay"
 }]]);
+var Compass = createLucideIcon("compass", [["path", {
+	d: "m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z",
+	key: "9ktpf1"
+}], ["circle", {
+	cx: "12",
+	cy: "12",
+	r: "10",
+	key: "1mglay"
+}]]);
 var DollarSign = createLucideIcon("dollar-sign", [["line", {
 	x1: "12",
 	x2: "12",
@@ -19284,6 +19293,24 @@ var Plus = createLucideIcon("plus", [["path", {
 	d: "M12 5v14",
 	key: "s699le"
 }]]);
+var Printer = createLucideIcon("printer", [
+	["path", {
+		d: "M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2",
+		key: "143wyd"
+	}],
+	["path", {
+		d: "M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6",
+		key: "1itne7"
+	}],
+	["rect", {
+		x: "6",
+		y: "14",
+		width: "12",
+		height: "8",
+		rx: "1",
+		key: "1ue0tg"
+	}]
+]);
 var RefreshCw = createLucideIcon("refresh-cw", [
 	["path", {
 		d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8",
@@ -26725,6 +26752,7 @@ const useStrategyStore = create((set) => ({
 		strategyFocus: ""
 	},
 	relatorio_1: null,
+	relatorio_2: null,
 	setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
 	updateRumelt: (data) => set((state) => ({ diagnosis: {
 		...state.diagnosis,
@@ -26763,7 +26791,8 @@ const useStrategyStore = create((set) => ({
 		...state.identity,
 		...data
 	} })),
-	setRelatorio1: (report) => set(() => ({ relatorio_1: report }))
+	setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
+	setRelatorio2: (report) => set(() => ({ relatorio_2: report }))
 }));
 var Card = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 	ref,
@@ -27192,6 +27221,49 @@ const generateDiagnosticReport = (state) => {
 		marketAnalysis,
 		swot,
 		insightsRisks
+	};
+};
+const generateStrategicDirectionReport = (state) => {
+	const { identity: identity$1, managerVision, diagnosis, jtbd, okrs, clinicConfig } = state;
+	const tone = clinicConfig.tom_linguagem || "intermediario";
+	const t = (formal, informal) => tone === "formal" ? formal : tone === "informal" ? informal : formal;
+	const mission = identity$1.reason || "Proporcionar saúde e bem-estar através de um atendimento de excelência.";
+	const vision = managerVision.vision2026 || identity$1.recognitionGoal || "Ser referência regional em qualidade assistencial e inovação até o final de 2026.";
+	const values = (identity$1.values || "Ética, Humanização, Excelência").split(/[,;.]/).map((v) => v.trim()).filter((v) => v.length > 2);
+	const strategicPrinciples = [
+		`Diagnóstico: ${diagnosis.rumelt.challenge || "Enfrentar a competitividade com diferenciação."}`,
+		`Política Orientadora: ${diagnosis.rumelt.policy || "Focar na experiência do paciente."}`,
+		`Ação Coerente: Implementar processos que garantam a entrega da proposta de valor.`
+	];
+	const valueProposition = jtbd.length > 0 ? `Ajudar o paciente a "${jtbd[0].job}" através de "${jtbd[0].solution}".` : "Oferecer tratamentos que resolvam as dores funcionais e emocionais dos pacientes com agilidade.";
+	const valueChain = t("1. Atração (Marketing Ético) → 2. Agendamento Eficiente → 3. Acolhimento na Recepção → 4. Atendimento Clínico de Excelência → 5. Pós-Consulta Ativo → 6. Fidelização e Indicação.", "Atrair gente certa → Agendar rápido → Receber bem → Tratar com carinho → Acompanhar depois → Virar fã.");
+	let positioningText = "";
+	if (identity$1.pricePositioning === "Premium") positioningText = "Diferenciação por Qualidade e Exclusividade. Foco em alto valor agregado e baixa sensibilidade a preço.";
+	else if (identity$1.pricePositioning === "Acessível") positioningText = "Liderança em Custo/Acesso. Foco em volume, eficiência operacional e acessibilidade.";
+	else positioningText = "Focalização/Nicho. Equilíbrio entre qualidade técnica e preço justo para o público-alvo específico.";
+	const competitivePositioning = `${positioningText} (Foco estratégico: ${identity$1.strategyFocus || "Crescimento"})`;
+	const bscObjectives = {
+		financial: okrs.filter((o) => o.perspective === "Financeira").map((o) => o.objective),
+		customers: okrs.filter((o) => o.perspective === "Clientes").map((o) => o.objective),
+		processes: okrs.filter((o) => o.perspective === "Processos").map((o) => o.objective),
+		learning: okrs.filter((o) => o.perspective === "Aprendizado").map((o) => o.objective)
+	};
+	if (bscObjectives.financial.length === 0) bscObjectives.financial.push("Garantir margem de lucro saudável", "Aumentar ticket médio");
+	if (bscObjectives.customers.length === 0) bscObjectives.customers.push("Aumentar satisfação (NPS)", "Fidelizar base de pacientes");
+	if (bscObjectives.processes.length === 0) bscObjectives.processes.push("Digitalizar jornada do paciente", "Otimizar tempo de agenda");
+	if (bscObjectives.learning.length === 0) bscObjectives.learning.push("Capacitar equipe de atendimento", "Implementar cultura de dados");
+	const strategicMapText = t(`Para atingir os objetivos Financeiros de "${bscObjectives.financial[0]}", precisamos encantar os Clientes com "${bscObjectives.customers[0]}". Isso só será possível se ajustarmos os Processos Internos para "${bscObjectives.processes[0]}", o que depende diretamente de Aprendizado e Crescimento para "${bscObjectives.learning[0]}".`, `Se a gente quer grana (${bscObjectives.financial[0]}), o paciente tem que estar feliz (${bscObjectives.customers[0]}). Pra isso, a casa tem que estar arrumada (${bscObjectives.processes[0]}) e o time treinado (${bscObjectives.learning[0]}).`);
+	return {
+		generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+		mission,
+		vision,
+		values,
+		strategicPrinciples,
+		valueProposition,
+		valueChain,
+		competitivePositioning,
+		bscObjectives,
+		strategicMapText
 	};
 };
 var DirectionContext = import_react.createContext(void 0);
@@ -28017,12 +28089,22 @@ function Diagnostic() {
 	});
 }
 function Strategy() {
-	const { blueOcean, jtbd, addBlueOceanItem, removeBlueOceanItem } = useStrategyStore();
+	const state = useStrategyStore();
+	const { blueOcean, jtbd, addBlueOceanItem, removeBlueOceanItem, relatorio_2, setRelatorio2 } = state;
 	const [newItem, setNewItem] = (0, import_react.useState)("");
+	const [isGenerating, setIsGenerating] = (0, import_react.useState)(false);
 	const handleAddItem = (category) => {
 		if (!newItem.trim()) return;
 		addBlueOceanItem(category, newItem);
 		setNewItem("");
+	};
+	const handleGenerateReport = () => {
+		setIsGenerating(true);
+		setTimeout(() => {
+			setRelatorio2(generateStrategicDirectionReport(state));
+			setIsGenerating(false);
+			toast.success("Relatório de Direcionamento gerado com sucesso!");
+		}, 1500);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-6 animate-fade-in",
@@ -28036,18 +28118,374 @@ function Strategy() {
 				children: "Desenvolva sua proposta de valor única e inovação."
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs, {
-			defaultValue: "blue-ocean",
+			defaultValue: "report",
 			className: "w-full",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TabsList, {
-					className: "grid w-full md:w-[400px] grid-cols-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-						value: "blue-ocean",
-						children: "Oceano Azul"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
-						value: "jtbd",
-						children: "Jobs to be Done"
-					})]
+					className: "grid w-full md:w-[600px] grid-cols-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "report",
+							children: "Direcionamento 2026"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "blue-ocean",
+							children: "Oceano Azul"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsTrigger, {
+							value: "jtbd",
+							children: "Jobs to be Done"
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
+					value: "report",
+					className: "mt-6 space-y-6 animate-fade-in",
+					children: !relatorio_2 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+						className: "border-2 border-dashed border-slate-200 bg-slate-50/50",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+							className: "flex flex-col items-center justify-center py-16 text-center space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-indigo-100 p-4 rounded-full",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Compass, { className: "size-10 text-indigo-600" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2 max-w-md",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-xl font-semibold text-slate-900",
+										children: "Gerar Relatório de Direcionamento"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-slate-500",
+										children: "Consolide Missão, Visão, Valores e o Mapa Estratégico em um documento único para guiar sua clínica."
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									onClick: handleGenerateReport,
+									disabled: isGenerating,
+									className: "bg-indigo-600 hover:bg-indigo-700 text-white min-w-[200px]",
+									children: isGenerating ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "mr-2 size-4 animate-spin" }), "Processando Estratégia..."] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, { className: "mr-2 size-4" }), "Gerar Relatório Oficial"] })
+								})
+							]
+						})
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-6",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-slate-100",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+									variant: "outline",
+									className: "text-indigo-700 bg-indigo-50",
+									children: [
+										"Gerado em:",
+										" ",
+										new Date(relatorio_2.generatedAt).toLocaleDateString()
+									]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-slate-400",
+									children: "Relatório Consolidado (Versão Final)"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+									variant: "outline",
+									size: "sm",
+									onClick: () => window.print(),
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "mr-2 size-3" }), " Imprimir"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+									variant: "outline",
+									size: "sm",
+									onClick: handleGenerateReport,
+									disabled: isGenerating,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: cn("mr-2 size-3", isGenerating && "animate-spin") }), "Regerar"]
+								})]
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							className: "border-t-4 border-t-indigo-600 shadow-lg print:shadow-none",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+									className: "bg-slate-50 border-b border-slate-100 pb-8",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-center space-y-2",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-sm font-bold text-indigo-600 uppercase tracking-widest",
+												children: "Planejamento Estratégico 2026"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+												className: "text-3xl text-slate-900",
+												children: "Relatório de Direcionamento"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+												className: "text-lg",
+												children: state.clinicName
+											})
+										]
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+									className: "p-8 md:p-12 space-y-10 font-serif md:font-sans",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "grid md:grid-cols-2 gap-8",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+												className: "space-y-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+													className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-lg text-indigo-600",
+															children: "01."
+														}),
+														" ",
+														"Missão"
+													]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+													className: "text-xl font-medium text-slate-800 leading-relaxed italic",
+													children: [
+														"\"",
+														relatorio_2.mission,
+														"\""
+													]
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+												className: "space-y-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+													className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-lg text-indigo-600",
+															children: "02."
+														}),
+														" ",
+														"Visão 2026"
+													]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+													className: "text-xl font-medium text-slate-800 leading-relaxed italic",
+													children: [
+														"\"",
+														relatorio_2.vision,
+														"\""
+													]
+												})]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator, {}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+											className: "space-y-4",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+												className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-lg text-indigo-600",
+														children: "03."
+													}),
+													" ",
+													"Valores Fundamentais"
+												]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "grid sm:grid-cols-2 md:grid-cols-4 gap-4",
+												children: relatorio_2.values.map((val, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "bg-slate-50 p-4 rounded-lg border border-slate-100 text-center font-medium text-slate-700",
+													children: val
+												}, idx))
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+											className: "space-y-4",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+												className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-lg text-indigo-600",
+														children: "04."
+													}),
+													" ",
+													"Princípios Estratégicos (Kernel)"
+												]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+												className: "space-y-2 list-disc pl-5 text-slate-700",
+												children: relatorio_2.strategicPrinciples.map((principle, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+													className: "pl-2",
+													children: principle
+												}, idx))
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "grid md:grid-cols-2 gap-8",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+												className: "space-y-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+													className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-lg text-indigo-600",
+															children: "05."
+														}),
+														" ",
+														"Proposta de Valor (JTBD)"
+													]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-700 bg-indigo-50/50 p-4 rounded-lg border border-indigo-100",
+													children: relatorio_2.valueProposition
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+												className: "space-y-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+													className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-lg text-indigo-600",
+															children: "07."
+														}),
+														" ",
+														"Posicionamento Competitivo"
+													]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-slate-700 bg-slate-50 p-4 rounded-lg border border-slate-100",
+													children: relatorio_2.competitivePositioning
+												})]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+											className: "space-y-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+												className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-lg text-indigo-600",
+														children: "06."
+													}),
+													" ",
+													"Cadeia de Valor"
+												]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "p-4 rounded-lg border border-dashed border-slate-300 text-center text-slate-600 font-medium text-sm",
+												children: relatorio_2.valueChain
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator, {}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+											className: "space-y-6",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+												className: "text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-lg text-indigo-600",
+														children: "08."
+													}),
+													" ",
+													"Objetivos Estratégicos (BSC)"
+												]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "grid md:grid-cols-2 gap-4",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+														className: "border-l-4 border-l-green-500 shadow-sm",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+															className: "py-3",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+																className: "text-sm font-bold uppercase text-green-700",
+																children: "Financeiro"
+															})
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+															className: "py-2 text-sm text-slate-600",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+																className: "list-disc pl-4 space-y-1",
+																children: relatorio_2.bscObjectives.financial.map((obj, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: obj }, i))
+															})
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+														className: "border-l-4 border-l-blue-500 shadow-sm",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+															className: "py-3",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+																className: "text-sm font-bold uppercase text-blue-700",
+																children: "Clientes"
+															})
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+															className: "py-2 text-sm text-slate-600",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+																className: "list-disc pl-4 space-y-1",
+																children: relatorio_2.bscObjectives.customers.map((obj, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: obj }, i))
+															})
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+														className: "border-l-4 border-l-amber-500 shadow-sm",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+															className: "py-3",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+																className: "text-sm font-bold uppercase text-amber-700",
+																children: "Processos Internos"
+															})
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+															className: "py-2 text-sm text-slate-600",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+																className: "list-disc pl-4 space-y-1",
+																children: relatorio_2.bscObjectives.processes.map((obj, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: obj }, i))
+															})
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+														className: "border-l-4 border-l-purple-500 shadow-sm",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+															className: "py-3",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+																className: "text-sm font-bold uppercase text-purple-700",
+																children: "Aprendizado & Crescimento"
+															})
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+															className: "py-2 text-sm text-slate-600",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+																className: "list-disc pl-4 space-y-1",
+																children: relatorio_2.bscObjectives.learning.map((obj, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: obj }, i))
+															})
+														})]
+													})
+												]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+											className: "space-y-3 bg-slate-900 text-slate-300 p-6 rounded-xl",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+												className: "text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-lg text-white",
+													children: "09."
+												}), " Lógica do Mapa Estratégico"]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+												className: "text-lg leading-relaxed font-medium text-white",
+												children: [
+													"\"",
+													relatorio_2.strategicMapText,
+													"\""
+												]
+											})]
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFooter, {
+									className: "bg-slate-50 border-t border-slate-100 p-8 flex justify-end",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+										asChild: true,
+										size: "lg",
+										className: "bg-teal-600 text-white",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+											to: "/mapa-estrategico",
+											children: [
+												"Visualizar Mapa Interativo",
+												" ",
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "ml-2 size-4" })
+											]
+										})
+									})
+								})
+							]
+						})]
+					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabsContent, {
 					value: "blue-ocean",
@@ -32513,4 +32951,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-aFg0L5Xt.js.map
+//# sourceMappingURL=index-B4ek0VIg.js.map
