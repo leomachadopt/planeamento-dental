@@ -67,6 +67,23 @@ export interface MarketAssessment {
   patientLoss: string
 }
 
+export interface ManagerVision {
+  problems: string[]
+  opportunities: string[]
+  vision2026: string
+  goals: {
+    revenue: string
+    occupancy: string
+    nps: string
+    other: string
+  }
+  ratings: {
+    processes: { score: number; justification: string }
+    financial: { score: number; justification: string }
+    satisfaction: { score: number; justification: string }
+  }
+}
+
 export interface StrategyState {
   clinicName: string
   clinicConfig: ClinicConfig
@@ -100,6 +117,7 @@ export interface StrategyState {
   actions: ActionItem[]
   operationalAssessment: OperationalAssessment
   marketAssessment: MarketAssessment
+  managerVision: ManagerVision
 
   setClinicConfig: (config: ClinicConfig) => void
   updateRumelt: (data: Partial<StrategyState['diagnosis']['rumelt']>) => void
@@ -116,6 +134,7 @@ export interface StrategyState {
   updateActionStatus: (id: string, status: ActionStatus) => void
   updateOperationalAssessment: (data: Partial<OperationalAssessment>) => void
   updateMarketAssessment: (data: Partial<MarketAssessment>) => void
+  updateManagerVision: (data: Partial<ManagerVision>) => void
 }
 
 export const useStrategyStore = create<StrategyState>((set) => ({
@@ -248,6 +267,22 @@ export const useStrategyStore = create<StrategyState>((set) => ({
     patientCompliments: '',
     patientLoss: '',
   },
+  managerVision: {
+    problems: ['', '', ''],
+    opportunities: ['', '', ''],
+    vision2026: '',
+    goals: {
+      revenue: '',
+      occupancy: '',
+      nps: '',
+      other: '',
+    },
+    ratings: {
+      processes: { score: 5, justification: '' },
+      financial: { score: 5, justification: '' },
+      satisfaction: { score: 5, justification: '' },
+    },
+  },
 
   setClinicConfig: (config) => set(() => ({ clinicConfig: config })),
   updateRumelt: (data) =>
@@ -285,5 +320,9 @@ export const useStrategyStore = create<StrategyState>((set) => ({
   updateMarketAssessment: (data) =>
     set((state) => ({
       marketAssessment: { ...state.marketAssessment, ...data },
+    })),
+  updateManagerVision: (data) =>
+    set((state) => ({
+      managerVision: { ...state.managerVision, ...data },
     })),
 }))

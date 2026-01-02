@@ -11,6 +11,7 @@ import {
   Settings,
   ClipboardList,
   Globe,
+  Eye,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -33,6 +34,7 @@ const menuItems = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
   { title: 'Operação (2A)', url: '/operacao', icon: ClipboardList },
   { title: 'Mercado (2B)', url: '/mercado', icon: Globe },
+  { title: 'Visão (2C)', url: '/visao-gestor', icon: Eye },
   { title: 'Diagnóstico', url: '/diagnostico', icon: Stethoscope },
   { title: 'Estratégia', url: '/estrategia', icon: Lightbulb },
   { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
