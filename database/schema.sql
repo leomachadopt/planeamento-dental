@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS identities (
   priority_audience TEXT,
   price_positioning VARCHAR(50),
   strategy_focus VARCHAR(50),
+  strategy_focus_complement TEXT,
   updated_at TIMESTAMP DEFAULT NOW(),
   UNIQUE(clinic_id)
 );
@@ -211,4 +212,38 @@ CREATE INDEX IF NOT EXISTS idx_reports_clinic_id ON reports(clinic_id);
 CREATE INDEX IF NOT EXISTS idx_blue_ocean_clinic_id ON blue_ocean_items(clinic_id);
 CREATE INDEX IF NOT EXISTS idx_jtbd_clinic_id ON jtbd_items(clinic_id);
 CREATE INDEX IF NOT EXISTS idx_identities_clinic_id ON identities(clinic_id);
+
+-- ============================================
+-- SISTEMA DE AUTENTICAÇÃO
+-- ============================================
+
+-- Tabela de usuários
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL CHECK (role IN ('admin', 'user')) DEFAULT 'user',
+  clinic_id UUID REFERENCES clinics(id) ON DELETE SET NULL,
+  is_active BOOLEAN DEFAULT true,
+  last_login TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Tabela de sessões/tokens
+CREATE TABLE IF NOT EXISTS user_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  token_hash VARCHAR(255) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Índices para performance (autenticação)
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_clinic_id ON users(clinic_id);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON user_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON user_sessions(expires_at);
 

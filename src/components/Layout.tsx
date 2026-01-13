@@ -1,4 +1,4 @@
-import { Outlet, useLocation, Link } from 'react-router-dom'
+import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
   Stethoscope,
@@ -17,6 +17,9 @@ import {
   ListTodo,
   FileText,
   BookOpenCheck,
+  LogOut,
+  User,
+  Shield,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -34,11 +37,25 @@ import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { useAuthStore } from '@/stores/useAuthStore'
 import ClinicSelector from './ClinicSelector'
+import DossierSelector from './DossierSelector'
+import DossierSidebar from './DossierSidebar'
+import { useState } from 'react'
 
 const menuItems = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
-  { title: 'Configuração Inicial (1)', url: '/configuracao', icon: Settings },
+  { title: 'Dossiê da Clínica', url: '/dossie', icon: FileText },
+  // Menu antigo mantido para referência (desativado)
+  // { title: 'Configuração Inicial (1)', url: '/configuracao', icon: Settings },
   { title: 'Operação (2A)', url: '/operacao', icon: ClipboardList },
   { title: 'Mercado (2B)', url: '/mercado', icon: Globe },
   { title: 'Visão (2C)', url: '/visao-gestor', icon: Eye },
@@ -53,12 +70,22 @@ const menuItems = [
     url: '/plano-operacional',
     icon: FileText,
   },
-  { title: 'Relatório Final', url: '/relatorio-final', icon: BookOpenCheck },
-  { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
+  // Relatórios antigos desativados - substituídos pelo sistema de relatórios por IA por seção
+  // { title: 'Relatório Final', url: '/relatorio-final', icon: BookOpenCheck },
+  // Menu de execução mantido mas desativado (não remover código)
+  // { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
 ]
 
 export default function Layout() {
   const location = useLocation()
+  const { user, logout } = useAuthStore()
+  const navigate = useNavigate()
+  const [currentDossierId, setCurrentDossierId] = useState<string | null>(null)
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <SidebarProvider>
@@ -78,39 +105,68 @@ export default function Layout() {
             </div>
           </SidebarHeader>
           <SidebarContent className="bg-slate-900 text-slate-300">
-            <SidebarMenu className="pt-4 px-2">
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location.pathname === item.url}
-                    tooltip={item.title}
-                    className="hover:bg-slate-800 hover:text-white data-[active=true]:bg-teal-600 data-[active=true]:text-white transition-colors"
-                  >
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            {currentDossierId ? (
+              <DossierSidebar dossierId={currentDossierId} />
+            ) : (
+              <SidebarMenu className="pt-4 px-2">
+                {menuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location.pathname === item.url}
+                      tooltip={item.title}
+                      className="hover:bg-slate-800 hover:text-white data-[active=true]:bg-teal-600 data-[active=true]:text-white transition-colors"
+                    >
+                      <Link to={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            )}
           </SidebarContent>
           <SidebarFooter className="bg-slate-900 p-4 border-t border-slate-800">
-            <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
-              <Avatar className="size-8">
-                <AvatarImage src="https://img.usecurling.com/ppl/thumbnail?gender=male" />
-                <AvatarFallback>DR</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden">
-                <span className="text-sm font-medium text-white truncate">
-                  Dr. Roberto
-                </span>
-                <span className="text-xs text-slate-400 truncate">
-                  Diretor Clínico
-                </span>
-              </div>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="w-full">
+                <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center cursor-pointer hover:bg-slate-800 rounded-lg p-2 transition-colors">
+                  <Avatar className="size-8">
+                    <AvatarImage src="https://img.usecurling.com/ppl/thumbnail?gender=male" />
+                    <AvatarFallback>
+                      {user?.name?.substring(0, 2).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden">
+                    <span className="text-sm font-medium text-white truncate">
+                      {user?.name || 'Usuário'}
+                    </span>
+                    <span className="text-xs text-slate-400 truncate">
+                      {user?.role === 'admin' ? 'Administrador' : 'Usuário'}
+                    </span>
+                  </div>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Perfil</span>
+                </DropdownMenuItem>
+                {user?.role === 'admin' && (
+                  <DropdownMenuItem onClick={() => navigate('/admin/dashboard')}>
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Administração</span>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sair</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </SidebarFooter>
           <SidebarRail />
         </Sidebar>
@@ -121,6 +177,8 @@ export default function Layout() {
               <SidebarTrigger className="-ml-2" />
               <Separator orientation="vertical" className="h-6" />
               <ClinicSelector />
+              <Separator orientation="vertical" className="h-6" />
+              <DossierSelector onDossierChange={setCurrentDossierId} />
             </div>
 
             <div className="flex items-center gap-4">

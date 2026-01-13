@@ -26,8 +26,9 @@ type QuestionKey = keyof IOperationalAssessment
 interface Question {
   key: QuestionKey
   title: string
-  description: string
+  subtitle: string
   placeholder: string
+  guidance?: string
 }
 
 export default function OperationalAssessment() {
@@ -43,66 +44,80 @@ export default function OperationalAssessment() {
 
   // Dynamic context helper with safe access
   const getClinicName = () => config_inicial?.nome_clinica || 'sua clínica'
-  const getClinicType = () => config_inicial?.tipo_clinica || 'saúde'
 
   const QUESTIONS: Question[] = [
     {
       key: 'services',
-      title: 'Quais são os principais serviços oferecidos?',
-      description: `Para ${getClinicName()}, liste os tratamentos, exames ou procedimentos que compõem o carro-chefe do faturamento.`,
+      title: 'Quais serviços realmente sustentam o faturamento da clínica hoje?',
+      subtitle: 'Liste apenas os serviços que geram volume ou margem relevante.',
       placeholder:
-        'Ex: Consultas de cardiologia, Ecocardiograma, Teste Ergométrico...',
+        'Implantes (alto valor, depende do Dr. João)\nOrtodontia fixa (alto volume)\nConsultas de avaliação',
+      guidance:
+        'Separe por linhas e, se possível, indique: se é serviço de alto volume ou alto valor; se depende de um profissional específico.',
     },
     {
       key: 'infrastructure',
-      title: 'Como é a estrutura física atual?',
-      description:
-        'Descreva salas de atendimento, recepção, equipamentos principais e acessibilidade.',
+      title: 'A estrutura física é suficiente para a demanda atual?',
+      subtitle:
+        'Pense em capacidade vs uso real, não só em descrição.',
       placeholder:
-        'Ex: 3 consultórios, 1 sala de exames, recepção para 10 pessoas...',
+        '2 gabinetes, 1 sempre cheio e outro ocioso em alguns períodos.\nCBCT próprio, pouco usado.\nRecepção pequena nos horários de pico.',
+      guidance:
+        'Informe: nº de gabinetes; se ficam cheios, ociosos ou sobrecarregados; equipamentos críticos (ex: CBCT, scanner).',
     },
     {
       key: 'team_composition',
-      title: 'Qual é a composição da equipe?',
-      description:
-        'Quantidade e função de profissionais de saúde e equipe administrativa/apoio.',
-      placeholder: 'Ex: 3 médicos sócios, 2 secretárias, 1 copeira...',
+      title: 'Quais funções são críticas para a operação não parar?',
+      subtitle: 'Identifique pessoas-chave e riscos operacionais.',
+      placeholder:
+        '1 rececionista centraliza agenda e confirmações (difícil substituir).\nImplantes dependem de 1 médico específico.\nFinanceiro concentrado no sócio.',
+      guidance:
+        'Cite: funções críticas; se existe substituição fácil ou não.',
     },
     {
       key: 'working_hours',
-      title: 'Quais são os horários de funcionamento?',
-      description: 'Dias da semana e horários de abertura e fechamento.',
-      placeholder: 'Ex: Seg a Sex das 08h às 18h, Sáb das 08h às 12h...',
+      title: 'Os horários atuais atendem bem o perfil dos seus pacientes?',
+      subtitle:
+        'Não descreva só horários — descreva problemas ou oportunidades.',
+      placeholder:
+        'Seg–Sex 9h–18h.\nMuita procura após 18h e sábado.\nTardes de terça costumam ficar vazias.',
+      guidance:
+        'Informe: horários; se há horários vazios ou lotados; pedidos frequentes não atendidos.',
     },
     {
       key: 'patient_management',
-      title: 'Como é feito o agendamento e gestão de pacientes?',
-      description:
-        'Cite softwares utilizados, uso de planilhas ou agenda de papel.',
+      title: 'Quão organizado é o processo de agendamento hoje?',
+      subtitle: 'Descreva o nível de controle, não só a ferramenta.',
       placeholder:
-        'Ex: Software XYZ para agenda e prontuário, confirmação via WhatsApp manual...',
+        'Software simples.\nConfirmação manual via WhatsApp.\nNo-show frequente, sem indicador formal.',
+      guidance:
+        'Considere: confirmações; no-show; uso de indicadores.',
     },
     {
       key: 'financial_management',
-      title: 'Como é feita a gestão financeira?',
-      description:
-        'Controle de custos, faturamento, fluxo de caixa e indicadores acompanhados.',
+      title: 'Você consegue responder essas perguntas hoje sem esforço?',
+      subtitle: 'Se não, explique por quê.',
       placeholder:
-        'Ex: Planilha de Excel controlada pelo sócio, faturamento terceirizado...',
+        'Faturamento médio estimado.\nNão sei margem real.\nCustos altos com pessoal.',
+      guidance:
+        'Perguntas implícitas: Faturamento mensal médio? Margem aproximada? Custo fixo principal?',
     },
     {
       key: 'processes_well_defined',
-      title: 'Quais processos internos funcionam bem?',
-      description: 'O que a equipe faz com excelência e sem erros frequentes?',
+      title:
+        'O que funciona melhor que a média das clínicas semelhantes?',
+      subtitle:
+        'Pense em vantagem competitiva operacional, não elogios genéricos.',
       placeholder:
-        'Ex: O atendimento na recepção é muito elogiado, a limpeza é impecável...',
+        'Atendimento inicial muito bem avaliado.\nOrganização clínica elogiada.\nTempo de espera baixo.',
     },
     {
       key: 'processes_disorganized',
-      title: 'Quais processos geram atrito ou retrabalho?',
-      description: 'Onde estão os gargalos operacionais hoje?',
+      title: 'O que mais limita o crescimento hoje?',
+      subtitle:
+        'Se resolvesse apenas 1 coisa, qual faria mais diferença?',
       placeholder:
-        'Ex: Demora na confirmação de consultas, glosas de convênios, fila de espera...',
+        'Agenda cheia, mas falta conversão.\nNo-show alto.\nDependência de um único médico.',
     },
   ]
 
@@ -174,7 +189,7 @@ export default function OperationalAssessment() {
               Entrevista Operacional
             </h1>
             <p className="text-sm text-slate-500">
-              Módulo 2A &bull; Mapeamento de processos da {getClinicType()}
+              Módulo 2A &bull; Diagnóstico operacional de {getClinicName()}
             </p>
           </div>
           <span className="text-sm font-medium text-teal-600 bg-teal-50 px-3 py-1 rounded-full">
@@ -190,13 +205,23 @@ export default function OperationalAssessment() {
             <div className="bg-teal-100 p-3 rounded-xl mt-1 shrink-0">
               <ClipboardList className="size-6 text-teal-700" />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               <CardTitle className="text-2xl text-slate-800 leading-tight">
                 {currentQuestion.title}
               </CardTitle>
               <CardDescription className="text-base text-slate-600">
-                {currentQuestion.description}
+                {currentQuestion.subtitle}
               </CardDescription>
+              {currentQuestion.guidance && (
+                <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <p className="text-sm text-slate-600 font-medium mb-1">
+                    💡 Campo guiado:
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    {currentQuestion.guidance}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </CardHeader>
@@ -210,7 +235,7 @@ export default function OperationalAssessment() {
                 onKeyDown={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 className={cn(
-                  'text-base min-h-[160px] resize-none p-4 transition-colors',
+                  'text-base min-h-[180px] resize-none p-4 transition-colors font-mono text-sm',
                   vagueAnswerWarning
                     ? 'border-amber-400 focus-visible:ring-amber-400 bg-amber-50/30'
                     : 'border-slate-200 focus-visible:ring-teal-500',

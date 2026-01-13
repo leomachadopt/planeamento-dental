@@ -1,6 +1,20 @@
+/**
+ * @deprecated Este componente foi substituído pelo sistema de Relatório Final
+ * baseado em dossiês. Use /dossie/:dossierId/final-report
+ * 
+ * Este arquivo é mantido apenas para referência histórica.
+ * Será removido em versão futura.
+ * 
+ * O novo sistema oferece:
+ * - Consolidação automática de todas as seções do dossiê
+ * - Geração via IA com narrativa executiva única
+ * - Priorização de alavancas estratégicas
+ * - Exportação PDF
+ * - Versionamento e stale tracking
+ */
+
 import { useState } from 'react'
 import { useStrategyStore } from '@/stores/useStrategyStore'
-import { generateFinalReport } from '@/lib/report-generator'
 import {
   Card,
   CardContent,
@@ -27,18 +41,10 @@ import { cn } from '@/lib/utils'
 
 export default function FinalReport() {
   const state = useStrategyStore()
-  const { relatorio_final, setRelatorioFinal } = state
-  const [isGenerating, setIsGenerating] = useState(false)
+  const { relatorio_final, isGeneratingReport, generateFinalReport } = state
 
-  const handleGenerate = () => {
-    setIsGenerating(true)
-    // Simulate processing
-    setTimeout(() => {
-      const report = generateFinalReport(state)
-      setRelatorioFinal(report)
-      setIsGenerating(false)
-      toast.success('Relatório Final Integrado gerado com sucesso!')
-    }, 2500)
+  const handleGenerate = async () => {
+    await generateFinalReport()
   }
 
   if (!relatorio_final) {
@@ -59,10 +65,10 @@ export default function FinalReport() {
         <Button
           size="lg"
           onClick={handleGenerate}
-          disabled={isGenerating}
+          disabled={isGeneratingReportReport}
           className="bg-slate-900 text-white hover:bg-slate-800"
         >
-          {isGenerating ? (
+          {isGeneratingReport ? (
             <>
               <RefreshCw className="mr-2 size-4 animate-spin" />
               Compilando Dados...

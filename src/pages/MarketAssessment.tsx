@@ -29,15 +29,16 @@ import { toast } from 'sonner'
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
-const MIN_CHAR_LENGTH = 10
+const MIN_CHAR_LENGTH = 15
 
 type QuestionKey = keyof IMarketAssessment
 
 interface Question {
   key: QuestionKey
   title: string
-  description: string
+  subtitle: string
   placeholder: string
+  guidance?: string
 }
 
 export default function MarketAssessment() {
@@ -57,62 +58,73 @@ export default function MarketAssessment() {
   const QUESTIONS: Question[] = [
     {
       key: 'marketDescription',
-      title: 'Como você descreveria o mercado de saúde local?',
-      description: `Analise a região de ${getClinicLocation()}. Há muita concorrência? O público é sensível a preço ou prioriza qualidade?`,
+      title: 'Que tipo de mercado você enfrenta hoje?',
+      subtitle:
+        'Escolha a descrição que mais se aproxima da realidade, mesmo que não seja perfeita.',
       placeholder:
-        'Ex: Mercado saturado de clínicas populares, mas com pouca oferta premium...',
+        'Mercado saturado, com muitas clínicas generalistas.\nPacientes com forte sensibilidade a preço.\nPouca diferenciação real entre concorrentes.',
+      guidance:
+        'Descreva em poucas linhas, pensando em: excesso ou falta de clínicas; disputa por preço ou por valor; comportamento do paciente.',
     },
     {
       key: 'competitors',
-      title: 'Quem são os principais concorrentes diretos?',
-      description:
-        'Cite nomes ou tipos de estabelecimentos que disputam o mesmo paciente que você.',
+      title: 'Quem disputa exatamente o mesmo tipo de paciente que você?',
+      subtitle: 'Não liste todas as clínicas — liste quem rouba seu paciente.',
       placeholder:
-        'Ex: Clínica X, Rede Y e consultórios particulares do bairro...',
+        'Rede popular focada em preço.\nConsultório premium de implantes.\nClínica que aceita mais convênios.',
+      guidance:
+        'Informe: nome ou tipo; se competem por preço, conveniência ou especialização.',
     },
     {
       key: 'clinicStrengths',
-      title: `O que a ${getClinicName()} faz melhor que eles?`,
-      description:
-        'Quais são seus diferenciais competitivos reais? Atendimento, tecnologia, corpo clínico?',
+      title: 'Por que um paciente escolhe você e não o concorrente?',
+      subtitle:
+        'Pense na decisão do paciente, não na sua opinião interna.',
       placeholder:
-        'Ex: Nosso atendimento humanizado e a pontualidade nas consultas...',
+        'Escolhem quando valorizam explicação e confiança.\nPerdemos quando o foco é preço baixo.',
+      guidance:
+        'Complete frases como: "Pacientes nos escolhem quando…"; "Perdemos pacientes quando…"',
     },
     {
       key: 'competitorStrengths',
-      title: 'Em quais pontos os concorrentes são mais fortes?',
-      description:
-        'Seja honesto. Eles têm preço menor? Melhor localização? Mais marketing?',
+      title: 'Onde os concorrentes têm vantagem difícil de copiar?',
+      subtitle: 'Ignore detalhes pequenos. Foque em vantagens estruturais.',
       placeholder:
-        'Ex: Eles possuem estacionamento próprio e investem muito em redes sociais...',
+        'Rede tem escala e preços agressivos.\nConcorrente premium tem marca forte e marketing constante.',
+      guidance:
+        'Exemplos: localização; escala; marca; investimento contínuo.',
     },
     {
       key: 'acquisitionChannels',
-      title: 'Como os pacientes chegam até a clínica hoje?',
-      description:
-        'Indicação (boca a boca), Instagram, Google, Convênios, Passantes?',
-      placeholder: 'Ex: 70% indicações de outros pacientes, 30% Instagram...',
+      title: 'Quais canais trazem pacientes MAIS QUALIFICADOS?',
+      subtitle: 'Não é volume. É qualidade e conversão.',
+      placeholder:
+        'Indicação traz pacientes mais decididos.\nInstagram gera curiosos e pedidos de preço.\nGoogle traz urgências.',
+      guidance:
+        'Diferencie: volume alto / baixa conversão; volume menor / maior valor.',
     },
     {
       key: 'patientComplaints',
-      title: 'Quais são as principais queixas dos pacientes?',
-      description:
-        'O que eles reclamam na recepção ou nas pesquisas de satisfação?',
+      title: 'O que os pacientes mais reclamam das clínicas da região?',
+      subtitle: 'Inclua concorrentes, não só você.',
       placeholder:
-        'Ex: Dificuldade para agendar por telefone, demora no atendimento...',
+        'Reclamações frequentes sobre atrasos.\nFalta de clareza nos valores.\nDificuldade em falar com a recepção.',
+      guidance:
+        'Pense em: atrasos; dificuldade de agendamento; falta de clareza em orçamento.',
     },
     {
       key: 'patientCompliments',
-      title: 'Quais são os principais elogios recebidos?',
-      description: 'O que faz o paciente voltar e indicar a clínica?',
-      placeholder: 'Ex: A atenção do médico e a limpeza do ambiente...',
+      title: 'Por que pacientes voltam e indicam sua clínica?',
+      subtitle: 'Se tivesse que escolher 1 motivo principal, qual seria?',
+      placeholder:
+        'Confiança no médico.\nExplicação clara.\nAtendimento humano.',
     },
     {
       key: 'patientLoss',
-      title: 'Você já perdeu pacientes para a concorrência?',
-      description: 'Se sim, qual foi o motivo principal na sua visão?',
+      title: 'Quando você perde pacientes, o que geralmente pesa mais?',
+      subtitle: 'Preço, conveniência, convênio ou percepção de valor?',
       placeholder:
-        'Ex: Sim, principalmente por preço ou porque o concorrente aceita o convênio X...',
+        'Preço.\nConvênios.\nHorários mais flexíveis do concorrente.',
     },
   ]
 
@@ -172,11 +184,11 @@ export default function MarketAssessment() {
             <Globe className="size-8 text-blue-600" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            2B – Mercado, Clientes e Concorrência
+            2B – Análise de Mercado
           </h1>
           <p className="text-slate-500 max-w-lg">
-            Mapeamento estratégico do ambiente competitivo e percepção de valor
-            dos pacientes da {getClinicName()}.
+            Mapeamento estratégico do ambiente competitivo e posicionamento
+            defensável para {getClinicName()}.
           </p>
         </div>
 
@@ -185,10 +197,10 @@ export default function MarketAssessment() {
             <div className="flex justify-between items-center">
               <div>
                 <CardTitle className="text-xl text-slate-800">
-                  Relatório de Inteligência de Mercado
+                  Inteligência de Mercado Estratégica
                 </CardTitle>
                 <CardDescription>
-                  Visão consolidada dos fatores externos e internos.
+                  Onde a clínica pode (e não pode) competir em 2026.
                 </CardDescription>
               </div>
               <Badge variant="outline" className="bg-white">
@@ -197,100 +209,50 @@ export default function MarketAssessment() {
             </div>
           </CardHeader>
           <CardContent className="p-8 space-y-8">
-            {/* Visão de Mercado */}
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-blue-800 flex items-center gap-2">
-                <Globe className="size-4" />
-                Visão de Mercado
-              </h3>
-              <p className="text-slate-700 leading-relaxed pl-6 border-l-2 border-slate-200">
-                {localAnswers.marketDescription}
-              </p>
-            </section>
-
-            {/* Concorrentes */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <section className="space-y-3">
-                <h3 className="text-lg font-semibold text-slate-700 flex items-center gap-2">
-                  <Target className="size-4 text-red-500" />
-                  Concorrentes Diretos
-                </h3>
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 text-slate-700 text-sm">
-                  {localAnswers.competitors}
-                </div>
-              </section>
-
-              <section className="space-y-3">
-                <h3 className="text-lg font-semibold text-slate-700 flex items-center gap-2">
-                  <Users className="size-4 text-teal-500" />
-                  Canais de Aquisição
-                </h3>
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 text-slate-700 text-sm">
-                  {localAnswers.acquisitionChannels}
-                </div>
-              </section>
-            </div>
-
-            {/* SWOT Simplificada (Forças e Fraquezas) */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-semibold text-blue-800 flex items-center gap-2">
-                <div className="size-2 bg-blue-500 rounded-full" />
-                Diferenciais Competitivos
-              </h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="border border-green-200 bg-green-50/50 rounded-lg p-4">
-                  <span className="text-xs font-bold text-green-700 uppercase mb-2 block flex items-center gap-1">
-                    <ThumbsUp className="size-3" /> Forças da Clínica
-                  </span>
-                  <p className="text-slate-800 text-sm">
-                    {localAnswers.clinicStrengths}
-                  </p>
-                </div>
-                <div className="border border-red-200 bg-red-50/50 rounded-lg p-4">
-                  <span className="text-xs font-bold text-red-700 uppercase mb-2 block flex items-center gap-1">
-                    <AlertCircle className="size-3" /> Pontos Fracos vs.
-                    Concorrência
-                  </span>
-                  <div className="text-slate-800 text-sm space-y-2">
-                    <p>{localAnswers.competitorStrengths}</p>
-                    {localAnswers.patientLoss && (
-                      <div className="pt-2 mt-2 border-t border-red-200">
-                        <span className="text-xs font-semibold text-red-600">
-                          Motivo de Perda:
-                        </span>{' '}
-                        {localAnswers.patientLoss}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Percepção do Paciente */}
-            <section className="space-y-3">
-              <h3 className="text-lg font-semibold text-blue-800 flex items-center gap-2">
-                <div className="size-2 bg-blue-500 rounded-full" />
-                Percepção dos Pacientes
-              </h3>
-              <div className="grid md:grid-cols-2 gap-4 pl-4 border-l-2 border-slate-200">
-                <div>
-                  <h4 className="font-medium text-green-700 text-sm mb-1 flex items-center gap-1">
-                    <ThumbsUp className="size-3" /> Elogios Frequentes
-                  </h4>
-                  <p className="text-slate-600 text-sm">
-                    {localAnswers.patientCompliments}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-amber-700 text-sm mb-1 flex items-center gap-1">
-                    <ThumbsDown className="size-3" /> Reclamações Comuns
-                  </h4>
-                  <p className="text-slate-600 text-sm">
-                    {localAnswers.patientComplaints}
-                  </p>
-                </div>
-              </div>
-            </section>
+            <Section
+              title="1. Tipo de mercado"
+              subtitle="Que tipo de mercado você enfrenta hoje?"
+              content={localAnswers.marketDescription}
+            />
+            <Section
+              title="2. Quem realmente disputa o mesmo paciente"
+              subtitle="Quem disputa exatamente o mesmo tipo de paciente que você?"
+              content={localAnswers.competitors}
+            />
+            <Section
+              title="3. Critério de escolha do paciente"
+              subtitle="Por que um paciente escolhe você e não o concorrente?"
+              content={localAnswers.clinicStrengths}
+            />
+            <Section
+              title="4. Onde os concorrentes são estruturalmente melhores"
+              subtitle="Onde os concorrentes têm vantagem difícil de copiar?"
+              content={localAnswers.competitorStrengths}
+              variant="warning"
+            />
+            <Section
+              title="5. Como a demanda chega até você (qualidade do canal)"
+              subtitle="Quais canais trazem pacientes MAIS QUALIFICADOS?"
+              content={localAnswers.acquisitionChannels}
+            />
+            <Section
+              title="6. Dor recorrente do mercado"
+              subtitle="O que os pacientes mais reclamam das clínicas da região?"
+              content={localAnswers.patientComplaints}
+              variant="warning"
+            />
+            <Section
+              title="7. Motivos reais de fidelização"
+              subtitle="Por que pacientes voltam e indicam sua clínica?"
+              content={localAnswers.patientCompliments}
+              variant="success"
+            />
+            <Section
+              title="8. Perdas competitivas (aprendizado estratégico)"
+              subtitle="Quando você perde pacientes, o que geralmente pesa mais?"
+              content={localAnswers.patientLoss}
+              variant="warning"
+            />
           </CardContent>
           <CardFooter className="bg-slate-50 border-t border-slate-100 p-6 flex justify-between">
             <Button variant="outline" onClick={() => setIsCompleted(false)}>
@@ -320,8 +282,7 @@ export default function MarketAssessment() {
               Análise de Mercado
             </h1>
             <p className="text-sm text-slate-500">
-              Módulo 2B &bull; Entendendo o ambiente externo da{' '}
-              {getClinicName()}
+              Módulo 2B &bull; Posicionamento competitivo de {getClinicName()}
             </p>
           </div>
           <span className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
@@ -337,13 +298,23 @@ export default function MarketAssessment() {
             <div className="bg-blue-100 p-3 rounded-xl mt-1 shrink-0">
               <Globe className="size-6 text-blue-700" />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               <CardTitle className="text-2xl text-slate-800 leading-tight">
                 {currentQuestion.title}
               </CardTitle>
               <CardDescription className="text-base text-slate-600">
-                {currentQuestion.description}
+                {currentQuestion.subtitle}
               </CardDescription>
+              {currentQuestion.guidance && (
+                <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <p className="text-sm text-slate-600 font-medium mb-1">
+                    💡 Campo guiado:
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    {currentQuestion.guidance}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </CardHeader>
@@ -357,7 +328,7 @@ export default function MarketAssessment() {
                 onKeyDown={handleKeyPress}
                 placeholder={currentQuestion.placeholder}
                 className={cn(
-                  'text-base min-h-[160px] resize-none p-4 transition-colors',
+                  'text-base min-h-[180px] resize-none p-4 transition-colors font-mono text-sm',
                   vagueAnswerWarning
                     ? 'border-amber-400 focus-visible:ring-amber-400 bg-amber-50/30'
                     : 'border-slate-200 focus-visible:ring-blue-500',
@@ -403,5 +374,45 @@ export default function MarketAssessment() {
         </CardFooter>
       </Card>
     </div>
+  )
+}
+
+function Section({
+  title,
+  subtitle,
+  content,
+  variant = 'default',
+}: {
+  title: string
+  subtitle?: string
+  content: string
+  variant?: 'default' | 'success' | 'warning'
+}) {
+  const variantStyles = {
+    default: 'border-slate-200 bg-white',
+    success: 'border-green-200 bg-green-50/30',
+    warning: 'border-amber-200 bg-amber-50/30',
+  }
+
+  return (
+    <section className="space-y-3">
+      <div>
+        <h3 className="text-lg font-semibold text-blue-800 flex items-center gap-2">
+          <div className="size-2 bg-blue-500 rounded-full" />
+          {title}
+        </h3>
+        {subtitle && (
+          <p className="text-sm text-slate-500 mt-1 ml-6">{subtitle}</p>
+        )}
+      </div>
+      <div
+        className={cn(
+          'text-slate-700 leading-relaxed pl-4 border-l-2 space-y-2 p-3 rounded-r-md whitespace-pre-line',
+          variantStyles[variant],
+        )}
+      >
+        <p>{content}</p>
+      </div>
+    </section>
   )
 }

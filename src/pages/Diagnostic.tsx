@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useStrategyStore } from '@/stores/useStrategyStore'
-import { generateDiagnosticReport } from '@/lib/report-generator'
 import {
   Card,
   CardContent,
@@ -39,9 +38,14 @@ import { cn } from '@/lib/utils'
 
 export default function Diagnostic() {
   const state = useStrategyStore()
-  const { diagnosis, updateRumelt, relatorio_1, setRelatorio1 } = state
+  const {
+    diagnosis,
+    updateRumelt,
+    relatorio_1,
+    isGeneratingReport,
+    generateDiagnosticReport,
+  } = state
   const [rumeltData, setRumeltData] = useState(diagnosis.rumelt)
-  const [isGenerating, setIsGenerating] = useState(false)
 
   const handleSaveRumelt = () => {
     updateRumelt(rumeltData)
@@ -62,17 +66,8 @@ export default function Diagnostic() {
     }, 2000)
   }
 
-  const handleGenerateReport = () => {
-    setIsGenerating(true)
-    // Simulate processing time for "AI" feel
-    setTimeout(() => {
-      const report = generateDiagnosticReport(state)
-      setRelatorio1(report)
-      setIsGenerating(false)
-      toast.success('Relatório gerado com sucesso!', {
-        description: 'Seu diagnóstico situacional está pronto.',
-      })
-    }, 1500)
+  const handleGenerateReport = async () => {
+    await generateDiagnosticReport()
   }
 
   return (
@@ -111,18 +106,18 @@ export default function Diagnostic() {
                 </div>
                 <Button
                   onClick={handleGenerateReport}
-                  disabled={isGenerating}
+                  disabled={isGeneratingReport}
                   className="bg-teal-600 hover:bg-teal-700 text-white min-w-[200px]"
                 >
-                  {isGenerating ? (
+                  {isGeneratingReport ? (
                     <>
                       <RefreshCw className="mr-2 size-4 animate-spin" />
-                      Gerando Análise...
+                      Gerando com IA...
                     </>
                   ) : (
                     <>
                       <BrainCircuit className="mr-2 size-4" />
-                      Gerar Diagnóstico 2026
+                      Gerar Diagnóstico com IA
                     </>
                   )}
                 </Button>
@@ -144,12 +139,12 @@ export default function Diagnostic() {
                   variant="outline"
                   size="sm"
                   onClick={handleGenerateReport}
-                  disabled={isGenerating}
+                  disabled={isGeneratingReport}
                 >
                   <RefreshCw
                     className={cn(
                       'mr-2 size-3',
-                      isGenerating && 'animate-spin',
+                      isGeneratingReport && 'animate-spin',
                     )}
                   />
                   Regerar

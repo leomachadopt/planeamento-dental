@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useStrategyStore } from '@/stores/useStrategyStore'
-import { generateStrategicDirectionReport } from '@/lib/report-generator'
 import {
   Card,
   CardContent,
@@ -38,10 +37,10 @@ export default function Strategy() {
     addBlueOceanItem,
     removeBlueOceanItem,
     relatorio_2,
-    setRelatorio2,
+    isGeneratingReport,
+    generateStrategicReport,
   } = state
   const [newItem, setNewItem] = useState('')
-  const [isGenerating, setIsGenerating] = useState(false)
 
   const handleAddItem = (category: keyof typeof blueOcean) => {
     if (!newItem.trim()) return
@@ -49,14 +48,8 @@ export default function Strategy() {
     setNewItem('')
   }
 
-  const handleGenerateReport = () => {
-    setIsGenerating(true)
-    setTimeout(() => {
-      const report = generateStrategicDirectionReport(state)
-      setRelatorio2(report)
-      setIsGenerating(false)
-      toast.success('Relatório de Direcionamento gerado com sucesso!')
-    }, 1500)
+  const handleGenerateReport = async () => {
+    await generateStrategicReport()
   }
 
   return (
@@ -95,10 +88,10 @@ export default function Strategy() {
                 </div>
                 <Button
                   onClick={handleGenerateReport}
-                  disabled={isGenerating}
+                  disabled={isGeneratingReport}
                   className="bg-indigo-600 hover:bg-indigo-700 text-white min-w-[200px]"
                 >
-                  {isGenerating ? (
+                  {isGeneratingReport ? (
                     <>
                       <RefreshCw className="mr-2 size-4 animate-spin" />
                       Processando Estratégia...
@@ -139,12 +132,12 @@ export default function Strategy() {
                     variant="outline"
                     size="sm"
                     onClick={handleGenerateReport}
-                    disabled={isGenerating}
+                    disabled={isGeneratingReport}
                   >
                     <RefreshCw
                       className={cn(
                         'mr-2 size-3',
-                        isGenerating && 'animate-spin',
+                        isGeneratingReport && 'animate-spin',
                       )}
                     />
                     Regerar

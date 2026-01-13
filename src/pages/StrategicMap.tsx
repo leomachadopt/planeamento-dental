@@ -62,7 +62,9 @@ export default function StrategicMap() {
             Mapa Estratégico (BSC)
           </h1>
           <p className="text-slate-500">
-            Alinhamento visual dos objetivos e gerenciamento de OKRs.
+            Registro estruturado dos objetivos estratégicos por perspectiva do BSC.
+            O acompanhamento da execução destes objetivos deve ser feito em um
+            sistema de monitorização de desempenho.
           </p>
         </div>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>

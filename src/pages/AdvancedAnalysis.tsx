@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useStrategyStore } from '@/stores/useStrategyStore'
-import { generateAdvancedStrategyReport } from '@/lib/report-generator'
 import {
   Card,
   CardContent,
@@ -39,17 +38,10 @@ import { cn } from '@/lib/utils'
 
 export default function AdvancedAnalysis() {
   const state = useStrategyStore()
-  const { relatorio_3, setRelatorio3 } = state
-  const [isGenerating, setIsGenerating] = useState(false)
+  const { relatorio_3, isGeneratingReport, generateAdvancedReport } = state
 
-  const handleGenerateReport = () => {
-    setIsGenerating(true)
-    setTimeout(() => {
-      const report = generateAdvancedStrategyReport(state)
-      setRelatorio3(report)
-      setIsGenerating(false)
-      toast.success('Análise Estratégica Avançada gerada com sucesso!')
-    }, 2000)
+  const handleGenerateReport = async () => {
+    await generateAdvancedReport()
   }
 
   return (
@@ -89,10 +81,10 @@ export default function AdvancedAnalysis() {
                 </div>
                 <Button
                   onClick={handleGenerateReport}
-                  disabled={isGenerating}
+                  disabled={isGeneratingReport}
                   className="bg-purple-600 hover:bg-purple-700 text-white min-w-[200px]"
                 >
-                  {isGenerating ? (
+                  {isGeneratingReport ? (
                     <>
                       <RefreshCw className="mr-2 size-4 animate-spin" />
                       Processando Dados...
@@ -133,12 +125,12 @@ export default function AdvancedAnalysis() {
                     variant="outline"
                     size="sm"
                     onClick={handleGenerateReport}
-                    disabled={isGenerating}
+                    disabled={isGeneratingReport}
                   >
                     <RefreshCw
                       className={cn(
                         'mr-2 size-3',
-                        isGenerating && 'animate-spin',
+                        isGeneratingReport && 'animate-spin',
                       )}
                     />
                     Regerar

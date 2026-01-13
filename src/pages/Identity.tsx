@@ -28,6 +28,7 @@ import {
   TrendingUp,
   FileText,
   Lightbulb,
+  ArrowRight,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Link } from 'react-router-dom'
@@ -38,93 +39,104 @@ type QuestionKey = keyof IIdentityState
 interface Question {
   key: QuestionKey
   title: string
-  description: string
+  subtitle: string
   placeholder?: string
   type: 'text' | 'textarea' | 'radio'
   icon: any
   options?: { value: string; label: string; description?: string }[]
+  guidance?: string
 }
 
 const QUESTIONS: Question[] = [
   {
     key: 'reason',
     title: 'Razão de Existir (Propósito)',
-    description:
-      'Em uma única frase, por que a clínica existe além do lucro? Qual impacto ela gera na vida das pessoas?',
+    subtitle:
+      'Em uma única frase, por que a clínica existe além do lucro? Qual impacto ela busca gerar na vida dos pacientes?',
     placeholder:
-      'Ex: Proporcionar qualidade de vida através de uma reabilitação humanizada e acessível.',
+      'Ajudar pessoas com dor crônica a retomarem qualidade de vida por meio de um cuidado humano, contínuo e baseado em evidência.',
     type: 'textarea',
     icon: Fingerprint,
+    guidance:
+      'Pense no paciente, não na clínica. Evite palavras genéricas como "qualidade" ou "excelência" sem contexto.',
   },
   {
     key: 'recognitionGoal',
-    title: 'Meta de Reconhecimento (3 Anos)',
-    description:
-      'Como você quer que a clínica seja descrita pelos pacientes e mercado em 2029?',
+    title: 'Identidade Futura (Reconhecimento)',
+    subtitle:
+      'Em até 3 anos, como você quer que a clínica seja reconhecida pelo mercado?',
     placeholder:
-      'Ex: Ser referência regional em tratamento de coluna com tecnologia não-invasiva.',
+      'Ser reconhecida como a principal clínica de reabilitação esportiva para corredores amadores da região, sendo preferida a clínicas generalistas.',
     type: 'textarea',
     icon: Award,
+    guidance:
+      'Para quem? Em relação a quais concorrentes? Por qual diferencial principal?',
   },
   {
     key: 'values',
     title: 'Valores Inegociáveis',
-    description:
-      'Quais princípios guiam suas decisões e comportamento da equipe? O que não toleram?',
-    placeholder: 'Ex: Ética acima de tudo, pontualidade, escuta ativa...',
+    subtitle:
+      'Quais valores são inegociáveis na clínica? O que nunca será tolerado, mesmo que gere lucro?',
+    placeholder:
+      'Ética acima de resultados, respeito ao paciente, pontualidade, comunicação clara, responsabilidade clínica.',
     type: 'textarea',
     icon: FileText,
+    guidance:
+      'Liste entre 3 e 5 valores. Pense em decisões difíceis do dia a dia.',
   },
   {
     key: 'priorityAudience',
     title: 'Público Prioritário (2026)',
-    description:
-      'Quem é o cliente ideal que vamos focar nossos esforços de marketing e vendas neste ciclo?',
+    subtitle:
+      'Qual é o tipo de paciente que a clínica quer priorizar em 2026?',
     placeholder:
-      'Ex: Mulheres de 35-50 anos, praticantes de atividade física, classe B.',
-    type: 'text',
+      'Adultos entre 35 e 55 anos, ativos ou ex-atletas, com dores musculoesqueléticas recorrentes, que valorizam explicação, continuidade e estão dispostos a investir em tratamento de médio e longo prazo.',
+    type: 'textarea',
     icon: Users,
+    guidance:
+      'Não descreva "todos". Pense em quem mais se beneficia da sua proposta. Pense em quem você quer atrair (não só quem aparece).',
   },
   {
     key: 'pricePositioning',
     title: 'Posicionamento de Preço',
-    description:
-      'Como a clínica se posiciona em relação à média do mercado local?',
+    subtitle:
+      'Como a clínica escolhe se posicionar em relação ao preço médio do mercado local?',
     type: 'radio',
     icon: DollarSign,
     options: [
       {
-        value: 'Acessível',
-        label: 'Opção mais acessível',
+        value: 'Mais acessível',
+        label: 'Mais acessível (foco em custo-benefício)',
         description: 'Foco em custo-benefício e entrada facilitada.',
       },
       {
-        value: 'Intermediária',
-        label: 'Opção intermediária',
+        value: 'Intermediário',
+        label: 'Intermediário (equilíbrio preço x valor)',
         description: 'Equilíbrio entre qualidade e preço de mercado.',
       },
       {
-        value: 'Premium',
-        label: 'Opção mais premium/exclusiva',
+        value: 'Premium / exclusivo',
+        label: 'Premium / exclusivo (alto valor agregado)',
         description: 'Alto valor agregado, ticket alto e exclusividade.',
       },
     ],
   },
   {
     key: 'strategyFocus',
-    title: 'Foco da Estratégia de Crescimento',
-    description: 'Qual será o motor principal de receita?',
+    title: 'Foco do Crescimento',
+    subtitle:
+      'Qual será o principal motor de crescimento da clínica neste ciclo?',
     type: 'radio',
     icon: TrendingUp,
     options: [
       {
-        value: 'Volume',
-        label: 'Volume (muitos pacientes)',
+        value: 'Mais pacientes',
+        label: 'Mais pacientes (volume)',
         description: 'Giro rápido, agenda cheia, processos padronizados.',
       },
       {
-        value: 'Alto Ticket',
-        label: 'Maior valor por paciente (ticket médio alto)',
+        value: 'Mais valor por paciente',
+        label: 'Mais valor por paciente (ticket médio maior)',
         description:
           'Menos pacientes, tratamentos complexos e relacionamento profundo.',
       },
@@ -136,7 +148,10 @@ export default function Identity() {
   const { identity, updateIdentity, config_inicial, relatorio_1 } =
     useStrategyStore()
   const [currentStep, setCurrentStep] = useState(0)
-  const [localData, setLocalData] = useState<IIdentityState>(identity)
+  const [localData, setLocalData] = useState<IIdentityState>({
+    ...identity,
+    strategyFocusComplement: identity.strategyFocusComplement || '',
+  })
   const [isCompleted, setIsCompleted] = useState(false)
 
   const currentQuestion = QUESTIONS[currentStep]
@@ -149,9 +164,22 @@ export default function Identity() {
 
   const handleNext = () => {
     const value = localData[currentQuestion.key]
-    if (!value || value.trim() === '') {
-      toast.error('Por favor, responda a pergunta para continuar.')
-      return
+    
+    // Validação específica para cada passo
+    if (currentQuestion.key === 'strategyFocus') {
+      if (!value || value.trim() === '') {
+        toast.error('Por favor, selecione o foco de crescimento.')
+        return
+      }
+      if (!localData.strategyFocusComplement || localData.strategyFocusComplement.trim() === '') {
+        toast.error('Por favor, preencha o que precisará mudar na clínica para sustentar essa escolha.')
+        return
+      }
+    } else {
+      if (!value || value.trim() === '') {
+        toast.error('Por favor, responda a pergunta para continuar.')
+        return
+      }
     }
 
     updateIdentity(localData)
@@ -185,6 +213,7 @@ export default function Identity() {
       priorityAudience,
       pricePositioning,
       strategyFocus,
+      strategyFocusComplement,
     } = localData
 
     const name = getClinicName()
@@ -208,6 +237,9 @@ export default function Identity() {
             Estrategicamente, adotaremos um posicionamento de preço{' '}
             <strong>{pricePositioning}</strong>, sustentado por um modelo de
             crescimento focado em <strong>{strategyFocus}</strong>.
+            {strategyFocusComplement && (
+              <> Para sustentar essa escolha, será necessário: <em>{strategyFocusComplement}</em>.</>
+            )}
           </p>
         </>
       )
@@ -228,6 +260,9 @@ export default function Identity() {
           Para vencer no mercado, escolhemos ser uma opção{' '}
           <strong>{pricePositioning}</strong>, com uma estratégia de crescimento
           baseada em <strong>{strategyFocus}</strong>.
+          {strategyFocusComplement && (
+            <> Para sustentar essa escolha, precisaremos: <em>{strategyFocusComplement}</em>.</>
+          )}
         </p>
       </>
     )
@@ -241,11 +276,10 @@ export default function Identity() {
             <Fingerprint className="size-8 text-indigo-600" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            3A – Identidade e Posicionamento Desejado
+            3A – Identidade Estratégica
           </h1>
           <p className="text-slate-500 max-w-lg">
-            Definição estratégica da marca e do rumo do negócio para o próximo
-            ciclo.
+            Fundação estratégica: quem somos, para quem existimos e qual identidade vamos sustentar.
           </p>
         </div>
 
@@ -257,7 +291,7 @@ export default function Identity() {
                   Manifesto de Identidade 2026
                 </CardTitle>
                 <CardDescription>
-                  Documento consolidado de posicionamento.
+                  Documento consolidado de posicionamento estratégico.
                 </CardDescription>
               </div>
               <Badge className="bg-indigo-600 hover:bg-indigo-700">
@@ -277,7 +311,7 @@ export default function Identity() {
               className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               <Link to="/estrategia">
-                Ir para Estratégia (3B) <ChevronRight className="ml-2 size-4" />
+                Ir para Estratégia (3B) <ArrowRight className="ml-2 size-4" />
               </Link>
             </Button>
           </CardFooter>
@@ -295,7 +329,7 @@ export default function Identity() {
               Identidade Estratégica
             </h1>
             <p className="text-sm text-slate-500">
-              Módulo 3A &bull; Definindo quem somos e onde vamos jogar
+              Módulo 3A &bull; Fundação estratégica da {getClinicName()}
             </p>
           </div>
           <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
@@ -326,13 +360,23 @@ export default function Identity() {
             <div className="bg-indigo-100 p-3 rounded-xl mt-1 shrink-0">
               <currentQuestion.icon className="size-6 text-indigo-700" />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               <CardTitle className="text-2xl text-slate-800 leading-tight">
                 {currentQuestion.title}
               </CardTitle>
               <CardDescription className="text-base text-slate-600">
-                {currentQuestion.description}
+                {currentQuestion.subtitle}
               </CardDescription>
+              {currentQuestion.guidance && (
+                <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <p className="text-sm text-slate-600 font-medium mb-1">
+                    💡 Orientação:
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    {currentQuestion.guidance}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </CardHeader>
@@ -357,38 +401,69 @@ export default function Identity() {
               />
             )}
             {currentQuestion.type === 'radio' && currentQuestion.options && (
-              <RadioGroup
-                value={localData[currentQuestion.key] as string}
-                onValueChange={handleInputChange}
-                className="grid gap-4"
-              >
-                {currentQuestion.options.map((option) => (
-                  <div
-                    key={option.value}
-                    className={cn(
-                      'flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors',
-                      localData[currentQuestion.key] === option.value
-                        ? 'border-indigo-500 bg-indigo-50'
-                        : 'border-slate-200',
-                    )}
-                  >
-                    <RadioGroupItem value={option.value} id={option.value} />
-                    <Label
-                      htmlFor={option.value}
-                      className="flex-1 cursor-pointer"
-                    >
-                      <div className="font-medium text-slate-900 text-base">
-                        {option.label}
-                      </div>
-                      {option.description && (
-                        <div className="text-slate-500 text-sm mt-1">
-                          {option.description}
-                        </div>
+              <div className="space-y-4">
+                <RadioGroup
+                  value={localData[currentQuestion.key] as string}
+                  onValueChange={handleInputChange}
+                  className="grid gap-4"
+                >
+                  {currentQuestion.options.map((option) => (
+                    <div
+                      key={option.value}
+                      className={cn(
+                        'flex items-center space-x-3 space-y-0 rounded-lg border p-4 cursor-pointer hover:bg-slate-50 transition-colors',
+                        localData[currentQuestion.key] === option.value
+                          ? 'border-indigo-500 bg-indigo-50'
+                          : 'border-slate-200',
                       )}
-                    </Label>
+                    >
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <Label
+                        htmlFor={option.value}
+                        className="flex-1 cursor-pointer"
+                      >
+                        <div className="font-medium text-slate-900 text-base">
+                          {option.label}
+                        </div>
+                        {option.description && (
+                          <div className="text-slate-500 text-sm mt-1">
+                            {option.description}
+                          </div>
+                        )}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+                
+                {/* Nota fixa para posicionamento de preço */}
+                {currentQuestion.key === 'pricePositioning' && localData.pricePositioning && (
+                  <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <p className="text-sm text-amber-800">
+                      <strong>Nota:</strong> Essa decisão impacta diretamente processos, marketing, equipe e margem.
+                    </p>
                   </div>
-                ))}
-              </RadioGroup>
+                )}
+
+                {/* Campo complemento obrigatório para foco de crescimento */}
+                {currentQuestion.key === 'strategyFocus' && localData.strategyFocus && (
+                  <div className="mt-4 space-y-2">
+                    <Label className="text-base font-semibold">
+                      O que precisará mudar na clínica para sustentar essa escolha?
+                    </Label>
+                    <Textarea
+                      value={localData.strategyFocusComplement}
+                      onChange={(e) =>
+                        setLocalData({
+                          ...localData,
+                          strategyFocusComplement: e.target.value,
+                        })
+                      }
+                      placeholder="Ex: Padronizar processos, melhorar agenda, reduzir dependência do gestor e investir em treinamento da equipe."
+                      className="min-h-[100px] border-slate-300 focus-visible:ring-indigo-500"
+                    />
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </CardContent>

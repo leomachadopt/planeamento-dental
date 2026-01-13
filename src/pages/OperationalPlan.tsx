@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useStrategyStore } from '@/stores/useStrategyStore'
-import { generateOperationalPlanReport } from '@/lib/report-generator'
 import {
   Card,
   CardContent,
@@ -34,17 +33,15 @@ import {
 
 export default function OperationalPlan() {
   const state = useStrategyStore()
-  const { relatorio_5, setRelatorio5, config_inicial } = state
-  const [isGenerating, setIsGenerating] = useState(false)
+  const {
+    relatorio_5,
+    config_inicial,
+    isGeneratingReport,
+    generateOperationalReport,
+  } = state
 
-  const handleGenerateReport = () => {
-    setIsGenerating(true)
-    setTimeout(() => {
-      const report = generateOperationalPlanReport(state)
-      setRelatorio5(report)
-      setIsGenerating(false)
-      toast.success('Plano Operacional 2026 gerado com sucesso!')
-    }, 2000)
+  const handleGenerateReport = async () => {
+    await generateOperationalReport()
   }
 
   return (
@@ -84,10 +81,10 @@ export default function OperationalPlan() {
                 </div>
                 <Button
                   onClick={handleGenerateReport}
-                  disabled={isGenerating}
+                  disabled={isGeneratingReportReport}
                   className="bg-emerald-600 hover:bg-emerald-700 text-white min-w-[200px]"
                 >
-                  {isGenerating ? (
+                  {isGeneratingReport ? (
                     <>
                       <RefreshCw className="mr-2 size-4 animate-spin" />
                       Processando...
@@ -128,12 +125,12 @@ export default function OperationalPlan() {
                     variant="outline"
                     size="sm"
                     onClick={handleGenerateReport}
-                    disabled={isGenerating}
+                    disabled={isGeneratingReportReport}
                   >
                     <RefreshCw
                       className={cn(
                         'mr-2 size-3',
-                        isGenerating && 'animate-spin',
+                        isGeneratingReport && 'animate-spin',
                       )}
                     />
                     Regerar

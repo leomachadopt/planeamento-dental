@@ -167,3 +167,6 @@ planeamento-dental/
 
 ✅ **Problema resolvido!** O aplicativo agora funciona corretamente no navegador usando API HTTP ao invés de conexão direta ao PostgreSQL.
 
+
+
+

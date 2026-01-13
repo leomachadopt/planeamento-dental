@@ -73,3 +73,6 @@ Se encontrar erros ao executar o schema:
 2. **Tabelas já existem**: Use `DROP TABLE IF EXISTS` antes de criar, ou remova manualmente as tabelas antigas
 3. **Erro de sintaxe**: Verifique se está usando PostgreSQL 12+ (Neon usa versões recentes)
 
+
+
+

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useStrategyStore } from '@/stores/useStrategyStore'
-import { generateTacticalPlanReport } from '@/lib/report-generator'
 import {
   Card,
   CardContent,
@@ -34,17 +33,10 @@ import { cn } from '@/lib/utils'
 
 export default function TacticalPlan() {
   const state = useStrategyStore()
-  const { relatorio_4, setRelatorio4 } = state
-  const [isGenerating, setIsGenerating] = useState(false)
+  const { relatorio_4, isGeneratingReport, generateTacticalReport } = state
 
-  const handleGenerateReport = () => {
-    setIsGenerating(true)
-    setTimeout(() => {
-      const report = generateTacticalPlanReport(state)
-      setRelatorio4(report)
-      setIsGenerating(false)
-      toast.success('Plano Tático 2026 gerado com sucesso!')
-    }, 2000)
+  const handleGenerateReport = async () => {
+    await generateTacticalReport()
   }
 
   const getPriorityColor = (p: string) => {
@@ -65,8 +57,9 @@ export default function TacticalPlan() {
           Plano Tático 2026
         </h1>
         <p className="text-slate-500">
-          Relatório 4: Transformando estratégia em ação com OKRs, KPIs e
-          Roadmap.
+          Relatório 4: Registro estruturado de OKRs, KPIs recomendados e
+          iniciativas táticas. A medição contínua desses indicadores deve ser
+          feita em um sistema próprio de monitorização de performance.
         </p>
       </div>
 
@@ -96,10 +89,10 @@ export default function TacticalPlan() {
                 </div>
                 <Button
                   onClick={handleGenerateReport}
-                  disabled={isGenerating}
+                  disabled={isGeneratingReportReport}
                   className="bg-orange-600 hover:bg-orange-700 text-white min-w-[200px]"
                 >
-                  {isGenerating ? (
+                  {isGeneratingReport ? (
                     <>
                       <RefreshCw className="mr-2 size-4 animate-spin" />
                       Processando Tática...
@@ -140,12 +133,12 @@ export default function TacticalPlan() {
                     variant="outline"
                     size="sm"
                     onClick={handleGenerateReport}
-                    disabled={isGenerating}
+                    disabled={isGeneratingReportReport}
                   >
                     <RefreshCw
                       className={cn(
                         'mr-2 size-3',
-                        isGenerating && 'animate-spin',
+                        isGeneratingReport && 'animate-spin',
                       )}
                     />
                     Regerar
@@ -175,9 +168,9 @@ export default function TacticalPlan() {
                     <CardTitle className="text-blue-800 text-4xl font-bold">
                       {Object.values(relatorio_4.kpis).flat().length}
                     </CardTitle>
-                    <CardDescription className="text-blue-700 font-medium">
-                      KPIs Monitorados
-                    </CardDescription>
+                  <CardDescription className="text-blue-700 font-medium">
+                    KPIs recomendados para acompanhamento em outro sistema
+                  </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <p className="text-xs text-slate-500">

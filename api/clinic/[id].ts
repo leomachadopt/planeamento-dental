@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import pool from '../_shared/db'
+import { authenticateToken, AuthRequest } from '../_shared/auth.js'
+import pool from '../_shared/db.js'
 
 // Importar funções do clinicService
 // Como estamos no servidor, podemos usar diretamente
@@ -161,6 +162,7 @@ async function getIdentity(clinicId: string) {
     priorityAudience: row.priority_audience || '',
     pricePositioning: row.price_positioning || '',
     strategyFocus: row.strategy_focus || '',
+    strategyFocusComplement: row.strategy_focus_complement || '',
   }
 }
 
@@ -408,15 +410,16 @@ async function saveIdentity(clinicId: string, identity: any) {
   await pool.query(
     `INSERT INTO identities (
       clinic_id, reason, recognition_goal, values, priority_audience,
-      price_positioning, strategy_focus
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+      price_positioning, strategy_focus, strategy_focus_complement
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     ON CONFLICT (clinic_id) DO UPDATE SET
       reason = $2, recognition_goal = $3, values = $4,
       priority_audience = $5, price_positioning = $6, strategy_focus = $7,
-      updated_at = NOW()`,
+      strategy_focus_complement = $8, updated_at = NOW()`,
     [
       clinicId, identity.reason, identity.recognitionGoal, identity.values,
       identity.priorityAudience, identity.pricePositioning, identity.strategyFocus,
+      identity.strategyFocusComplement || '',
     ],
   )
 }
@@ -487,7 +490,7 @@ export default async function handler(
   )
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
   )
 
   if (req.method === 'OPTIONS') {
@@ -495,42 +498,55 @@ export default async function handler(
     return
   }
 
-  try {
-    const { id } = req.query
-    if (!id || typeof id !== 'string') {
-      return res.status(400).json({ error: 'ID da clínica é obrigatório' })
+  return authenticateToken(req as AuthRequest, res, async () => {
+    try {
+      const { id } = req.query
+      if (!id || typeof id !== 'string') {
+        return res.status(400).json({ error: 'ID da clínica é obrigatório' })
+      }
+
+      const authReq = req as AuthRequest
+      const user = authReq.user!
+
+      // Verificar se o usuário tem acesso à clínica (admin pode acessar todas)
+      if (user.role !== 'admin' && user.clinicId !== id) {
+        return res.status(403).json({ error: 'Acesso negado a esta clínica' })
+      }
+
+      const { method } = req
+
+      if (method === 'GET') {
+        // Carregar todos os dados da clínica
+        const data = await loadAllClinicData(id)
+        const clinicResult = await pool.query('SELECT * FROM clinics WHERE id = $1', [id])
+        const clinic = clinicResult.rows[0]
+        return res.status(200).json({
+          ...data,
+          clinicName: clinic?.clinic_name || data.config_inicial?.nome_clinica || 'Clínica',
+        })
+      }
+
+      if (method === 'POST' || method === 'PUT') {
+        // Salvar todos os dados da clínica
+        const state = req.body
+        await saveAllClinicData(id, state)
+        return res.status(200).json({ success: true })
+      }
+
+      if (method === 'DELETE') {
+        // Apenas admin pode deletar clínicas
+        if (user.role !== 'admin') {
+          return res.status(403).json({ error: 'Apenas administradores podem deletar clínicas' })
+        }
+        await pool.query('DELETE FROM clinics WHERE id = $1', [id])
+        return res.status(200).json({ success: true })
+      }
+
+      return res.status(405).json({ error: 'Método não permitido' })
+    } catch (error: any) {
+      console.error('Erro na API:', error)
+      return res.status(500).json({ error: error.message })
     }
-
-    const { method } = req
-
-    if (method === 'GET') {
-      // Carregar todos os dados da clínica
-      const data = await loadAllClinicData(id)
-      const clinicResult = await pool.query('SELECT * FROM clinics WHERE id = $1', [id])
-      const clinic = clinicResult.rows[0]
-      return res.status(200).json({
-        ...data,
-        clinicName: clinic?.clinic_name || data.config_inicial?.nome_clinica || 'Clínica',
-      })
-    }
-
-    if (method === 'POST' || method === 'PUT') {
-      // Salvar todos os dados da clínica
-      const state = req.body
-      await saveAllClinicData(id, state)
-      return res.status(200).json({ success: true })
-    }
-
-    if (method === 'DELETE') {
-      // Deletar clínica
-      await pool.query('DELETE FROM clinics WHERE id = $1', [id])
-      return res.status(200).json({ success: true })
-    }
-
-    return res.status(405).json({ error: 'Método não permitido' })
-  } catch (error: any) {
-    console.error('Erro na API:', error)
-    return res.status(500).json({ error: error.message })
-  }
+  })
 }
 

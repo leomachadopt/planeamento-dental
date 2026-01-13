@@ -147,3 +147,6 @@ Todos os serviços estão em `src/services/clinicService.ts`:
 - [Documentação do Neon](https://neon.tech/docs)
 - [Documentação do pg (PostgreSQL para Node.js)](https://node-postgres.com/)
 
+
+
+

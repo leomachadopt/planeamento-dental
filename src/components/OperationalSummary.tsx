@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { OperationalAssessment as IOperationalAssessment } from '@/stores/useStrategyStore'
+import { cn } from '@/lib/utils'
 
 interface OperationalSummaryProps {
   answers: IOperationalAssessment
@@ -54,45 +55,47 @@ export function OperationalSummary({
           </div>
         </CardHeader>
         <CardContent className="p-8 space-y-8">
-          <Section title="Serviços" content={answers.services} />
           <Section
-            title="Estrutura Física"
-            content={answers.infrastructure}
-            extra={
-              answers.working_hours
-                ? `Funcionamento: ${answers.working_hours}`
-                : undefined
-            }
+            title="1. Serviços que sustentam a operação"
+            subtitle="Quais serviços realmente sustentam o faturamento da clínica hoje?"
+            content={answers.services}
           />
-          <Section title="Equipe" content={answers.team_composition} />
           <Section
-            title="Jornada do Paciente"
+            title="2. Capacidade física vs uso real"
+            subtitle="A estrutura física é suficiente para a demanda atual?"
+            content={answers.infrastructure}
+          />
+          <Section
+            title="3. Dependência da equipa"
+            subtitle="Quais funções são críticas para a operação não parar?"
+            content={answers.team_composition}
+          />
+          <Section
+            title="4. Horário vs comportamento do paciente"
+            subtitle="Os horários atuais atendem bem o perfil dos seus pacientes?"
+            content={answers.working_hours}
+          />
+          <Section
+            title="5. Maturidade do agendamento"
+            subtitle="Quão organizado é o processo de agendamento hoje?"
             content={answers.patient_management}
           />
-
-          <section className="space-y-3">
-            <SectionHeader title="Processos Internos" />
-            <div className="pl-4 border-l-2 border-slate-200 space-y-4">
-              <div className="bg-green-50 p-3 rounded-md border border-green-100">
-                <span className="text-xs font-bold text-green-700 uppercase mb-1 block">
-                  O que funciona bem
-                </span>
-                <p className="text-green-900">
-                  {answers.processes_well_defined}
-                </p>
-              </div>
-              <div className="bg-red-50 p-3 rounded-md border border-red-100">
-                <span className="text-xs font-bold text-red-700 uppercase mb-1 block">
-                  Pontos de Atenção
-                </span>
-                <p className="text-red-900">{answers.processes_disorganized}</p>
-              </div>
-            </div>
-          </section>
-
           <Section
-            title="Gestão Financeira"
+            title="6. Controle financeiro prático"
+            subtitle="Você consegue responder essas perguntas hoje sem esforço?"
             content={answers.financial_management}
+          />
+          <Section
+            title="7. O que funciona bem (vantagem operacional)"
+            subtitle="O que funciona melhor que a média das clínicas semelhantes?"
+            content={answers.processes_well_defined}
+            variant="success"
+          />
+          <Section
+            title="8. Onde a operação trava crescimento"
+            subtitle="O que mais limita o crescimento hoje?"
+            content={answers.processes_disorganized}
+            variant="warning"
           />
         </CardContent>
         <CardFooter className="bg-slate-50 border-t border-slate-100 p-6 flex justify-between">
@@ -112,18 +115,38 @@ export function OperationalSummary({
 
 function Section({
   title,
+  subtitle,
   content,
   extra,
+  variant = 'default',
 }: {
   title: string
+  subtitle?: string
   content: string
   extra?: string
+  variant?: 'default' | 'success' | 'warning'
 }) {
+  const variantStyles = {
+    default: 'border-slate-200 bg-white',
+    success: 'border-green-200 bg-green-50/30',
+    warning: 'border-amber-200 bg-amber-50/30',
+  }
+
   return (
     <section className="space-y-3">
-      <SectionHeader title={title} />
-      <div className="text-slate-700 leading-relaxed pl-4 border-l-2 border-slate-200 space-y-2">
-        <p>{content}</p>
+      <div>
+        <SectionHeader title={title} />
+        {subtitle && (
+          <p className="text-sm text-slate-500 mt-1 ml-6">{subtitle}</p>
+        )}
+      </div>
+      <div
+        className={cn(
+          'text-slate-700 leading-relaxed pl-4 border-l-2 space-y-2 p-3 rounded-r-md',
+          variantStyles[variant],
+        )}
+      >
+        <p className="whitespace-pre-line">{content}</p>
         {extra && (
           <p className="text-sm text-slate-500 mt-2 font-medium">{extra}</p>
         )}

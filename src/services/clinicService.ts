@@ -306,7 +306,7 @@ export async function saveManagerVision(
   clinicId: string,
   vision: ManagerVision,
 ): Promise<void> {
-  // Salvar dados principais
+  // Salvar dados principais - vision2026 e kpis como JSON
   await pool.query(
     `INSERT INTO manager_visions (
       clinic_id, vision_2026, revenue_goal, occupancy_goal, nps_goal, other_goal,
@@ -321,11 +321,11 @@ export async function saveManagerVision(
       satisfaction_justification = $12, updated_at = NOW()`,
     [
       clinicId,
-      vision.vision2026,
+      JSON.stringify(vision.vision2026),
       vision.goals.revenue,
       vision.goals.occupancy,
       vision.goals.nps,
-      vision.goals.other,
+      JSON.stringify(vision.kpis), // Salvar KPIs no other_goal temporariamente
       vision.ratings.processes.score,
       vision.ratings.processes.justification,
       vision.ratings.financial.score,
@@ -343,22 +343,22 @@ export async function saveManagerVision(
     clinicId,
   ])
 
-  // Inserir problemas
+  // Inserir problemas como JSON
   for (let i = 0; i < vision.problems.length; i++) {
-    if (vision.problems[i]) {
+    if (vision.problems[i] && vision.problems[i].description) {
       await pool.query(
         'INSERT INTO manager_problems (clinic_id, problem, position) VALUES ($1, $2, $3)',
-        [clinicId, vision.problems[i], i],
+        [clinicId, JSON.stringify(vision.problems[i]), i],
       )
     }
   }
 
-  // Inserir oportunidades
+  // Inserir oportunidades como JSON
   for (let i = 0; i < vision.opportunities.length; i++) {
-    if (vision.opportunities[i]) {
+    if (vision.opportunities[i] && vision.opportunities[i].description) {
       await pool.query(
         'INSERT INTO manager_opportunities (clinic_id, opportunity, position) VALUES ($1, $2, $3)',
-        [clinicId, vision.opportunities[i], i],
+        [clinicId, JSON.stringify(vision.opportunities[i]), i],
       )
     }
   }
@@ -383,10 +383,79 @@ export async function getManagerVision(
   )
 
   const row = visionResult.rows[0]
+  
+  // Tentar parsear problemas e oportunidades como JSON, senão usar formato antigo
+  let problems: any[] = []
+  try {
+    problems = problemsResult.rows.map((r) => {
+      try {
+        return JSON.parse(r.problem)
+      } catch {
+        // Formato antigo (string simples)
+        return { description: r.problem, impact: [], sinceWhen: '', rootCause: '' }
+      }
+    })
+  } catch {
+    problems = []
+  }
+
+  let opportunities: any[] = []
+  try {
+    opportunities = opportunitiesResult.rows.map((r) => {
+      try {
+        return JSON.parse(r.opportunity)
+      } catch {
+        // Formato antigo (string simples)
+        return { description: r.opportunity, dependsOn: [], risk: '', tradeOff: '' }
+      }
+    })
+  } catch {
+    opportunities = []
+  }
+
+  // Tentar parsear vision2026 como JSON
+  let vision2026: any = null
+  try {
+    if (row.vision_2026) {
+      vision2026 = JSON.parse(row.vision_2026)
+    }
+  } catch {
+    vision2026 = null
+  }
+
+  // Tentar parsear kpis do other_goal (temporário até atualizar schema)
+  let kpis: any = null
+  try {
+    if (row.other_goal) {
+      kpis = JSON.parse(row.other_goal)
+    }
+  } catch {
+    kpis = null
+  }
+
   return {
-    problems: problemsResult.rows.map((r) => r.problem),
-    opportunities: opportunitiesResult.rows.map((r) => r.opportunity),
-    vision2026: row.vision_2026 || '',
+    problems: problems.length > 0 ? problems : [
+      { description: '', impact: [], sinceWhen: '', rootCause: '' },
+      { description: '', impact: [], sinceWhen: '', rootCause: '' },
+      { description: '', impact: [], sinceWhen: '', rootCause: '' },
+    ],
+    opportunities: opportunities.length > 0 ? opportunities : [
+      { description: '', dependsOn: [], risk: '', tradeOff: '' },
+      { description: '', dependsOn: [], risk: '', tradeOff: '' },
+      { description: '', dependsOn: [], risk: '', tradeOff: '' },
+    ],
+    vision2026: vision2026 || {
+      financial: { monthlyRevenue: '', margin: '', ownerDependency: '' },
+      market: { knownFor: '', chosenFor: '' },
+      operation: { scheduleStatus: '', processStandardization: '' },
+      people: { teamProfile: '', turnover: '', autonomy: '' },
+    },
+    kpis: kpis || {
+      financial: { monthlyRevenue: '', margin: '', averageTicket: '' },
+      operational: { occupancyRate: '', waitTime: '', noShowRate: '' },
+      experience: { nps: '', returnRate: '', referralRate: '' },
+      people: { maxTurnover: '', ownerDependency: '' },
+    },
     goals: {
       revenue: row.revenue_goal || '',
       occupancy: row.occupancy_goal || '',
@@ -419,12 +488,12 @@ export async function saveIdentity(
   await pool.query(
     `INSERT INTO identities (
       clinic_id, reason, recognition_goal, values, priority_audience,
-      price_positioning, strategy_focus
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+      price_positioning, strategy_focus, strategy_focus_complement
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     ON CONFLICT (clinic_id) DO UPDATE SET
       reason = $2, recognition_goal = $3, values = $4,
       priority_audience = $5, price_positioning = $6, strategy_focus = $7,
-      updated_at = NOW()`,
+      strategy_focus_complement = $8, updated_at = NOW()`,
     [
       clinicId,
       identity.reason,
@@ -433,6 +502,7 @@ export async function saveIdentity(
       identity.priorityAudience,
       identity.pricePositioning,
       identity.strategyFocus,
+      identity.strategyFocusComplement || '',
     ],
   )
 }
@@ -454,6 +524,7 @@ export async function getIdentity(
     priorityAudience: row.priority_audience || '',
     pricePositioning: (row.price_positioning as any) || '',
     strategyFocus: (row.strategy_focus as any) || '',
+    strategyFocusComplement: row.strategy_focus_complement || '',
   }
 }
 

@@ -105,3 +105,6 @@ VITE_API_URL=http://localhost:3000
 - As API routes já têm headers CORS configurados
 - Se ainda houver erro, verifique a configuração do proxy no `vite.config.ts`
 
+
+
+

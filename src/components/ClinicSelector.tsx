@@ -24,8 +24,15 @@ import { Save, Plus, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function ClinicSelector() {
-  const { currentClinicId, loadClinicData, saveClinicData, createNewClinic, isSaving, isLoading } =
-    useStrategyStore()
+  const {
+    currentClinicId,
+    loadClinicData,
+    saveClinicData,
+    createNewClinic,
+    isSaving,
+    isLoading,
+    hasUnsavedChanges,
+  } = useStrategyStore()
   interface Clinic {
     id: string
     clinic_name: string
@@ -151,17 +158,23 @@ export default function ClinicSelector() {
         onClick={handleSave}
         disabled={!currentClinicId || isSaving}
         size="sm"
-        variant="default"
+        variant={hasUnsavedChanges ? 'default' : 'outline'}
+        className={hasUnsavedChanges ? 'bg-orange-600 hover:bg-orange-700' : ''}
       >
         {isSaving ? (
           <>
             <Loader2 className="mr-2 size-4 animate-spin" />
             Salvando...
           </>
+        ) : hasUnsavedChanges ? (
+          <>
+            <Save className="mr-2 size-4" />
+            Salvar Agora
+          </>
         ) : (
           <>
             <Save className="mr-2 size-4" />
-            Salvar
+            Salvo
           </>
         )}
       </Button>

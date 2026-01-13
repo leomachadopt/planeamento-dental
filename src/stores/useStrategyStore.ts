@@ -48,51 +48,139 @@ export interface ConfigInicial {
 }
 
 export interface OperationalAssessment {
+  // Passo 1: Serviços que sustentam a operação
   services: string
+  // Passo 2: Capacidade física vs uso real
   infrastructure: string
+  // Passo 3: Dependência da equipa
   team_composition: string
+  // Passo 4: Horário vs comportamento do paciente
   working_hours: string
+  // Passo 5: Maturidade do agendamento
   patient_management: string
+  // Passo 6: Controle financeiro prático
   financial_management: string
+  // Passo 7: O que funciona bem (vantagem operacional)
   processes_well_defined: string
+  // Passo 8: Onde a operação trava crescimento
   processes_disorganized: string
 }
 
 export interface MarketAssessment {
+  // Passo 1: Tipo de mercado (não descrição genérica)
   marketDescription: string
+  // Passo 2: Quem realmente disputa o MESMO paciente
   competitors: string
+  // Passo 3: Critério de escolha do paciente
   clinicStrengths: string
+  // Passo 4: Onde os concorrentes são estruturalmente melhores
   competitorStrengths: string
+  // Passo 5: Como a demanda chega até você (qualidade do canal)
   acquisitionChannels: string
+  // Passo 6: Dor recorrente do mercado (não da clínica)
   patientComplaints: string
+  // Passo 7: Motivos reais de fidelização
   patientCompliments: string
+  // Passo 8: Perdas competitivas (aprendizado estratégico)
   patientLoss: string
 }
 
+export interface ProblemDetail {
+  description: string
+  impact: ('Financeiro' | 'Operacional' | 'Pessoas' | 'Experiência do paciente')[]
+  sinceWhen: string
+  rootCause: string
+}
+
+export interface OpportunityDetail {
+  description: string
+  dependsOn: ('Marketing' | 'Operação' | 'Pessoas' | 'Tecnologia' | 'Posicionamento de mercado')[]
+  risk: string
+  tradeOff: string
+}
+
+export interface Vision2026 {
+  financial: {
+    monthlyRevenue: string
+    margin: string
+    ownerDependency: string
+  }
+  market: {
+    knownFor: string
+    chosenFor: string
+  }
+  operation: {
+    scheduleStatus: string
+    processStandardization: string
+  }
+  people: {
+    teamProfile: string
+    turnover: string
+    autonomy: string
+  }
+}
+
+export interface KPIs {
+  financial: {
+    monthlyRevenue: string
+    margin: string
+    averageTicket: string
+  }
+  operational: {
+    occupancyRate: string
+    waitTime: string
+    noShowRate: string
+  }
+  experience: {
+    nps: string
+    returnRate: string
+    referralRate: string
+  }
+  people: {
+    maxTurnover: string
+    ownerDependency: string
+  }
+}
+
 export interface ManagerVision {
-  problems: string[]
-  opportunities: string[]
-  vision2026: string
+  // Passo 1: Dores reais de gestão (3 problemas com detalhes)
+  problems: ProblemDetail[]
+  // Passo 2: Oportunidades e alavancas estratégicas (3 oportunidades com detalhes)
+  opportunities: OpportunityDetail[]
+  // Passo 3: Visão 2026 (estado futuro concreto)
+  vision2026: Vision2026
+  // Passo 4: Métricas que realmente importam
+  kpis: KPIs
+  // Passo 5: Processos internos (maturidade real)
+  ratings: {
+    processes: { score: number; justification: string }
+    financial: { score: number; justification: string }
+    satisfaction: { score: number; justification: string }
+  }
+  // Campos legados para compatibilidade (serão preenchidos automaticamente)
   goals: {
     revenue: string
     occupancy: string
     nps: string
     other: string
   }
-  ratings: {
-    processes: { score: number; justification: string }
-    financial: { score: number; justification: string }
-    satisfaction: { score: number; justification: string }
-  }
 }
 
 export interface IdentityState {
+  // Passo 1: Razão de existir (propósito)
   reason: string
+  // Passo 2: Identidade futura (reconhecimento)
   recognitionGoal: string
+  // Passo 3: Valores inegociáveis
   values: string
+  // Passo 4: Público prioritário (2026)
   priorityAudience: string
+  // Passo 5: Posicionamento de preço
   pricePositioning: string
+  // Passo 6: Foco do crescimento
   strategyFocus: string
+  // Complemento obrigatório do foco de crescimento
+  strategyFocusComplement: string
 }
 
 export interface SWOT {
@@ -282,6 +370,7 @@ export interface StrategyState {
   currentClinicId: string | null
   isLoading: boolean
   isSaving: boolean
+  hasUnsavedChanges: boolean
 
   // Data
   clinicName: string
@@ -355,6 +444,37 @@ export interface StrategyState {
   loadClinicData: (clinicId: string) => Promise<void>
   saveClinicData: () => Promise<void>
   createNewClinic: (clinicName: string) => Promise<string>
+
+  // Report generation with AI
+  isGeneratingReport: boolean
+  generateDiagnosticReport: () => Promise<void>
+  generateStrategicReport: () => Promise<void>
+  generateAdvancedReport: () => Promise<void>
+  generateTacticalReport: () => Promise<void>
+  generateOperationalReport: () => Promise<void>
+  generateFinalReport: () => Promise<void>
+}
+
+// Debounce timer for auto-save
+let saveTimeout: NodeJS.Timeout | null = null
+
+// Debounced save function
+const debouncedSave = () => {
+  if (saveTimeout) {
+    clearTimeout(saveTimeout)
+  }
+  saveTimeout = setTimeout(async () => {
+    const state = useStrategyStore.getState()
+    console.log('🕒 Auto-save timer triggered', {
+      hasClinicId: !!state.currentClinicId,
+      hasUnsavedChanges: state.hasUnsavedChanges,
+      isSaving: state.isSaving,
+    })
+    if (state.currentClinicId && state.hasUnsavedChanges && !state.isSaving) {
+      console.log('💾 Auto-saving data...')
+      await state.saveClinicData()
+    }
+  }, 2000) // Wait 2 seconds after last change
 }
 
 export const useStrategyStore = create<StrategyState>((set, get) => ({
@@ -362,8 +482,10 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
   currentClinicId: null,
   isLoading: false,
   isSaving: false,
+  isGeneratingReport: false,
+  hasUnsavedChanges: false,
 
-  clinicName: 'Clínica Vida & Saúde',
+  clinicName: '',
   config_inicial: {
     tipo_clinica: '',
     nome_clinica: '',
@@ -377,101 +499,27 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
   },
   diagnosis: {
     porter: {
-      rivalry: 'Alta concorrência de clínicas populares na região.',
-      newEntrants: 'Barreiras de entrada médias (custo de equipamentos).',
-      substitutes: 'Terapias holísticas e automedicação.',
-      buyers: 'Pacientes exigem agendamento digital e rapidez.',
-      suppliers: 'Fornecedores de insumos com preços voláteis.',
+      rivalry: '',
+      newEntrants: '',
+      substitutes: '',
+      buyers: '',
+      suppliers: '',
     },
     rumelt: {
-      challenge:
-        'Estagnação do crescimento devido à baixa fidelização de pacientes crônicos.',
-      obstacles:
-        'Processos manuais de agendamento, falta de pós-consulta estruturado.',
-      policy:
-        'Implementar uma jornada digital centrada no paciente, automatizando o relacionamento e criando programas de continuidade.',
+      challenge: '',
+      obstacles: '',
+      policy: '',
     },
   },
   blueOcean: {
-    eliminate: ['Papelada física na recepção', 'Tempo de espera > 15min'],
-    reduce: [
-      'Consultas de retorno presenciais desnecessárias (migrar para tele)',
-    ],
-    raise: ['Acompanhamento pós-consulta', 'Integração com wearables'],
-    create: ["Programa de Fidelidade 'Saúde Premium'", 'Concierge de Saúde'],
+    eliminate: [],
+    reduce: [],
+    raise: [],
+    create: [],
   },
-  jtbd: [
-    {
-      id: '1',
-      job: 'Aliviar a dor nas costas rapidamente para voltar ao trabalho',
-      type: 'Funcional',
-      solution: "Protocolo 'Dor Zero' em 24h",
-    },
-    {
-      id: '2',
-      job: "Sentir-se cuidado e não apenas 'mais um número'",
-      type: 'Emocional',
-      solution: 'Atendimento personalizado e humanizado',
-    },
-  ],
-  okrs: [
-    {
-      id: '1',
-      objective: 'Garantir a Sustentabilidade Financeira',
-      perspective: 'Financeira',
-      progress: 65,
-      keyResults: [
-        {
-          id: 'kr1',
-          title: 'Aumentar faturamento recorrente',
-          target: 100000,
-          current: 65000,
-          unit: 'R$',
-        },
-      ],
-    },
-    {
-      id: '2',
-      objective: 'Encantar o Paciente na Jornada Digital',
-      perspective: 'Clientes',
-      progress: 40,
-      keyResults: [
-        {
-          id: 'kr2',
-          title: 'Atingir NPS de 75',
-          target: 75,
-          current: 45,
-          unit: 'pts',
-        },
-      ],
-    },
-  ],
-  actions: [
-    {
-      id: '1',
-      title: 'Implementar CRM de agendamento',
-      status: 'Do',
-      owner: 'Dr. Roberto',
-      deadline: '2024-03-15',
-      okrId: '2',
-    },
-    {
-      id: '2',
-      title: "Treinamento de recepcionistas em 'Hospitalidade'",
-      status: 'Plan',
-      owner: 'Ana (Gerente)',
-      deadline: '2024-03-20',
-      okrId: '2',
-    },
-    {
-      id: '3',
-      title: 'Revisar contratos de fornecedores',
-      status: 'Check',
-      owner: 'Financeiro',
-      deadline: '2024-02-28',
-      okrId: '1',
-    },
-  ],
+  jtbd: [],
+  okrs: [],
+  actions: [],
   operationalAssessment: {
     services: '',
     infrastructure: '',
@@ -523,52 +571,93 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
   relatorio_5: null,
   relatorio_final: null,
 
-  setConfigInicial: (config) =>
-    set(() => ({ config_inicial: config, clinicName: config.nome_clinica })),
-  updateRumelt: (data) =>
+  setConfigInicial: (config) => {
+    console.log('📝 setConfigInicial called', config)
+    set(() => ({
+      config_inicial: config,
+      clinicName: config.nome_clinica,
+      hasUnsavedChanges: true,
+    }))
+    // Auto-save with debounce
+    debouncedSave()
+  },
+  updateRumelt: (data) => {
     set((state) => ({
       diagnosis: {
         ...state.diagnosis,
         rumelt: { ...state.diagnosis.rumelt, ...data },
       },
-    })),
-  addBlueOceanItem: (category, item) =>
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  addBlueOceanItem: (category, item) => {
     set((state) => ({
       blueOcean: {
         ...state.blueOcean,
         [category]: [...state.blueOcean[category], item],
       },
-    })),
-  removeBlueOceanItem: (category, index) =>
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  removeBlueOceanItem: (category, index) => {
     set((state) => ({
       blueOcean: {
         ...state.blueOcean,
         [category]: state.blueOcean[category].filter((_, i) => i !== index),
       },
-    })),
-  addOKR: (okr) => set((state) => ({ okrs: [...state.okrs, okr] })),
-  addAction: (action) =>
-    set((state) => ({ actions: [...state.actions, action] })),
-  updateActionStatus: (id, status) =>
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  addOKR: (okr) => {
+    set((state) => ({ okrs: [...state.okrs, okr], hasUnsavedChanges: true }))
+    debouncedSave()
+  },
+  addAction: (action) => {
+    set((state) => ({
+      actions: [...state.actions, action],
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  updateActionStatus: (id, status) => {
     set((state) => ({
       actions: state.actions.map((a) => (a.id === id ? { ...a, status } : a)),
-    })),
-  updateOperationalAssessment: (data) =>
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  updateOperationalAssessment: (data) => {
+    console.log('📝 updateOperationalAssessment called', data)
     set((state) => ({
       operationalAssessment: { ...state.operationalAssessment, ...data },
-    })),
-  updateMarketAssessment: (data) =>
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  updateMarketAssessment: (data) => {
     set((state) => ({
       marketAssessment: { ...state.marketAssessment, ...data },
-    })),
-  updateManagerVision: (data) =>
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  updateManagerVision: (data) => {
     set((state) => ({
       managerVision: { ...state.managerVision, ...data },
-    })),
-  updateIdentity: (data) =>
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
+  updateIdentity: (data) => {
     set((state) => ({
       identity: { ...state.identity, ...data },
-    })),
+      hasUnsavedChanges: true,
+    }))
+    debouncedSave()
+  },
   setRelatorio1: (report) => set(() => ({ relatorio_1: report })),
   setRelatorio2: (report) => set(() => ({ relatorio_2: report })),
   setRelatorio3: (report) => set(() => ({ relatorio_3: report })),
@@ -577,7 +666,15 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
   setRelatorioFinal: (report) => set(() => ({ relatorio_final: report })),
 
   // Database actions
-  setCurrentClinicId: (clinicId) => set({ currentClinicId: clinicId }),
+  setCurrentClinicId: (clinicId) => {
+    set({ currentClinicId: clinicId })
+    // Persist to localStorage
+    if (clinicId) {
+      localStorage.setItem('currentClinicId', clinicId)
+    } else {
+      localStorage.removeItem('currentClinicId')
+    }
+  },
 
   loadClinicData: async (clinicId: string) => {
     set({ isLoading: true })
@@ -588,7 +685,11 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
         ...data,
         currentClinicId: clinicId,
         isLoading: false,
+        hasUnsavedChanges: false,
       })
+
+      // Persist to localStorage
+      localStorage.setItem('currentClinicId', clinicId)
 
       toast.success('Dados carregados com sucesso!')
     } catch (error) {
@@ -601,17 +702,20 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
   saveClinicData: async () => {
     const state = get()
     if (!state.currentClinicId) {
+      console.warn('⚠️ Tentativa de salvar sem clínica selecionada')
       toast.error('Nenhuma clínica selecionada')
       return
     }
 
+    console.log('💾 Saving clinic data...', state.currentClinicId)
     set({ isSaving: true })
     try {
       await api.saveClinicData(state.currentClinicId, state)
-      toast.success('Dados salvos com sucesso!')
-      set({ isSaving: false })
+      console.log('✅ Dados salvos com sucesso!')
+      set({ isSaving: false, hasUnsavedChanges: false })
+      toast.success('Dados salvos automaticamente!', { duration: 2000 })
     } catch (error) {
-      console.error('Erro ao salvar dados:', error)
+      console.error('❌ Erro ao salvar dados:', error)
       toast.error('Erro ao salvar dados')
       set({ isSaving: false })
     }
@@ -621,12 +725,165 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
     try {
       const { id } = await api.createClinic(clinicName)
       set({ currentClinicId: id, clinicName: clinicName })
+      // Persist to localStorage
+      localStorage.setItem('currentClinicId', id)
       toast.success('Clínica criada com sucesso!')
       return id
     } catch (error) {
       console.error('Erro ao criar clínica:', error)
       toast.error('Erro ao criar clínica')
       throw error
+    }
+  },
+
+  // Report generation
+  generateDiagnosticReport: async () => {
+    const state = get()
+    if (!state.currentClinicId) {
+      toast.error('Nenhuma clínica selecionada')
+      return
+    }
+
+    set({ isGeneratingReport: true })
+    try {
+      toast.info('Gerando relatório de diagnóstico com IA...')
+      const response = await api.generateReport(
+        state.currentClinicId,
+        'diagnostic',
+        state,
+      )
+      set({ relatorio_1: response.data })
+      toast.success('Relatório de diagnóstico gerado com sucesso!')
+    } catch (error: any) {
+      console.error('Erro ao gerar relatório:', error)
+      toast.error(error.message || 'Erro ao gerar relatório')
+    } finally {
+      set({ isGeneratingReport: false })
+    }
+  },
+
+  generateStrategicReport: async () => {
+    const state = get()
+    if (!state.currentClinicId) {
+      toast.error('Nenhuma clínica selecionada')
+      return
+    }
+
+    set({ isGeneratingReport: true })
+    try {
+      toast.info('Gerando relatório estratégico com IA...')
+      const response = await api.generateReport(
+        state.currentClinicId,
+        'strategic',
+        state,
+      )
+      set({ relatorio_2: response.data })
+      toast.success('Relatório estratégico gerado com sucesso!')
+    } catch (error: any) {
+      console.error('Erro ao gerar relatório:', error)
+      toast.error(error.message || 'Erro ao gerar relatório')
+    } finally {
+      set({ isGeneratingReport: false })
+    }
+  },
+
+  generateAdvancedReport: async () => {
+    const state = get()
+    if (!state.currentClinicId) {
+      toast.error('Nenhuma clínica selecionada')
+      return
+    }
+
+    set({ isGeneratingReport: true })
+    try {
+      toast.info('Gerando análise estratégica avançada com IA...')
+      const response = await api.generateReport(
+        state.currentClinicId,
+        'advanced',
+        state,
+      )
+      set({ relatorio_3: response.data })
+      toast.success('Análise avançada gerada com sucesso!')
+    } catch (error: any) {
+      console.error('Erro ao gerar relatório:', error)
+      toast.error(error.message || 'Erro ao gerar relatório')
+    } finally {
+      set({ isGeneratingReport: false })
+    }
+  },
+
+  generateTacticalReport: async () => {
+    const state = get()
+    if (!state.currentClinicId) {
+      toast.error('Nenhuma clínica selecionada')
+      return
+    }
+
+    set({ isGeneratingReport: true })
+    try {
+      toast.info('Gerando plano tático com IA...')
+      const response = await api.generateReport(
+        state.currentClinicId,
+        'tactical',
+        state,
+      )
+      set({ relatorio_4: response.data })
+      toast.success('Plano tático gerado com sucesso!')
+    } catch (error: any) {
+      console.error('Erro ao gerar relatório:', error)
+      toast.error(error.message || 'Erro ao gerar relatório')
+    } finally {
+      set({ isGeneratingReport: false })
+    }
+  },
+
+  generateOperationalReport: async () => {
+    const state = get()
+    if (!state.currentClinicId) {
+      toast.error('Nenhuma clínica selecionada')
+      return
+    }
+
+    set({ isGeneratingReport: true })
+    try {
+      toast.info('Gerando plano operacional com IA...')
+      const response = await api.generateReport(
+        state.currentClinicId,
+        'operational',
+        state,
+      )
+      set({ relatorio_5: response.data })
+      toast.success('Plano operacional gerado com sucesso!')
+    } catch (error: any) {
+      console.error('Erro ao gerar relatório:', error)
+      toast.error(error.message || 'Erro ao gerar relatório')
+    } finally {
+      set({ isGeneratingReport: false })
+    }
+  },
+
+  generateFinalReport: async () => {
+    const state = get()
+    if (!state.currentClinicId) {
+      toast.error('Nenhuma clínica selecionada')
+      return
+    }
+
+    set({ isGeneratingReport: true })
+    try {
+      toast.info('Gerando relatório final consolidado com IA...')
+      const response = await api.generateReport(
+        state.currentClinicId,
+        'final',
+        state,
+      )
+      set({ relatorio_final: response.data })
+      toast.success('Relatório final gerado com sucesso!')
+    } catch (error: any) {
+      console.error('Erro ao gerar relatório:', error)
+      toast.error(error.message || 'Erro ao gerar relatório')
+    } finally {
+      set({ isGeneratingReport: false })
     }
   },
 }))
