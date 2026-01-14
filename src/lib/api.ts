@@ -16,7 +16,9 @@ function getAuthToken(): string | null {
 }
 
 async function fetchAPI(endpoint: string, options: RequestInit = {}) {
-  const url = `${API_BASE_URL}${endpoint}`
+  // Garantir que endpoint começa com /
+  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
+  const url = `${API_BASE_URL}${normalizedEndpoint}`
   const token = getAuthToken()
 
   const headers: HeadersInit = {
@@ -43,11 +45,51 @@ async function fetchAPI(endpoint: string, options: RequestInit = {}) {
       throw new Error('Sessão expirada. Faça login novamente.')
     }
 
-    const error = await response.json().catch(() => ({ error: 'Erro desconhecido' }))
-    throw new Error(error.error || `HTTP error! status: ${response.status}`)
+    // Tentar parsear como JSON, mas tratar erros de parsing
+    let errorMessage = `HTTP error! status: ${response.status}`
+    try {
+      const contentType = response.headers.get('content-type')
+      if (contentType && contentType.includes('application/json')) {
+        const error = await response.json()
+        errorMessage = error.error || error.message || errorMessage
+      } else {
+        // Se não for JSON, tentar ler como texto
+        const text = await response.text()
+        // Se o texto parece ser código (contém "import" ou "export"), é um erro de roteamento
+        if (text.includes('import') || text.includes('export')) {
+          errorMessage = `Erro de roteamento: a API retornou código ao invés de JSON. Verifique se a rota ${endpoint} existe.`
+        } else if (text.trim()) {
+          errorMessage = text.substring(0, 200) // Limitar tamanho
+        }
+      }
+    } catch (parseError) {
+      // Se falhar ao parsear, usar mensagem padrão
+      console.error('Erro ao parsear resposta de erro:', parseError)
+    }
+    
+    throw new Error(errorMessage)
   }
 
-  return response.json()
+  // Verificar se a resposta é JSON antes de fazer parse
+  const contentType = response.headers.get('content-type')
+  if (contentType && contentType.includes('application/json')) {
+    return response.json()
+  } else {
+    // Se não for JSON, tentar parsear mesmo assim (pode ser texto vazio)
+    const text = await response.text()
+    if (text.trim()) {
+      // Se parece ser código, é um erro
+      if (text.includes('import') || text.includes('export')) {
+        throw new Error(`A API retornou código ao invés de JSON para ${endpoint}. Verifique a rota.`)
+      }
+      try {
+        return JSON.parse(text)
+      } catch {
+        throw new Error(`Resposta inválida da API: esperado JSON, recebido ${contentType || 'texto'}`)
+      }
+    }
+    return null
+  }
 }
 
 export const api = {
@@ -390,6 +432,48 @@ export const api = {
   
   deleteInitiative: (dossierId: string, entityId: string) =>
     fetchAPI(`/dossiers/${dossierId}/entities/initiatives?entityId=${entityId}`, {
+      method: 'DELETE',
+    }),
+
+  // Service Categories
+  getServiceCategories: (dossierId: string, entityId?: string) =>
+    fetchAPI(`/dossiers/${dossierId}/entities/service-categories${entityId ? `?entityId=${entityId}` : ''}`),
+  
+  createServiceCategory: (dossierId: string, data: any) =>
+    fetchAPI(`/dossiers/${dossierId}/entities/service-categories`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  
+  updateServiceCategory: (dossierId: string, entityId: string, data: any) =>
+    fetchAPI(`/dossiers/${dossierId}/entities/service-categories?entityId=${entityId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  
+  deleteServiceCategory: (dossierId: string, entityId: string) =>
+    fetchAPI(`/dossiers/${dossierId}/entities/service-categories?entityId=${entityId}`, {
+      method: 'DELETE',
+    }),
+
+  // Roles (clinic-level)
+  getRoles: (clinicId: string, entityId?: string) =>
+    fetchAPI(`/clinics/${clinicId}/roles${entityId ? `?entityId=${entityId}` : ''}`),
+  
+  createRole: (clinicId: string, data: any) =>
+    fetchAPI(`/clinics/${clinicId}/roles`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  
+  updateRole: (clinicId: string, entityId: string, data: any) =>
+    fetchAPI(`/clinics/${clinicId}/roles?entityId=${entityId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  
+  deleteRole: (clinicId: string, entityId: string) =>
+    fetchAPI(`/clinics/${clinicId}/roles?entityId=${entityId}`, {
       method: 'DELETE',
     }),
 

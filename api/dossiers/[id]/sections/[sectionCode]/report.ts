@@ -1,9 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { authenticateToken, AuthRequest } from '../../../_shared/auth.js'
-import pool from '../../../_shared/db.js'
-import { buildSectionSnapshot } from '../../../_shared/snapshotBuilder.js'
-import { generateSectionReportWithRetry } from '../../../_shared/section-ai-client.js'
-import { markFinalReportAsStale } from '../../../_shared/staleTracking.js'
+import { authenticateToken, AuthRequest } from '../../../../_shared/auth.js'
+import pool from '../../../../_shared/db.js'
+import { buildSectionSnapshot } from '../../../../_shared/snapshotBuilder.js'
+import { generateSectionReportWithRetry } from '../../../../_shared/section-ai-client.js'
 
 export default async function handler(
   req: VercelRequest,
@@ -60,30 +59,38 @@ export default async function handler(
 
       if (method === 'GET') {
         // Retornar último relatório da seção
-        const reportResult = await pool.query(
-          `SELECT * FROM ai_reports 
-           WHERE dossier_id = $1 AND section_code = $2 
-           ORDER BY created_at DESC 
-           LIMIT 1`,
-          [dossierId, sectionCode],
-        )
+        try {
+          const reportResult = await pool.query(
+            `SELECT * FROM ai_reports 
+             WHERE dossier_id = $1 AND section_code = $2 
+             ORDER BY created_at DESC 
+             LIMIT 1`,
+            [dossierId, sectionCode],
+          )
 
-        if (reportResult.rows.length === 0) {
-          return res.status(404).json({ error: 'Relatório ainda não gerado para esta seção' })
+          if (reportResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Relatório ainda não gerado para esta seção' })
+          }
+
+          const report = reportResult.rows[0]
+          return res.status(200).json({
+            id: report.id,
+            status: report.status,
+            report_markdown: report.report_markdown,
+            insights: report.insights_json,
+            created_at: report.created_at,
+            updated_at: report.updated_at,
+            prompt_key: report.prompt_key,
+            prompt_version: report.prompt_version,
+            model: report.model,
+          })
+        } catch (dbError: any) {
+          console.error('Erro ao buscar relatório:', dbError)
+          return res.status(500).json({ 
+            error: 'Erro ao buscar relatório',
+            message: dbError.message 
+          })
         }
-
-        const report = reportResult.rows[0]
-        return res.status(200).json({
-          id: report.id,
-          status: report.status,
-          report_markdown: report.report_markdown,
-          insights: report.insights_json,
-          created_at: report.created_at,
-          updated_at: report.updated_at,
-          prompt_key: report.prompt_key,
-          prompt_version: report.prompt_version,
-          model: report.model,
-        })
       }
 
       if (method === 'POST') {
@@ -150,14 +157,19 @@ export default async function handler(
 
           // 5. Marcar relatórios anteriores como stale
           await pool.query(
-            `UPDATE ai_reports 
+            `UPDATE ai_reports
              SET status = 'stale', updated_at = NOW()
              WHERE dossier_id = $1 AND section_code = $2 AND id != $3 AND status = 'generated'`,
             [dossierId, sectionCode, reportId],
           )
 
           // Marcar relatório final como stale quando uma seção é regenerada
-          await markFinalReportAsStale(dossierId)
+          await pool.query(
+            `UPDATE final_reports
+             SET is_stale = true, updated_at = NOW()
+             WHERE dossier_id = $1 AND is_stale = false`,
+            [dossierId],
+          )
 
           // 6. Registrar eventos
           try {

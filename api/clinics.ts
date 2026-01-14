@@ -46,6 +46,11 @@ export default async function handler(
       }
 
       if (method === 'POST') {
+        // Apenas admin pode criar clínicas
+        if (user.role !== 'admin') {
+          return res.status(403).json({ error: 'Apenas administradores podem criar clínicas' })
+        }
+
         // Criar nova clínica
         const { clinicName } = req.body
         if (!clinicName) {

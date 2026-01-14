@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useStrategyStore } from '@/stores/useStrategyStore'
+import { useAuthStore } from '@/stores/useAuthStore'
 import { api } from '@/lib/api'
 import {
   Select,
@@ -8,31 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Save, Plus, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function ClinicSelector() {
-  const {
-    currentClinicId,
-    loadClinicData,
-    saveClinicData,
-    createNewClinic,
-    isSaving,
-    isLoading,
-    hasUnsavedChanges,
-  } = useStrategyStore()
+  const { user } = useAuthStore()
+  const currentClinicId = user?.clinicId || null
   interface Clinic {
     id: string
     clinic_name: string
@@ -42,8 +22,6 @@ export default function ClinicSelector() {
 
   const [clinics, setClinics] = useState<Clinic[]>([])
   const [loadingClinics, setLoadingClinics] = useState(false)
-  const [newClinicName, setNewClinicName] = useState('')
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
     loadClinics()
@@ -64,28 +42,9 @@ export default function ClinicSelector() {
 
   const handleSelectClinic = async (clinicId: string) => {
     if (clinicId === currentClinicId) return
-    await loadClinicData(clinicId)
-  }
-
-  const handleCreateClinic = async () => {
-    if (!newClinicName.trim()) {
-      toast.error('Digite o nome da clínica')
-      return
-    }
-
-    try {
-      const clinicId = await api.createClinic(newClinicName.trim())
-      await createNewClinic(newClinicName.trim())
-      setNewClinicName('')
-      setIsDialogOpen(false)
-      await loadClinics()
-    } catch (error) {
-      toast.error('Erro ao criar clínica')
-    }
-  }
-
-  const handleSave = async () => {
-    await saveClinicData()
+    // Atualizar clínica do usuário (implementar se necessário)
+    // Por enquanto, apenas recarregar a página para atualizar o contexto
+    window.location.reload()
   }
 
   return (
@@ -93,7 +52,7 @@ export default function ClinicSelector() {
       <Select
         value={currentClinicId || ''}
         onValueChange={handleSelectClinic}
-        disabled={loadingClinics || isLoading}
+        disabled={loadingClinics}
       >
         <SelectTrigger className="w-[250px]">
           <SelectValue placeholder="Selecione uma clínica" />
@@ -113,71 +72,8 @@ export default function ClinicSelector() {
         </SelectContent>
       </Select>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="sm">
-            <Plus className="mr-2 size-4" />
-            Nova Clínica
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Criar Nova Clínica</DialogTitle>
-            <DialogDescription>
-              Digite o nome da nova clínica para começar o planejamento estratégico.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="clinic-name">Nome da Clínica</Label>
-              <Input
-                id="clinic-name"
-                value={newClinicName}
-                onChange={(e) => setNewClinicName(e.target.value)}
-                placeholder="Ex: Clínica Dentária Sorriso Radiante"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleCreateClinic()
-                  }
-                }}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancelar
-            </Button>
-            <Button onClick={handleCreateClinic}>
-              Criar Clínica
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Apenas administradores podem criar clínicas através da área administrativa */}
 
-      <Button
-        onClick={handleSave}
-        disabled={!currentClinicId || isSaving}
-        size="sm"
-        variant={hasUnsavedChanges ? 'default' : 'outline'}
-        className={hasUnsavedChanges ? 'bg-orange-600 hover:bg-orange-700' : ''}
-      >
-        {isSaving ? (
-          <>
-            <Loader2 className="mr-2 size-4 animate-spin" />
-            Salvando...
-          </>
-        ) : hasUnsavedChanges ? (
-          <>
-            <Save className="mr-2 size-4" />
-            Salvar Agora
-          </>
-        ) : (
-          <>
-            <Save className="mr-2 size-4" />
-            Salvo
-          </>
-        )}
-      </Button>
     </div>
   )
 }

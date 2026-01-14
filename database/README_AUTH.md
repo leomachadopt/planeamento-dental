@@ -92,3 +92,4 @@ Certifique-se de que o arquivo `.env.local` existe e contém:
 DATABASE_URL=sua_connection_string_aqui
 ```
 
+

@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { authenticateToken, AuthRequest } from '../../_shared/auth.js'
 import pool from '../../_shared/db.js'
 import { markSectionReportsAsStale, getSectionForQuestion, markFinalReportAsStale } from '../../_shared/staleTracking.js'
+import { updateSectionCompletion } from '../../_shared/sectionCompletion.js'
 
 export default async function handler(
   req: VercelRequest,
@@ -162,6 +163,11 @@ export default async function handler(
         // Marcar relatório final como stale se alguma seção foi afetada
         if (affectedSections.size > 0) {
           await markFinalReportAsStale(dossierId)
+        }
+
+        // Atualizar completude das seções afetadas
+        for (const sectionCodeToUpdate of affectedSections) {
+          await updateSectionCompletion(dossierId, sectionCodeToUpdate)
         }
 
         return res.status(200).json({ saved: savedAnswers.length, answers: savedAnswers })

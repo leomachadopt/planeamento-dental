@@ -165,7 +165,7 @@ export default function DossierReports() {
                     <div className="text-sm text-slate-500 dark:text-slate-400">
                       <p>
                         Gerado em:{' '}
-                        {new Date(report.created_at).toLocaleString('pt-PT', {
+                        {new Date(report.created_at).toLocaleString('pt-BR', {
                           dateStyle: 'short',
                           timeStyle: 'short',
                         })}
@@ -173,6 +173,11 @@ export default function DossierReports() {
                       {report.status === 'stale' && (
                         <p className="text-amber-600 dark:text-amber-400 mt-1">
                           ⚠️ Dados da seção foram alterados após a geração
+                        </p>
+                      )}
+                      {report.status === 'error' && (
+                        <p className="text-red-600 dark:text-red-400 mt-1">
+                          ⚠️ Erro ao gerar relatório. Tente regenerar.
                         </p>
                       )}
                     </div>
@@ -211,4 +216,5 @@ export default function DossierReports() {
     </div>
   )
 }
+
 

@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { authenticateToken, AuthRequest } from '../../../_shared/auth.js'
 import pool from '../../../_shared/db.js'
+import { markSectionReportsAsStale, getSectionForEntity, markFinalReportAsStale } from '../../../_shared/staleTracking.js'
+import { updateSectionCompletion } from '../../../_shared/sectionCompletion.js'
 
 const TABLE_NAME = 'value_propositions'
 
@@ -78,6 +80,14 @@ export default async function handler(
            RETURNING *`,
           [clinicId, dossierId, title, description || null, targetSegmentId || null, notes || null],
         )
+        
+        // Marcar relatórios como stale
+        const sectionCode = getSectionForEntity('value_propositions')
+        if (sectionCode) {
+          await markSectionReportsAsStale(dossierId, sectionCode)
+          await updateSectionCompletion(dossierId, sectionCode)
+        }
+        
         return res.status(201).json(result.rows[0])
       }
 
@@ -127,6 +137,14 @@ export default async function handler(
           return res.status(404).json({ error: 'Entidade não encontrada' })
         }
 
+        // Marcar relatórios como stale
+        const sectionCode = getSectionForEntity('value_propositions')
+        if (sectionCode) {
+          await markSectionReportsAsStale(dossierId, sectionCode)
+          await markFinalReportAsStale(dossierId)
+          await updateSectionCompletion(dossierId, sectionCode)
+        }
+
         return res.status(200).json(result.rows[0])
       }
 
@@ -142,6 +160,14 @@ export default async function handler(
           return res.status(404).json({ error: 'Entidade não encontrada' })
         }
 
+        // Marcar relatórios como stale
+        const sectionCode = getSectionForEntity('value_propositions')
+        if (sectionCode) {
+          await markSectionReportsAsStale(dossierId, sectionCode)
+          await markFinalReportAsStale(dossierId)
+          await updateSectionCompletion(dossierId, sectionCode)
+        }
+
         return res.status(200).json({ message: 'Entidade deletada', id: entityId })
       }
 
@@ -152,4 +178,5 @@ export default async function handler(
     }
   })
 }
+
 

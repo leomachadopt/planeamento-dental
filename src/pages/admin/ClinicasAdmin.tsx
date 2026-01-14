@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
-import { Building2, Trash2, Eye, Download, Upload, Search } from 'lucide-react'
+import { Building2, Trash2, Eye, Download, Upload, Search, Plus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -39,6 +39,8 @@ export default function ClinicasAdmin() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null)
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [newClinicName, setNewClinicName] = useState('')
 
   useEffect(() => {
     loadClinics()
@@ -64,7 +66,8 @@ export default function ClinicasAdmin() {
     try {
       setIsLoading(true)
       const response = await api.getAllClinics()
-      setClinics(response.clinics || [])
+      // A API retorna um array direto, não um objeto com 'clinics'
+      setClinics(Array.isArray(response) ? response : response.clinics || [])
     } catch (error: any) {
       toast.error('Erro ao carregar clínicas')
     } finally {
@@ -98,6 +101,23 @@ export default function ClinicasAdmin() {
     toast.info('Funcionalidade de import em desenvolvimento')
   }
 
+  const handleCreateClinic = async () => {
+    if (!newClinicName.trim()) {
+      toast.error('Nome da clínica é obrigatório')
+      return
+    }
+
+    try {
+      await api.createClinic(newClinicName.trim())
+      toast.success('Clínica criada com sucesso')
+      setIsCreateDialogOpen(false)
+      setNewClinicName('')
+      loadClinics()
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao criar clínica')
+    }
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -106,6 +126,45 @@ export default function ClinicasAdmin() {
           <p className="text-slate-500 mt-1">Visualize e gerencie todas as clínicas cadastradas</p>
         </div>
         <div className="flex gap-2">
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => setNewClinicName('')}>
+                <Plus className="mr-2 h-4 w-4" />
+                Nova Clínica
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Nova Clínica</DialogTitle>
+                <DialogDescription>
+                  Preencha os dados para criar uma nova clínica
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Nome da Clínica</Label>
+                  <Input
+                    placeholder="Digite o nome da clínica..."
+                    value={newClinicName}
+                    onChange={(e) => setNewClinicName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleCreateClinic()
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={handleCreateClinic} className="flex-1">
+                    Criar
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                    Cancelar
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
           <Button variant="outline" onClick={handleImportClinic}>
             <Upload className="mr-2 h-4 w-4" />
             Importar
@@ -265,4 +324,5 @@ export default function ClinicasAdmin() {
     </div>
   )
 }
+
 

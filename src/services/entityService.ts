@@ -212,3 +212,63 @@ export async function deleteCapacity(dossierId: string, entityId: string) {
   return api.deleteCapacity(dossierId, entityId)
 }
 
+// ==================== SERVICE CATEGORIES ====================
+
+export async function getServiceCategories(dossierId: string, entityId?: string) {
+  return api.getServiceCategories(dossierId, entityId)
+}
+
+export async function createServiceCategory(dossierId: string, data: {
+  name: string
+  description?: string
+  notes?: string
+}) {
+  return api.createServiceCategory(dossierId, data)
+}
+
+export async function updateServiceCategory(
+  dossierId: string,
+  entityId: string,
+  data: {
+    name?: string
+    description?: string
+    notes?: string
+    status?: string
+  },
+) {
+  return api.updateServiceCategory(dossierId, entityId, data)
+}
+
+export async function deleteServiceCategory(dossierId: string, entityId: string) {
+  return api.deleteServiceCategory(dossierId, entityId)
+}
+
+// ==================== ROLES ====================
+
+export async function getRoles(clinicId: string, entityId?: string) {
+  return api.getRoles(clinicId, entityId)
+}
+
+export async function createRole(clinicId: string, data: {
+  name: string
+  description?: string
+}) {
+  return api.createRole(clinicId, data)
+}
+
+export async function updateRole(
+  clinicId: string,
+  entityId: string,
+  data: {
+    name?: string
+    description?: string
+  },
+) {
+  return api.updateRole(clinicId, entityId, data)
+}
+
+export async function deleteRole(clinicId: string, entityId: string) {
+  return api.deleteRole(clinicId, entityId)
+}
+
+

@@ -97,3 +97,4 @@ CREATE TABLE IF NOT EXISTS initiatives (
 
 CREATE INDEX IF NOT EXISTS idx_initiatives_dossier ON initiatives(clinic_id, dossier_id);
 
+

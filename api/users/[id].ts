@@ -73,6 +73,30 @@ export default async function handler(
         if (req.method === 'PUT' || req.method === 'PATCH') {
           const { name, role, clinicId, isActive, password } = req.body
 
+          // Validação: usuários não-admin devem ter clínica
+          // Primeiro, precisamos verificar o role atual do usuário se não estiver sendo alterado
+          if (role !== undefined || clinicId !== undefined) {
+            const currentUser = await pool.query('SELECT role, clinic_id FROM users WHERE id = $1', [id])
+            if (currentUser.rows.length === 0) {
+              return res.status(404).json({ error: 'Usuário não encontrado' })
+            }
+
+            const finalRole = role !== undefined ? role : currentUser.rows[0].role
+            const finalClinicId = clinicId !== undefined ? clinicId : currentUser.rows[0].clinic_id
+
+            if (finalRole !== 'admin' && !finalClinicId) {
+              return res.status(400).json({ error: 'Usuários devem estar associados a uma clínica' })
+            }
+
+            // Validar se a clínica existe (se fornecida)
+            if (finalClinicId) {
+              const clinicCheck = await pool.query('SELECT id FROM clinics WHERE id = $1', [finalClinicId])
+              if (clinicCheck.rows.length === 0) {
+                return res.status(400).json({ error: 'Clínica não encontrada' })
+              }
+            }
+          }
+
           const updates: string[] = []
           const values: any[] = []
           let paramCount = 1
@@ -139,4 +163,5 @@ export default async function handler(
     })
   })
 }
+
 

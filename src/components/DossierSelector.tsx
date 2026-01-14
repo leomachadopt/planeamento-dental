@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useStrategyStore } from '@/stores/useStrategyStore'
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '@/stores/useAuthStore'
 import { getDossiers, createDossier, type Dossier } from '@/services/dossierService'
 import {
   Select,
@@ -28,7 +29,9 @@ interface DossierSelectorProps {
 }
 
 export default function DossierSelector({ onDossierChange }: DossierSelectorProps) {
-  const { currentClinicId } = useStrategyStore()
+  const navigate = useNavigate()
+  const { user } = useAuthStore()
+  const currentClinicId = user?.clinicId || null
   const [dossiers, setDossiers] = useState<Dossier[]>([])
   const [currentDossierId, setCurrentDossierId] = useState<string | null>(null)
   const [loadingDossiers, setLoadingDossiers] = useState(false)
@@ -93,6 +96,8 @@ export default function DossierSelector({ onDossierChange }: DossierSelectorProp
       setCurrentDossierId(newDossier.id)
       onDossierChange?.(newDossier.id)
       toast.success('Dossiê criado com sucesso!')
+      // Redirecionar para a primeira seção (Identity)
+      navigate(`/dossie/${newDossier.id}/identity`)
     } catch (error: any) {
       console.error('Erro ao criar dossiê:', error)
       toast.error(error.message || 'Erro ao criar dossiê')
@@ -186,4 +191,5 @@ export default function DossierSelector({ onDossierChange }: DossierSelectorProp
     </div>
   )
 }
+
 

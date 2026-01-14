@@ -61,12 +61,29 @@ export default function UsuariosAdmin() {
     role: 'user' as 'admin' | 'user',
     clinicId: '',
   })
+  const [clinics, setClinics] = useState<Array<{ id: string; clinic_name: string }>>([])
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false)
+  const [selectedUserForPassword, setSelectedUserForPassword] = useState<User | null>(null)
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   useEffect(() => {
     if (user?.role === 'admin') {
       loadUsers()
+      loadClinics()
     }
   }, [user])
+
+  const loadClinics = async () => {
+    try {
+      const response = await api.getAllClinics()
+      // A API retorna um array direto, não um objeto com 'clinics'
+      const clinicsArray = Array.isArray(response) ? response : response.clinics || []
+      setClinics(clinicsArray)
+    } catch (error: any) {
+      console.error('Erro ao carregar clínicas:', error)
+    }
+  }
 
   useEffect(() => {
     filterUsers()
@@ -109,6 +126,12 @@ export default function UsuariosAdmin() {
   }
 
   const handleCreateUser = async () => {
+    // Validação: usuários não-admin devem ter clínica
+    if (formData.role !== 'admin' && !formData.clinicId) {
+      toast.error('Usuários devem estar associados a uma clínica')
+      return
+    }
+
     try {
       await api.createUser(formData)
       toast.success('Usuário criado com sucesso')
@@ -121,6 +144,12 @@ export default function UsuariosAdmin() {
   }
 
   const handleUpdateUser = async (userId: string) => {
+    // Validação: usuários não-admin devem ter clínica
+    if (formData.role !== 'admin' && !formData.clinicId) {
+      toast.error('Usuários devem estar associados a uma clínica')
+      return
+    }
+
     try {
       await api.updateUser(userId, {
         name: formData.name,
@@ -158,14 +187,37 @@ export default function UsuariosAdmin() {
     }
   }
 
-  const handleResetPassword = async (userId: string) => {
-    if (!confirm('Deseja resetar a senha deste usuário? Uma nova senha será gerada.')) return
+  const handleResetPassword = (user: User) => {
+    setSelectedUserForPassword(user)
+    setNewPassword('')
+    setConfirmPassword('')
+    setIsPasswordDialogOpen(true)
+  }
+
+  const handleSavePassword = async () => {
+    if (!selectedUserForPassword) return
+
+    if (!newPassword || newPassword.length < 8) {
+      toast.error('A senha deve ter no mínimo 8 caracteres')
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error('As senhas não coincidem')
+      return
+    }
 
     try {
-      // TODO: Implementar endpoint de reset de senha
-      toast.info('Funcionalidade em desenvolvimento')
+      await api.updateUser(selectedUserForPassword.id, {
+        password: newPassword,
+      })
+      toast.success('Senha atualizada com sucesso')
+      setIsPasswordDialogOpen(false)
+      setNewPassword('')
+      setConfirmPassword('')
+      setSelectedUserForPassword(null)
     } catch (error: any) {
-      toast.error('Erro ao resetar senha')
+      toast.error(error.message || 'Erro ao atualizar senha')
     }
   }
 
@@ -263,7 +315,7 @@ export default function UsuariosAdmin() {
                 <Select
                   value={formData.role}
                   onValueChange={(value: 'admin' | 'user') =>
-                    setFormData({ ...formData, role: value })
+                    setFormData({ ...formData, role: value, clinicId: value === 'admin' ? '' : formData.clinicId })
                   }
                 >
                   <SelectTrigger>
@@ -275,6 +327,33 @@ export default function UsuariosAdmin() {
                   </SelectContent>
                 </Select>
               </div>
+              {formData.role !== 'admin' && (
+                <div className="space-y-2">
+                  <Label>Clínica *</Label>
+                  <Select
+                    value={formData.clinicId}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, clinicId: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione uma clínica" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {clinics.map((clinic) => (
+                        <SelectItem key={clinic.id} value={clinic.id}>
+                          {clinic.clinic_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {clinics.length === 0 && (
+                    <p className="text-sm text-slate-500">
+                      Nenhuma clínica cadastrada. Crie uma clínica primeiro.
+                    </p>
+                  )}
+                </div>
+              )}
               <div className="flex gap-2">
                 <Button
                   onClick={() => {
@@ -408,8 +487,8 @@ export default function UsuariosAdmin() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleResetPassword(u.id)}
-                          title="Resetar Senha"
+                          onClick={() => handleResetPassword(u)}
+                          title="Redefinir Senha"
                         >
                           <Key className="h-4 w-4" />
                         </Button>
@@ -438,7 +517,66 @@ export default function UsuariosAdmin() {
           )}
         </CardContent>
       </Card>
+
+      {/* Dialog de Redefinição de Senha */}
+      <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Redefinir Senha</DialogTitle>
+            <DialogDescription>
+              Defina uma nova senha para {selectedUserForPassword?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Nova Senha</Label>
+              <Input
+                type="password"
+                placeholder="Digite a nova senha (mínimo 8 caracteres)"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSavePassword()
+                  }
+                }}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Confirmar Senha</Label>
+              <Input
+                type="password"
+                placeholder="Confirme a nova senha"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSavePassword()
+                  }
+                }}
+              />
+            </div>
+            <div className="flex gap-2 pt-2">
+              <Button onClick={handleSavePassword} className="flex-1">
+                Salvar Senha
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsPasswordDialogOpen(false)
+                  setNewPassword('')
+                  setConfirmPassword('')
+                  setSelectedUserForPassword(null)
+                }}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
+
 

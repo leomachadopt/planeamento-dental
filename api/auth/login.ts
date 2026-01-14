@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
 import pool from '../_shared/db.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
@@ -34,8 +35,21 @@ export default async function handler(
     console.log('=== INÍCIO DO LOGIN ===')
     console.log('Request method:', req.method)
     console.log('Request body exists:', !!req.body)
+    console.log('Request body type:', typeof req.body)
+    console.log('Request body:', req.body)
     
-    const { email, password } = req.body || {}
+    // Parse do body se necessário
+    let body = req.body
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body)
+      } catch (e) {
+        console.error('Erro ao parsear body:', e)
+        return res.status(400).json({ error: 'Body inválido' })
+      }
+    }
+    
+    const { email, password } = body || {}
 
     if (!email || !password) {
       console.log('Email ou senha faltando:', { hasEmail: !!email, hasPassword: !!password })
@@ -44,7 +58,13 @@ export default async function handler(
 
     console.log('Tentativa de login para:', email.toLowerCase())
     console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL)
+    console.log('DATABASE_URL length:', process.env.DATABASE_URL?.length || 0)
     console.log('JWT_SECRET exists:', !!JWT_SECRET)
+
+    // Verificar se o pool está configurado
+    if (!pool) {
+      throw new Error('Pool de conexões não está inicializado')
+    }
 
     // Buscar usuário
     console.log('Executando query no banco...')
@@ -59,6 +79,8 @@ export default async function handler(
       console.error('❌ Erro na query do banco:', dbError)
       console.error('❌ DB Error message:', dbError?.message)
       console.error('❌ DB Error code:', dbError?.code)
+      console.error('❌ DB Error detail:', dbError?.detail)
+      console.error('❌ DB Error hint:', dbError?.hint)
       throw new Error('Erro ao conectar com o banco de dados: ' + dbError?.message)
     }
 
@@ -80,16 +102,8 @@ export default async function handler(
     
     let isValidPassword = false
     try {
-      console.log('Importando bcryptjs...')
-      const bcrypt = await import('bcryptjs')
-      console.log('bcryptjs importado:', { hasBcrypt: !!bcrypt, hasDefault: !!bcrypt.default })
-      
-      if (!bcrypt.default || typeof bcrypt.default.compare !== 'function') {
-        throw new Error('bcrypt.default.compare não está disponível')
-      }
-      
-      console.log('Chamando bcrypt.compare...')
-      isValidPassword = await bcrypt.default.compare(password, user.password_hash)
+      console.log('Verificando senha com bcryptjs...')
+      isValidPassword = await bcrypt.compare(password, user.password_hash)
       console.log('Senha válida:', isValidPassword)
     } catch (bcryptError: any) {
       console.error('❌ Erro ao verificar senha:', bcryptError)
@@ -141,13 +155,17 @@ export default async function handler(
     console.error('❌ Error name:', error?.name)
     console.error('❌ Error code:', error?.code)
     
+    // Em desenvolvimento, retornar mais detalhes
+    const isDevelopment = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV
+    
     return res.status(500).json({ 
       error: 'Erro interno do servidor',
       message: error?.message || 'Erro desconhecido',
-      ...(process.env.NODE_ENV === 'development' && {
+      ...(isDevelopment && {
         details: error?.stack,
         errorName: error?.name,
-        errorCode: error?.code
+        errorCode: error?.code,
+        hasDatabaseUrl: !!process.env.DATABASE_URL,
       })
     })
   }

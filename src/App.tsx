@@ -9,23 +9,16 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
 // Pages
 import Index from './pages/Index'
-import Diagnostic from './pages/Diagnostic'
-import Strategy from './pages/Strategy'
-import StrategicMap from './pages/StrategicMap'
-import TacticalPlan from './pages/TacticalPlan'
-import OperationalPlan from './pages/OperationalPlan'
-import Execution from './pages/Execution'
-import SetupWizard from './pages/SetupWizard'
-import OperationalAssessment from './pages/OperationalAssessment'
-import MarketAssessment from './pages/MarketAssessment'
-import ManagerVision from './pages/ManagerVision'
-import Identity from './pages/Identity'
-import AdvancedAnalysis from './pages/AdvancedAnalysis'
-import FinalReport from './pages/FinalReport'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import DossierIdentity from './pages/DossierIdentity'
+import DossierBusinessModel from './pages/DossierBusinessModel'
+import DossierMarket from './pages/DossierMarket'
+import DossierOffer from './pages/DossierOffer'
+import DossierOperations from './pages/DossierOperations'
+import DossierStrategy from './pages/DossierStrategy'
+import DossierPlan from './pages/DossierPlan'
 import DossierReports from './pages/DossierReports'
 import DossierFinalReport from './pages/DossierFinalReport'
 
@@ -63,27 +56,17 @@ const App = () => {
             }
           >
             <Route path="/" element={<Index />} />
-            {/* Novas rotas de Dossiê */}
+            {/* Rotas de Dossiê */}
             <Route path="/dossie" element={<Navigate to="/" replace />} />
             <Route path="/dossie/:dossierId/identity" element={<DossierIdentity />} />
+            <Route path="/dossie/:dossierId/business-model" element={<DossierBusinessModel />} />
+            <Route path="/dossie/:dossierId/market" element={<DossierMarket />} />
+            <Route path="/dossie/:dossierId/offer" element={<DossierOffer />} />
+            <Route path="/dossie/:dossierId/operations" element={<DossierOperations />} />
+            <Route path="/dossie/:dossierId/strategy" element={<DossierStrategy />} />
+            <Route path="/dossie/:dossierId/plan" element={<DossierPlan />} />
             <Route path="/dossie/:dossierId/relatorios" element={<DossierReports />} />
             <Route path="/dossie/:dossierId/final-report" element={<DossierFinalReport />} />
-            <Route path="/dossie/:dossierId/:sectionCode" element={<DossierIdentity />} />
-            {/* Rotas antigas mantidas para compatibilidade */}
-            <Route path="/diagnostico" element={<Diagnostic />} />
-            <Route path="/operacao" element={<OperationalAssessment />} />
-            <Route path="/mercado" element={<MarketAssessment />} />
-            <Route path="/visao-gestor" element={<ManagerVision />} />
-            <Route path="/identidade" element={<Identity />} />
-            <Route path="/estrategia" element={<Strategy />} />
-            <Route path="/analise-avancada" element={<AdvancedAnalysis />} />
-            <Route path="/mapa-estrategico" element={<StrategicMap />} />
-            <Route path="/plano-tatico" element={<TacticalPlan />} />
-            <Route path="/plano-operacional" element={<OperationalPlan />} />
-            {/* Rota antiga de relatório final - desativada em favor do sistema de dossiês */}
-            {/* <Route path="/relatorio-final" element={<FinalReport />} /> */}
-            <Route path="/execucao" element={<Execution />} />
-            <Route path="/configuracao" element={<SetupWizard />} />
           </Route>
 
           {/* Rotas protegidas - Administração */}

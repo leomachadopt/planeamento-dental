@@ -3,6 +3,13 @@
 
 import { Pool } from 'pg'
 
+// Validar DATABASE_URL
+if (!process.env.DATABASE_URL) {
+  console.error('❌ DATABASE_URL não está configurada!')
+  console.error('❌ Configure DATABASE_URL no arquivo .env.local ou nas variáveis de ambiente')
+  throw new Error('DATABASE_URL não configurada. Configure no .env.local ou variáveis de ambiente.')
+}
+
 // Pool de conexões PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -23,6 +30,7 @@ pool.on('error', (err) => {
 })
 
 export default pool
+
 
 
 

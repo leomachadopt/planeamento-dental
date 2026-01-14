@@ -1,25 +1,13 @@
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard,
-  Stethoscope,
-  Lightbulb,
-  Map as MapIcon,
-  Activity,
   Search,
   Bell,
-  ChevronDown,
-  Settings,
-  ClipboardList,
-  Globe,
-  Eye,
-  Fingerprint,
-  BrainCircuit,
-  ListTodo,
   FileText,
   BookOpenCheck,
   LogOut,
   User,
   Shield,
+  Stethoscope,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -52,28 +40,8 @@ import DossierSidebar from './DossierSidebar'
 import { useState } from 'react'
 
 const menuItems = [
-  { title: 'Dashboard', url: '/', icon: LayoutDashboard },
-  { title: 'Dossiê da Clínica', url: '/dossie', icon: FileText },
-  // Menu antigo mantido para referência (desativado)
-  // { title: 'Configuração Inicial (1)', url: '/configuracao', icon: Settings },
-  { title: 'Operação (2A)', url: '/operacao', icon: ClipboardList },
-  { title: 'Mercado (2B)', url: '/mercado', icon: Globe },
-  { title: 'Visão (2C)', url: '/visao-gestor', icon: Eye },
-  { title: 'Diagnóstico', url: '/diagnostico', icon: Stethoscope },
-  { title: 'Identidade (3A)', url: '/identidade', icon: Fingerprint },
-  { title: 'Estratégia (3B)', url: '/estrategia', icon: Lightbulb },
-  { title: 'Análise Avançada', url: '/analise-avancada', icon: BrainCircuit },
-  { title: 'Mapa Estratégico', url: '/mapa-estrategico', icon: MapIcon },
-  { title: 'Plano Tático (4)', url: '/plano-tatico', icon: ListTodo },
-  {
-    title: 'Plano Operacional (5)',
-    url: '/plano-operacional',
-    icon: FileText,
-  },
-  // Relatórios antigos desativados - substituídos pelo sistema de relatórios por IA por seção
-  // { title: 'Relatório Final', url: '/relatorio-final', icon: BookOpenCheck },
-  // Menu de execução mantido mas desativado (não remover código)
-  // { title: 'Execução (PDCA)', url: '/execucao', icon: Activity },
+  { title: 'Centro de Documentação', url: '/', icon: FileText },
+  { title: 'Dossiê da Clínica', url: '/dossie', icon: BookOpenCheck },
 ]
 
 export default function Layout() {
@@ -185,7 +153,7 @@ export default function Layout() {
               <div className="relative hidden md:block w-64">
                 <Search className="absolute left-2.5 top-2.5 size-4 text-slate-400" />
                 <Input
-                  placeholder="Buscar metas ou ações..."
+                  placeholder="Buscar documentos..."
                   className="pl-9 h-9 bg-slate-100 border-none focus-visible:ring-teal-500"
                 />
               </div>
@@ -205,11 +173,11 @@ export default function Layout() {
           </div>
 
           <footer className="h-8 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 text-xs text-slate-500 print:hidden">
-            <span>Última sincronização: Hoje, 09:42</span>
+            <span>Sistema de Documentação Estratégica</span>
             <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="size-2 rounded-full bg-green-500" />
               <span className="font-medium text-teal-700">
-                Modo Consultor AI: Ativo
+                Sistema Ativo
               </span>
             </div>
           </footer>

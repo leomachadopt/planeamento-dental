@@ -71,12 +71,27 @@ export default async function handler(
             return res.status(400).json({ error: 'Senha deve ter no mínimo 8 caracteres' })
           }
 
+          const userRole = role || 'user'
+
+          // Validação: usuários não-admin devem ter clínica
+          if (userRole !== 'admin' && !clinicId) {
+            return res.status(400).json({ error: 'Usuários devem estar associados a uma clínica' })
+          }
+
+          // Validar se a clínica existe (se fornecida)
+          if (clinicId) {
+            const clinicCheck = await pool.query('SELECT id FROM clinics WHERE id = $1', [clinicId])
+            if (clinicCheck.rows.length === 0) {
+              return res.status(400).json({ error: 'Clínica não encontrada' })
+            }
+          }
+
           const bcrypt = await import('bcryptjs')
           const passwordHash = await bcrypt.default.hash(password, 10)
 
           const result = await pool.query(
             'INSERT INTO users (email, password_hash, name, role, clinic_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, email, name, role, clinic_id',
-            [email.toLowerCase(), passwordHash, name, role || 'user', clinicId || null]
+            [email.toLowerCase(), passwordHash, name, userRole, clinicId || null]
           )
 
           return res.status(201).json({
@@ -101,4 +116,5 @@ export default async function handler(
     })
   })
 }
+
 
