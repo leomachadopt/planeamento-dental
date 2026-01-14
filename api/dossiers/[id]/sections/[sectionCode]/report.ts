@@ -103,8 +103,15 @@ export default async function handler(
 
         try {
           // 1. Build snapshot
-          console.log(`Construindo snapshot para seção ${sectionCode}...`)
-          const snapshot = await buildSectionSnapshot(dossierId, sectionCode)
+          console.log(`[${new Date().toISOString()}] Construindo snapshot para seção ${sectionCode} do dossiê ${dossierId}...`)
+          let snapshot: any
+          try {
+            snapshot = await buildSectionSnapshot(dossierId, sectionCode)
+            console.log(`[${new Date().toISOString()}] Snapshot construído com sucesso. Respostas: ${snapshot.answers?.length || 0}, Entidades: ${Object.keys(snapshot.entities || {}).length}`)
+          } catch (snapshotError: any) {
+            console.error(`[${new Date().toISOString()}] Erro ao construir snapshot:`, snapshotError)
+            throw new Error(`Erro ao construir snapshot: ${snapshotError.message}`)
+          }
 
           // 2. Registrar evento
           let reportId: string | null = null
@@ -120,14 +127,24 @@ export default async function handler(
           }
 
           // 3. Call LLM
-          console.log(`Chamando IA para gerar relatório...`)
-          const aiResult = await generateSectionReportWithRetry(sectionCode, snapshot, {
-            apiKey,
-            model: 'gpt-4o',
-            temperature: 0.7,
-            promptVersion: '1.0.0',
-            tone: 'intermediario',
-          })
+          console.log(`[${new Date().toISOString()}] Chamando IA para gerar relatório...`)
+          // Ajustar temperatura baseado na seção (IDENTITY usa 0.4-0.6)
+          const temperature = sectionCode === 'IDENTITY' ? 0.5 : 0.7
+          
+          let aiResult: any
+          try {
+            aiResult = await generateSectionReportWithRetry(sectionCode, snapshot, {
+              apiKey,
+              model: 'gpt-4o',
+              temperature,
+              promptVersion: '1.0.0',
+              tone: 'intermediario',
+            })
+            console.log(`[${new Date().toISOString()}] Relatório gerado pela IA com sucesso. Tamanho do markdown: ${aiResult.report_markdown?.length || 0} caracteres`)
+          } catch (aiError: any) {
+            console.error(`[${new Date().toISOString()}] Erro ao gerar relatório com IA:`, aiError)
+            throw new Error(`Erro na geração pela IA: ${aiError.message}`)
+          }
 
           // 4. Persistir relatório
           const insertResult = await pool.query(
@@ -148,7 +165,7 @@ export default async function handler(
               'SECTION_REPORT_V1',
               '1.0.0',
               'gpt-4o',
-              0.7,
+              temperature, // Usar a variável temperature calculada
               aiResult.token_usage ? JSON.stringify(aiResult.token_usage) : null,
             ],
           )
@@ -165,9 +182,9 @@ export default async function handler(
 
           // Marcar relatório final como stale quando uma seção é regenerada
           await pool.query(
-            `UPDATE final_reports
-             SET is_stale = true, updated_at = NOW()
-             WHERE dossier_id = $1 AND is_stale = false`,
+            `UPDATE ai_reports
+             SET status = 'stale', updated_at = NOW()
+             WHERE dossier_id = $1 AND section_code = 'FINAL_REPORT' AND status = 'generated'`,
             [dossierId],
           )
 
@@ -202,6 +219,7 @@ export default async function handler(
           })
         } catch (error: any) {
           console.error('Erro ao gerar relatório:', error)
+          console.error('Stack trace:', error.stack)
 
           // Salvar erro no banco
           try {
@@ -217,8 +235,8 @@ export default async function handler(
                 dossierId,
                 sectionId,
                 sectionCode,
-                JSON.stringify({ error: 'Snapshot não pôde ser construído' }),
-                error.message,
+                JSON.stringify({ error: error.message, stack: error.stack }),
+                error.message || 'Erro desconhecido',
                 'SECTION_REPORT_V1',
                 '1.0.0',
                 'gpt-4o',
@@ -230,7 +248,7 @@ export default async function handler(
               await pool.query(
                 `INSERT INTO ai_report_events (ai_report_id, event_type, payload_json)
                  VALUES ($1, 'error', $2)`,
-                [errorReportResult.rows[0].id, JSON.stringify({ error: error.message })],
+                [errorReportResult.rows[0].id, JSON.stringify({ error: error.message, stack: error.stack })],
               )
             } catch {
               // Ignorar
@@ -239,9 +257,52 @@ export default async function handler(
             console.error('Erro ao salvar erro no banco:', dbError)
           }
 
+          // Retornar mensagem de erro mais detalhada
+          const errorMessage = error.message || 'Erro desconhecido'
+          const errorDetails = process.env.NODE_ENV === 'development' 
+            ? {
+                stack: error.stack,
+                name: error.name,
+              }
+            : undefined
+
+          console.error('Erro completo:', {
+            message: errorMessage,
+            stack: error.stack,
+            name: error.name,
+          })
+
+          // Tentar buscar o relatório de erro salvo no banco
+          try {
+            const errorReportResult = await pool.query(
+              `SELECT * FROM ai_reports 
+               WHERE dossier_id = $1 AND section_code = $2 AND status = 'error'
+               ORDER BY created_at DESC 
+               LIMIT 1`,
+              [dossierId, sectionCode],
+            )
+
+            if (errorReportResult.rows.length > 0) {
+              const errorReport = errorReportResult.rows[0]
+              return res.status(500).json({
+                id: errorReport.id,
+                status: 'error',
+                error_message: errorReport.error_message || errorMessage,
+                report_markdown: '',
+                insights: {},
+                created_at: errorReport.created_at,
+                message: errorMessage,
+                details: errorDetails,
+              })
+            }
+          } catch (dbError) {
+            console.error('Erro ao buscar relatório de erro:', dbError)
+          }
+
           return res.status(500).json({
             error: 'Erro ao gerar relatório',
-            message: error.message,
+            message: errorMessage,
+            details: errorDetails,
           })
         }
       }

@@ -17,19 +17,51 @@ export function getSystemPrompt(tone: string): string {
 // Instruções específicas por seção
 const SECTION_INSTRUCTIONS: Record<string, string> = {
   IDENTITY: `
-Analise a IDENTIDADE ESTRATÉGICA da clínica com foco em:
+Você é um consultor sênior de estratégia para clínicas de saúde. Seu trabalho é transformar as informações fornecidas em um relatório executivo detalhado e acionável sobre a IDENTIDADE do negócio.
 
-1. **Propósito e Razão de Existir**: Avalie se o propósito está claro, diferenciado e alinhado com a proposta de valor.
+Regras:
+- Não cite nem mencione livros, autores, frameworks ou "metodologias".
+- Use linguagem clara, direta e profissional, evitando jargões.
+- Seja específico: use os dados fornecidos (segmentos, propostas, escolhas, valores, ações críticas, características-chave).
+- Identifique inconsistências, lacunas e ambiguidades sem agressividade, com sugestões práticas para corrigir.
+- Não invente fatos: se algo não estiver no snapshot, marque como "não informado" e diga por que isso importa.
+- Trate "Identidade" como base de decisões: foco, posicionamento, escolhas e renúncias.
+- Produza um relatório bem detalhado, com seções e subtítulos, e exemplos aplicáveis ao contexto.
+- Ao final, gere recomendações prioritárias e um checklist de melhoria.
 
-2. **Valores Inegociáveis**: Verifique se os valores são específicos, acionáveis e realmente inegociáveis (não genéricos).
+Objetivo do relatório:
+- Explicar, de forma detalhada e bem descritiva, qual é a identidade estratégica da clínica (propósito, visão, valores, foco, posicionamento e escolhas).
+- Transformar as respostas em um "norte" prático: como essa identidade deve orientar decisões de público, oferta, experiência e crescimento.
+- Destacar contradições e lacunas e como resolvê-las.
+- Propor ações críticas e características-chave (se já existirem, avaliar; se não existirem, sugerir rascunhos com base no que foi fornecido, deixando claro que são sugestões).
 
-3. **Posicionamento de Preço**: Analise a coerência entre o posicionamento de preço escolhido e a proposta de valor oferecida.
+Requisitos de profundidade:
+- O relatório deve ter pelo menos 900 a 1400 palavras (aprox.), com seções completas, exemplos e justificativas.
+- Use os dados do snapshot de forma explícita (referencie termos e decisões declaradas, sem citar o snapshot literalmente).
 
-4. **Segmentos de Cliente**: Avalie se os segmentos estão bem definidos, priorizados e se há propostas de valor específicas para cada um.
+TOM e estilo:
+- Profissional, claro e humano, como um consultor falando com o dono.
+- Não use linguagem motivacional vaga. Seja prático.
+- Não mencione nenhum livro, autor ou framework.
 
-5. **Propostas de Valor**: Verifique se as propostas são diferenciadas, defensáveis e conectadas aos segmentos alvo.
+Atenção ao rigor:
+- Não invente segmentos, serviços, preços, ou estratégias não fornecidas.
+- Se houver contradições, descreva a contradição e o impacto provável.
+- Se faltarem dados, liste perguntas de follow-up.
 
-**Identifique contradições**: Por exemplo, se o posicionamento é "premium" mas não há propostas de valor que justifiquem preço alto, ou se há segmentos sem propostas específicas.
+Estrutura recomendada dentro do report_markdown:
+1. Resumo executivo da identidade
+2. Propósito e impacto
+3. Visão e ambição (3 anos)
+4. Valores inegociáveis e implicações práticas
+5. Escolhas de foco: público prioritário e renúncias
+6. Posicionamento: preço, proposta de valor e diferenciação
+7. Estratégia de crescimento e suas exigências
+8. Ações críticas (o que precisa acontecer sempre)
+9. Características-chave (como a clínica deve "ser")
+10. Riscos de incoerência e pontos de atenção
+11. Recomendações priorizadas
+12. Checklist de melhoria da Identidade
   `,
 
   MARKET: `
@@ -132,6 +164,14 @@ Você DEVE retornar um JSON válido com a seguinte estrutura EXATA:
       "completeness": 0-10,
       "impact_potential": 0-10
     },
+    "identity_summary": {
+      "purpose": "...",
+      "vision": "...",
+      "values": ["...", "..."],
+      "priority_audience": "...",
+      "positioning": "...",
+      "growth_focus": "..."
+    },
     "alerts": [
       {
         "severity": "high|medium|low",
@@ -163,6 +203,7 @@ Você DEVE retornar um JSON válido com a seguinte estrutura EXATA:
         "evidence": ["referências aos dados"]
       }
     ],
+    "checklist": ["...", "..."],
     "tags": ["tag1", "tag2"]
   }
 }
@@ -179,6 +220,7 @@ IMPORTANTE:
 
 - O insights JSON deve ser válido e parseável sem ambiguidades.
 - Todos os campos são obrigatórios (arrays podem estar vazios).
+- Para seções que não sejam IDENTITY, o campo "identity_summary" pode ser um objeto vazio {}.
 `
 
 /**
@@ -194,9 +236,49 @@ Analise a seção ${sectionCode} com base nos dados fornecidos.
 Identifique pontos fortes, lacunas, riscos e oportunidades.
   `
 
-  // Formatar snapshot de forma legível
-  const snapshotFormatted = formatSnapshotForPrompt(snapshot)
+  // Para IDENTITY, usar prompt específico com snapshot JSON diretamente
+  if (sectionCode === 'IDENTITY') {
+    const snapshotJson = JSON.stringify(snapshot, null, 2)
+    
+    return `
+${sectionInstruction}
 
+Gere um RELATÓRIO EXECUTIVO DE IDENTIDADE da clínica com base no snapshot abaixo.
+
+Objetivo do relatório:
+- Explicar, de forma detalhada e bem descritiva, qual é a identidade estratégica da clínica (propósito, visão, valores, foco, posicionamento e escolhas).
+- Transformar as respostas em um "norte" prático: como essa identidade deve orientar decisões de público, oferta, experiência e crescimento.
+- Destacar contradições e lacunas e como resolvê-las.
+- Propor ações críticas e características-chave (se já existirem, avaliar; se não existirem, sugerir rascunhos com base no que foi fornecido, deixando claro que são sugestões).
+
+Requisitos de profundidade:
+- O relatório deve ter pelo menos 900 a 1400 palavras (aprox.), com seções completas, exemplos e justificativas.
+- Use os dados do snapshot de forma explícita (referencie termos e decisões declaradas, sem citar o snapshot literalmente).
+
+TOM e estilo:
+- Profissional, claro e humano, como um consultor falando com o dono.
+- Não use linguagem motivacional vaga. Seja prático.
+- Não mencione nenhum livro, autor ou framework.
+
+Atenção ao rigor:
+- Não invente segmentos, serviços, preços, ou estratégias não fornecidas.
+- Se houver contradições, descreva a contradição e o impacto provável.
+- Se faltarem dados, liste perguntas de follow-up.
+
+Snapshot (JSON):
+${snapshotJson}
+
+${OUTPUT_FORMAT}
+
+IMPORTANTE: 
+- O report_markdown DEVE ser COMPLETO e NÃO CORTADO. 
+- Se o limite de tokens for atingido, priorize completar o report_markdown mesmo que alguns campos do insights fiquem vazios.
+- O relatório deve ter TODAS as 12 seções mencionadas na estrutura recomendada.
+- NÃO corte o conteúdo no meio de uma frase ou seção.
+  `.trim()
+  }
+
+  // Para outras seções, usar formato padrão
   return `
 ${sectionInstruction}
 

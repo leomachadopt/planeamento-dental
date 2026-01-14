@@ -19,7 +19,9 @@
     "test:watch": "echo \"there are no tests for this project\" && exit 0",
     "db:migrate": "node scripts/migrate-db.js",
     "db:create-admin": "node scripts/create-admin.js",
-    "db:update-admin-email": "node scripts/update-admin-email.js"
+    "db:update-admin-email": "node scripts/update-admin-email.js",
+    "db:migrate-identity": "node scripts/migrate-identity-questions.js",
+    "db:cleanup-identity": "node scripts/cleanup-identity-questions.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

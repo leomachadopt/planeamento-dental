@@ -23,12 +23,21 @@ import {
 } from '@/components/ui/dialog'
 
 const promptTypes = [
-  { value: 'diagnostic', label: 'Diagnóstico', description: 'Prompt para relatório de diagnóstico' },
-  { value: 'strategic', label: 'Estratégico', description: 'Prompt para direcionamento estratégico' },
-  { value: 'advanced', label: 'Análise Avançada', description: 'Prompt para análise estratégica avançada' },
-  { value: 'tactical', label: 'Tático', description: 'Prompt para plano tático (OKRs)' },
-  { value: 'operational', label: 'Operacional', description: 'Prompt para plano operacional' },
-  { value: 'final', label: 'Relatório Final', description: 'Prompt para relatório final consolidado' },
+  // Seções do Dossiê
+  { value: 'section_IDENTITY', label: 'IDENTITY - Identidade', description: 'Prompt para relatório de identidade estratégica', category: 'sections' },
+  { value: 'section_MARKET', label: 'MARKET - Mercado', description: 'Prompt para relatório de mercado e concorrência', category: 'sections' },
+  { value: 'section_OFFER', label: 'OFFER - Oferta', description: 'Prompt para relatório de oferta de serviços', category: 'sections' },
+  { value: 'section_OPERATIONS', label: 'OPERATIONS - Operações', description: 'Prompt para relatório de operações', category: 'sections' },
+  { value: 'section_STRATEGY', label: 'STRATEGY - Estratégia', description: 'Prompt para relatório de estratégia', category: 'sections' },
+  { value: 'section_PLAN', label: 'PLAN - Plano', description: 'Prompt para relatório de plano', category: 'sections' },
+  { value: 'section_BUSINESS_MODEL', label: 'BUSINESS_MODEL - Modelo de Negócio', description: 'Prompt para relatório de modelo de negócio', category: 'sections' },
+  // Tipos antigos (mantidos para compatibilidade)
+  { value: 'diagnostic', label: 'Diagnóstico', description: 'Prompt para relatório de diagnóstico', category: 'legacy' },
+  { value: 'strategic', label: 'Estratégico', description: 'Prompt para direcionamento estratégico', category: 'legacy' },
+  { value: 'advanced', label: 'Análise Avançada', description: 'Prompt para análise estratégica avançada', category: 'legacy' },
+  { value: 'tactical', label: 'Tático', description: 'Prompt para plano tático (OKRs)', category: 'legacy' },
+  { value: 'operational', label: 'Operacional', description: 'Prompt para plano operacional', category: 'legacy' },
+  { value: 'final', label: 'Relatório Final', description: 'Prompt para relatório final consolidado', category: 'legacy' },
 ]
 
 const modelConfigs = {
@@ -38,15 +47,18 @@ const modelConfigs = {
 }
 
 export default function PromptsAdmin() {
-  const [selectedType, setSelectedType] = useState('diagnostic')
-  const [promptContent, setPromptContent] = useState('')
+  const [selectedType, setSelectedType] = useState('section_IDENTITY')
+  const [systemPrompt, setSystemPrompt] = useState('')
+  const [userPrompt, setUserPrompt] = useState('')
+  const [originalSystemPrompt, setOriginalSystemPrompt] = useState('')
+  const [originalUserPrompt, setOriginalUserPrompt] = useState('')
   const [modelConfig, setModelConfig] = useState({
     model: 'gpt-4',
     temperature: 0.7,
     maxTokens: 4000,
   })
-  const [originalPrompt, setOriginalPrompt] = useState('')
   const [previewOpen, setPreviewOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     loadPrompt(selectedType)
@@ -54,25 +66,52 @@ export default function PromptsAdmin() {
 
   // Carregar prompt atual ao mudar tipo
   const loadPrompt = async (type: string) => {
+    setLoading(true)
     try {
       try {
         const response = await api.getPrompt(type)
-        setPromptContent(response.content || getDefaultPrompt(type))
-        setOriginalPrompt(response.content || getDefaultPrompt(type))
-      } catch (error) {
-        // Se endpoint não existir, usar prompt padrão
-        const defaultPrompt = getDefaultPrompt(type)
-        setPromptContent(defaultPrompt)
-        setOriginalPrompt(defaultPrompt)
+        setSystemPrompt(response.system_prompt || '')
+        setUserPrompt(response.user_prompt || '')
+        setOriginalSystemPrompt(response.system_prompt || '')
+        setOriginalUserPrompt(response.user_prompt || '')
+        
+        // Se não tiver prompts salvos, carregar defaults do código
+        if (!response.system_prompt && !response.user_prompt) {
+          const defaults = getDefaultPrompts(type)
+          setSystemPrompt(defaults.systemPrompt)
+          setUserPrompt(defaults.userPrompt)
+          setOriginalSystemPrompt(defaults.systemPrompt)
+          setOriginalUserPrompt(defaults.userPrompt)
+        }
+      } catch (error: any) {
+        // Se endpoint não existir, usar prompts padrão
+        const defaults = getDefaultPrompts(type)
+        setSystemPrompt(defaults.systemPrompt)
+        setUserPrompt(defaults.userPrompt)
+        setOriginalSystemPrompt(defaults.systemPrompt)
+        setOriginalUserPrompt(defaults.userPrompt)
       }
     } catch (error) {
       toast.error('Erro ao carregar prompt')
+    } finally {
+      setLoading(false)
     }
   }
 
-  const getDefaultPrompt = (type: string) => {
-    // Retorna um prompt padrão baseado no tipo
-    return `Prompt para ${type} - Edite este prompt conforme necessário.\n\nEste prompt será usado para gerar relatórios do tipo "${type}".`
+  const getDefaultPrompts = (type: string): { systemPrompt: string; userPrompt: string } => {
+    // Se for uma seção, retornar prompts padrão
+    if (type.startsWith('section_')) {
+      const sectionCode = type.replace('section_', '')
+      return {
+        systemPrompt: `Você é um consultor sênior de estratégia especializado em clínicas de saúde. Analise os dados fornecidos e gere um relatório detalhado e acionável sobre a seção ${sectionCode}.`,
+        userPrompt: `Gere um relatório executivo da seção ${sectionCode} com base no snapshot abaixo.\n\nSnapshot:\n{{SNAPSHOT_JSON}}\n\nRetorne um JSON válido com report_markdown e insights estruturados.`,
+      }
+    }
+    // Retorna prompts padrão baseado no tipo
+    return {
+      systemPrompt: `Você é um consultor especializado. Analise os dados fornecidos e gere um relatório detalhado.`,
+      userPrompt: `Gere um relatório do tipo "${type}" com base nos dados fornecidos.\n\nRetorne um JSON válido com report_markdown e insights estruturados.`,
+    }
   }
 
   const handleTypeChange = (type: string) => {
@@ -83,13 +122,12 @@ export default function PromptsAdmin() {
   const handleSave = async () => {
     try {
       try {
-        await api.savePrompt(selectedType, promptContent)
+        await api.savePrompt(selectedType, systemPrompt, userPrompt)
         toast.success('Prompt salvo com sucesso')
-        setOriginalPrompt(promptContent)
+        setOriginalSystemPrompt(systemPrompt)
+        setOriginalUserPrompt(userPrompt)
       } catch (error: any) {
-        // Se endpoint não existir, apenas salvar localmente
-        toast.info('Salvando localmente (endpoint não disponível)')
-        setOriginalPrompt(promptContent)
+        toast.error(`Erro ao salvar prompt: ${error.message}`)
       }
     } catch (error) {
       toast.error('Erro ao salvar prompt')
@@ -97,13 +135,14 @@ export default function PromptsAdmin() {
   }
 
   const handleReset = () => {
-    if (confirm('Deseja restaurar o prompt original? As alterações serão perdidas.')) {
-      setPromptContent(originalPrompt)
-      toast.info('Prompt restaurado')
+    if (confirm('Deseja restaurar os prompts originais? As alterações serão perdidas.')) {
+      setSystemPrompt(originalSystemPrompt)
+      setUserPrompt(originalUserPrompt)
+      toast.info('Prompts restaurados')
     }
   }
 
-  const hasChanges = promptContent !== originalPrompt
+  const hasChanges = systemPrompt !== originalSystemPrompt || userPrompt !== originalUserPrompt
 
   return (
     <div className="space-y-8">
@@ -123,7 +162,7 @@ export default function PromptsAdmin() {
             <RotateCcw className="mr-2 h-4 w-4" />
             Restaurar
           </Button>
-          <Button onClick={handleSave} disabled={!hasChanges}>
+          <Button onClick={handleSave} disabled={!hasChanges || loading}>
             <Save className="mr-2 h-4 w-4" />
             Salvar
           </Button>
@@ -138,23 +177,46 @@ export default function PromptsAdmin() {
             <CardDescription>Selecione o prompt que deseja editar</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {promptTypes.map((type) => (
-                <Button
-                  key={type.value}
-                  variant={selectedType === type.value ? 'default' : 'outline'}
-                  className="w-full justify-start"
-                  onClick={() => handleTypeChange(type.value)}
-                >
-                  <Code className="mr-2 h-4 w-4" />
-                  {type.label}
-                </Button>
-              ))}
-            </div>
+            <Tabs defaultValue="sections" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="sections">Seções</TabsTrigger>
+                <TabsTrigger value="legacy">Legado</TabsTrigger>
+              </TabsList>
+              <TabsContent value="sections" className="space-y-2 mt-4">
+                {promptTypes
+                  .filter((type) => type.category === 'sections')
+                  .map((type) => (
+                    <Button
+                      key={type.value}
+                      variant={selectedType === type.value ? 'default' : 'outline'}
+                      className="w-full justify-start"
+                      onClick={() => handleTypeChange(type.value)}
+                    >
+                      <Code className="mr-2 h-4 w-4" />
+                      {type.label}
+                    </Button>
+                  ))}
+              </TabsContent>
+              <TabsContent value="legacy" className="space-y-2 mt-4">
+                {promptTypes
+                  .filter((type) => type.category === 'legacy')
+                  .map((type) => (
+                    <Button
+                      key={type.value}
+                      variant={selectedType === type.value ? 'default' : 'outline'}
+                      className="w-full justify-start"
+                      onClick={() => handleTypeChange(type.value)}
+                    >
+                      <Code className="mr-2 h-4 w-4" />
+                      {type.label}
+                    </Button>
+                  ))}
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
 
-        {/* Editor de Prompt */}
+        {/* Editor de Prompts */}
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>
@@ -165,20 +227,46 @@ export default function PromptsAdmin() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Conteúdo do Prompt</Label>
-                <Textarea
-                  value={promptContent}
-                  onChange={(e) => setPromptContent(e.target.value)}
-                  className="min-h-[400px] font-mono text-sm"
-                  placeholder="Digite o prompt aqui..."
-                />
-                <p className="text-xs text-slate-500">
-                  {promptContent.length} caracteres
-                </p>
+            {loading ? (
+              <div className="text-center py-8">Carregando...</div>
+            ) : (
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="system-prompt">
+                    SYSTEM PROMPT <span className="text-xs text-slate-500">(role: system)</span>
+                  </Label>
+                  <Textarea
+                    id="system-prompt"
+                    value={systemPrompt}
+                    onChange={(e) => setSystemPrompt(e.target.value)}
+                    className="min-h-[200px] font-mono text-sm"
+                    placeholder="Digite o system prompt aqui..."
+                  />
+                  <p className="text-xs text-slate-500">
+                    {systemPrompt.length} caracteres
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="user-prompt">
+                    USER PROMPT <span className="text-xs text-slate-500">(role: user)</span>
+                  </Label>
+                  <Textarea
+                    id="user-prompt"
+                    value={userPrompt}
+                    onChange={(e) => setUserPrompt(e.target.value)}
+                    className="min-h-[400px] font-mono text-sm"
+                    placeholder="Digite o user prompt aqui... Use {{SNAPSHOT_JSON}} como placeholder para o snapshot."
+                  />
+                  <p className="text-xs text-slate-500">
+                    {userPrompt.length} caracteres
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    💡 Use <code className="bg-slate-100 px-1 rounded">{'{{SNAPSHOT_JSON}}'}</code> como placeholder para o snapshot JSON
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -279,16 +367,27 @@ export default function PromptsAdmin() {
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-auto">
           <DialogHeader>
-            <DialogTitle>Preview do Prompt</DialogTitle>
+            <DialogTitle>Preview dos Prompts</DialogTitle>
             <DialogDescription>
-              Visualização do prompt que será enviado para a IA
+              Visualização dos prompts que serão enviados para a IA
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="p-4 bg-slate-50 rounded-lg border">
-              <pre className="whitespace-pre-wrap text-sm font-mono">
-                {promptContent || '(Prompt vazio)'}
-              </pre>
+            <div>
+              <h4 className="font-semibold mb-2">SYSTEM PROMPT:</h4>
+              <div className="p-4 bg-slate-50 rounded-lg border">
+                <pre className="whitespace-pre-wrap text-sm font-mono">
+                  {systemPrompt || '(System prompt vazio)'}
+                </pre>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-2">USER PROMPT:</h4>
+              <div className="p-4 bg-slate-50 rounded-lg border">
+                <pre className="whitespace-pre-wrap text-sm font-mono">
+                  {userPrompt || '(User prompt vazio)'}
+                </pre>
+              </div>
             </div>
             <div className="text-sm text-slate-500">
               <p>
@@ -307,4 +406,3 @@ export default function PromptsAdmin() {
     </div>
   )
 }
-

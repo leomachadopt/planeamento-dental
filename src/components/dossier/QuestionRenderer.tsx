@@ -21,6 +21,11 @@ export default function QuestionRenderer({
 }: QuestionRendererProps) {
   switch (question.type) {
     case 'textarea':
+      // Placeholder customizado para IDENTITY_REASON
+      const placeholder = question.code === 'IDENTITY_REASON'
+        ? 'Escreva aqui, com suas próprias palavras, por que sua clínica existe e que transformação real ela gera na vida dos pacientes…'
+        : question.help_text || ''
+      
       return (
         <Textarea
           value={answer.valueText || ''}
@@ -30,7 +35,7 @@ export default function QuestionRenderer({
               valueText: e.target.value,
             })
           }
-          placeholder={question.help_text}
+          placeholder={placeholder}
           className="min-h-[100px]"
         />
       )
@@ -72,4 +77,5 @@ export default function QuestionRenderer({
       )
   }
 }
+
 

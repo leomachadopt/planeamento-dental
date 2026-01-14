@@ -54,7 +54,29 @@ export function useSectionReport(dossierId: string | undefined, sectionCode: str
       hasFetchedRef.current = true
       toast.success('Relatório gerado com sucesso!')
     } catch (error: any) {
-      toast.error(error.message || 'Erro ao gerar relatório')
+      console.error('Erro ao gerar relatório:', error)
+      
+      // Extrair mensagem de erro mais detalhada
+      let errorMessage = 'Erro ao gerar relatório'
+      if (error.message) {
+        errorMessage = error.message
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message
+      } else if (typeof error === 'string') {
+        errorMessage = error
+      }
+      
+      // Se o relatório foi salvo com status 'error', carregar para exibir
+      try {
+        const errorReport = await api.getSectionReport(dossierId, sectionCode)
+        if (errorReport?.status === 'error') {
+          setReport(errorReport)
+        }
+      } catch {
+        // Ignorar erro ao buscar relatório de erro
+      }
+      
+      toast.error(errorMessage)
     } finally {
       setGeneratingReport(false)
     }

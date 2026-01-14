@@ -196,10 +196,10 @@ export const api = {
   // Admin - Prompts
   getPrompts: () => fetchAPI('/admin/prompts'),
   getPrompt: (type: string) => fetchAPI(`/admin/prompts/${type}`),
-  savePrompt: (type: string, content: string) =>
+  savePrompt: (type: string, systemPrompt: string, userPrompt: string) =>
     fetchAPI(`/admin/prompts/${type}`, {
       method: 'PUT',
-      body: JSON.stringify({ content }),
+      body: JSON.stringify({ system_prompt: systemPrompt, user_prompt: userPrompt }),
     }),
 
   // Admin - Configurações
@@ -479,7 +479,7 @@ export const api = {
 
   // Relatórios por IA
   generateSectionReport: (dossierId: string, sectionCode: string) =>
-    fetchAPI(`/dossiers/${dossierId}/sections/${sectionCode}/report:generate`, {
+    fetchAPI(`/dossiers/${dossierId}/sections/${sectionCode}/report`, {
       method: 'POST',
     }),
   

@@ -84,3 +84,4 @@ DROP INDEX IF EXISTS idx_identities_clinic_id;
 -- - ai_reports, ai_report_events, ai_prompt_templates
 -- - users, user_sessions
 
+

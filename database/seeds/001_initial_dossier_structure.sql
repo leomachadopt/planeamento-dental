@@ -5,7 +5,7 @@
 -- 1. INSERIR SEÇÕES PRINCIPAIS
 -- ============================================
 INSERT INTO sections (code, name, order_index, description) VALUES
-('IDENTITY', 'Identidade', 1, 'Fundação estratégica: propósito, valores, posicionamento'),
+('IDENTITY', 'Identidade', 1, 'Definir quem a clínica é, por que ela existe, para quem ela existe e como ela escolhe competir. Base de todas as decisões estratégicas.'),
 ('BUSINESS_MODEL', 'Modelo de Negócio', 2, 'Como a clínica cria, entrega e captura valor'),
 ('MARKET', 'Mercado', 3, 'Análise de mercado, concorrentes e oportunidades'),
 ('OFFER', 'Oferta', 4, 'Serviços, categorias e propostas de valor'),
@@ -59,56 +59,130 @@ BEGIN
   END IF;
   
   -- ============================================
-  -- 4. INSERIR PERGUNTAS INICIAIS (7 perguntas)
+  -- 4. INSERIR/ATUALIZAR PERGUNTAS (12 perguntas)
   -- ============================================
   IF v_question_set_id IS NOT NULL THEN
-    -- Pergunta 1: Razão de Existir
-    INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
-    VALUES (v_question_set_id, 'IDENTITY_REASON', 'Razão de Existir (Propósito)', 'Em uma única frase, por que a clínica existe além do lucro? Qual impacto ela busca gerar na vida dos pacientes?', 'textarea', true, 1, 0.9)
-    ON CONFLICT (question_set_id, code) DO NOTHING;
+    -- BLOCO 1 — PROPÓSITO, VISÃO E VALORES
     
-    -- Pergunta 2: Identidade Futura
+    -- Pergunta 1: Razão de Existir (Propósito)
     INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
-    VALUES (v_question_set_id, 'IDENTITY_RECOGNITION_GOAL', 'Identidade Futura (Reconhecimento)', 'Em até 3 anos, como você quer que a clínica seja reconhecida pelo mercado?', 'textarea', true, 2, 0.9)
-    ON CONFLICT (question_set_id, code) DO NOTHING;
+    VALUES (v_question_set_id, 'IDENTITY_REASON', 'Razão de Existir (Propósito)', 'Em uma única frase, por que a clínica existe além de ganhar dinheiro? Que impacto real ela quer gerar na vida dos pacientes? Pense no resultado na vida do paciente, não no procedimento. Pense no "depois do tratamento".', 'textarea', true, 1, 0.9)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
     
-    -- Pergunta 3: Valores
+    -- Pergunta 2: Visão de Futuro (Reconhecimento em 3 anos)
     INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
-    VALUES (v_question_set_id, 'IDENTITY_VALUES', 'Valores Inegociáveis', 'Quais valores são inegociáveis na clínica? O que nunca será tolerado, mesmo que gere lucro?', 'textarea', true, 3, 0.8)
-    ON CONFLICT (question_set_id, code) DO NOTHING;
+    VALUES (v_question_set_id, 'IDENTITY_RECOGNITION_GOAL', 'Visão de Futuro (Reconhecimento em 3 anos)', 'Daqui a 3 anos, como você quer que as pessoas descrevam sua clínica quando falarem dela? Pense em reputação, não em tamanho. Complete mentalmente a frase: "Essa é aquela clínica que…"', 'textarea', true, 2, 0.9)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
     
-    -- Pergunta 4: Público Prioritário
+    -- Pergunta 3: Valores Inegociáveis
     INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
-    VALUES (v_question_set_id, 'IDENTITY_PRIORITY_AUDIENCE', 'Público Prioritário (2026)', 'Qual é o tipo de paciente que a clínica quer priorizar em 2026?', 'textarea', true, 4, 0.9)
-    ON CONFLICT (question_set_id, code) DO NOTHING;
+    VALUES (v_question_set_id, 'IDENTITY_VALUES', 'Valores Inegociáveis', 'Quais comportamentos e atitudes são inegociáveis na clínica? O que nunca deve acontecer, mesmo que gere lucro? Pense em situações reais: O que você não aceitaria de um profissional? Que tipo de paciente você prefere perder do que atender mal?', 'textarea', true, 3, 0.8)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
+    
+    -- BLOCO 2 — PARA QUEM EXISTIMOS
+    
+    -- Pergunta 4: Público Prioritário deste Ciclo
+    INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
+    VALUES (v_question_set_id, 'IDENTITY_PRIORITY_AUDIENCE', 'Público Prioritário deste Ciclo', 'Entre todos os segmentos que você atende, qual será o PRIORITÁRIO nos próximos 12–24 meses? E qual você conscientemente NÃO vai priorizar? Escolha um foco principal e diga também qual tipo de paciente vai virar secundário.', 'textarea', true, 4, 0.9)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
+    
+    -- BLOCO 3 — COMO GERAMOS VALOR
     
     -- Pergunta 5: Posicionamento de Preço
     INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
     VALUES (v_question_set_id, 'IDENTITY_PRICE_POSITIONING', 'Posicionamento de Preço', 'Como a clínica escolhe se posicionar em relação ao preço médio do mercado local?', 'single_select', true, 5, 0.7)
-    ON CONFLICT (question_set_id, code) DO NOTHING;
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
     
-    -- Pergunta 6: Foco do Crescimento
+    -- Pergunta 5.1: Justificativa do Posicionamento de Preço (complementar obrigatória)
     INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
-    VALUES (v_question_set_id, 'IDENTITY_STRATEGY_FOCUS', 'Foco do Crescimento', 'Qual será o principal motor de crescimento da clínica neste ciclo?', 'single_select', true, 6, 0.8)
-    ON CONFLICT (question_set_id, code) DO NOTHING;
+    VALUES (v_question_set_id, 'IDENTITY_PRICE_POSITIONING_JUSTIFICATION', 'O que justifica esse posicionamento?', 'O que justifica esse posicionamento? (técnica, experiência, estrutura, tempo de sessão, especialização, etc.)', 'textarea', true, 6, 0.6)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
+    
+    -- BLOCO 4 — COMO VAMOS CRESCER
+    
+    -- Pergunta 6: Principal Motor de Crescimento
+    INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
+    VALUES (v_question_set_id, 'IDENTITY_STRATEGY_FOCUS', 'Principal Motor de Crescimento', 'Qual será o motor de crescimento principal da clínica neste ciclo?', 'single_select', true, 7, 0.8)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
+    
+    -- Pergunta 6.1: Motor Secundário de Crescimento
+    INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
+    VALUES (v_question_set_id, 'IDENTITY_STRATEGY_FOCUS_SECONDARY', 'Motor Secundário de Crescimento', 'Qual será o motor secundário de crescimento?', 'single_select', true, 8, 0.7)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
     
     -- Pergunta 7: Mudanças Necessárias
     INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
-    VALUES (v_question_set_id, 'IDENTITY_STRATEGY_FOCUS_COMPLEMENT', 'Mudanças Necessárias', 'O que precisará mudar na clínica para sustentar essa escolha?', 'textarea', false, 7, 0.6)
-    ON CONFLICT (question_set_id, code) DO NOTHING;
+    VALUES (v_question_set_id, 'IDENTITY_STRATEGY_FOCUS_COMPLEMENT', 'Mudanças Necessárias', 'O que vai precisar mudar para sustentar essa estratégia? Divida em: Pessoas, Processos, Oferta/Serviços', 'textarea', true, 9, 0.6)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      required = EXCLUDED.required,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
+    
+    -- BLOCO 5 — O CORAÇÃO DO FLIGHT PLAN
+    
+    -- Pergunta 8: Ações Críticas da Clínica
+    INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
+    VALUES (v_question_set_id, 'IDENTITY_CRITICAL_ACTIONS', 'Ações Críticas da Clínica', 'Quais são as 3 coisas que a clínica precisa fazer EXCEPCIONALMENTE BEM, todos os dias, para cumprir sua missão? Isso define o que realmente importa na operação.', 'textarea', true, 10, 0.9)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
+    
+    -- Pergunta 9: Características-Chave da Clínica
+    INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
+    VALUES (v_question_set_id, 'IDENTITY_KEY_CHARACTERISTICS', 'Características-Chave da Clínica', 'Quais são as 3 características que a clínica precisa TER como identidade no dia a dia? Isso define o jeito de ser da clínica, não só o que ela faz.', 'textarea', true, 11, 0.9)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
+    
+    -- BLOCO 6 — COERÊNCIA E FOCO
+    
+    -- Pergunta 10: O que a clínica NÃO quer ser
+    INSERT INTO questions (question_set_id, code, text, help_text, type, required, order_index, ai_importance_weight)
+    VALUES (v_question_set_id, 'IDENTITY_WHAT_NOT_TO_BE', 'O que a clínica NÃO quer ser', 'Que tipo de clínica você NÃO quer construir, mesmo que isso pareça dar dinheiro? Toda boa estratégia tem uma lista do que não fazer.', 'textarea', true, 12, 0.8)
+    ON CONFLICT (question_set_id, code) DO UPDATE SET
+      text = EXCLUDED.text,
+      help_text = EXCLUDED.help_text,
+      ai_importance_weight = EXCLUDED.ai_importance_weight;
     
     -- ============================================
-    -- 5. INSERIR OPÇÕES PARA PERGUNTAS DE SELEÇÃO
+    -- 5. INSERIR/ATUALIZAR OPÇÕES PARA PERGUNTAS DE SELEÇÃO
     -- ============================================
     
     -- Opções para Posicionamento de Preço
     INSERT INTO question_options (question_id, label, value, order_index)
-    SELECT q.id, 'Mais acessível (foco em custo-benefício)', 'Mais acessível', 1
+    SELECT q.id, 'Mais acessível (custo-benefício)', 'Mais acessível', 1
     FROM questions q WHERE q.code = 'IDENTITY_PRICE_POSITIONING' AND q.question_set_id = v_question_set_id
     ON CONFLICT DO NOTHING;
     
     INSERT INTO question_options (question_id, label, value, order_index)
-    SELECT q.id, 'Intermediário (equilíbrio preço x valor)', 'Intermediário', 2
+    SELECT q.id, 'Intermediário (equilíbrio)', 'Intermediário', 2
     FROM questions q WHERE q.code = 'IDENTITY_PRICE_POSITIONING' AND q.question_set_id = v_question_set_id
     ON CONFLICT DO NOTHING;
     
@@ -117,17 +191,29 @@ BEGIN
     FROM questions q WHERE q.code = 'IDENTITY_PRICE_POSITIONING' AND q.question_set_id = v_question_set_id
     ON CONFLICT DO NOTHING;
     
-    -- Opções para Foco do Crescimento
+    -- Opções para Principal Motor de Crescimento
     INSERT INTO question_options (question_id, label, value, order_index)
     SELECT q.id, 'Mais pacientes (volume)', 'Mais pacientes', 1
     FROM questions q WHERE q.code = 'IDENTITY_STRATEGY_FOCUS' AND q.question_set_id = v_question_set_id
     ON CONFLICT DO NOTHING;
     
     INSERT INTO question_options (question_id, label, value, order_index)
-    SELECT q.id, 'Mais valor por paciente (ticket médio maior)', 'Mais valor por paciente', 2
+    SELECT q.id, 'Mais valor por paciente (ticket médio)', 'Mais valor por paciente', 2
     FROM questions q WHERE q.code = 'IDENTITY_STRATEGY_FOCUS' AND q.question_set_id = v_question_set_id
+    ON CONFLICT DO NOTHING;
+    
+    -- Opções para Motor Secundário de Crescimento
+    INSERT INTO question_options (question_id, label, value, order_index)
+    SELECT q.id, 'Mais pacientes (volume)', 'Mais pacientes', 1
+    FROM questions q WHERE q.code = 'IDENTITY_STRATEGY_FOCUS_SECONDARY' AND q.question_set_id = v_question_set_id
+    ON CONFLICT DO NOTHING;
+    
+    INSERT INTO question_options (question_id, label, value, order_index)
+    SELECT q.id, 'Mais valor por paciente (ticket médio)', 'Mais valor por paciente', 2
+    FROM questions q WHERE q.code = 'IDENTITY_STRATEGY_FOCUS_SECONDARY' AND q.question_set_id = v_question_set_id
     ON CONFLICT DO NOTHING;
   END IF;
 END $$;
+
 
 

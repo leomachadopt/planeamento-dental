@@ -30,6 +30,12 @@ export interface Question {
   type: 'text' | 'textarea' | 'number' | 'currency' | 'date' | 'single_select' | 'multi_select' | 'scale' | 'json'
   required: boolean
   order_index: number
+  validation_schema?: {
+    minLength?: number
+    maxLength?: number
+    required?: boolean
+    rules?: string[]
+  }
   options?: Array<{ id: string; label: string; value: string; order_index: number }>
   answer?: {
     id: string
@@ -189,5 +195,6 @@ export async function calculateSectionCompletion(
     return 0
   }
 }
+
 
 

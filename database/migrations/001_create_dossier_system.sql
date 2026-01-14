@@ -254,3 +254,4 @@ CREATE TABLE IF NOT EXISTS capacities (
 CREATE INDEX IF NOT EXISTS idx_capacities_dossier ON capacities(clinic_id, dossier_id);
 
 
+
