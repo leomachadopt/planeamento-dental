@@ -521,11 +521,28 @@ export const api = {
   getFinalReport: (dossierId: string) =>
     fetchAPI(`/dossiers/${dossierId}/final-report`),
   
-  exportFinalReport: (dossierId: string, format: 'pdf' | 'docx' = 'pdf') =>
-    fetchAPI(`/dossiers/${dossierId}/final-report/export?format=${format}`, {
-      method: 'GET',
-      responseType: 'blob',
-    }),
+  exportFinalReport: async (dossierId: string, format: 'pdf' | 'docx' = 'pdf') => {
+    const token = getAuthToken()
+    const headers: HeadersInit = {}
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
+    const response = await fetch(
+      `${API_BASE_URL}/dossiers/${dossierId}/final-report/export?format=${format}`,
+      {
+        method: 'GET',
+        headers,
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error(`Erro ao exportar relatório: ${response.status}`)
+    }
+
+    return response.blob()
+  },
 }
 
 
