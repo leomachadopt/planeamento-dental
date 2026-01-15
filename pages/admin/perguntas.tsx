@@ -568,7 +568,7 @@ function QuestionForm({
 }: {
   question: Question | null
   questionSetId: string
-  sectionCode: string
+  sectionCode?: string
   onSave: (q: Question) => void
   onCancel: () => void
 }) {
