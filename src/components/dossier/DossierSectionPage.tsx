@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSectionData } from '@/hooks/useSectionData'
 import { useSectionReport } from '@/hooks/useSectionReport'
 import { saveAnswers } from '@/services/dossierService'
@@ -40,6 +40,7 @@ export default function DossierSectionPage({
 
   const [savingAnswers, setSavingAnswers] = useState<Set<string>>(new Set())
   const [answersMap, setAnswersMap] = useState<Record<string, any>>({})
+  const saveTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({})
 
   // Inicializar answersMap quando sectionData mudar
   useEffect(() => {
@@ -54,59 +55,83 @@ export default function DossierSectionPage({
     }
   }, [sectionData])
 
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(saveTimeoutRef.current).forEach(clearTimeout)
+    }
+  }, [])
+
   if (!dossierId) {
     return null
   }
 
-  const handleAnswerChange = async (
-    question: Question,
-    value: {
-      valueText?: string
-      valueNumber?: number
-      valueJson?: any
-    },
-  ) => {
-    if (!question.id) return
+  const handleAnswerChange = useCallback(
+    (
+      question: Question,
+      value: {
+        valueText?: string
+        valueNumber?: number
+        valueJson?: any
+      },
+    ) => {
+      if (!question.id) return
 
-    // Atualizar estado local imediatamente para feedback visual
-    setAnswersMap((prev) => ({
-      ...prev,
-      [question.id]: value,
-    }))
-
-    setSavingAnswers((prev) => new Set(prev).add(question.id))
-
-    try {
-      await saveAnswers(dossierId, [
-        {
-          questionId: question.id,
-          valueText: value.valueText,
-          valueNumber: value.valueNumber,
-          valueJson: value.valueJson,
-          source: 'user',
-        },
-      ])
-
-      // Atualizar dados da seção após salvar
-      await refetch()
-    } catch (err) {
-      console.error('Erro ao salvar resposta:', err)
-      toast.error('Erro ao salvar resposta')
-      // Reverter mudança em caso de erro
+      // Atualizar estado local imediatamente para feedback visual
       setAnswersMap((prev) => ({
         ...prev,
-        [question.id]: sectionData?.questionSets
-          .flatMap((qs) => qs.questions)
-          .find((q) => q.id === question.id)?.answer || {},
+        [question.id]: value,
       }))
-    } finally {
-      setSavingAnswers((prev) => {
-        const next = new Set(prev)
-        next.delete(question.id)
-        return next
-      })
-    }
-  }
+
+      // Limpar timeout anterior se existir
+      if (saveTimeoutRef.current[question.id]) {
+        clearTimeout(saveTimeoutRef.current[question.id])
+      }
+
+      // Marcar como salvando após um pequeno delay (para evitar piscar o ícone)
+      const savingTimeout = setTimeout(() => {
+        setSavingAnswers((prev) => new Set(prev).add(question.id))
+      }, 300)
+
+      // Debounce: salvar após 1 segundo de inatividade
+      saveTimeoutRef.current[question.id] = setTimeout(async () => {
+        try {
+          await saveAnswers(dossierId, [
+            {
+              questionId: question.id,
+              valueText: value.valueText,
+              valueNumber: value.valueNumber,
+              valueJson: value.valueJson,
+              source: 'user',
+            },
+          ])
+
+          // Não fazer refetch aqui - o estado local já está atualizado
+          // Isso evita o refresh da tela enquanto o usuário está digitando
+        } catch (err) {
+          console.error('Erro ao salvar resposta:', err)
+          toast.error('Erro ao salvar resposta')
+
+          // Reverter mudança em caso de erro
+          setAnswersMap((prev) => ({
+            ...prev,
+            [question.id]: sectionData?.questionSets
+              .flatMap((qs) => qs.questions)
+              .find((q) => q.id === question.id)?.answer || {},
+          }))
+        } finally {
+          clearTimeout(savingTimeout)
+          setSavingAnswers((prev) => {
+            const next = new Set(prev)
+            next.delete(question.id)
+            return next
+          })
+          delete saveTimeoutRef.current[question.id]
+        }
+      }, 1000) // 1 segundo de debounce
+    },
+    [dossierId, sectionData],
+  )
 
   if (loading) {
     return (
