@@ -289,7 +289,7 @@ export default async function handler(
           }
 
           // Processar validation_schema: remover propriedades undefined e tratar objeto vazio
-          let processedValidationSchema = null
+          let processedValidationSchema: string | null = null
           if (validation_schema && typeof validation_schema === 'object') {
             // Remover propriedades undefined
             const cleaned = Object.fromEntries(

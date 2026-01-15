@@ -74,7 +74,7 @@ export default async function handler(
         name: user.name,
       },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN as string }
     )
 
     return res.status(201).json({
