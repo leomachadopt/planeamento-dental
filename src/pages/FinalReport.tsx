@@ -111,7 +111,11 @@ export default function FinalReport() {
           <Button variant="outline" onClick={handleGenerate}>
             <RefreshCw className="mr-2 size-4" /> Atualizar
           </Button>
-          <Button onClick={() => window.print()}>
+          <Button onClick={() => {
+            if (typeof window !== 'undefined') {
+              window.print()
+            }
+          }}>
             <Printer className="mr-2 size-4" /> Imprimir / PDF
           </Button>
         </div>

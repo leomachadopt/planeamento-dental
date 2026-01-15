@@ -31,3 +31,4 @@ COMMENT ON COLUMN ai_prompt_templates.system_prompt IS 'Prompt do sistema (role:
 COMMENT ON COLUMN ai_prompt_templates.user_prompt IS 'Prompt do usuário (role: user) enviado à IA';
 COMMENT ON COLUMN ai_prompt_templates.template_text IS 'Campo legado mantido para compatibilidade';
 
+

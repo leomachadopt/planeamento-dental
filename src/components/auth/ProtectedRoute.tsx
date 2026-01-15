@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom'
+import { useRouter } from 'next/router'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useEffect } from 'react'
 
@@ -8,6 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
+  const router = useRouter()
   const { isAuthenticated, user, isLoading, checkAuth } = useAuthStore()
 
   useEffect(() => {
@@ -15,6 +16,20 @@ export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRout
       checkAuth()
     }
   }, [isAuthenticated, isLoading, checkAuth])
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push('/login')
+        return
+      }
+
+      if (requireAdmin && user?.role !== 'admin') {
+        router.push('/')
+        return
+      }
+    }
+  }, [isAuthenticated, isLoading, user, requireAdmin, router])
 
   if (isLoading) {
     return (
@@ -28,15 +43,16 @@ export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRout
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
+    return null
   }
 
   if (requireAdmin && user?.role !== 'admin') {
-    return <Navigate to="/" replace />
+    return null
   }
 
   return <>{children}</>
 }
+
 
 
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { getDossierSections, type Section } from '@/services/dossierService'
 import {
   SidebarMenu,
@@ -38,7 +39,8 @@ const sectionIcons: Record<string, any> = {
 }
 
 export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
-  const location = useLocation()
+  const router = useRouter()
+  const pathname = router.pathname
   const [sections, setSections] = useState<Section[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -107,8 +109,8 @@ export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
           ? `/dossie/${dossierId}/final-report`
           : `/dossie/${dossierId}/${routeMap[section.code] || section.code.toLowerCase()}`
         const isActive = section.code === 'FINAL_REPORT'
-          ? location.pathname === sectionPath
-          : location.pathname.includes(`/${routeMap[section.code] || section.code.toLowerCase()}`)
+          ? pathname === sectionPath
+          : pathname.includes(`/${routeMap[section.code] || section.code.toLowerCase()}`)
 
         return (
           <SidebarMenuItem key={section.id}>
@@ -118,7 +120,7 @@ export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
               tooltip={section.name}
               className="hover:bg-slate-800 hover:text-white data-[active=true]:bg-teal-600 data-[active=true]:text-white transition-colors h-auto py-2"
             >
-              <Link to={sectionPath} className="flex flex-col gap-2 w-full">
+              <Link href={sectionPath} className="flex flex-col gap-2 w-full">
                 <div className="flex items-center gap-2 w-full">
                   <Icon className="size-4 shrink-0" />
                   <span className="text-sm font-medium flex-1">{section.name}</span>
@@ -141,11 +143,11 @@ export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
       <SidebarMenuItem className="mt-4 pt-4 border-t border-slate-700">
         <SidebarMenuButton
           asChild
-          isActive={location.pathname.includes('/relatorios')}
+          isActive={pathname.includes('/relatorios')}
           tooltip="Relatórios do Dossiê"
           className="hover:bg-slate-800 hover:text-white data-[active=true]:bg-teal-600 data-[active=true]:text-white transition-colors"
         >
-          <Link to={`/dossie/${dossierId}/relatorios`} className="flex items-center gap-2">
+          <Link href={`/dossie/${dossierId}/relatorios`} className="flex items-center gap-2">
             <BarChart3 className="size-4" />
             <span>Relatórios</span>
           </Link>

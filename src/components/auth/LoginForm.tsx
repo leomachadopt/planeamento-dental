@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,7 +14,7 @@ export function LoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const { login, isLoading } = useAuthStore()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,7 +22,13 @@ export function LoginForm() {
 
     try {
       await login(email, password)
-      navigate('/')
+      // Verificar role do usuário após login e redirecionar adequadamente
+      const { user } = useAuthStore.getState()
+      if (user?.role === 'admin') {
+        router.push('/admin')
+      } else {
+        router.push('/')
+      }
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login')
     }
@@ -84,7 +91,7 @@ export function LoginForm() {
 
           <div className="text-center text-sm text-slate-600">
             Não tem uma conta?{' '}
-            <Link to="/register" className="text-teal-600 hover:underline">
+            <Link href="/register" className="text-teal-600 hover:underline">
               Criar conta
             </Link>
           </div>
@@ -93,6 +100,7 @@ export function LoginForm() {
     </Card>
   )
 }
+
 
 
 

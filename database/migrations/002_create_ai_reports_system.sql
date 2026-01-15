@@ -99,3 +99,4 @@ CREATE INDEX IF NOT EXISTS idx_initiatives_dossier ON initiatives(clinic_id, dos
 
 
 
+

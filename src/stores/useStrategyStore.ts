@@ -668,11 +668,13 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
   // Database actions
   setCurrentClinicId: (clinicId) => {
     set({ currentClinicId: clinicId })
-    // Persist to localStorage
-    if (clinicId) {
-      localStorage.setItem('currentClinicId', clinicId)
-    } else {
-      localStorage.removeItem('currentClinicId')
+    // Persist to localStorage (apenas no browser)
+    if (typeof window !== 'undefined') {
+      if (clinicId) {
+        localStorage.setItem('currentClinicId', clinicId)
+      } else {
+        localStorage.removeItem('currentClinicId')
+      }
     }
   },
 
@@ -688,8 +690,10 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
         hasUnsavedChanges: false,
       })
 
-      // Persist to localStorage
-      localStorage.setItem('currentClinicId', clinicId)
+      // Persist to localStorage (apenas no browser)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('currentClinicId', clinicId)
+      }
 
       toast.success('Dados carregados com sucesso!')
     } catch (error) {

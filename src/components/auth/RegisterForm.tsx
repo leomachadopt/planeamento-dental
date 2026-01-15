@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,7 +16,7 @@ export function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const { register, isLoading } = useAuthStore()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,7 +34,7 @@ export function RegisterForm() {
 
     try {
       await register(email, password, name)
-      navigate('/')
+      router.push('/')
     } catch (err: any) {
       setError(err.message || 'Erro ao criar conta')
     }
@@ -128,7 +129,7 @@ export function RegisterForm() {
 
           <div className="text-center text-sm text-slate-600">
             Já tem uma conta?{' '}
-            <Link to="/login" className="text-teal-600 hover:underline">
+            <Link href="/login" className="text-teal-600 hover:underline">
               Fazer login
             </Link>
           </div>
@@ -137,6 +138,7 @@ export function RegisterForm() {
     </Card>
   )
 }
+
 
 
 

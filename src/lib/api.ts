@@ -1,8 +1,17 @@
 // Cliente API para comunicação com o backend
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
+// No Next.js, variáveis de ambiente do cliente devem começar com NEXT_PUBLIC_
+// Como as rotas de API são servidas diretamente pelo Next.js, usamos '/api' como padrão
+const API_BASE_URL = 
+  (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_API_URL) ||
+  '/api'
 
 // Função para obter token do store
 function getAuthToken(): string | null {
+  // Verificar se estamos no browser (não no SSR)
+  if (typeof window === 'undefined') {
+    return null
+  }
+  
   try {
     const authStorage = localStorage.getItem('auth-storage')
     if (authStorage) {
@@ -36,11 +45,25 @@ async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   })
 
   if (!response.ok) {
-    if (response.status === 401) {
-      // Token inválido, limpar autenticação
-      localStorage.removeItem('auth-storage')
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login'
+    if (response.status === 401 || response.status === 403) {
+      // Token inválido ou expirado, limpar autenticação
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth-storage')
+        // Limpar o estado do store também
+        try {
+          // Importar dinamicamente para evitar dependência circular
+          import('@/stores/useAuthStore').then(({ useAuthStore }) => {
+            useAuthStore.getState().logout()
+          }).catch(() => {
+            // Ignorar erro se o store não estiver disponível
+          })
+        } catch (error) {
+          // Ignorar erro
+        }
+        
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login'
+        }
       }
       throw new Error('Sessão expirada. Faça login novamente.')
     }

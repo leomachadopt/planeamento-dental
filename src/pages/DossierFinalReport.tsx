@@ -64,11 +64,32 @@ export default function DossierFinalReport() {
   const handleExport = async (format: 'pdf' = 'pdf') => {
     if (!dossierId) return
 
+    // Verificar se estamos no browser
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      toast.error('Exportação disponível apenas no navegador')
+      return
+    }
+
     setExporting(true)
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/dossiers/${dossierId}/final-report/export?format=${format}`, {
+      // Obter token de autenticação
+      const authStorage = localStorage.getItem('auth-storage')
+      let token = null
+      if (authStorage) {
+        try {
+          const parsed = JSON.parse(authStorage)
+          token = parsed.state?.token || null
+        } catch {
+          // Ignorar erro de parsing
+        }
+      }
+
+      // No Next.js, usar URL relativa ou variável de ambiente NEXT_PUBLIC_API_URL
+      const apiUrl = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || ''
+      const baseUrl = apiUrl || '/api'
+      const response = await fetch(`${baseUrl}/dossiers/${dossierId}/final-report/export?format=${format}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       })
 
@@ -367,6 +388,7 @@ export default function DossierFinalReport() {
     </div>
   )
 }
+
 
 
 

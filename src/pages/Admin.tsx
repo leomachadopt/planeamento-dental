@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/router'
 import { useAuthStore } from '@/stores/useAuthStore'
 
 /**
@@ -8,15 +8,15 @@ import { useAuthStore } from '@/stores/useAuthStore'
  */
 export default function Admin() {
   const { user } = useAuthStore()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   useEffect(() => {
     if (user?.role === 'admin') {
-      navigate('/admin/dashboard', { replace: true })
+      router.replace('/admin')
     } else {
-      navigate('/', { replace: true })
+      router.replace('/')
     }
-  }, [user, navigate])
+  }, [user, router])
 
   return null
 }

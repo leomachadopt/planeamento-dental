@@ -1,0 +1,169 @@
+import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { authenticateToken, AuthRequest } from '@/lib/api-shared/auth'
+import pool from '@/lib/api-shared/db'
+import { markSectionReportsAsStale, getSectionForEntity, markFinalReportAsStale } from '@/lib/api-shared/staleTracking'
+import { updateSectionCompletion } from '@/lib/api-shared/sectionCompletion'
+
+const TABLE_NAME = 'service_categories'
+
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse,
+) {
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization')
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
+  }
+
+  return authenticateToken(req as AuthRequest, res, async () => {
+    try {
+      const { method } = req
+      const authReq = req as AuthRequest
+      const user = authReq.user!
+      const dossierId = req.query.id as string
+      const entityId = req.query.entityId as string
+
+      if (!dossierId) {
+        return res.status(400).json({ error: 'ID do dossiê é obrigatório' })
+      }
+
+      const dossierResult = await pool.query('SELECT clinic_id FROM dossiers WHERE id = $1', [dossierId])
+      if (dossierResult.rows.length === 0) {
+        return res.status(404).json({ error: 'Dossiê não encontrado' })
+      }
+
+      const clinicId = dossierResult.rows[0].clinic_id
+      if (user.role !== 'admin' && user.clinicId !== clinicId) {
+        return res.status(403).json({ error: 'Acesso negado' })
+      }
+
+      if (method === 'GET') {
+        if (entityId) {
+          const result = await pool.query(
+            `SELECT * FROM ${TABLE_NAME} WHERE id = $1 AND clinic_id = $2 AND dossier_id = $3`,
+            [entityId, clinicId, dossierId],
+          )
+          if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Entidade não encontrada' })
+          }
+          return res.status(200).json(result.rows[0])
+        } else {
+          const result = await pool.query(
+            `SELECT * FROM ${TABLE_NAME} WHERE clinic_id = $1 AND dossier_id = $2 ORDER BY created_at`,
+            [clinicId, dossierId],
+          )
+          return res.status(200).json(result.rows)
+        }
+      }
+
+      if (method === 'POST') {
+        const { name, description, notes } = req.body
+        if (!name) {
+          return res.status(400).json({ error: 'name é obrigatório' })
+        }
+
+        const result = await pool.query(
+          `INSERT INTO ${TABLE_NAME} (clinic_id, dossier_id, name, description, notes, status)
+           VALUES ($1, $2, $3, $4, $5, 'active')
+           RETURNING *`,
+          [clinicId, dossierId, name, description || null, notes || null],
+        )
+        
+        // Marcar relatórios como stale
+        const sectionCode = getSectionForEntity('service_categories')
+        if (sectionCode) {
+          await markSectionReportsAsStale(dossierId, sectionCode)
+          await updateSectionCompletion(dossierId, sectionCode)
+        }
+        
+        return res.status(201).json(result.rows[0])
+      }
+
+      if (method === 'PUT' && entityId) {
+        const { name, description, notes, status } = req.body
+
+        const updateFields: string[] = []
+        const updateValues: any[] = []
+        let paramIndex = 1
+
+        if (name !== undefined) {
+          updateFields.push(`name = $${paramIndex++}`)
+          updateValues.push(name)
+        }
+        if (description !== undefined) {
+          updateFields.push(`description = $${paramIndex++}`)
+          updateValues.push(description)
+        }
+        if (notes !== undefined) {
+          updateFields.push(`notes = $${paramIndex++}`)
+          updateValues.push(notes)
+        }
+        if (status !== undefined) {
+          updateFields.push(`status = $${paramIndex++}`)
+          updateValues.push(status)
+        }
+
+        if (updateFields.length === 0) {
+          return res.status(400).json({ error: 'Nenhum campo para atualizar' })
+        }
+
+        updateFields.push(`updated_at = NOW()`)
+        updateValues.push(clinicId, dossierId, entityId)
+
+        const result = await pool.query(
+          `UPDATE ${TABLE_NAME} 
+           SET ${updateFields.join(', ')}
+           WHERE clinic_id = $${paramIndex++} AND dossier_id = $${paramIndex++} AND id = $${paramIndex++}
+           RETURNING *`,
+          updateValues,
+        )
+
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Entidade não encontrada' })
+        }
+
+        // Marcar relatórios como stale
+        const sectionCode = getSectionForEntity('service_categories')
+        if (sectionCode) {
+          await markSectionReportsAsStale(dossierId, sectionCode)
+          await updateSectionCompletion(dossierId, sectionCode)
+        }
+
+        return res.status(200).json(result.rows[0])
+      }
+
+      if (method === 'DELETE' && entityId) {
+        const result = await pool.query(
+          `DELETE FROM ${TABLE_NAME} 
+           WHERE id = $1 AND clinic_id = $2 AND dossier_id = $3
+           RETURNING *`,
+          [entityId, clinicId, dossierId],
+        )
+
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Entidade não encontrada' })
+        }
+
+        // Marcar relatórios como stale
+        const sectionCode = getSectionForEntity('service_categories')
+        if (sectionCode) {
+          await markSectionReportsAsStale(dossierId, sectionCode)
+          await updateSectionCompletion(dossierId, sectionCode)
+        }
+
+        return res.status(200).json({ message: 'Entidade excluída com sucesso' })
+      }
+
+      return res.status(405).json({ error: 'Método não permitido' })
+    } catch (error: any) {
+      console.error('Erro na API de service_categories:', error)
+      return res.status(500).json({ error: error.message || 'Erro interno do servidor' })
+    }
+  })
+}
+

@@ -31,17 +31,24 @@ export const identityQuestionsContext: Record<string, QuestionContext> = {
     ],
   },
   IDENTITY_RECOGNITION_GOAL: {
-    why: 'Isso define onde você quer chegar.',
+    why: 'Essa pergunta define para onde você está levando o negócio. Sem uma visão clara: a clínica cresce "para qualquer lado", aceita qualquer tipo de projeto/parceria/paciente, compra equipamentos e contrata pessoas sem critério estratégico, e confunde crescimento com progresso. A visão serve como filtro de decisão, define o que você vai construir (e o que não vai), dá direção para investimentos/marketing/estrutura, e cria coerência entre o hoje e o futuro desejado.',
     consequences: [
-      'Cresce para qualquer lado',
-      'Aceita qualquer tipo de projeto',
-      'Não sabe dizer "não"',
+      'A clínica cresce "para qualquer lado"',
+      'Aceita qualquer tipo de projeto, parceria ou paciente',
+      'Compra equipamentos e contrata pessoas sem critério estratégico',
+      'Confunde crescimento com progresso',
     ],
-    howToAnswer: 'Pense em reputação, não em tamanho. Complete mentalmente a frase: "Essa é aquela clínica que…"',
+    howToAnswer: 'Pense menos em: ❌ Tamanho ❌ Faturamento ❌ Quantidade de unidades. E mais em: ✅ Reputação ✅ Tipo de problema que você resolve ✅ Como as pessoas descrevem você para outras. Complete mentalmente: "Essa é aquela clínica que…" Boas respostas: falam de posição no mercado (não de vaidade), falam de tipo de caso resolvido (não de tecnologia), falam de confiança e reconhecimento (não de números), soam como algo que um paciente ou outro médico diria.',
     goodExamples: [
       'Essa é aquela clínica que resolve casos que ninguém mais resolve.',
       'Essa é a clínica mais confiável para reabilitação de coluna da cidade.',
       'Essa é a clínica onde todo mundo indica de olhos fechados.',
+    ],
+    badExamples: [
+      'Ser a maior rede de clínicas da região.',
+      'Ter faturamento de X milhões.',
+      'Ter 10 unidades em 3 anos.',
+      'Ser referência em tecnologia de ponta.',
     ],
   },
   IDENTITY_VALUES: {

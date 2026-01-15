@@ -21,10 +21,13 @@ export default function QuestionRenderer({
 }: QuestionRendererProps) {
   switch (question.type) {
     case 'textarea':
-      // Placeholder customizado para IDENTITY_REASON
-      const placeholder = question.code === 'IDENTITY_REASON'
-        ? 'Escreva aqui, com suas próprias palavras, por que sua clínica existe e que transformação real ela gera na vida dos pacientes…'
-        : question.help_text || ''
+      // Placeholder customizado para perguntas específicas
+      let placeholder = question.help_text || ''
+      if (question.code === 'IDENTITY_REASON') {
+        placeholder = 'Escreva aqui, com suas próprias palavras, por que sua clínica existe e que transformação real ela gera na vida dos pacientes…'
+      } else if (question.code === 'IDENTITY_RECOGNITION_GOAL') {
+        placeholder = 'Escreva aqui, com suas próprias palavras, como você quer que sua clínica seja conhecida e lembrada daqui a 3 anos…'
+      }
       
       return (
         <Textarea

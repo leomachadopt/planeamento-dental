@@ -44,7 +44,9 @@ export default function ClinicSelector() {
     if (clinicId === currentClinicId) return
     // Atualizar clínica do usuário (implementar se necessário)
     // Por enquanto, apenas recarregar a página para atualizar o contexto
-    window.location.reload()
+    if (typeof window !== 'undefined') {
+      window.location.reload()
+    }
   }
 
   return (

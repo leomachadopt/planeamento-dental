@@ -1,4 +1,5 @@
-import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import {
   LayoutDashboard,
   Users,
@@ -59,6 +60,7 @@ const adminMenuItems = [
   {
     group: 'Conteúdo & IA',
     items: [
+      { title: 'Perguntas', url: '/admin/perguntas', icon: FileText },
       { title: 'Relatórios', url: '/admin/relatorios', icon: FileText },
       { title: 'Prompts & Modelos', url: '/admin/prompts', icon: Code },
     ],
@@ -78,14 +80,17 @@ const adminMenuItems = [
   },
 ]
 
-export default function AdminLayout() {
-  const location = useLocation()
+interface AdminLayoutProps {
+  children: React.ReactNode
+}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  const router = useRouter()
   const { user, logout } = useAuthStore()
-  const navigate = useNavigate()
 
   const handleLogout = () => {
     logout()
-    navigate('/login')
+    router.push('/login')
   }
 
   return (
@@ -116,11 +121,11 @@ export default function AdminLayout() {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        isActive={location.pathname === item.url}
+                        isActive={router.pathname === item.url}
                         tooltip={item.title}
                         className="hover:bg-slate-800 hover:text-white data-[active=true]:bg-purple-600 data-[active=true]:text-white transition-colors"
                       >
-                        <Link to={item.url}>
+                        <Link href={item.url}>
                           <item.icon />
                           <span>{item.title}</span>
                         </Link>
@@ -138,7 +143,7 @@ export default function AdminLayout() {
                   tooltip="Voltar ao Sistema"
                   className="hover:bg-slate-800 hover:text-white transition-colors"
                 >
-                  <Link to="/">
+                  <Link href="/">
                     <BarChart3 />
                     <span>Voltar ao Sistema</span>
                   </Link>
@@ -197,7 +202,7 @@ export default function AdminLayout() {
           </header>
 
           <div className="flex-1 overflow-auto p-6 md:p-8">
-            <Outlet />
+            {children}
           </div>
 
           <footer className="h-8 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 text-xs text-slate-500 print:hidden">
@@ -212,6 +217,7 @@ export default function AdminLayout() {
     </SidebarProvider>
   )
 }
+
 
 
 
