@@ -69,39 +69,62 @@ export default function QuestionWizard({
   // Buscar contexto do banco de dados
   useEffect(() => {
     if (currentQuestion?.id) {
+      console.log('🔍 Carregando contexto para pergunta:', currentQuestion.code, currentQuestion.id)
       setLoadingContext(true)
-      fetch(`/api/questions/${currentQuestion.id}/context`)
-        .then((res) => res.json())
+
+      fetch(`/api/questions/${currentQuestion.id}/context`, {
+        credentials: 'include', // Importante para enviar cookies de autenticação
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => {
+          console.log('📥 Resposta da API de contexto:', res.status)
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`)
+          }
+          return res.json()
+        })
         .then((data) => {
+          console.log('📦 Dados do contexto recebidos:', data)
           if (data && Object.keys(data).length > 1) {
             // Converter formato do banco para formato esperado
-            setQuestionContext({
+            const context = {
               why: data.why,
               consequences: data.consequences,
               howToAnswer: data.howToAnswer,
               goodExamples: data.goodExamples,
               badExamples: data.badExamples,
-            })
+            }
+            console.log('✅ Contexto processado e definido:', context)
+            setQuestionContext(context)
           } else {
+            console.log('⚠️ Contexto vazio do banco, usando fallback')
             // Fallback para contexto hardcoded se não houver no banco
             if (sectionCode === 'IDENTITY' && currentQuestion?.code) {
               const hardcodedContext = identityQuestionsContext[currentQuestion.code]
+              console.log('📚 Usando contexto hardcoded:', hardcodedContext ? 'encontrado' : 'não encontrado')
               setQuestionContext(hardcodedContext)
             } else {
               setQuestionContext(undefined)
             }
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('❌ Erro ao buscar contexto:', error)
           // Em caso de erro, usar fallback hardcoded
           if (sectionCode === 'IDENTITY' && currentQuestion?.code) {
             const hardcodedContext = identityQuestionsContext[currentQuestion.code]
+            console.log('📚 Erro no fetch, usando contexto hardcoded:', hardcodedContext ? 'encontrado' : 'não encontrado')
             setQuestionContext(hardcodedContext)
           } else {
             setQuestionContext(undefined)
           }
         })
-        .finally(() => setLoadingContext(false))
+        .finally(() => {
+          console.log('🏁 Carregamento de contexto finalizado')
+          setLoadingContext(false)
+        })
     } else {
       setQuestionContext(undefined)
     }
