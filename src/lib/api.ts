@@ -24,7 +24,7 @@ function getAuthToken(): string | null {
   return null
 }
 
-async function fetchAPI(endpoint: string, options: RequestInit = {}) {
+export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   // Garantir que endpoint começa com /
   const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
   const url = `${API_BASE_URL}${normalizedEndpoint}`
