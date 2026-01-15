@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import jwt from 'jsonwebtoken'
+import jwt, { type SignOptions } from 'jsonwebtoken'
 import pool from '@/lib/api-shared/db'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
@@ -65,6 +65,9 @@ export default async function handler(
     const user = result.rows[0]
 
     // Gerar token JWT
+    const jwtOptions: SignOptions = {
+      expiresIn: JWT_EXPIRES_IN,
+    }
     const token = jwt.sign(
       {
         id: user.id,
@@ -74,7 +77,7 @@ export default async function handler(
         name: user.name,
       },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as string }
+      jwtOptions
     )
 
     return res.status(201).json({

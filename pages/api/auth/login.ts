@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import jwt from 'jsonwebtoken'
+import jwt, { type SignOptions } from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import pool from '@/lib/api-shared/db'
 
@@ -124,6 +124,9 @@ export default async function handler(
 
     // Gerar token JWT
     console.log('Gerando token JWT...')
+    const jwtOptions: SignOptions = {
+      expiresIn: JWT_EXPIRES_IN,
+    }
     const token = jwt.sign(
       {
         id: user.id,
@@ -133,7 +136,7 @@ export default async function handler(
         name: user.name,
       },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as string }
+      jwtOptions
     )
 
     console.log('Token gerado com sucesso')
