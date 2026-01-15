@@ -1,7 +1,7 @@
 // Versão server-side do AI client
 import { getSystemPrompt, buildSectionReportPrompt } from '../../src/lib/section-prompts.js'
 import type { SectionSnapshot } from '../../src/lib/api-shared/snapshotBuilder.js'
-import pool from './db.js'
+import pool from '../../src/lib/api-shared/db.js'
 
 export interface InsightsJSON {
   score: {
