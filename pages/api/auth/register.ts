@@ -65,9 +65,6 @@ export default async function handler(
     const user = result.rows[0]
 
     // Gerar token JWT
-    const jwtOptions: SignOptions = {
-      expiresIn: JWT_EXPIRES_IN,
-    }
     const token = jwt.sign(
       {
         id: user.id,
@@ -77,7 +74,9 @@ export default async function handler(
         name: user.name,
       },
       JWT_SECRET,
-      jwtOptions
+      {
+        expiresIn: JWT_EXPIRES_IN as SignOptions['expiresIn'],
+      }
     )
 
     return res.status(201).json({
