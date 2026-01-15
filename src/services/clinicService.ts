@@ -29,12 +29,13 @@ export async function getAllClinics(): Promise<Clinic[]> {
   return api.getAllClinics()
 }
 
-export async function updateClinicName(
-  clinicId: string,
-  clinicName: string,
-): Promise<void> {
-  return api.updateClinic(clinicId, { name: clinicName })
-}
+// TODO: Implementar updateClinic na API antes de usar esta função
+// export async function updateClinicName(
+//   clinicId: string,
+//   clinicName: string,
+// ): Promise<void> {
+//   return api.updateClinic(clinicId, { name: clinicName })
+// }
 
 export async function deleteClinic(clinicId: string): Promise<void> {
   return api.deleteClinic(clinicId)

@@ -541,19 +541,38 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
     patientLoss: '',
   },
   managerVision: {
-    problems: ['', '', ''],
-    opportunities: ['', '', ''],
-    vision2026: '',
-    goals: {
-      revenue: '',
-      occupancy: '',
-      nps: '',
-      other: '',
+    problems: [
+      { description: '', impact: [], sinceWhen: '', rootCause: '' },
+      { description: '', impact: [], sinceWhen: '', rootCause: '' },
+      { description: '', impact: [], sinceWhen: '', rootCause: '' },
+    ],
+    opportunities: [
+      { description: '', dependsOn: [], risk: '', tradeOff: '' },
+      { description: '', dependsOn: [], risk: '', tradeOff: '' },
+      { description: '', dependsOn: [], risk: '', tradeOff: '' },
+    ],
+    vision2026: {
+      financial: { monthlyRevenue: '', margin: '', ownerDependency: '' },
+      market: { knownFor: '', chosenFor: '' },
+      operation: { scheduleStatus: '', processStandardization: '' },
+      people: { teamProfile: '', turnover: '', autonomy: '' },
+    },
+    kpis: {
+      financial: { monthlyRevenue: '', margin: '', averageTicket: '' },
+      operational: { occupancyRate: '', waitTime: '', noShowRate: '' },
+      experience: { nps: '', returnRate: '', referralRate: '' },
+      people: { maxTurnover: '', ownerDependency: '' },
     },
     ratings: {
       processes: { score: 5, justification: '' },
       financial: { score: 5, justification: '' },
       satisfaction: { score: 5, justification: '' },
+    },
+    goals: {
+      revenue: '',
+      occupancy: '',
+      nps: '',
+      other: '',
     },
   },
   identity: {
@@ -563,6 +582,7 @@ export const useStrategyStore = create<StrategyState>((set, get) => ({
     priorityAudience: '',
     pricePositioning: '',
     strategyFocus: '',
+    strategyFocusComplement: '',
   },
   relatorio_1: null,
   relatorio_2: null,

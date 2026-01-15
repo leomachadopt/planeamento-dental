@@ -65,7 +65,7 @@ export default function FinalReport() {
         <Button
           size="lg"
           onClick={handleGenerate}
-          disabled={isGeneratingReportReport}
+          disabled={isGeneratingReport}
           className="bg-slate-900 text-white hover:bg-slate-800"
         >
           {isGeneratingReport ? (

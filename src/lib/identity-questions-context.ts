@@ -3,7 +3,7 @@
 
 export interface QuestionContext {
   why: string // Por que estamos perguntando isso
-  howToAnswer: string // Como responder bem
+  howToAnswer?: string // Como responder bem
   goodExamples?: string[] // Exemplos bons
   badExamples?: string[] // Exemplos ruins
   consequences?: string[] // O que acontece sem isso
