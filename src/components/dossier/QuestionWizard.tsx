@@ -14,6 +14,7 @@ import {
 import QuestionRenderer from './QuestionRenderer'
 import { identityQuestionsContext, type QuestionContext } from '@/lib/identity-questions-context'
 import type { Question, QuestionSet } from '@/services/dossierService'
+import { fetchAPI } from '@/lib/api'
 
 interface QuestionWizardProps {
   questionSets: QuestionSet[]
@@ -72,19 +73,7 @@ export default function QuestionWizard({
       console.log('🔍 Carregando contexto para pergunta:', currentQuestion.code, currentQuestion.id)
       setLoadingContext(true)
 
-      fetch(`/api/questions/${currentQuestion.id}/context`, {
-        credentials: 'include', // Importante para enviar cookies de autenticação
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          console.log('📥 Resposta da API de contexto:', res.status)
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`)
-          }
-          return res.json()
-        })
+      fetchAPI(`/api/questions/${currentQuestion.id}/context`)
         .then((data) => {
           console.log('📦 Dados do contexto recebidos:', data)
           if (data && Object.keys(data).length > 1) {
