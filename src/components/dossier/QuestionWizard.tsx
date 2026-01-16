@@ -518,12 +518,22 @@ export default function QuestionWizard({
               </div>
 
               <Button
-                onClick={goToNextQuestion}
-                disabled={currentQuestionIndex === currentQuestions.length - 1}
+                onClick={() => {
+                  if (currentQuestionIndex === currentQuestions.length - 1) {
+                    // Última pergunta: rolar para o relatório
+                    const reportSection = document.getElementById('section-report')
+                    if (reportSection) {
+                      reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  } else {
+                    // Não é última pergunta: ir para próxima
+                    goToNextQuestion()
+                  }
+                }}
                 className="flex items-center gap-2"
               >
                 {currentQuestionIndex === currentQuestions.length - 1
-                  ? 'Próxima seção'
+                  ? 'Concluir Seção'
                   : 'Próxima pergunta'}
                 <ChevronRight className="size-4" />
               </Button>

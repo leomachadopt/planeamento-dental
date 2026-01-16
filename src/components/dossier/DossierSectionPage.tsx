@@ -261,14 +261,16 @@ export default function DossierSectionPage({
       )}
 
       {/* Relatório da Seção */}
-      <SectionReportCard
-        report={report}
-        loading={loadingReport}
-        generating={generatingReport}
-        onGenerate={handleGenerateReport}
-        sectionCode={sectionCode}
-        sectionTitle={`Relatório - ${sectionData.section.name}`}
-      />
+      <div id="section-report">
+        <SectionReportCard
+          report={report}
+          loading={loadingReport}
+          generating={generatingReport}
+          onGenerate={handleGenerateReport}
+          sectionCode={sectionCode}
+          sectionTitle={`Relatório - ${sectionData.section.name}`}
+        />
+      </div>
     </div>
   )
 }
