@@ -65,7 +65,28 @@ export default function DossierSectionPage({
               valueJson: q.answer.value_json,
             })
           }
-          initialAnswers[q.id] = q.answer || {}
+
+          // Converter snake_case do banco para camelCase esperado pelo frontend
+          if (q.answer) {
+            const converted = {
+              id: q.answer.id,
+              valueText: q.answer.value_text,
+              valueNumber: q.answer.value_number,
+              valueJson: q.answer.value_json,
+              source: q.answer.source,
+            }
+            initialAnswers[q.id] = converted
+
+            if (converted.valueText || converted.valueNumber || converted.valueJson) {
+              console.log('🔄 Convertido snake_case → camelCase:', {
+                questionCode: q.code,
+                antes: { value_text: q.answer.value_text, value_number: q.answer.value_number },
+                depois: { valueText: converted.valueText, valueNumber: converted.valueNumber },
+              })
+            }
+          } else {
+            initialAnswers[q.id] = {}
+          }
         })
       })
 
