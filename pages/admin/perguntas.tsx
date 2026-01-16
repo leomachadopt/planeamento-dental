@@ -145,6 +145,9 @@ export default function PerguntasAdmin() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [editingId, setEditingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [bulkImportModalOpen, setBulkImportModalOpen] = useState(false)
+  const [bulkJsonInput, setBulkJsonInput] = useState('')
+  const [bulkImporting, setBulkImporting] = useState(false)
 
   useEffect(() => {
     loadSections()
@@ -348,6 +351,54 @@ export default function PerguntasAdmin() {
     }
   }
 
+  const handleBulkImport = async () => {
+    if (!bulkJsonInput.trim()) {
+      toast.error('Por favor, cole o JSON do bloco')
+      return
+    }
+
+    try {
+      setBulkImporting(true)
+      const parsed = JSON.parse(bulkJsonInput)
+
+      if (!parsed.block) {
+        toast.error('JSON inválido: esperado formato { "block": { ... } }')
+        return
+      }
+
+      console.log('📦 Enviando importação em lote:', parsed)
+
+      const result = await fetchAPI('/admin/questions/bulk-import', {
+        method: 'POST',
+        body: JSON.stringify(parsed)
+      })
+
+      console.log('✅ Resultado da importação:', result)
+
+      // Mostrar resumo
+      toast.success(
+        `Importação concluída! ${result.summary.imported} pergunta(s) importada(s), ` +
+        `${result.summary.skipped} ignorada(s), ${result.summary.errors} erro(s)`
+      )
+
+      // Fechar modal e limpar
+      setBulkImportModalOpen(false)
+      setBulkJsonInput('')
+
+      // Recarregar perguntas
+      if (selectedSection) {
+        const questionSetId = selectedQuestionSet && selectedQuestionSet !== 'all' ? selectedQuestionSet : undefined
+        loadQuestions(selectedSection, questionSetId)
+      }
+
+    } catch (error: any) {
+      console.error('❌ Erro na importação:', error)
+      toast.error('Erro ao importar: ' + error.message)
+    } finally {
+      setBulkImporting(false)
+    }
+  }
+
   const currentSection = sections.find((s) => s.code === selectedSection)
   const availableQuestionSets = currentSection?.questionSets || []
 
@@ -360,10 +411,16 @@ export default function PerguntasAdmin() {
             Adicione, edite e personalize perguntas e seus contextos
           </p>
         </div>
-        <Button onClick={() => setEditingId('new')} disabled={!selectedQuestionSet || selectedQuestionSet === 'all'}>
-          <Plus className="mr-2 size-4" />
-          Nova Pergunta
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setBulkImportModalOpen(true)}>
+            <Upload className="mr-2 size-4" />
+            Importar Bloco (JSON)
+          </Button>
+          <Button onClick={() => setEditingId('new')} disabled={!selectedQuestionSet || selectedQuestionSet === 'all'}>
+            <Plus className="mr-2 size-4" />
+            Nova Pergunta
+          </Button>
+        </div>
       </div>
 
       {/* Filtros */}
@@ -459,6 +516,86 @@ export default function PerguntasAdmin() {
           onCancel={() => setEditingId(null)}
         />
       )}
+
+      {/* Modal de Importação em Lote */}
+      <Dialog open={bulkImportModalOpen} onOpenChange={setBulkImportModalOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Importar Bloco de Perguntas via JSON</DialogTitle>
+            <DialogDescription>
+              Cole o JSON completo do bloco com todas as perguntas. O sistema criará automaticamente o question_set e todas as perguntas com seus contextos.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>JSON do Bloco</Label>
+              <Textarea
+                value={bulkJsonInput}
+                onChange={(e) => setBulkJsonInput(e.target.value)}
+                placeholder='{ "block": { "code": "OFFER_VALUE_PROPOSITION", "name": "Bloco 4 ...", "questions": [...] } }'
+                className="min-h-[400px] font-mono text-sm"
+              />
+            </div>
+            <div className="text-sm text-slate-500 space-y-2">
+              <p className="font-semibold">Formato esperado:</p>
+              <pre className="bg-slate-100 p-3 rounded text-xs overflow-x-auto">
+{`{
+  "block": {
+    "code": "OFFER_VALUE_PROPOSITION",
+    "name": "Bloco 4 — Oferta & Proposta de Valor",
+    "description": "Define o que é vendido...",
+    "questions": [
+      {
+        "code": "OFFER_CORE_PROBLEM",
+        "text": "Qual é o principal problema...",
+        "help_text": "Descreva o problema...",
+        "type": "textarea",
+        "required": true,
+        "ai_importance_weight": 1.0,
+        "validation_schema": {
+          "min_length": 200,
+          "max_length": 900
+        },
+        "options": [],
+        "context": {
+          "why": "Toda oferta forte...",
+          "consequences": ["...", "..."],
+          "how_to_answer": "Descreva...",
+          "good_examples": ["..."],
+          "bad_examples": ["..."],
+          "show_why": true,
+          "show_consequences": true,
+          "show_how_to_answer": true,
+          "show_good_examples": true,
+          "show_bad_examples": true
+        }
+      },
+      ...
+    ]
+  }
+}`}
+              </pre>
+              <div className="bg-blue-50 border border-blue-200 rounded p-3 mt-2">
+                <p className="font-semibold text-blue-900">ℹ️ Como funciona:</p>
+                <ul className="list-disc list-inside text-blue-800 space-y-1 mt-1">
+                  <li>O código da seção é extraído automaticamente (ex: "OFFER" de "OFFER_VALUE_PROPOSITION")</li>
+                  <li>Se o question_set já existir, as perguntas serão adicionadas a ele</li>
+                  <li>Perguntas duplicadas (mesmo código) serão ignoradas</li>
+                  <li>Os contextos são criados automaticamente se a tabela existir</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setBulkImportModalOpen(false)} disabled={bulkImporting}>
+              Cancelar
+            </Button>
+            <Button onClick={handleBulkImport} disabled={!bulkJsonInput.trim() || bulkImporting}>
+              {bulkImporting ? 'Importando...' : 'Importar'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

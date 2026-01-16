@@ -73,7 +73,7 @@ export default function QuestionWizard({
       console.log('🔍 Carregando contexto para pergunta:', currentQuestion.code, currentQuestion.id)
       setLoadingContext(true)
 
-      fetchAPI(`/api/questions/${currentQuestion.id}/context`)
+      fetchAPI(`/questions/${currentQuestion.id}/context`)
         .then((data) => {
           console.log('📦 Dados do contexto recebidos:', data)
           if (data && Object.keys(data).length > 1) {

@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSectionData } from '@/hooks/useSectionData'
 import { useSectionReport } from '@/hooks/useSectionReport'
 import { saveAnswers } from '@/services/dossierService'
-import QuestionRenderer from '@/components/dossier/QuestionRenderer'
 import QuestionWizard from '@/components/dossier/QuestionWizard'
 import SectionReportCard from '@/components/dossier/SectionReportCard'
 import {
@@ -193,59 +192,14 @@ export default function DossierSectionPage({
         </CardHeader>
       </Card>
 
-      {/* Perguntas - Usar QuestionWizard para IDENTITY, senão mostrar todas */}
-      {sectionCode === 'IDENTITY' ? (
-        <QuestionWizard
-          questionSets={sectionData.questionSets}
-          answersMap={answersMap}
-          savingAnswers={savingAnswers}
-          onAnswerChange={handleAnswerChange}
-          sectionCode={sectionCode}
-        />
-      ) : (
-        sectionData.questionSets.map((questionSet) => (
-          <Card key={questionSet.id}>
-            <CardHeader>
-              <CardTitle className="text-lg">{questionSet.name}</CardTitle>
-              {questionSet.subsection_name && (
-                <CardDescription>{questionSet.subsection_name}</CardDescription>
-              )}
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {questionSet.questions.map((question) => {
-                const answer = answersMap[question.id] || question.answer || {}
-                const isSaving = savingAnswers.has(question.id)
-
-                return (
-                  <div key={question.id} className="space-y-2">
-                    <div className="flex items-start justify-between">
-                      <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        {question.text}
-                        {question.required && (
-                          <span className="text-red-500 ml-1">*</span>
-                        )}
-                      </label>
-                      {isSaving && (
-                        <Loader2 className="size-4 animate-spin text-teal-600" />
-                      )}
-                    </div>
-                    {question.help_text && (
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
-                        {question.help_text}
-                      </p>
-                    )}
-                    <QuestionRenderer
-                      question={question}
-                      answer={answer}
-                      onChange={(value) => handleAnswerChange(question, value)}
-                    />
-                  </div>
-                )
-              })}
-            </CardContent>
-          </Card>
-        ))
-      )}
+      {/* Perguntas - Usar QuestionWizard para todas as seções */}
+      <QuestionWizard
+        questionSets={sectionData.questionSets}
+        answersMap={answersMap}
+        savingAnswers={savingAnswers}
+        onAnswerChange={handleAnswerChange}
+        sectionCode={sectionCode}
+      />
 
       {/* Blocos de Entidades */}
       {entityBlocks && (

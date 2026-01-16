@@ -103,11 +103,16 @@ export default {
         },
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-        xl: 'calc(var(--radius) + 4px)',
-        '2xl': 'calc(var(--radius) + 8px)',
+        // Sobrescrever valores padrão com versões mais arredondadas
+        none: '0px',
+        sm: '0.375rem',  // 6px - mais arredondado que o padrão (3px)
+        DEFAULT: '0.5rem',  // 8px
+        md: '0.625rem',  // 10px - mais arredondado que o padrão (6px)
+        lg: 'var(--radius)',  // 14px (0.875rem)
+        xl: 'calc(var(--radius) + 4px)',  // 18px
+        '2xl': 'calc(var(--radius) + 8px)',  // 22px
+        '3xl': '1.5rem',  // 24px
+        full: '9999px',
       },
       transitionProperty: {
         width: 'width',
@@ -115,7 +120,14 @@ export default {
         spacing: 'margin, padding',
       },
       boxShadow: {
-        // Sombras ultra-modernas e sutis
+        // Sobrescrever sombras padrão com versões modernas
+        sm: '0 2px 8px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+        DEFAULT: '0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.04)',
+        md: '0 6px 16px -2px rgba(0, 0, 0, 0.10), 0 3px 8px -2px rgba(0, 0, 0, 0.05)',
+        lg: '0 10px 24px -3px rgba(0, 0, 0, 0.12), 0 4px 12px -3px rgba(0, 0, 0, 0.06)',
+        xl: '0 20px 40px -4px rgba(0, 0, 0, 0.15), 0 8px 16px -4px rgba(0, 0, 0, 0.08)',
+        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        // Sombras customizadas
         xs: '0 1px 2px 0 rgba(0, 0, 0, 0.02)',
         subtle: '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
         soft: '0 2px 8px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
@@ -123,6 +135,8 @@ export default {
         lifted: '0 8px 32px -4px rgba(0, 0, 0, 0.10), 0 4px 16px -4px rgba(0, 0, 0, 0.05)',
         glow: '0 0 24px rgba(20, 184, 166, 0.15)',
         'glow-sm': '0 0 12px rgba(20, 184, 166, 0.10)',
+        inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+        none: 'none',
       },
       transitionTimingFunction: {
         smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
