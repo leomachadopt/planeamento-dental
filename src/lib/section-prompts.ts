@@ -680,3 +680,10 @@ Gere o relatório final completo e os insights estruturados baseados EXCLUSIVAME
   return finalReportInstruction
 }
 
+/**
+ * Exporta SECTION_INSTRUCTIONS para uso no admin
+ */
+export function getSectionInstruction(sectionCode: string): string {
+  return SECTION_INSTRUCTIONS[sectionCode] || ''
+}
+

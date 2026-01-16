@@ -21,16 +21,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { getSectionInstruction, getSystemPrompt } from '@/lib/section-prompts'
 
 const promptTypes = [
-  // Seções do Dossiê
+  // Seções do Dossiê (ordem igual à sidebar do usuário)
   { value: 'section_IDENTITY', label: 'IDENTITY - Identidade', description: 'Prompt para relatório de identidade estratégica', category: 'sections' },
+  { value: 'section_BUSINESS_MODEL', label: 'BUSINESS_MODEL - Modelo de Negócio', description: 'Prompt para relatório de modelo de negócio', category: 'sections' },
   { value: 'section_MARKET', label: 'MARKET - Mercado', description: 'Prompt para relatório de mercado e concorrência', category: 'sections' },
   { value: 'section_OFFER', label: 'OFFER - Oferta', description: 'Prompt para relatório de oferta de serviços', category: 'sections' },
   { value: 'section_OPERATIONS', label: 'OPERATIONS - Operações', description: 'Prompt para relatório de operações', category: 'sections' },
-  { value: 'section_STRATEGY', label: 'STRATEGY - Estratégia', description: 'Prompt para relatório de estratégia', category: 'sections' },
-  { value: 'section_PLAN', label: 'PLAN - Plano', description: 'Prompt para relatório de plano', category: 'sections' },
-  { value: 'section_BUSINESS_MODEL', label: 'BUSINESS_MODEL - Modelo de Negócio', description: 'Prompt para relatório de modelo de negócio', category: 'sections' },
+  { value: 'section_PEOPLE', label: 'PEOPLE - Pessoas, Cultura & Gestão', description: 'Prompt para relatório de pessoas e cultura organizacional', category: 'sections' },
+  { value: 'section_STRATEGY', label: 'STRATEGY - Estratégia', description: 'Prompt para síntese estratégica', category: 'sections' },
+  { value: 'section_PLAN', label: 'PLAN - Plano', description: 'Prompt para plano de execução', category: 'sections' },
   // Tipos antigos (mantidos para compatibilidade)
   { value: 'diagnostic', label: 'Diagnóstico', description: 'Prompt para relatório de diagnóstico', category: 'legacy' },
   { value: 'strategic', label: 'Estratégico', description: 'Prompt para direcionamento estratégico', category: 'legacy' },
@@ -99,15 +101,23 @@ export default function PromptsAdmin() {
   }
 
   const getDefaultPrompts = (type: string): { systemPrompt: string; userPrompt: string } => {
-    // Se for uma seção, retornar prompts padrão
+    // Se for uma seção, buscar prompts robustos de section-prompts.ts
     if (type.startsWith('section_')) {
       const sectionCode = type.replace('section_', '')
-      return {
-        systemPrompt: `Você é um consultor sênior de estratégia especializado em clínicas de saúde. Analise os dados fornecidos e gere um relatório detalhado e acionável sobre a seção ${sectionCode}.`,
-        userPrompt: `Gere um relatório executivo da seção ${sectionCode} com base no snapshot abaixo.\n\nSnapshot:\n{{SNAPSHOT_JSON}}\n\nRetorne um JSON válido com report_markdown e insights estruturados.`,
-      }
+      const sectionInstruction = getSectionInstruction(sectionCode)
+
+      // System Prompt: tom intermediário
+      const systemPrompt = getSystemPrompt('intermediario')
+
+      // User Prompt: instruções da seção + formato de saída
+      const userPrompt = sectionInstruction
+        ? `${sectionInstruction}\n\n**DADOS DA CLÍNICA E DO DOSSIÊ:**\n\nSnapshot:\n{{SNAPSHOT_JSON}}\n\n---\n\nGere o relatório completo e os insights estruturados baseados EXCLUSIVAMENTE nos dados fornecidos acima.\nRetorne um JSON válido com a seguinte estrutura:\n\n{\n  "report_markdown": "# Relatório da Seção ${sectionCode}\\n\\n[Conteúdo completo em Markdown]",\n  "insights": {\n    "score": { "clarity": 0-10, "consistency": 0-10, "completeness": 0-10, "impact_potential": 0-10 },\n    "alerts": [],\n    "recommendations": [],\n    "missing_data": [],\n    "contradictions": [],\n    "checklist": [],\n    "tags": []\n  }\n}`
+        : `Gere um relatório executivo da seção ${sectionCode} com base no snapshot abaixo.\n\nSnapshot:\n{{SNAPSHOT_JSON}}\n\nRetorne um JSON válido com report_markdown e insights estruturados.`
+
+      return { systemPrompt, userPrompt }
     }
-    // Retorna prompts padrão baseado no tipo
+
+    // Retorna prompts padrão baseado no tipo legacy
     return {
       systemPrompt: `Você é um consultor especializado. Analise os dados fornecidos e gere um relatório detalhado.`,
       userPrompt: `Gere um relatório do tipo "${type}" com base nos dados fornecidos.\n\nRetorne um JSON válido com report_markdown e insights estruturados.`,
