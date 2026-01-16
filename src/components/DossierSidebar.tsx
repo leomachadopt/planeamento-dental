@@ -20,6 +20,7 @@ import {
   BookOpenCheck,
   Loader2,
   BarChart3,
+  Users,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -33,6 +34,7 @@ const sectionIcons: Record<string, any> = {
   MARKET: Globe,
   OFFER: Package,
   OPERATIONS: Settings,
+  PEOPLE: Users,
   STRATEGY: Target,
   PLAN: FileText,
   FINAL_REPORT: BookOpenCheck,
@@ -88,11 +90,15 @@ export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
     return <Badge className="bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600 text-xs">Pendente</Badge>
   }
 
+  // Identificar seções especiais (não-questionário)
+  const specialSections = ['STRATEGY', 'PLAN', 'FINAL_REPORT']
+
   return (
     <SidebarMenu className="pt-4 px-2">
       {sections.map((section) => {
         const Icon = sectionIcons[section.code] || FileText
-        
+        const isSpecial = specialSections.includes(section.code)
+
         // Mapear sectionCode para rotas
         const routeMap: Record<string, string> = {
           IDENTITY: 'identity',
@@ -100,10 +106,11 @@ export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
           MARKET: 'market',
           OFFER: 'offer',
           OPERATIONS: 'operations',
+          PEOPLE: 'people',
           STRATEGY: 'strategy',
           PLAN: 'plan',
         }
-        
+
         // FINAL_REPORT tem rota especial
         const sectionPath = section.code === 'FINAL_REPORT'
           ? `/dossie/${dossierId}/final-report`
@@ -126,12 +133,18 @@ export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
                   <span className="text-sm font-medium flex-1">{section.name}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 w-full pl-6">
-                  {section.completion_percent !== undefined && (
+                  {!isSpecial && section.completion_percent !== undefined && (
                     <div className="flex-1 min-w-[60px]">
                       <Progress value={section.completion_percent} className="h-1.5" />
                     </div>
                   )}
-                  {getStatusBadge(section.status, section.completion_percent)}
+                  {isSpecial ? (
+                    <Badge className="bg-purple-600 text-white text-xs">
+                      {section.code === 'STRATEGY' ? 'Síntese' : section.code === 'PLAN' ? 'Planejamento' : 'Documento'}
+                    </Badge>
+                  ) : (
+                    getStatusBadge(section.status, section.completion_percent)
+                  )}
                 </div>
               </Link>
             </SidebarMenuButton>
