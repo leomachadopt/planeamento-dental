@@ -105,37 +105,61 @@ export default async function handler(
 
         // Processar cada resposta
         const upsertPromises = answers.map(async (answer: any) => {
-          const { questionId, valueText, valueNumber, valueJson, source } = answer
+          try {
+            const { questionId, valueText, valueNumber, valueJson, source } = answer
 
-          // Determinar qual campo usar baseado no tipo da pergunta
-          const question = questionsCheck.rows.find((q: any) => q.id === questionId)
-          if (!question) return null
+            // Determinar qual campo usar baseado no tipo da pergunta
+            const question = questionsCheck.rows.find((q: any) => q.id === questionId)
+            if (!question) return null
 
-          let finalValueText = null
-          let finalValueNumber = null
-          let finalValueJson = null
+            let finalValueText = null
+            let finalValueNumber = null
+            let finalValueJson = null
 
-          if (question.type === 'number' || question.type === 'currency' || question.type === 'scale') {
-            finalValueNumber = valueNumber !== undefined ? valueNumber : (valueText ? parseFloat(valueText) : null)
-          } else if (question.type === 'json' || question.type === 'multi_select') {
-            finalValueJson = valueJson || (valueText ? JSON.parse(valueText) : null)
-          } else {
-            finalValueText = valueText !== undefined ? valueText : (valueNumber ? String(valueNumber) : null)
+            if (question.type === 'number' || question.type === 'currency' || question.type === 'scale') {
+              finalValueNumber = valueNumber !== undefined ? valueNumber : (valueText ? parseFloat(valueText) : null)
+            } else if (question.type === 'json' || question.type === 'multi_select') {
+              // Para tipos JSON, priorizar valueJson
+              if (valueJson !== undefined && valueJson !== null) {
+                finalValueJson = valueJson
+              } else if (valueText) {
+                // Se tiver valueText, tentar fazer parse, mas capturar erro
+                try {
+                  finalValueJson = JSON.parse(valueText)
+                } catch (parseError) {
+                  // Se não for JSON válido e for multi_select, tratar como array de uma string
+                  // Se for json, retornar erro
+                  if (question.type === 'multi_select') {
+                    finalValueJson = [valueText]
+                  } else {
+                    throw new Error(`Pergunta "${question.code}" espera JSON válido, mas recebeu: "${valueText.substring(0, 50)}..."`)
+                  }
+                }
+              } else {
+                finalValueJson = null
+              }
+            } else {
+              finalValueText = valueText !== undefined ? valueText : (valueNumber ? String(valueNumber) : null)
+            }
+
+            return pool.query(
+              `INSERT INTO answers (dossier_id, question_id, value_text, value_number, value_json, source, updated_at)
+               VALUES ($1, $2, $3, $4, $5, $6, NOW())
+               ON CONFLICT (dossier_id, question_id)
+               DO UPDATE SET
+                 value_text = EXCLUDED.value_text,
+                 value_number = EXCLUDED.value_number,
+                 value_json = EXCLUDED.value_json,
+                 source = EXCLUDED.source,
+                 updated_at = NOW()
+               RETURNING *`,
+              [dossierId, questionId, finalValueText, finalValueNumber, finalValueJson, source || 'user'],
+            )
+          } catch (error: any) {
+            // Log do erro específico mas não falhar toda a operação
+            console.error(`Erro ao processar resposta da pergunta ${answer.questionId}:`, error.message)
+            throw error // Re-throw para que o erro seja capturado no catch principal
           }
-
-          return pool.query(
-            `INSERT INTO answers (dossier_id, question_id, value_text, value_number, value_json, source, updated_at)
-             VALUES ($1, $2, $3, $4, $5, $6, NOW())
-             ON CONFLICT (dossier_id, question_id) 
-             DO UPDATE SET 
-               value_text = EXCLUDED.value_text,
-               value_number = EXCLUDED.value_number,
-               value_json = EXCLUDED.value_json,
-               source = EXCLUDED.source,
-               updated_at = NOW()
-             RETURNING *`,
-            [dossierId, questionId, finalValueText, finalValueNumber, finalValueJson, source || 'user'],
-          )
         })
 
         const results = await Promise.all(upsertPromises.filter(Boolean))
