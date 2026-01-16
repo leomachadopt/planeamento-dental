@@ -7,8 +7,12 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { FileText, RefreshCw, Loader2, AlertCircle } from 'lucide-react'
+import { FileText, RefreshCw, Loader2, AlertCircle, Download } from 'lucide-react'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
+import { useState } from 'react'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+import { toast } from 'sonner'
 
 interface SectionReportCardProps {
   report: any | null
@@ -28,7 +32,70 @@ export default function SectionReportCard({
   sectionTitle,
 }: SectionReportCardProps) {
   const displayTitle = sectionTitle || 'Relatório desta Seção'
-  
+  const [exporting, setExporting] = useState(false)
+
+  const handleExportPDF = async () => {
+    if (!report || !report.report_markdown) {
+      toast.error('Nenhum relatório para exportar')
+      return
+    }
+
+    setExporting(true)
+    toast.info('Preparando PDF...')
+
+    try {
+      // Capturar o conteúdo do relatório
+      const reportElement = document.getElementById(`report-content-${sectionCode}`)
+      if (!reportElement) {
+        throw new Error('Conteúdo do relatório não encontrado')
+      }
+
+      // Converter para canvas
+      const canvas = await html2canvas(reportElement, {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+      })
+
+      // Criar PDF
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const imgWidth = 210 // A4 width in mm
+      const pageHeight = 297 // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      let heightLeft = imgHeight
+      let position = 0
+
+      // Adicionar primeira página
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+      heightLeft -= pageHeight
+
+      // Adicionar páginas adicionais se necessário
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight
+        pdf.addPage()
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+        heightLeft -= pageHeight
+      }
+
+      // Salvar PDF
+      const fileName = `relatorio-${sectionCode.toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`
+      pdf.save(fileName)
+
+      toast.success('PDF exportado com sucesso!')
+    } catch (error) {
+      console.error('Erro ao exportar PDF:', error)
+      toast.error('Erro ao exportar PDF')
+    } finally {
+      setExporting(false)
+    }
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -42,28 +109,50 @@ export default function SectionReportCard({
               Relatório gerado por IA com análise e insights sobre esta seção
             </CardDescription>
           </div>
-          <Button
-            onClick={onGenerate}
-            disabled={generating}
-            variant={report ? 'outline' : 'default'}
-          >
-            {generating ? (
-              <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
-                Gerando...
-              </>
-            ) : report ? (
-              <>
-                <RefreshCw className="mr-2 size-4" />
-                Regenerar
-              </>
-            ) : (
-              <>
-                <FileText className="mr-2 size-4" />
-                Gerar Relatório
-              </>
+          <div className="flex gap-2">
+            {report && (
+              <Button
+                onClick={handleExportPDF}
+                disabled={exporting}
+                variant="outline"
+                size="default"
+              >
+                {exporting ? (
+                  <>
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                    Exportando...
+                  </>
+                ) : (
+                  <>
+                    <Download className="mr-2 size-4" />
+                    Exportar PDF
+                  </>
+                )}
+              </Button>
             )}
-          </Button>
+            <Button
+              onClick={onGenerate}
+              disabled={generating}
+              variant={report ? 'outline' : 'default'}
+            >
+              {generating ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                  Gerando...
+                </>
+              ) : report ? (
+                <>
+                  <RefreshCw className="mr-2 size-4" />
+                  Regenerar
+                </>
+              ) : (
+                <>
+                  <FileText className="mr-2 size-4" />
+                  Gerar Relatório
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -72,7 +161,7 @@ export default function SectionReportCard({
             <Loader2 className="size-6 animate-spin text-teal-600" />
           </div>
         ) : report ? (
-          <div className="space-y-6">
+          <div id={`report-content-${sectionCode}`} className="space-y-6">
             {report.status === 'error' && (
               <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                 <AlertCircle className="size-5 text-red-600 dark:text-red-400" />
