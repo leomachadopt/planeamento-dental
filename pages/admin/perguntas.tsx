@@ -710,6 +710,7 @@ function QuestionForm({
   onCancel: () => void
 }) {
   const [formData, setFormData] = useState<Question>({
+    id: question?.id, // IMPORTANTE: preservar o ID para edição
     question_set_id: question?.question_set_id || questionSetId || '',
     code: question?.code || '',
     text: question?.text || '',
