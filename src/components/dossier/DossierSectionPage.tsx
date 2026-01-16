@@ -44,15 +44,35 @@ export default function DossierSectionPage({
   // Inicializar answersMap quando sectionData mudar
   useEffect(() => {
     if (sectionData?.questionSets) {
+      console.log('📥 Carregando dados da seção:', {
+        sectionCode,
+        questionSetsCount: sectionData.questionSets.length,
+      })
+
       const initialAnswers: Record<string, any> = {}
+      let answersCount = 0
+
       sectionData.questionSets.forEach((qs) => {
         qs.questions.forEach((q) => {
+          if (q.answer && Object.keys(q.answer).length > 0) {
+            answersCount++
+            console.log('📝 Resposta encontrada:', {
+              questionId: q.id,
+              questionCode: q.code,
+              answerKeys: Object.keys(q.answer),
+              valueText: q.answer.value_text?.substring(0, 50),
+              valueNumber: q.answer.value_number,
+              valueJson: q.answer.value_json,
+            })
+          }
           initialAnswers[q.id] = q.answer || {}
         })
       })
+
+      console.log(`✅ Total de ${answersCount} respostas carregadas`)
       setAnswersMap(initialAnswers)
     }
-  }, [sectionData])
+  }, [sectionData, sectionCode])
 
   // Cleanup timeouts on unmount
   useEffect(() => {
@@ -95,7 +115,16 @@ export default function DossierSectionPage({
       // Debounce: salvar após 1 segundo de inatividade
       saveTimeoutRef.current[question.id] = setTimeout(async () => {
         try {
-          await saveAnswers(dossierId, [
+          console.log('💾 Salvando resposta:', {
+            dossierId,
+            questionId: question.id,
+            questionCode: question.code,
+            valueText: value.valueText?.substring(0, 50),
+            valueNumber: value.valueNumber,
+            valueJson: value.valueJson,
+          })
+
+          const result = await saveAnswers(dossierId, [
             {
               questionId: question.id,
               valueText: value.valueText,
@@ -105,10 +134,12 @@ export default function DossierSectionPage({
             },
           ])
 
+          console.log('✅ Resposta salva com sucesso:', result)
+
           // Não fazer refetch aqui - o estado local já está atualizado
           // Isso evita o refresh da tela enquanto o usuário está digitando
         } catch (err) {
-          console.error('Erro ao salvar resposta:', err)
+          console.error('❌ Erro ao salvar resposta:', err)
           toast.error('Erro ao salvar resposta')
 
           // Reverter mudança em caso de erro
