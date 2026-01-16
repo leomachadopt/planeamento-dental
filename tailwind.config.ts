@@ -27,8 +27,28 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter var', 'SF Pro Display', 'system-ui', 'sans-serif'],
-        display: ['SF Pro Display', 'Inter var', 'system-ui', 'sans-serif'],
+        sans: [
+          'Inter',
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
+        mono: [
+          'JetBrains Mono',
+          'Fira Code',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Consolas',
+          'monospace',
+        ],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -86,18 +106,60 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 8px)',
       },
       transitionProperty: {
         width: 'width',
         height: 'height',
+        spacing: 'margin, padding',
       },
       boxShadow: {
-        subtle:
-          '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
-        elevation: '0 4px 20px rgba(0, 0, 0, 0.05)',
+        // Sombras ultra-modernas e sutis
+        xs: '0 1px 2px 0 rgba(0, 0, 0, 0.02)',
+        subtle: '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
+        soft: '0 2px 8px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+        elevation: '0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.04)',
+        lifted: '0 8px 32px -4px rgba(0, 0, 0, 0.10), 0 4px 16px -4px rgba(0, 0, 0, 0.05)',
+        glow: '0 0 24px rgba(20, 184, 166, 0.15)',
+        'glow-sm': '0 0 12px rgba(20, 184, 166, 0.10)',
       },
       transitionTimingFunction: {
-        apple: 'cubic-bezier(0.42, 0, 0.58, 1)',
+        smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        'smooth-in': 'cubic-bezier(0.4, 0, 1, 1)',
+        'smooth-out': 'cubic-bezier(0, 0, 0.2, 1)',
+      },
+      transitionDuration: {
+        250: '250ms',
+        350: '350ms',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'fade-up': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'scale-in': {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-1000px 0' },
+          '100%': { backgroundPosition: '1000px 0' },
+        },
+      },
+      animation: {
+        'fade-in': 'fade-in 0.3s ease-out',
+        'fade-up': 'fade-up 0.4s ease-out',
+        'scale-in': 'scale-in 0.2s ease-out',
+        shimmer: 'shimmer 2s linear infinite',
       },
     },
   },
