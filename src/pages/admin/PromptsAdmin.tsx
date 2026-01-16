@@ -33,6 +33,7 @@ const promptTypes = [
   { value: 'section_PEOPLE', label: 'PEOPLE - Pessoas, Cultura & Gestão', description: 'Prompt para relatório de pessoas e cultura organizacional', category: 'sections' },
   { value: 'section_STRATEGY', label: 'STRATEGY - Estratégia', description: 'Prompt para síntese estratégica', category: 'sections' },
   { value: 'section_PLAN', label: 'PLAN - Plano', description: 'Prompt para plano de execução', category: 'sections' },
+  { value: 'section_FINAL_REPORT', label: 'FINAL_REPORT - Relatório Final', description: 'Prompt para relatório final consolidado (integração executiva)', category: 'sections' },
   // Tipos antigos (mantidos para compatibilidade)
   { value: 'diagnostic', label: 'Diagnóstico', description: 'Prompt para relatório de diagnóstico', category: 'legacy' },
   { value: 'strategic', label: 'Estratégico', description: 'Prompt para direcionamento estratégico', category: 'legacy' },
