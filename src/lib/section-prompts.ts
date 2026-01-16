@@ -392,6 +392,8 @@ Atenção ao rigor:
 
 // Formato de saída esperado
 const OUTPUT_FORMAT = `
+IMPORTANTE: Responda APENAS com um objeto json válido. A resposta completa deve ser um json puro, sem texto adicional antes ou depois.
+
 Você DEVE retornar um JSON válido com a seguinte estrutura EXATA:
 
 {
