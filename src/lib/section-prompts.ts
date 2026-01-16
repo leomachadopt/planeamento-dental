@@ -270,15 +270,123 @@ Analise o MODELO DE NEGÓCIO com foco em:
   `,
 
   FINAL_REPORT: `
-Consolide todas as seções anteriores em um RELATÓRIO FINAL que:
+Você é um consultor estratégico sênior especializado em estruturação, posicionamento e escala de clínicas e empresas de serviços complexos.
 
-1. Sintetize os principais achados de cada seção.
+Seu papel é produzir um RELATÓRIO EXECUTIVO FINAL de altíssimo nível a partir de múltiplos relatórios intermediários:
+- Identidade
+- Mercado
+- Oferta
+- Operações
+- Pessoas, Cultura & Gestão
+- Estratégia (síntese)
+- Plano (desdobramento)
 
-2. Identifique temas transversais e conexões entre seções.
+Regras fundamentais:
 
-3. Destaque contradições ou inconsistências entre seções.
+1. Você NÃO deve repetir conteúdos já apresentados nos relatórios anteriores.
+2. Você NÃO deve explicar conceitos básicos.
+3. Você NÃO deve fazer um resumo seção por seção.
 
-4. Forneça uma visão integrada do dossiê completo.
+Seu trabalho é:
+- Integrar
+- Sintetizar
+- Resolver conflitos
+- Priorizar
+- Fazer escolhas claras
+- Assumir renúncias
+- Apontar riscos reais
+- Apontar alavancas reais
+- Criar um plano mestre de execução
+
+O tom deve ser:
+- Executivo
+- Direto
+- Sem marketing
+- Sem frases bonitas vazias
+- Sem autoengano
+- Orientado a decisão e trade-offs
+
+Você deve escrever como se este documento fosse:
+- Apresentado a sócios
+- Usado para planejar os próximos 12–36 meses
+- Usado para guiar investimento, contratações e foco estratégico
+
+Você deve preferir:
+- Clareza a diplomacia
+- Verdade a conforto
+- Decisão a ambiguidade
+
+Este documento deve responder o tempo todo:
+"Se eu fosse dono dessa clínica, o que eu faria a partir de amanhã?"
+
+Estrutura obrigatória do relatório:
+
+1. **Resumo Executivo** (para sócios)
+   - Situação atual em 3-5 frases
+   - Tese estratégica em 1 parágrafo
+   - As 3 decisões mais importantes
+
+2. **A Tese Estratégica da Clínica**
+   - Qual é o jogo que a clínica está jogando?
+   - Por que ela pode vencer esse jogo?
+   - Qual é a aposta central?
+
+3. **Diagnóstico Integrado do Negócio**
+   - Não repita relatórios anteriores
+   - Integre: onde identity, market, offer, operations e people se encontram ou colidem?
+   - Identifique padrões e tensões estruturais
+
+4. **Os Principais Gargalos Estruturais**
+   - O que impede crescimento hoje?
+   - O que vai impedir crescimento amanhã?
+   - Seja específico e hierarquize
+
+5. **As Principais Alavancas de Crescimento**
+   - O que pode desbloquear valor rapidamente?
+   - O que pode desbloquear valor estruturalmente?
+   - Priorize por impacto vs esforço
+
+6. **As Decisões Difíceis (Renúncias Estratégicas)**
+   - O que a clínica deve PARAR de fazer?
+   - O que a clínica deve EVITAR fazer?
+   - Quais oportunidades devem ser conscientemente ignoradas?
+
+7. **O Plano-Mestre em 3 Horizontes**
+   - Horizonte 1 (0–6 meses): estabilizar e corrigir gargalos críticos
+   - Horizonte 2 (6–18 meses): construir capacidades e escalar
+   - Horizonte 3 (18–36 meses): consolidar posição e expandir
+
+8. **Mapa de Prioridades Estratégicas**
+   - Top 5-7 prioridades absolutas
+   - Para cada uma: por quê, o quê, como, quando, quem
+
+9. **Indicadores-Chave que Governam a Clínica**
+   - Quais 5-10 métricas realmente importam?
+   - O que observar semanalmente, mensalmente, trimestralmente?
+
+10. **Principais Riscos e Planos de Contenção**
+    - Top 3-5 riscos que podem quebrar a estratégia
+    - O que fazer se cada um se concretizar?
+
+11. **Conclusão Executiva: As 3 Decisões Mais Importantes**
+    - Se o dono pudesse tomar apenas 3 decisões nos próximos 90 dias, quais seriam?
+    - Por quê essas e não outras?
+
+Requisitos de profundidade:
+- O relatório deve ter pelo menos 2000 a 3000 palavras.
+- Seja denso em conteúdo, mas claro na forma.
+- Use dados e insights dos relatórios anteriores sem repeti-los literalmente.
+
+TOM e estilo:
+- Executivo e decisivo
+- Honesto e direto
+- Orientado a ação
+- Sem eufemismos ou linguagem corporativa vazia
+
+Atenção ao rigor:
+- Não invente dados ou insights que não estejam nos relatórios fornecidos.
+- Seja honesto sobre lacunas e incertezas.
+- Priorize clareza brutal sobre conforto diplomático.
   `,
 }
 
@@ -503,71 +611,10 @@ export function buildFinalReportPrompt(
   tone: string = 'intermediario',
 ): string {
   const finalReportInstruction = `
-Você é um consultor sênior de gestão estratégica que recebeu todos os relatórios setoriais de uma clínica de saúde.
-Sua missão é escrever o PARECER FINAL EXECUTIVO para o dono da clínica e/ou investidores.
-
-Este documento será o documento estratégico oficial do negócio, consolidando todas as análises setoriais em uma narrativa única, clara e acionável.
+${SECTION_INSTRUCTIONS['FINAL_REPORT']}
 
 **CONTEXTO:**
 Você recebeu relatórios detalhados de cada área estratégica da clínica. Algumas áreas podem estar completas, outras podem ter lacunas.
-Sua tarefa é:
-1. Consolidar os achados em uma narrativa executiva única
-2. Identificar as 3-7 prioridades estratégicas mais importantes
-3. Mapear riscos críticos e oportunidades
-4. Criar um roadmap de alto nível para os próximos 12-24 meses
-5. Ser claro sobre o que NÃO fazer (kill list)
-
-**ESTRUTURA OBRIGATÓRIA DO RELATÓRIO:**
-
-1. **CAPA**
-   - Nome da clínica: ${snapshot.clinic.name}
-   - Nome do dossiê: ${snapshot.dossier.title}
-   - Data: ${new Date().toLocaleDateString('pt-PT')}
-   - Subtítulo: "Relatório Estratégico Consolidado"
-
-2. **SUMÁRIO EXECUTIVO** (1-2 páginas equivalentes)
-   - Diagnóstico geral da situação atual
-   - 3-5 grandes conclusões principais
-   - Visão geral do estado de saúde do negócio
-
-3. **MAPA DE SAÚDE DO NEGÓCIO**
-   - Visão geral por área (Identidade, Mercado, Oferta, Operações, Estratégia, Plano)
-   - Pontos fortes e fracos de cada área
-   - Scores médios de clareza, consistência, completude e potencial de impacto
-
-4. **PRINCIPAIS RISCOS ESTRATÉGICOS**
-   - Lista priorizada de riscos
-   - Impacto de cada risco e por que são perigosos
-   - Seções afetadas por cada risco
-
-5. **PRINCIPAIS OPORTUNIDADES**
-   - Oportunidades identificadas
-   - Potencial de impacto
-   - Esforço necessário
-
-6. **AS 3-7 PRIORIDADES ESTRATÉGICAS**
-   Para cada prioridade, incluir:
-   - Contexto e situação atual
-   - Por que é prioridade
-   - Impacto esperado (alto/médio/baixo)
-   - Esforço necessário (alto/médio/baixo)
-   - Racional por trás da priorização
-
-7. **ROADMAP DE ALTO NÍVEL (12-24 MESES)**
-   - Fases ou ondas de implementação
-   - O que vem antes do quê (dependências)
-   - Marcos principais
-   - Timeline aproximada
-
-8. **O QUE NÃO FAZER**
-   - Cortes estratégicos necessários
-   - Focos a abandonar
-   - Renúncias estratégicas conscientes
-   - Atividades que não agregam valor
-
-9. **APÊNDICE**
-   - Resumo executivo de cada seção analisada
-   - Referências aos relatórios setoriais completos
 
 **DADOS CONSOLIDADOS:**
 
@@ -665,14 +712,14 @@ Você DEVE retornar um JSON válido com a seguinte estrutura EXATA:
 
 **INSTRUÇÕES IMPORTANTES:**
 
-- O report_markdown deve seguir EXATAMENTE a estrutura obrigatória listada acima
-- Seja específico e cite dados concretos dos relatórios setoriais
+- O report_markdown deve seguir EXATAMENTE a estrutura de 11 seções definida nas instruções iniciais
+- Seja específico e cite dados concretos dos relatórios setoriais fornecidos
 - Priorize clareza e acionabilidade sobre complexidade
-- Identifique contradições entre seções e resolva-as
-- Seja honesto sobre lacunas (seções faltantes)
-- O relatório deve ser útil tanto para o dono da clínica quanto para investidores
-- Use linguagem ${tone === 'formal' ? 'formal e técnica' : tone === 'informal' ? 'acessível e direta' : 'clara e profissional'}
-- O documento deve ter entre 15-25 páginas equivalentes quando impresso
+- Identifique contradições entre seções e resolva-as explicitamente
+- Seja honesto sobre lacunas (seções faltantes ou desatualizadas)
+- O relatório deve responder: "Se eu fosse dono dessa clínica, o que eu faria a partir de amanhã?"
+- Use tom ${tone === 'formal' ? 'formal e técnico' : tone === 'informal' ? 'acessível e direto' : 'executivo e profissional'}
+- O documento deve ter entre 2000-3000 palavras
 
 Gere o relatório final completo e os insights estruturados baseados EXCLUSIVAMENTE nos dados fornecidos acima.
   `.trim()
