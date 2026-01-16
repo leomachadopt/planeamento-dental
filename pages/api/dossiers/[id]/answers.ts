@@ -127,13 +127,11 @@ export default async function handler(
                 try {
                   finalValueJson = JSON.parse(valueText)
                 } catch (parseError) {
-                  // Se não for JSON válido e for multi_select, tratar como array de uma string
-                  // Se for json, retornar erro
-                  if (question.type === 'multi_select') {
-                    finalValueJson = [valueText]
-                  } else {
-                    throw new Error(`Pergunta "${question.code}" espera JSON válido, mas recebeu: "${valueText.substring(0, 50)}..."`)
-                  }
+                  // WORKAROUND: Para perguntas configuradas incorretamente como json/multi_select
+                  // mas que estão sendo usadas como textarea, salvar como texto mesmo
+                  console.warn(`⚠️ Pergunta ${question.code} é tipo ${question.type} mas recebeu texto simples. Salvando como value_text.`)
+                  finalValueText = valueText
+                  finalValueJson = null
                 }
               } else {
                 finalValueJson = null
