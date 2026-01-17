@@ -11,8 +11,65 @@ import { FileText, RefreshCw, Loader2, AlertCircle, Download } from 'lucide-reac
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { useState } from 'react'
 import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
 import { toast } from 'sonner'
+
+// Tipos para segmentos de texto
+interface TextSegment {
+  text: string
+  type: 'h1' | 'h2' | 'h3' | 'paragraph' | 'list-item' | 'separator'
+}
+
+// Função para parsear markdown em segmentos estruturados
+function parseMarkdownToSegments(markdown: string): TextSegment[] {
+  const segments: TextSegment[] = []
+  const lines = markdown.split('\n')
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+
+    if (!line) {
+      if (segments.length > 0 && segments[segments.length - 1].type !== 'separator') {
+        segments.push({ text: '', type: 'separator' })
+      }
+      continue
+    }
+
+    // Headers
+    if (line.startsWith('### ')) {
+      segments.push({ text: line.replace(/^###\s+/, ''), type: 'h3' })
+    } else if (line.startsWith('## ')) {
+      segments.push({ text: line.replace(/^##\s+/, ''), type: 'h2' })
+    } else if (line.startsWith('# ')) {
+      segments.push({ text: line.replace(/^#\s+/, ''), type: 'h1' })
+    }
+    // Listas
+    else if (line.match(/^\s*[-*+]\s+/)) {
+      const text = line.replace(/^\s*[-*+]\s+/, '')
+      segments.push({ text: `• ${cleanInlineMarkdown(text)}`, type: 'list-item' })
+    }
+    else if (line.match(/^\s*\d+\.\s+/)) {
+      const text = line.replace(/^\s*\d+\.\s+/, '')
+      const num = line.match(/^\s*(\d+)\./)?.[1] || '1'
+      segments.push({ text: `${num}. ${cleanInlineMarkdown(text)}`, type: 'list-item' })
+    }
+    // Parágrafos
+    else {
+      segments.push({ text: cleanInlineMarkdown(line), type: 'paragraph' })
+    }
+  }
+
+  return segments
+}
+
+// Limpar formatação inline do markdown
+function cleanInlineMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+    .replace(/`(.+?)`/g, '$1')
+    .trim()
+}
 
 interface SectionReportCardProps {
   report: any | null
@@ -44,97 +101,115 @@ export default function SectionReportCard({
     toast.info('Preparando PDF...')
 
     try {
-      // Capturar o conteúdo do relatório
-      const reportElement = document.getElementById(`report-content-${sectionCode}`)
-      if (!reportElement) {
-        throw new Error('Conteúdo do relatório não encontrado')
-      }
-
-      // Adicionar classe para estilos de exportação (remove bordas coloridas)
-      reportElement.classList.add('pdf-export-mode')
-
-      // Converter para canvas com boa qualidade para texto legível
-      const canvas = await html2canvas(reportElement, {
-        scale: 2, // Escala 2 para texto mais nítido
-        logging: false,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-      })
-
-      // Remover classe de exportação
-      reportElement.classList.remove('pdf-export-mode')
-
-      // Criar PDF com margens adequadas
+      // Criar PDF com jsPDF diretamente (texto nativo, fontes grandes e legíveis)
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
-        compress: true,
       })
 
-      // Configuração de margens
-      const marginX = 15 // Margem horizontal
-      const marginTop = 20 // Margem superior
-      const marginBottom = 20 // Margem inferior
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const pageHeight = pdf.internal.pageSize.getHeight()
+      const marginLeft = 25
+      const marginRight = 25
+      const marginTop = 30
+      const marginBottom = 25
+      const maxWidth = pageWidth - marginLeft - marginRight
+      let yPosition = marginTop
 
-      const pageWidth = 210 // A4 width in mm
-      const pageHeight = 297 // A4 height in mm
-      const contentWidth = pageWidth - (marginX * 2) // Largura do conteúdo com margens
-      const contentHeight = pageHeight - marginTop - marginBottom // Altura útil por página
-
-      // Calcular dimensões da imagem mantendo proporção
-      const imgHeight = (canvas.height * contentWidth) / canvas.width
-      let heightLeft = imgHeight
-      let srcY = 0 // Posição Y no canvas fonte
-
-      // Proporção para converter de mm para pixels do canvas
-      const pixelsPerMm = canvas.width / contentWidth
-
-      // Primeira página
-      const firstPageHeight = Math.min(imgHeight, contentHeight)
-      const firstPageSrcHeight = firstPageHeight * pixelsPerMm
-
-      // Criar canvas temporário para a primeira página
-      const tempCanvas = document.createElement('canvas')
-      tempCanvas.width = canvas.width
-      tempCanvas.height = firstPageSrcHeight
-      const tempCtx = tempCanvas.getContext('2d')
-      if (tempCtx) {
-        tempCtx.fillStyle = '#ffffff'
-        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height)
-        tempCtx.drawImage(canvas, 0, srcY, canvas.width, firstPageSrcHeight, 0, 0, canvas.width, firstPageSrcHeight)
+      // Configurações de tipografia - fontes grandes para boa legibilidade
+      const typography = {
+        h1: { size: 22, lineHeight: 11, spaceBefore: 12, spaceAfter: 7, font: 'bold' as const },
+        h2: { size: 18, lineHeight: 9, spaceBefore: 10, spaceAfter: 5, font: 'bold' as const },
+        h3: { size: 15, lineHeight: 8, spaceBefore: 8, spaceAfter: 4, font: 'bold' as const },
+        paragraph: { size: 12, lineHeight: 6, spaceBefore: 0, spaceAfter: 4, font: 'normal' as const },
+        'list-item': { size: 12, lineHeight: 6, spaceBefore: 0, spaceAfter: 3, font: 'normal' as const },
+        separator: { size: 12, lineHeight: 5, spaceBefore: 0, spaceAfter: 0, font: 'normal' as const },
       }
 
-      pdf.addImage(tempCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', marginX, marginTop, contentWidth, firstPageHeight, undefined, 'FAST')
-      heightLeft -= contentHeight
-      srcY += firstPageSrcHeight
+      // Função para adicionar nova página se necessário
+      const checkPageBreak = (requiredHeight: number) => {
+        if (yPosition + requiredHeight > pageHeight - marginBottom) {
+          pdf.addPage()
+          yPosition = marginTop
+          return true
+        }
+        return false
+      }
 
-      // Páginas adicionais
-      while (heightLeft > 0) {
-        pdf.addPage()
-        const remainingHeight = Math.min(heightLeft, contentHeight)
-        const srcHeight = remainingHeight * pixelsPerMm
+      // Função auxiliar para adicionar texto com quebra de linha
+      const addText = (text: string, style: keyof typeof typography, indent: number = 0) => {
+        const config = typography[style]
 
-        const pageCanvas = document.createElement('canvas')
-        pageCanvas.width = canvas.width
-        pageCanvas.height = srcHeight
-        const pageCtx = pageCanvas.getContext('2d')
-        if (pageCtx) {
-          pageCtx.fillStyle = '#ffffff'
-          pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height)
-          pageCtx.drawImage(canvas, 0, srcY, canvas.width, srcHeight, 0, 0, canvas.width, srcHeight)
+        if (config.spaceBefore > 0) {
+          checkPageBreak(config.spaceBefore)
+          yPosition += config.spaceBefore
         }
 
-        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', marginX, marginTop, contentWidth, remainingHeight, undefined, 'FAST')
-        heightLeft -= contentHeight
-        srcY += srcHeight
+        pdf.setFontSize(config.size)
+        pdf.setFont('helvetica', config.font)
+
+        const effectiveMaxWidth = maxWidth - indent
+        const lines = pdf.splitTextToSize(text, effectiveMaxWidth)
+
+        for (const line of lines) {
+          checkPageBreak(config.lineHeight)
+          pdf.text(line, marginLeft + indent, yPosition)
+          yPosition += config.lineHeight
+        }
+
+        if (config.spaceAfter > 0) {
+          yPosition += config.spaceAfter
+        }
       }
 
-      // Adicionar numeração de páginas
+      // Título da seção no topo
+      pdf.setFontSize(26)
+      pdf.setFont('helvetica', 'bold')
+      pdf.setTextColor(0, 128, 128) // Teal
+      const title = sectionTitle || `Relatório - ${sectionCode}`
+      pdf.text(title, pageWidth / 2, yPosition, { align: 'center' })
+      pdf.setTextColor(0, 0, 0)
+      yPosition += 15
+
+      // Linha decorativa
+      pdf.setDrawColor(0, 128, 128)
+      pdf.setLineWidth(0.8)
+      pdf.line(marginLeft + 20, yPosition, pageWidth - marginRight - 20, yPosition)
+      yPosition += 15
+
+      // Data de geração
+      pdf.setFontSize(11)
+      pdf.setFont('helvetica', 'italic')
+      pdf.setTextColor(100, 100, 100)
+      const date = new Date().toLocaleDateString('pt-PT', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      })
+      pdf.text(`Gerado em ${date}`, pageWidth / 2, yPosition, { align: 'center' })
+      pdf.setTextColor(0, 0, 0)
+      yPosition += 15
+
+      // Parsear e renderizar o markdown
+      const segments = parseMarkdownToSegments(report.report_markdown)
+
+      for (const segment of segments) {
+        if (segment.type === 'separator') {
+          yPosition += typography.separator.lineHeight
+          continue
+        }
+
+        const indent = segment.type === 'list-item' ? 5 : 0
+        addText(segment.text, segment.type, indent)
+      }
+
+      // Numeração de páginas
       const totalPages = pdf.internal.pages.length - 1
       for (let i = 1; i <= totalPages; i++) {
         pdf.setPage(i)
-        pdf.setFontSize(11)
+        pdf.setFontSize(10)
+        pdf.setFont('helvetica', 'normal')
         pdf.setTextColor(120, 120, 120)
         pdf.text(`${i} / ${totalPages}`, pageWidth / 2, pageHeight - 15, { align: 'center' })
       }
@@ -147,11 +222,6 @@ export default function SectionReportCard({
     } catch (error) {
       console.error('Erro ao exportar PDF:', error)
       toast.error('Erro ao exportar PDF')
-      // Garantir que a classe é removida mesmo em caso de erro
-      const reportElement = document.getElementById(`report-content-${sectionCode}`)
-      if (reportElement) {
-        reportElement.classList.remove('pdf-export-mode')
-      }
     } finally {
       setExporting(false)
     }
