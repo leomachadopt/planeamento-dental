@@ -278,7 +278,7 @@ export async function generateFinalReport(
         },
       ],
       temperature,
-      max_tokens: 8000, // Mais tokens para relatório final
+      max_tokens: 10000, // Mais tokens para relatório final
       response_format: { type: 'json_object' },
     }),
   })

@@ -151,8 +151,8 @@ export async function generateSectionReport(
     userPrompt = buildSectionReportPrompt(sectionCode, snapshot, tone)
   }
 
-  // 8000 tokens para todas as seções - suficiente para relatórios completos + JSON structure
-  const maxTokens = 8000
+  // 10000 tokens para todas as seções - suficiente para relatórios completos + JSON structure
+  const maxTokens = 10000
 
   let response: Response
   try {
