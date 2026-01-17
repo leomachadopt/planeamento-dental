@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///mnt/c/Users/Leonardo%20Machado/Documents/Planeamento%20dental/planeamento-dental/pages/_document.tsx"],"sourcesContent":["import { Html, Head, Main, NextScript } from 'next/document'\r\n\r\nexport default function Document() {\r\n  return (\r\n    <Html lang=\"en\">\r\n      <Head>\r\n        <meta name=\"description\" content=\"Projeto gerado usando Skip (https://goskip.dev)\" />\r\n        <meta name=\"author\" content=\"Skip (https://goskip.dev)\" />\r\n        <meta property=\"og:image\" content=\"/og-image.png\" />\r\n      </Head>\r\n      <body>\r\n        <Main />\r\n        <NextScript />\r\n      </body>\r\n    </Html>\r\n  )\r\n}\r\n"],"names":[],"mappings":";;;;;AAAA;;;AAEe,SAAS;IACtB,qBACE,qKAAC,kVAAI;QAAC,MAAK;;0BACT,qKAAC,kVAAI;;kCACH,qKAAC;wBAAK,MAAK;wBAAc,SAAQ;;;;;;kCACjC,qKAAC;wBAAK,MAAK;wBAAS,SAAQ;;;;;;kCAC5B,qKAAC;wBAAK,UAAS;wBAAW,SAAQ;;;;;;;;;;;;0BAEpC,qKAAC;;kCACC,qKAAC,kVAAI;;;;;kCACL,qKAAC,wVAAU;;;;;;;;;;;;;;;;;AAInB"}}]
+}

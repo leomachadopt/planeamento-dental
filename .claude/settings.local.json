@@ -22,7 +22,8 @@
       "Bash(netstat:*)",
       "Bash(ss -tlnp:*)",
       "Bash(lsof:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npx vercel --prod)"
     ],
     "deny": [],
     "ask": []

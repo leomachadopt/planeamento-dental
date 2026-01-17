@@ -1,0 +1,3 @@
+{
+  "/api/clinics/[id]/roles": "pages/api/clinics/[id]/roles.js"
+}

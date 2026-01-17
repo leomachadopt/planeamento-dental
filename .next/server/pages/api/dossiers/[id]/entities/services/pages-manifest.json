@@ -1,0 +1,3 @@
+{
+  "/api/dossiers/[id]/entities/services": "pages/api/dossiers/[id]/entities/services.js"
+}

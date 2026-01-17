@@ -1,0 +1,3 @@
+{
+  "/api/admin/prompts/[type]": "pages/api/admin/prompts/[type].js"
+}

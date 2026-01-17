@@ -1,0 +1,3 @@
+{
+  "/api/dossiers/[id]/entities/service-categories": "pages/api/dossiers/[id]/entities/service-categories.js"
+}

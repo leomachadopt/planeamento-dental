@@ -1,0 +1,11 @@
+__turbopack_load_page_chunks__("/admin/perguntas", [
+  "static/chunks/4800b6fafb4b0a5d.js",
+  "static/chunks/833472583a850015.js",
+  "static/chunks/27aed22c338d5a10.js",
+  "static/chunks/f73223d28d11bf10.js",
+  "static/chunks/e252d6b5f46ac5e6.js",
+  "static/chunks/9e2fce0be76928a9.js",
+  "static/chunks/4153030d551f1891.js",
+  "static/chunks/757d55f1f29fcc36.js",
+  "static/chunks/turbopack-46c2cc2c1d98b849.js"
+])

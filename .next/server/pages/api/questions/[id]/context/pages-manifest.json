@@ -1,0 +1,3 @@
+{
+  "/api/questions/[id]/context": "pages/api/questions/[id]/context.js"
+}

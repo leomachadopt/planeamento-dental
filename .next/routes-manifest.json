@@ -1,0 +1,476 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "pages",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/admin/prompts/[type]",
+      "regex": "^/api/admin/prompts/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPtype": "nxtPtype"
+      },
+      "namedRegex": "^/api/admin/prompts/(?<nxtPtype>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/questions/[id]",
+      "regex": "^/api/admin/questions/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/questions/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/clinic/[id]",
+      "regex": "^/api/clinic/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/clinic/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/clinics/[id]/roles",
+      "regex": "^/api/clinics/([^/]+?)/roles(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/clinics/(?<nxtPid>[^/]+?)/roles(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]",
+      "regex": "^/api/dossiers/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/answers",
+      "regex": "^/api/dossiers/([^/]+?)/answers(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/answers(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/capacities",
+      "regex": "^/api/dossiers/([^/]+?)/entities/capacities(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/capacities(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/competitors",
+      "regex": "^/api/dossiers/([^/]+?)/entities/competitors(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/competitors(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/customer-segments",
+      "regex": "^/api/dossiers/([^/]+?)/entities/customer\\-segments(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/customer\\-segments(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/initiatives",
+      "regex": "^/api/dossiers/([^/]+?)/entities/initiatives(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/initiatives(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/service-categories",
+      "regex": "^/api/dossiers/([^/]+?)/entities/service\\-categories(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/service\\-categories(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/services",
+      "regex": "^/api/dossiers/([^/]+?)/entities/services(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/services(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/strategic-choices",
+      "regex": "^/api/dossiers/([^/]+?)/entities/strategic\\-choices(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/strategic\\-choices(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/team-members",
+      "regex": "^/api/dossiers/([^/]+?)/entities/team\\-members(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/team\\-members(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/entities/value-propositions",
+      "regex": "^/api/dossiers/([^/]+?)/entities/value\\-propositions(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/entities/value\\-propositions(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/final-report",
+      "regex": "^/api/dossiers/([^/]+?)/final\\-report(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/final\\-report(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/final-report/export",
+      "regex": "^/api/dossiers/([^/]+?)/final\\-report/export(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/final\\-report/export(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/reports",
+      "regex": "^/api/dossiers/([^/]+?)/reports(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/reports(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/sections",
+      "regex": "^/api/dossiers/([^/]+?)/sections(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/sections(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers/[id]/sections/[sectionCode]/report",
+      "regex": "^/api/dossiers/([^/]+?)/sections/([^/]+?)/report(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid",
+        "nxtPsectionCode": "nxtPsectionCode"
+      },
+      "namedRegex": "^/api/dossiers/(?<nxtPid>[^/]+?)/sections/(?<nxtPsectionCode>[^/]+?)/report(?:/)?$"
+    },
+    {
+      "page": "/api/questions/[id]/context",
+      "regex": "^/api/questions/([^/]+?)/context(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/questions/(?<nxtPid>[^/]+?)/context(?:/)?$"
+    },
+    {
+      "page": "/api/users/[id]",
+      "regex": "^/api/users/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/users/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/business-model",
+      "regex": "^/dossie/([^/]+?)/business\\-model(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/business\\-model(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/final-report",
+      "regex": "^/dossie/([^/]+?)/final\\-report(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/final\\-report(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/identity",
+      "regex": "^/dossie/([^/]+?)/identity(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/identity(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/market",
+      "regex": "^/dossie/([^/]+?)/market(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/market(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/offer",
+      "regex": "^/dossie/([^/]+?)/offer(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/offer(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/operations",
+      "regex": "^/dossie/([^/]+?)/operations(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/operations(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/people",
+      "regex": "^/dossie/([^/]+?)/people(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/people(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/plan",
+      "regex": "^/dossie/([^/]+?)/plan(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/plan(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/relatorios",
+      "regex": "^/dossie/([^/]+?)/relatorios(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/relatorios(?:/)?$"
+    },
+    {
+      "page": "/dossie/[dossierId]/strategy",
+      "regex": "^/dossie/([^/]+?)/strategy(?:/)?$",
+      "routeKeys": {
+        "nxtPdossierId": "nxtPdossierId"
+      },
+      "namedRegex": "^/dossie/(?<nxtPdossierId>[^/]+?)/strategy(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/auditoria",
+      "regex": "^/admin/auditoria(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/auditoria(?:/)?$"
+    },
+    {
+      "page": "/admin/clinicas",
+      "regex": "^/admin/clinicas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/clinicas(?:/)?$"
+    },
+    {
+      "page": "/admin/configuracoes",
+      "regex": "^/admin/configuracoes(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/configuracoes(?:/)?$"
+    },
+    {
+      "page": "/admin/dashboard",
+      "regex": "^/admin/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard(?:/)?$"
+    },
+    {
+      "page": "/admin/observabilidade",
+      "regex": "^/admin/observabilidade(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/observabilidade(?:/)?$"
+    },
+    {
+      "page": "/admin/perguntas",
+      "regex": "^/admin/perguntas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/perguntas(?:/)?$"
+    },
+    {
+      "page": "/admin/prompts",
+      "regex": "^/admin/prompts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/prompts(?:/)?$"
+    },
+    {
+      "page": "/admin/relatorios",
+      "regex": "^/admin/relatorios(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/relatorios(?:/)?$"
+    },
+    {
+      "page": "/admin/usuarios",
+      "regex": "^/admin/usuarios(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/usuarios(?:/)?$"
+    },
+    {
+      "page": "/api/admin/questions",
+      "regex": "^/api/admin/questions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/questions(?:/)?$"
+    },
+    {
+      "page": "/api/admin/questions/bulk-import",
+      "regex": "^/api/admin/questions/bulk\\-import(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/questions/bulk\\-import(?:/)?$"
+    },
+    {
+      "page": "/api/admin/questions/reorder",
+      "regex": "^/api/admin/questions/reorder(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/questions/reorder(?:/)?$"
+    },
+    {
+      "page": "/api/admin/reports",
+      "regex": "^/api/admin/reports(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/reports(?:/)?$"
+    },
+    {
+      "page": "/api/admin/sections",
+      "regex": "^/api/admin/sections(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/sections(?:/)?$"
+    },
+    {
+      "page": "/api/admin/stats",
+      "regex": "^/api/admin/stats(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/stats(?:/)?$"
+    },
+    {
+      "page": "/api/auth/login",
+      "regex": "^/api/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/login(?:/)?$"
+    },
+    {
+      "page": "/api/auth/logout",
+      "regex": "^/api/auth/logout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/logout(?:/)?$"
+    },
+    {
+      "page": "/api/auth/me",
+      "regex": "^/api/auth/me(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/me(?:/)?$"
+    },
+    {
+      "page": "/api/auth/register",
+      "regex": "^/api/auth/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/auth/register(?:/)?$"
+    },
+    {
+      "page": "/api/clinics",
+      "regex": "^/api/clinics(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/clinics(?:/)?$"
+    },
+    {
+      "page": "/api/debug/answers",
+      "regex": "^/api/debug/answers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/debug/answers(?:/)?$"
+    },
+    {
+      "page": "/api/debug/config",
+      "regex": "^/api/debug/config(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/debug/config(?:/)?$"
+    },
+    {
+      "page": "/api/debug/question",
+      "regex": "^/api/debug/question(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/debug/question(?:/)?$"
+    },
+    {
+      "page": "/api/dossiers",
+      "regex": "^/api/dossiers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/dossiers(?:/)?$"
+    },
+    {
+      "page": "/api/users",
+      "regex": "^/api/users(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/users(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/register",
+      "regex": "^/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/register(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
