@@ -10,7 +10,10 @@
       "Bash(node scripts/generate-secrets.cjs:*)",
       "Bash(npm install:*)",
       "Bash(grep:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(xargs ls:*)",
+      "Bash(git -C \"/mnt/c/Users/Leonardo Machado/Documents/Planeamento dental/planeamento-dental\" log --oneline -20)",
+      "Bash(pnpm build:*)"
     ],
     "deny": [],
     "ask": []
