@@ -50,19 +50,28 @@ export default function SectionReportCard({
         throw new Error('Conteúdo do relatório não encontrado')
       }
 
-      // Converter para canvas
+      // Adicionar classe para estilos de exportação (remove bordas coloridas)
+      reportElement.classList.add('pdf-export-mode')
+
+      // Converter para canvas com otimizações para tamanho menor
       const canvas = await html2canvas(reportElement, {
-        scale: 2,
+        scale: 1.5, // Reduzido de 2 para 1.5 (boa qualidade, menor tamanho)
         logging: false,
         useCORS: true,
+        backgroundColor: '#ffffff', // Fundo branco sólido
       })
 
+      // Remover classe de exportação
+      reportElement.classList.remove('pdf-export-mode')
+
       // Criar PDF
-      const imgData = canvas.toDataURL('image/png')
+      // Usar JPEG com compressão em vez de PNG (reduz tamanho significativamente)
+      const imgData = canvas.toDataURL('image/jpeg', 0.85)
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
+        compress: true, // Ativar compressão do PDF
       })
 
       const imgWidth = 210 // A4 width in mm
@@ -71,15 +80,15 @@ export default function SectionReportCard({
       let heightLeft = imgHeight
       let position = 0
 
-      // Adicionar primeira página
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+      // Adicionar primeira página com compressão
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST')
       heightLeft -= pageHeight
 
       // Adicionar páginas adicionais se necessário
       while (heightLeft > 0) {
         position = heightLeft - imgHeight
         pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST')
         heightLeft -= pageHeight
       }
 
@@ -91,6 +100,11 @@ export default function SectionReportCard({
     } catch (error) {
       console.error('Erro ao exportar PDF:', error)
       toast.error('Erro ao exportar PDF')
+      // Garantir que a classe é removida mesmo em caso de erro
+      const reportElement = document.getElementById(`report-content-${sectionCode}`)
+      if (reportElement) {
+        reportElement.classList.remove('pdf-export-mode')
+      }
     } finally {
       setExporting(false)
     }

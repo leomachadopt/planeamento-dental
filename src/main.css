@@ -386,3 +386,74 @@
     background-position: 1000px 0;
   }
 }
+
+/* ===============================================
+   ESTILOS PARA EXPORTAÇÃO PDF
+   Remove bordas coloridas e simplifica visual
+   =============================================== */
+.pdf-export-mode {
+  background-color: #ffffff !important;
+  padding: 24px !important;
+}
+
+/* Remover todas as bordas coloridas (teal, green, blue, etc) */
+.pdf-export-mode [class*="border-teal"],
+.pdf-export-mode [class*="border-green"],
+.pdf-export-mode [class*="border-blue"],
+.pdf-export-mode [class*="border-purple"],
+.pdf-export-mode [class*="border-amber"],
+.pdf-export-mode [class*="border-red"] {
+  border-color: #e2e8f0 !important;
+}
+
+/* Converter backgrounds coloridos para cinza neutro */
+.pdf-export-mode [class*="bg-teal"],
+.pdf-export-mode [class*="bg-green"],
+.pdf-export-mode [class*="bg-blue"],
+.pdf-export-mode [class*="bg-purple"],
+.pdf-export-mode [class*="bg-amber"] {
+  background-color: #f8fafc !important;
+}
+
+/* Manter backgrounds de erro visíveis mas mais suaves */
+.pdf-export-mode [class*="bg-red"] {
+  background-color: #fef2f2 !important;
+}
+
+/* Blockquote - remover borda lateral colorida */
+.pdf-export-mode blockquote {
+  border-left-color: #94a3b8 !important;
+}
+
+/* Links - usar cor neutra */
+.pdf-export-mode a {
+  color: #334155 !important;
+}
+
+/* Textos coloridos - converter para preto/cinza escuro */
+.pdf-export-mode [class*="text-teal"],
+.pdf-export-mode [class*="text-green"],
+.pdf-export-mode [class*="text-blue"],
+.pdf-export-mode [class*="text-purple"],
+.pdf-export-mode [class*="text-amber"] {
+  color: #475569 !important;
+}
+
+/* Manter textos de erro visíveis */
+.pdf-export-mode [class*="text-red"] {
+  color: #dc2626 !important;
+}
+
+/* Remover sombras dos cards no PDF */
+.pdf-export-mode [class*="card"],
+.pdf-export-mode .card {
+  box-shadow: none !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* Desativar animações e transformações */
+.pdf-export-mode * {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}

@@ -6,9 +6,9 @@ import type { SectionSnapshot } from '@/services/snapshotBuilder'
 
 export function getSystemPrompt(tone: string): string {
   const toneMap = {
-    formal: 'Você é um consultor de gestão estratégica especializado em clínicas de saúde. Use linguagem formal, técnica e objetiva. Seja preciso e baseie todas as conclusões nos dados fornecidos.',
-    informal: 'Você é um mentor de negócios que fala de forma acessível e direta. Use linguagem informal e próxima, evitando jargões excessivos. Seja prático e baseie recomendações nos dados fornecidos.',
-    intermediario: 'Você é um consultor experiente que equilibra profissionalismo com clareza. Use linguagem clara, mas profissional. Seja objetivo e baseie análises nos dados fornecidos.',
+    formal: 'Você é um consultor de gestão estratégica especializado em clínicas de saúde. Use linguagem formal, técnica e objetiva. Seja preciso e baseie todas as conclusões nos dados fornecidos. Retorne suas análises em formato json estruturado.',
+    informal: 'Você é um mentor de negócios que fala de forma acessível e direta. Use linguagem informal e próxima, evitando jargões excessivos. Seja prático e baseie recomendações nos dados fornecidos. Retorne suas análises em formato json estruturado.',
+    intermediario: 'Você é um consultor experiente que equilibra profissionalismo com clareza. Use linguagem clara, mas profissional. Seja objetivo e baseie análises nos dados fornecidos. Retorne suas análises em formato json estruturado.',
   }
 
   return toneMap[tone as keyof typeof toneMap] || toneMap.intermediario

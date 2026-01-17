@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(psql:*)",
+      "Bash(node scripts/debug-question-9.js:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(node scripts/check-answers.cjs:*)",
+      "Bash(node scripts/generate-secrets.cjs:*)",
+      "Bash(npm install:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

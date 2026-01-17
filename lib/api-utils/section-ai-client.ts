@@ -151,9 +151,8 @@ export async function generateSectionReport(
     userPrompt = buildSectionReportPrompt(sectionCode, snapshot, tone)
   }
 
-  // Ajustar max_tokens baseado na seção (IDENTITY precisa de mais tokens para 1400+ palavras)
-  // 8000 tokens = ~6000 palavras, suficiente para 1400+ palavras de conteúdo + JSON structure
-  const maxTokens = sectionCode === 'IDENTITY' ? 8000 : 4000
+  // 8000 tokens para todas as seções - suficiente para relatórios completos + JSON structure
+  const maxTokens = 8000
 
   let response: Response
   try {
