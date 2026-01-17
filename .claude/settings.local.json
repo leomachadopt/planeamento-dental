@@ -16,7 +16,13 @@
       "Bash(pnpm build:*)",
       "Bash(vercel ls:*)",
       "WebFetch(domain:planeamento-dental.vercel.app)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(pnpm install)",
+      "Bash(netstat:*)",
+      "Bash(ss -tlnp:*)",
+      "Bash(lsof:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

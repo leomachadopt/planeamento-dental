@@ -2,16 +2,62 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { authenticateToken, AuthRequest } from '@/lib/api-shared/auth'
 import pool from '@/lib/api-shared/db'
 
-// Função simples para converter markdown básico para texto
-function markdownToText(markdown: string): string {
-  return markdown
-    .replace(/^#+\s+(.+)$/gm, '$1') // Headers
+interface TextSegment {
+  text: string
+  type: 'h1' | 'h2' | 'h3' | 'paragraph' | 'list-item' | 'separator'
+  isBold?: boolean
+}
+
+// Função para parsear markdown em segmentos estruturados
+function parseMarkdownToSegments(markdown: string): TextSegment[] {
+  const segments: TextSegment[] = []
+  const lines = markdown.split('\n')
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+
+    if (!line) {
+      // Linha vazia - adiciona separador para espaçamento
+      if (segments.length > 0 && segments[segments.length - 1].type !== 'separator') {
+        segments.push({ text: '', type: 'separator' })
+      }
+      continue
+    }
+
+    // Headers
+    if (line.startsWith('### ')) {
+      segments.push({ text: line.replace(/^###\s+/, ''), type: 'h3' })
+    } else if (line.startsWith('## ')) {
+      segments.push({ text: line.replace(/^##\s+/, ''), type: 'h2' })
+    } else if (line.startsWith('# ')) {
+      segments.push({ text: line.replace(/^#\s+/, ''), type: 'h1' })
+    }
+    // Listas
+    else if (line.match(/^\s*[-*+]\s+/)) {
+      const text = line.replace(/^\s*[-*+]\s+/, '')
+      segments.push({ text: `• ${cleanInlineMarkdown(text)}`, type: 'list-item' })
+    }
+    else if (line.match(/^\s*\d+\.\s+/)) {
+      const text = line.replace(/^\s*\d+\.\s+/, '')
+      const num = line.match(/^\s*(\d+)\./)?.[1] || '1'
+      segments.push({ text: `${num}. ${cleanInlineMarkdown(text)}`, type: 'list-item' })
+    }
+    // Parágrafos
+    else {
+      segments.push({ text: cleanInlineMarkdown(line), type: 'paragraph' })
+    }
+  }
+
+  return segments
+}
+
+// Limpar formatação inline do markdown
+function cleanInlineMarkdown(text: string): string {
+  return text
     .replace(/\*\*(.+?)\*\*/g, '$1') // Bold
     .replace(/\*(.+?)\*/g, '$1') // Italic
     .replace(/\[(.+?)\]\(.+?\)/g, '$1') // Links
     .replace(/`(.+?)`/g, '$1') // Code
-    .replace(/^\s*[-*+]\s+/gm, '• ') // Lists
-    .replace(/^\s*\d+\.\s+/gm, '') // Numbered lists
     .trim()
 }
 
@@ -90,71 +136,139 @@ export default async function handler(
 
         const pageWidth = doc.internal.pageSize.getWidth()
         const pageHeight = doc.internal.pageSize.getHeight()
-        const margin = 20
-        const maxWidth = pageWidth - 2 * margin
-        let yPosition = margin
+        const marginLeft = 25
+        const marginRight = 25
+        const marginTop = 30
+        const marginBottom = 25
+        const maxWidth = pageWidth - marginLeft - marginRight
+        let yPosition = marginTop
+
+        // Configurações de tipografia
+        const typography = {
+          h1: { size: 18, lineHeight: 10, spaceBefore: 12, spaceAfter: 6, font: 'bold' as const },
+          h2: { size: 15, lineHeight: 8, spaceBefore: 10, spaceAfter: 5, font: 'bold' as const },
+          h3: { size: 13, lineHeight: 7, spaceBefore: 8, spaceAfter: 4, font: 'bold' as const },
+          paragraph: { size: 11, lineHeight: 6, spaceBefore: 0, spaceAfter: 4, font: 'normal' as const },
+          'list-item': { size: 11, lineHeight: 6, spaceBefore: 0, spaceAfter: 2, font: 'normal' as const },
+          separator: { size: 11, lineHeight: 4, spaceBefore: 0, spaceAfter: 0, font: 'normal' as const },
+        }
 
         // Função para adicionar nova página se necessário
         const checkPageBreak = (requiredHeight: number) => {
-          if (yPosition + requiredHeight > pageHeight - margin) {
+          if (yPosition + requiredHeight > pageHeight - marginBottom) {
             doc.addPage()
-            yPosition = margin
+            yPosition = marginTop
             return true
           }
           return false
         }
 
-        // Capa
-        doc.setFontSize(24)
-        doc.setFont('helvetica', 'bold')
-        const clinicName = report.clinic_name || 'Clínica'
-        const titleWidth = doc.getTextWidth(clinicName)
-        doc.text(clinicName, (pageWidth - titleWidth) / 2, yPosition)
-        yPosition += 15
+        // Função auxiliar para adicionar texto com quebra de linha
+        const addText = (text: string, style: keyof typeof typography, indent: number = 0) => {
+          const config = typography[style]
 
-        doc.setFontSize(18)
-        doc.setFont('helvetica', 'normal')
-        const dossierTitle = report.dossier_title || 'Dossiê'
-        const subtitleWidth = doc.getTextWidth(dossierTitle)
-        doc.text(dossierTitle, (pageWidth - subtitleWidth) / 2, yPosition)
-        yPosition += 10
+          // Espaço antes
+          if (config.spaceBefore > 0) {
+            checkPageBreak(config.spaceBefore)
+            yPosition += config.spaceBefore
+          }
 
-        doc.setFontSize(16)
-        doc.text('Relatório Estratégico Consolidado', (pageWidth - doc.getTextWidth('Relatório Estratégico Consolidado')) / 2, yPosition)
-        yPosition += 15
+          doc.setFontSize(config.size)
+          doc.setFont('helvetica', config.font)
 
-        doc.setFontSize(12)
-        doc.setFont('helvetica', 'italic')
-        const date = new Date(report.created_at).toLocaleDateString('pt-PT')
-        doc.text(`Gerado em: ${date}`, (pageWidth - doc.getTextWidth(`Gerado em: ${date}`)) / 2, yPosition)
-        yPosition = pageHeight - 30
+          const effectiveMaxWidth = maxWidth - indent
+          const lines = doc.splitTextToSize(text, effectiveMaxWidth)
 
-        // Nova página para conteúdo
-        doc.addPage()
-        yPosition = margin
+          for (const line of lines) {
+            checkPageBreak(config.lineHeight)
+            doc.text(line, marginLeft + indent, yPosition)
+            yPosition += config.lineHeight
+          }
 
-        // Converter markdown para texto e dividir em linhas
-        const text = markdownToText(report.report_markdown)
-        const lines = doc.splitTextToSize(text, maxWidth)
-
-        doc.setFontSize(11)
-        doc.setFont('helvetica', 'normal')
-
-        for (const line of lines) {
-          checkPageBreak(7)
-          doc.text(line, margin, yPosition)
-          yPosition += 7
+          // Espaço depois
+          if (config.spaceAfter > 0) {
+            yPosition += config.spaceAfter
+          }
         }
 
-        // Adicionar numeração de páginas
+        // =====================
+        // CAPA DO DOCUMENTO
+        // =====================
+
+        // Título da clínica (centralizado no topo)
+        yPosition = 60
+        doc.setFontSize(28)
+        doc.setFont('helvetica', 'bold')
+        const clinicName = report.clinic_name || 'Clínica'
+        doc.text(clinicName, pageWidth / 2, yPosition, { align: 'center' })
+
+        // Linha decorativa
+        yPosition += 15
+        doc.setDrawColor(0, 128, 128) // Teal color
+        doc.setLineWidth(0.8)
+        doc.line(marginLeft + 30, yPosition, pageWidth - marginRight - 30, yPosition)
+
+        // Título do dossiê
+        yPosition += 20
+        doc.setFontSize(20)
+        doc.setFont('helvetica', 'normal')
+        const dossierTitle = report.dossier_title || 'Dossiê Estratégico'
+        doc.text(dossierTitle, pageWidth / 2, yPosition, { align: 'center' })
+
+        // Subtítulo
+        yPosition += 25
+        doc.setFontSize(16)
+        doc.setFont('helvetica', 'bold')
+        doc.setTextColor(0, 128, 128) // Teal color
+        doc.text('Relatório Estratégico Consolidado', pageWidth / 2, yPosition, { align: 'center' })
+        doc.setTextColor(0, 0, 0) // Reset to black
+
+        // Data de geração (no rodapé da capa)
+        yPosition = pageHeight - 50
+        doc.setFontSize(11)
+        doc.setFont('helvetica', 'italic')
+        doc.setTextColor(100, 100, 100)
+        const date = new Date(report.created_at).toLocaleDateString('pt-PT', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        })
+        doc.text(`Documento gerado em ${date}`, pageWidth / 2, yPosition, { align: 'center' })
+        doc.setTextColor(0, 0, 0) // Reset to black
+
+        // =====================
+        // CONTEÚDO DO RELATÓRIO
+        // =====================
+        doc.addPage()
+        yPosition = marginTop
+
+        // Parsear markdown em segmentos
+        const segments = parseMarkdownToSegments(report.report_markdown)
+
+        for (const segment of segments) {
+          if (segment.type === 'separator') {
+            yPosition += typography.separator.lineHeight
+            continue
+          }
+
+          const indent = segment.type === 'list-item' ? 5 : 0
+          addText(segment.text, segment.type, indent)
+        }
+
+        // =====================
+        // NUMERAÇÃO DE PÁGINAS
+        // =====================
         const totalPages = doc.internal.pages.length - 1
-        for (let i = 1; i <= totalPages; i++) {
+        for (let i = 2; i <= totalPages; i++) { // Começa da página 2 (depois da capa)
           doc.setPage(i)
-          doc.setFontSize(10)
+          doc.setFontSize(9)
+          doc.setFont('helvetica', 'normal')
+          doc.setTextColor(120, 120, 120)
           doc.text(
-            `Página ${i} de ${totalPages}`,
-            pageWidth - margin - doc.getTextWidth(`Página ${i} de ${totalPages}`),
-            pageHeight - 10,
+            `${i - 1} / ${totalPages - 1}`,
+            pageWidth / 2,
+            pageHeight - 12,
+            { align: 'center' }
           )
         }
 

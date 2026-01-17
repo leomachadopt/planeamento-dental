@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import { fetchAPI } from '@/lib/api'
+import { fetchAPI, api } from '@/lib/api'
 import {
   Card,
   CardContent,
@@ -49,6 +49,7 @@ export default function DossierFinalReportPage() {
   const [finalReport, setFinalReport] = useState<FinalReportData | null>(null)
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
+  const [exportingPDF, setExportingPDF] = useState(false)
 
   useEffect(() => {
     if (dossierId) {
@@ -95,12 +96,28 @@ export default function DossierFinalReportPage() {
   const handleExportPDF = async () => {
     if (!dossierId) return
 
+    setExportingPDF(true)
+    toast.info('Preparando PDF...')
+
     try {
-      // TODO: implementar exportação PDF
-      toast.info('Exportação PDF em desenvolvimento')
+      const blob = await api.exportFinalReport(dossierId, 'pdf')
+
+      // Criar URL para download
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `relatorio-final-${dossierId}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+
+      toast.success('PDF exportado com sucesso!')
     } catch (error: any) {
       console.error('Erro ao exportar PDF:', error)
-      toast.error('Erro ao exportar PDF')
+      toast.error(error.message || 'Erro ao exportar PDF')
+    } finally {
+      setExportingPDF(false)
     }
   }
 
@@ -240,9 +257,18 @@ export default function DossierFinalReportPage() {
 
             {finalReport?.report && (
               <>
-                <Button variant="outline" onClick={handleExportPDF}>
-                  <Download className="size-4 mr-2" />
-                  Exportar PDF
+                <Button variant="outline" onClick={handleExportPDF} disabled={exportingPDF}>
+                  {exportingPDF ? (
+                    <>
+                      <Loader2 className="size-4 mr-2 animate-spin" />
+                      Exportando...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="size-4 mr-2" />
+                      Exportar PDF
+                    </>
+                  )}
                 </Button>
                 <Button variant="outline" onClick={handleExportDOCX}>
                   <Download className="size-4 mr-2" />

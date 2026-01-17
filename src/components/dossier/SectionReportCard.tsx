@@ -53,43 +53,90 @@ export default function SectionReportCard({
       // Adicionar classe para estilos de exportação (remove bordas coloridas)
       reportElement.classList.add('pdf-export-mode')
 
-      // Converter para canvas com otimizações para tamanho menor
+      // Converter para canvas com boa qualidade para texto legível
       const canvas = await html2canvas(reportElement, {
-        scale: 1.5, // Reduzido de 2 para 1.5 (boa qualidade, menor tamanho)
+        scale: 2, // Escala 2 para texto mais nítido
         logging: false,
         useCORS: true,
-        backgroundColor: '#ffffff', // Fundo branco sólido
+        backgroundColor: '#ffffff',
       })
 
       // Remover classe de exportação
       reportElement.classList.remove('pdf-export-mode')
 
-      // Criar PDF
-      // Usar JPEG com compressão em vez de PNG (reduz tamanho significativamente)
-      const imgData = canvas.toDataURL('image/jpeg', 0.85)
+      // Criar PDF com margens adequadas
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
-        compress: true, // Ativar compressão do PDF
+        compress: true,
       })
 
-      const imgWidth = 210 // A4 width in mm
+      // Configuração de margens
+      const marginX = 15 // Margem horizontal
+      const marginTop = 20 // Margem superior
+      const marginBottom = 20 // Margem inferior
+
+      const pageWidth = 210 // A4 width in mm
       const pageHeight = 297 // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      const contentWidth = pageWidth - (marginX * 2) // Largura do conteúdo com margens
+      const contentHeight = pageHeight - marginTop - marginBottom // Altura útil por página
+
+      // Calcular dimensões da imagem mantendo proporção
+      const imgHeight = (canvas.height * contentWidth) / canvas.width
       let heightLeft = imgHeight
-      let position = 0
+      let srcY = 0 // Posição Y no canvas fonte
 
-      // Adicionar primeira página com compressão
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST')
-      heightLeft -= pageHeight
+      // Proporção para converter de mm para pixels do canvas
+      const pixelsPerMm = canvas.width / contentWidth
 
-      // Adicionar páginas adicionais se necessário
+      // Primeira página
+      const firstPageHeight = Math.min(imgHeight, contentHeight)
+      const firstPageSrcHeight = firstPageHeight * pixelsPerMm
+
+      // Criar canvas temporário para a primeira página
+      const tempCanvas = document.createElement('canvas')
+      tempCanvas.width = canvas.width
+      tempCanvas.height = firstPageSrcHeight
+      const tempCtx = tempCanvas.getContext('2d')
+      if (tempCtx) {
+        tempCtx.fillStyle = '#ffffff'
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height)
+        tempCtx.drawImage(canvas, 0, srcY, canvas.width, firstPageSrcHeight, 0, 0, canvas.width, firstPageSrcHeight)
+      }
+
+      pdf.addImage(tempCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', marginX, marginTop, contentWidth, firstPageHeight, undefined, 'FAST')
+      heightLeft -= contentHeight
+      srcY += firstPageSrcHeight
+
+      // Páginas adicionais
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight
         pdf.addPage()
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST')
-        heightLeft -= pageHeight
+        const remainingHeight = Math.min(heightLeft, contentHeight)
+        const srcHeight = remainingHeight * pixelsPerMm
+
+        const pageCanvas = document.createElement('canvas')
+        pageCanvas.width = canvas.width
+        pageCanvas.height = srcHeight
+        const pageCtx = pageCanvas.getContext('2d')
+        if (pageCtx) {
+          pageCtx.fillStyle = '#ffffff'
+          pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height)
+          pageCtx.drawImage(canvas, 0, srcY, canvas.width, srcHeight, 0, 0, canvas.width, srcHeight)
+        }
+
+        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', marginX, marginTop, contentWidth, remainingHeight, undefined, 'FAST')
+        heightLeft -= contentHeight
+        srcY += srcHeight
+      }
+
+      // Adicionar numeração de páginas
+      const totalPages = pdf.internal.pages.length - 1
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i)
+        pdf.setFontSize(9)
+        pdf.setTextColor(120, 120, 120)
+        pdf.text(`${i} / ${totalPages}`, pageWidth / 2, pageHeight - 10, { align: 'center' })
       }
 
       // Salvar PDF
