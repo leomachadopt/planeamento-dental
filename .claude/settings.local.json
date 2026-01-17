@@ -13,7 +13,10 @@
       "Bash(find:*)",
       "Bash(xargs ls:*)",
       "Bash(git -C \"/mnt/c/Users/Leonardo Machado/Documents/Planeamento dental/planeamento-dental\" log --oneline -20)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Bash(vercel ls:*)",
+      "WebFetch(domain:planeamento-dental.vercel.app)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
