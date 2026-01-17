@@ -134,9 +134,9 @@ export default function SectionReportCard({
       const totalPages = pdf.internal.pages.length - 1
       for (let i = 1; i <= totalPages; i++) {
         pdf.setPage(i)
-        pdf.setFontSize(9)
+        pdf.setFontSize(11)
         pdf.setTextColor(120, 120, 120)
-        pdf.text(`${i} / ${totalPages}`, pageWidth / 2, pageHeight - 10, { align: 'center' })
+        pdf.text(`${i} / ${totalPages}`, pageWidth / 2, pageHeight - 15, { align: 'center' })
       }
 
       // Salvar PDF

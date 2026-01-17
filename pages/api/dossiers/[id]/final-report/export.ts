@@ -143,14 +143,14 @@ export default async function handler(
         const maxWidth = pageWidth - marginLeft - marginRight
         let yPosition = marginTop
 
-        // Configurações de tipografia
+        // Configurações de tipografia - fontes maiores para boa legibilidade
         const typography = {
-          h1: { size: 18, lineHeight: 10, spaceBefore: 12, spaceAfter: 6, font: 'bold' as const },
-          h2: { size: 15, lineHeight: 8, spaceBefore: 10, spaceAfter: 5, font: 'bold' as const },
-          h3: { size: 13, lineHeight: 7, spaceBefore: 8, spaceAfter: 4, font: 'bold' as const },
-          paragraph: { size: 11, lineHeight: 6, spaceBefore: 0, spaceAfter: 4, font: 'normal' as const },
-          'list-item': { size: 11, lineHeight: 6, spaceBefore: 0, spaceAfter: 2, font: 'normal' as const },
-          separator: { size: 11, lineHeight: 4, spaceBefore: 0, spaceAfter: 0, font: 'normal' as const },
+          h1: { size: 24, lineHeight: 12, spaceBefore: 14, spaceAfter: 8, font: 'bold' as const },
+          h2: { size: 20, lineHeight: 10, spaceBefore: 12, spaceAfter: 6, font: 'bold' as const },
+          h3: { size: 16, lineHeight: 9, spaceBefore: 10, spaceAfter: 5, font: 'bold' as const },
+          paragraph: { size: 14, lineHeight: 7, spaceBefore: 0, spaceAfter: 5, font: 'normal' as const },
+          'list-item': { size: 14, lineHeight: 7, spaceBefore: 0, spaceAfter: 3, font: 'normal' as const },
+          separator: { size: 14, lineHeight: 6, spaceBefore: 0, spaceAfter: 0, font: 'normal' as const },
         }
 
         // Função para adicionar nova página se necessário
@@ -196,28 +196,28 @@ export default async function handler(
         // =====================
 
         // Título da clínica (centralizado no topo)
-        yPosition = 60
-        doc.setFontSize(28)
+        yPosition = 70
+        doc.setFontSize(36)
         doc.setFont('helvetica', 'bold')
         const clinicName = report.clinic_name || 'Clínica'
         doc.text(clinicName, pageWidth / 2, yPosition, { align: 'center' })
 
         // Linha decorativa
-        yPosition += 15
+        yPosition += 18
         doc.setDrawColor(0, 128, 128) // Teal color
-        doc.setLineWidth(0.8)
-        doc.line(marginLeft + 30, yPosition, pageWidth - marginRight - 30, yPosition)
+        doc.setLineWidth(1)
+        doc.line(marginLeft + 20, yPosition, pageWidth - marginRight - 20, yPosition)
 
         // Título do dossiê
-        yPosition += 20
-        doc.setFontSize(20)
+        yPosition += 25
+        doc.setFontSize(26)
         doc.setFont('helvetica', 'normal')
         const dossierTitle = report.dossier_title || 'Dossiê Estratégico'
         doc.text(dossierTitle, pageWidth / 2, yPosition, { align: 'center' })
 
         // Subtítulo
-        yPosition += 25
-        doc.setFontSize(16)
+        yPosition += 30
+        doc.setFontSize(22)
         doc.setFont('helvetica', 'bold')
         doc.setTextColor(0, 128, 128) // Teal color
         doc.text('Relatório Estratégico Consolidado', pageWidth / 2, yPosition, { align: 'center' })
@@ -225,7 +225,7 @@ export default async function handler(
 
         // Data de geração (no rodapé da capa)
         yPosition = pageHeight - 50
-        doc.setFontSize(11)
+        doc.setFontSize(14)
         doc.setFont('helvetica', 'italic')
         doc.setTextColor(100, 100, 100)
         const date = new Date(report.created_at).toLocaleDateString('pt-PT', {
@@ -261,13 +261,13 @@ export default async function handler(
         const totalPages = doc.internal.pages.length - 1
         for (let i = 2; i <= totalPages; i++) { // Começa da página 2 (depois da capa)
           doc.setPage(i)
-          doc.setFontSize(9)
+          doc.setFontSize(11)
           doc.setFont('helvetica', 'normal')
           doc.setTextColor(120, 120, 120)
           doc.text(
             `${i - 1} / ${totalPages - 1}`,
             pageWidth / 2,
-            pageHeight - 12,
+            pageHeight - 15,
             { align: 'center' }
           )
         }
