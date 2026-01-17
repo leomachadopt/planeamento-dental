@@ -1,3 +1,0 @@
-{
-  "/api/dossiers/[id]/sections/[sectionCode]/report": "pages/api/dossiers/[id]/sections/[sectionCode]/report.js"
-}
