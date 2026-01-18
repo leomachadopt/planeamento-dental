@@ -175,28 +175,33 @@ export async function generateSectionReport(
 
   let response: Response
   try {
+    const requestBody = {
+      model: finalModel,
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt,
+        },
+        {
+          role: 'user',
+          content: userPrompt,
+        },
+      ],
+      temperature: finalTemperature,
+      max_tokens: maxTokens,
+      response_format: { type: 'json_object' },
+      stop: ['<<END_REPORT>>'], // Stop sequence para evitar lixo após JSON
+    }
+
+    console.log(`[OpenAI Request] Model: ${finalModel}, MaxTokens: ${maxTokens}, Temperature: ${finalTemperature}`)
+
     response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({
-        model: finalModel,
-        messages: [
-          {
-            role: 'system',
-            content: systemPrompt,
-          },
-          {
-            role: 'user',
-            content: userPrompt,
-          },
-        ],
-        temperature: finalTemperature,
-        max_tokens: maxTokens,
-        response_format: { type: 'json_object' },
-      }),
+      body: JSON.stringify(requestBody),
     })
   } catch (fetchError: any) {
     console.error('Erro na requisição para OpenAI:', fetchError)
@@ -223,9 +228,22 @@ export async function generateSectionReport(
     throw new Error('Resposta inválida da OpenAI')
   }
 
-  const content = data.choices[0]?.message?.content
+  // ===== LOG DA RESPOSTA CRUA =====
+  console.log('===== RESPOSTA CRUA DA OPENAI =====')
+  console.log('finish_reason:', data.choices?.[0]?.finish_reason)
+  console.log('token_usage:', JSON.stringify(data.usage))
+  console.log('model:', data.model)
 
-  if (!content) {
+  // O campo que contém o texto final é: data.choices[0].message.content
+  const rawContent = data.choices?.[0]?.message?.content
+  console.log('Campo: data.choices[0].message.content')
+  console.log('Tipo:', typeof rawContent)
+  console.log('Tamanho:', rawContent?.length || 0, 'caracteres')
+  console.log('Primeiros 1000 chars:', rawContent?.substring(0, 1000))
+  console.log('Últimos 500 chars:', rawContent?.substring(Math.max(0, (rawContent?.length || 0) - 500)))
+  console.log('===================================')
+
+  if (!rawContent) {
     console.error('Resposta vazia da OpenAI. Data recebida:', JSON.stringify(data).substring(0, 500))
     throw new Error('Resposta vazia da OpenAI')
   }
@@ -235,18 +253,16 @@ export async function generateSectionReport(
   if (finishReason === 'length') {
     console.error('⚠️ CRÍTICO: Resposta da IA foi TRUNCADA por limite de tokens!')
     console.error('Token usage:', data.usage)
-    console.error('Tamanho do conteúdo recebido:', content.length, 'caracteres')
-    // Lançar erro para forçar retry - resposta truncada não deve ser aceita
-    throw new Error(`TRUNCATED: Resposta foi cortada por limite de tokens (${content.length} chars recebidos). Token usage: ${JSON.stringify(data.usage)}`)
+    console.error('Tamanho do conteúdo recebido:', rawContent.length, 'caracteres')
+    throw new Error(`TRUNCATED: Resposta foi cortada por limite de tokens (${rawContent.length} chars recebidos). Token usage: ${JSON.stringify(data.usage)}`)
   }
 
   try {
-    const parsed = parseAIResponse(content)
+    const parsed = parseAIResponse(rawContent)
 
     // Verificar se o report_markdown está completo
     if (parsed.report_markdown) {
       console.log(`Report markdown gerado: ${parsed.report_markdown.length} caracteres`)
-      // 6000 caracteres mínimo para relatórios de 900-1400 palavras
       if (parsed.report_markdown.length < 6000) {
         console.warn(`⚠️ Relatório pode estar incompleto: ${parsed.report_markdown.length} caracteres (esperado mínimo: 6000)`)
       }
@@ -258,93 +274,82 @@ export async function generateSectionReport(
       token_usage: data.usage,
     }
   } catch (parseError: any) {
-    console.error('Erro ao parsear resposta da IA:', parseError)
-    console.error('Conteúdo recebido (primeiros 1000 chars):', content.substring(0, 1000))
-    console.error('Conteúdo recebido (últimos 500 chars):', content.substring(Math.max(0, content.length - 500)))
+    console.error('===== ERRO DE PARSING =====')
+    console.error('Mensagem:', parseError.message)
+    console.error('Conteúdo completo que falhou no parse:')
+    console.error(rawContent)
+    console.error('===========================')
     throw new Error(`Erro ao processar resposta da IA: ${parseError.message}`)
   }
 }
 
 function parseAIResponse(content: string): AIReportResponse {
-  // Log do conteúdo recebido para debug
-  console.log('Parseando resposta da IA. Tamanho:', content.length)
-  console.log('Primeiros 500 caracteres:', content.substring(0, 500))
+  console.log('[parseAIResponse] Iniciando parsing. Tamanho do conteúdo:', content.length)
 
-  // 1. Tentar parse JSON direto
-  try {
-    const parsed = JSON.parse(content)
-    if (validateAIResponse(parsed)) {
-      console.log('Parse bem-sucedido: JSON direto válido')
-      return parsed
-    } else {
-      console.warn('JSON parseado mas validação falhou')
-    }
-  } catch (error: any) {
-    console.log('Erro no parse JSON direto:', error.message)
+  // ===== PASSO 1: Limpar conteúdo =====
+  let cleanedContent = content
+
+  // Se existir <<END_REPORT>>, cortar tudo depois
+  const endReportIndex = cleanedContent.indexOf('<<END_REPORT>>')
+  if (endReportIndex !== -1) {
+    console.log('[parseAIResponse] Encontrado <<END_REPORT>> na posição', endReportIndex)
+    cleanedContent = cleanedContent.substring(0, endReportIndex).trim()
+    console.log('[parseAIResponse] Conteúdo após corte:', cleanedContent.length, 'caracteres')
   }
 
-  // 2. Tentar extrair JSON de markdown code blocks
-  try {
-    const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/) || content.match(/\{[\s\S]*\}/)
-    if (jsonMatch) {
-      const jsonStr = jsonMatch[1] || jsonMatch[0]
-      const parsed = JSON.parse(jsonStr)
-      if (validateAIResponse(parsed)) {
-        console.log('Parse bem-sucedido: JSON extraído de markdown')
-        return parsed
-      } else {
-        console.warn('JSON extraído mas validação falhou')
-      }
-    }
-  } catch (error: any) {
-    console.log('Erro ao extrair JSON de markdown:', error.message)
+  // Remover markdown code blocks se existirem
+  const codeBlockMatch = cleanedContent.match(/```(?:json)?\s*([\s\S]*?)\s*```/)
+  if (codeBlockMatch) {
+    console.log('[parseAIResponse] Removendo code blocks do markdown')
+    cleanedContent = codeBlockMatch[1].trim()
   }
 
-  // 3. Tentar corrigir estrutura (campos faltantes)
-  try {
-    const parsed = JSON.parse(content)
-    const corrected = {
-      report_markdown: parsed.report_markdown || parsed.report || '# Relatório\n\nErro ao processar resposta.',
-      insights: correctInsightsStructure(parsed.insights || parsed),
-    }
-    if (validateAIResponse(corrected)) {
-      console.log('Parse bem-sucedido: JSON corrigido')
-      return corrected
-    } else {
-      console.warn('JSON corrigido mas validação ainda falhou')
-      // Verificar se o report_markdown está presente e tem tamanho razoável
-      if (corrected.report_markdown && corrected.report_markdown.length > 100) {
-        console.warn('Retornando resposta parcial (sem validação completa) - report_markdown presente')
-        return corrected as AIReportResponse
-      }
-    }
-  } catch (error: any) {
-    console.log('Erro ao corrigir JSON:', error.message)
-    // Se o erro for de JSON truncado, tentar extrair o que for possível
-    if (error.message.includes('Unexpected end') || error.message.includes('truncated')) {
-      console.warn('JSON parece estar truncado. Tentando extrair conteúdo parcial...')
-      try {
-        // Tentar encontrar o report_markdown mesmo com JSON incompleto
-        const markdownMatch = content.match(/"report_markdown"\s*:\s*"([^"]*(?:\\.[^"]*)*)"/)
-        if (markdownMatch && markdownMatch[1]) {
-          const extractedMarkdown = markdownMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"')
-          console.warn('Extraído report_markdown parcial do JSON truncado')
-          return {
-            report_markdown: extractedMarkdown,
-            insights: correctInsightsStructure({}),
-          }
-        }
-      } catch (extractError) {
-        console.error('Erro ao extrair conteúdo parcial:', extractError)
-      }
-    }
+  // ===== PASSO 2: Extrair JSON do primeiro { ao último } =====
+  const firstBrace = cleanedContent.indexOf('{')
+  const lastBrace = cleanedContent.lastIndexOf('}')
+
+  if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
+    console.error('[parseAIResponse] ERRO: Não encontrou estrutura JSON válida')
+    console.error('[parseAIResponse] firstBrace:', firstBrace, 'lastBrace:', lastBrace)
+    console.error('[parseAIResponse] Conteúdo limpo:', cleanedContent.substring(0, 500))
+    throw new Error(`JSON não encontrado na resposta. Conteúdo não contém { } válidos.`)
   }
 
-  // 4. Última tentativa: criar resposta mínima
-  console.error('Não foi possível parsear resposta. Tamanho do conteúdo:', content.length)
-  console.error('Primeiros 500 chars:', content.substring(0, 500))
-  console.error('Últimos 500 chars:', content.substring(Math.max(0, content.length - 500)))
-  throw new Error(`Não foi possível parsear a resposta da IA. Formato inválido. Tamanho: ${content.length} caracteres`)
+  const jsonStr = cleanedContent.substring(firstBrace, lastBrace + 1)
+  console.log('[parseAIResponse] JSON extraído. Tamanho:', jsonStr.length)
+  console.log('[parseAIResponse] Início do JSON:', jsonStr.substring(0, 200))
+  console.log('[parseAIResponse] Final do JSON:', jsonStr.substring(Math.max(0, jsonStr.length - 200)))
+
+  // ===== PASSO 3: Parse do JSON =====
+  let parsed: any
+  try {
+    parsed = JSON.parse(jsonStr)
+    console.log('[parseAIResponse] JSON.parse bem-sucedido')
+    console.log('[parseAIResponse] Campos encontrados:', Object.keys(parsed).join(', '))
+  } catch (parseError: any) {
+    console.error('[parseAIResponse] ERRO no JSON.parse:', parseError.message)
+    console.error('[parseAIResponse] jsonStr que falhou:')
+    console.error(jsonStr)
+    throw new Error(`Falha no JSON.parse: ${parseError.message}. Verifique os logs para ver o jsonStr.`)
+  }
+
+  // ===== PASSO 4: Validar e corrigir estrutura =====
+  const result: AIReportResponse = {
+    report_markdown: parsed.report_markdown || parsed.report || '',
+    insights: correctInsightsStructure(parsed.insights || {}),
+  }
+
+  if (!result.report_markdown) {
+    console.error('[parseAIResponse] ERRO: report_markdown está vazio')
+    console.error('[parseAIResponse] Campos no parsed:', Object.keys(parsed).join(', '))
+    throw new Error('Campo report_markdown está vazio ou não existe na resposta.')
+  }
+
+  console.log('[parseAIResponse] Parsing concluído com sucesso')
+  console.log('[parseAIResponse] report_markdown:', result.report_markdown.length, 'caracteres')
+  console.log('[parseAIResponse] insights.score:', JSON.stringify(result.insights.score))
+
+  return result
 }
 
 function validateAIResponse(data: any): data is AIReportResponse {
