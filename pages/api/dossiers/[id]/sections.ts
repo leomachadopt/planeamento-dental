@@ -77,14 +77,13 @@ export default async function handler(
             completion_percent: 0,
           }
 
-          // Buscar question_sets ativos da seção (apenas a versão mais recente de cada)
+          // Buscar todos os question_sets ativos da seção
           const questionSetsResult = await pool.query(
-            `SELECT DISTINCT ON (qs.subsection_id, qs.section_id)
-             qs.*, sub.code as subsection_code, sub.name as subsection_name
+            `SELECT qs.*, sub.code as subsection_code, sub.name as subsection_name
              FROM question_sets qs
              LEFT JOIN subsections sub ON sub.id = qs.subsection_id
              WHERE qs.section_id = $1 AND qs.is_active = true
-             ORDER BY qs.subsection_id, qs.section_id, qs.version DESC`,
+             ORDER BY qs.version DESC, qs.name`,
             [section.id],
           )
 

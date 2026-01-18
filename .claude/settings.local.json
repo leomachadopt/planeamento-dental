@@ -27,7 +27,8 @@
       "Bash(git rm:*)",
       "Bash(pkill:*)",
       "Bash(xargs:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []
