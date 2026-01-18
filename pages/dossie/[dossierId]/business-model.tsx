@@ -11,7 +11,7 @@ import { Building2 } from 'lucide-react'
 export default function DossierBusinessModel() {
   return (
     <DossierSectionPage
-      sectionCode="BUSINESS_MODEL"
+      sectionCode="BUSINESS"
       entityBlocks={
         <Card>
           <CardHeader>
