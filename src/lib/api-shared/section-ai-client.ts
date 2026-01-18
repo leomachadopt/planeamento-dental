@@ -88,11 +88,19 @@ async function getCustomPromptFromDB(
     )
 
     if (result.rows.length > 0) {
+      // Se max_tokens do banco for muito baixo (< 8000), usar 16384 como fallback
+      const dbMaxTokens = result.rows[0].max_tokens || 0
+      const safeMaxTokens = dbMaxTokens >= 8000 ? dbMaxTokens : 16384
+
+      if (dbMaxTokens > 0 && dbMaxTokens < 8000) {
+        console.warn(`[getCustomPromptFromDB] max_tokens do banco (${dbMaxTokens}) é muito baixo. Usando ${safeMaxTokens} como fallback.`)
+      }
+
       return {
         system_prompt: result.rows[0].system_prompt,
         user_prompt: result.rows[0].user_prompt,
         temperature: parseFloat(result.rows[0].temperature) || 0.7,
-        max_tokens: result.rows[0].max_tokens || 4000,
+        max_tokens: safeMaxTokens,
         model: result.rows[0].model || 'gpt-4o',
       }
     }
@@ -242,20 +250,25 @@ export async function generateSectionReport(
     throw new Error('Resposta inválida da OpenAI')
   }
 
-  // ===== LOG DA RESPOSTA CRUA =====
-  console.log('===== RESPOSTA CRUA DA OPENAI =====')
-  console.log('finish_reason:', data.choices?.[0]?.finish_reason)
+  // ===== LOG DA RESPOSTA CRUA (APÓS CHAMADA) =====
+  const finishReason = data.choices?.[0]?.finish_reason
+  const rawContent = data.choices?.[0]?.message?.content
+  const contentLength = rawContent?.length || 0
+  const last200Chars = rawContent?.substring(Math.max(0, contentLength - 200)) || ''
+  const hasStopMarker = rawContent?.includes('<<END_REPORT>>') || false
+
+  console.log('===== RESPOSTA DA OPENAI (APÓS CHAMADA) =====')
+  console.log('finish_reason:', finishReason)
   console.log('token_usage:', JSON.stringify(data.usage))
   console.log('model:', data.model)
-
-  // O campo que contém o texto final é: data.choices[0].message.content
-  const rawContent = data.choices?.[0]?.message?.content
-  console.log('Campo: data.choices[0].message.content')
-  console.log('Tipo:', typeof rawContent)
-  console.log('Tamanho:', rawContent?.length || 0, 'caracteres')
-  console.log('Primeiros 1000 chars:', rawContent?.substring(0, 1000))
-  console.log('Últimos 500 chars:', rawContent?.substring(Math.max(0, (rawContent?.length || 0) - 500)))
-  console.log('===================================')
+  console.log('Campo usado: data.choices[0].message.content')
+  console.log('Tamanho:', contentLength, 'caracteres')
+  console.log('Últimos 200 chars:', last200Chars)
+  console.log('Contém <<END_REPORT>>:', hasStopMarker)
+  if (!hasStopMarker) {
+    console.warn('⚠️ STOP_MARKER_NOT_FOUND: O texto NÃO contém <<END_REPORT>>')
+  }
+  console.log('==============================================')
 
   if (!rawContent) {
     console.error('Resposta vazia da OpenAI. Data recebida:', JSON.stringify(data).substring(0, 500))
@@ -263,12 +276,19 @@ export async function generateSectionReport(
   }
 
   // Verificar se a resposta foi cortada (finish_reason = 'length')
-  const finishReason = data.choices[0]?.finish_reason
+  // NÃO fazer retry automático - retornar erro amigável
   if (finishReason === 'length') {
-    console.error('⚠️ CRÍTICO: Resposta da IA foi TRUNCADA por limite de tokens!')
-    console.error('Token usage:', data.usage)
-    console.error('Tamanho do conteúdo recebido:', rawContent.length, 'caracteres')
-    throw new Error(`TRUNCATED: Resposta foi cortada por limite de tokens (${rawContent.length} chars recebidos). Token usage: ${JSON.stringify(data.usage)}`)
+    console.error('===== TRUNCATION DETECTADO =====')
+    console.error('finish_reason: length')
+    console.error('completion_tokens:', data.usage?.completion_tokens)
+    console.error('max_tokens configurado:', maxTokens)
+    console.error('Tamanho do conteúdo recebido:', contentLength, 'caracteres')
+    console.error('================================')
+
+    // Erro amigável sem retry
+    const errorMsg = `Relatório truncado: a IA gerou ${data.usage?.completion_tokens} tokens mas o limite é ${maxTokens}. ` +
+      `Aumente o max_tokens nas configurações do prompt para pelo menos 8000 (recomendado: 16000).`
+    throw new Error(`TRUNCATED_NO_RETRY: ${errorMsg}`)
   }
 
   try {
@@ -418,13 +438,39 @@ export async function generateSectionReportWithRetry(
   insights: InsightsJSON
   token_usage?: any
 }> {
+  console.log(`[generateSectionReportWithRetry] Iniciando para seção: ${sectionCode}`)
+
   try {
-    return await generateSectionReport(sectionCode, snapshot, options)
+    const result = await generateSectionReport(sectionCode, snapshot, options)
+    console.log(`[generateSectionReportWithRetry] Sucesso na primeira tentativa`)
+    return result
   } catch (error: any) {
-    console.warn('Primeira tentativa falhou, tentando novamente...', error.message)
+    console.error(`[generateSectionReportWithRetry] Primeira tentativa falhou: ${error.message}`)
+
+    // NÃO fazer retry se for erro de truncation - é um problema de configuração
+    if (error.message.includes('TRUNCATED_NO_RETRY')) {
+      console.error('[generateSectionReportWithRetry] Erro de truncation - NÃO fazendo retry')
+      // Extrair mensagem amigável
+      const friendlyMsg = error.message.replace('TRUNCATED_NO_RETRY: ', '')
+      throw new Error(friendlyMsg)
+    }
+
+    // Para outros erros, tentar novamente UMA vez
+    console.warn('[generateSectionReportWithRetry] Tentando novamente (retry 1/1)...')
+
     try {
-      return await generateSectionReport(sectionCode, snapshot, options)
+      const result = await generateSectionReport(sectionCode, snapshot, options)
+      console.log(`[generateSectionReportWithRetry] Sucesso no retry`)
+      return result
     } catch (retryError: any) {
+      console.error(`[generateSectionReportWithRetry] Retry também falhou: ${retryError.message}`)
+
+      // Se for truncation no retry, não propagar como "Falha após retry"
+      if (retryError.message.includes('TRUNCATED_NO_RETRY')) {
+        const friendlyMsg = retryError.message.replace('TRUNCATED_NO_RETRY: ', '')
+        throw new Error(friendlyMsg)
+      }
+
       throw new Error(`Falha após retry: ${retryError.message}`)
     }
   }
