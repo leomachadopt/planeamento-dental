@@ -77,12 +77,14 @@ export default async function handler(
             completion_percent: 0,
           }
 
-          // Buscar todos os question_sets ativos da seção
+          // Buscar todos os question_sets ativos da seção que tenham pelo menos uma pergunta
           const questionSetsResult = await pool.query(
             `SELECT qs.*, sub.code as subsection_code, sub.name as subsection_name
              FROM question_sets qs
              LEFT JOIN subsections sub ON sub.id = qs.subsection_id
-             WHERE qs.section_id = $1 AND qs.is_active = true
+             WHERE qs.section_id = $1
+               AND qs.is_active = true
+               AND EXISTS (SELECT 1 FROM questions q WHERE q.question_set_id = qs.id)
              ORDER BY qs.version DESC, qs.name`,
             [section.id],
           )
