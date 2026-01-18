@@ -193,7 +193,21 @@ export async function generateSectionReport(
       stop: ['<<END_REPORT>>'], // Stop sequence para evitar lixo após JSON
     }
 
-    console.log(`[OpenAI Request] Model: ${finalModel}, MaxTokens: ${maxTokens}, Temperature: ${finalTemperature}`)
+    // ===== LOG DO PAYLOAD COMPLETO =====
+    console.log('===== PAYLOAD ENVIADO PARA OPENAI =====')
+    console.log('model:', requestBody.model)
+    console.log('temperature:', requestBody.temperature)
+    console.log('max_tokens:', requestBody.max_tokens)
+    console.log('response_format:', JSON.stringify(requestBody.response_format))
+    console.log('stop:', JSON.stringify(requestBody.stop))
+    console.log('messages[0].role:', requestBody.messages[0].role)
+    console.log('messages[0].content (length):', requestBody.messages[0].content.length)
+    console.log('messages[1].role:', requestBody.messages[1].role)
+    console.log('messages[1].content (length):', requestBody.messages[1].content.length)
+    console.log('========================================')
+
+    // Log resumido para facilitar leitura
+    console.log(`[OpenAI Request] Model: ${finalModel}, MaxTokens: ${maxTokens}, Temperature: ${finalTemperature}, Stop: ${JSON.stringify(requestBody.stop)}`)
 
     response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
