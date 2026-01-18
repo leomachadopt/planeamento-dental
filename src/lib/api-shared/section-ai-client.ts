@@ -62,16 +62,24 @@ const DEFAULT_MODEL = 'gpt-4o-2024-08-06' // Suporta até 16K tokens de output
 const DEFAULT_TEMPERATURE = 0.5 // 0.4-0.6 para IDENTITY conforme especificado
 const DEFAULT_TONE = 'intermediario'
 
+export interface PromptConfig {
+  system_prompt: string | null
+  user_prompt: string | null
+  temperature: number
+  max_tokens: number
+  model: string
+}
+
 /**
- * Busca prompt customizado do banco de dados
+ * Busca prompt customizado do banco de dados com configurações de modelo
  * Retorna null se não encontrar, para usar fallback do código
  */
 async function getCustomPromptFromDB(
   promptKey: string,
-): Promise<{ system_prompt: string | null; user_prompt: string | null } | null> {
+): Promise<PromptConfig | null> {
   try {
     const result = await pool.query(
-      `SELECT system_prompt, user_prompt
+      `SELECT system_prompt, user_prompt, temperature, max_tokens, model
        FROM ai_prompt_templates
        WHERE key = $1 AND is_active = true
        ORDER BY created_at DESC
@@ -83,6 +91,9 @@ async function getCustomPromptFromDB(
       return {
         system_prompt: result.rows[0].system_prompt,
         user_prompt: result.rows[0].user_prompt,
+        temperature: parseFloat(result.rows[0].temperature) || 0.7,
+        max_tokens: result.rows[0].max_tokens || 4000,
+        model: result.rows[0].model || 'gpt-4o',
       }
     }
 
@@ -112,14 +123,17 @@ export async function generateSectionReport(
 }> {
   const {
     apiKey,
-    model = DEFAULT_MODEL,
-    temperature = DEFAULT_TEMPERATURE,
+    model: optModel = DEFAULT_MODEL,
+    temperature: optTemperature = DEFAULT_TEMPERATURE,
     tone = DEFAULT_TONE,
   } = options
 
   let systemPrompt: string
   let userPrompt: string
-  
+  let finalModel = optModel
+  let finalTemperature = optTemperature
+  let finalMaxTokens = 16384 // Default máximo
+
   try {
     // Tentar buscar prompt customizado do banco primeiro
     const promptKey = `section_${sectionCode}`
@@ -128,7 +142,7 @@ export async function generateSectionReport(
     if (customPrompt && (customPrompt.system_prompt || customPrompt.user_prompt)) {
       // Usar prompts customizados do banco
       systemPrompt = customPrompt.system_prompt || getSystemPrompt(tone)
-      
+
       if (customPrompt.user_prompt) {
         // Substituir placeholders no user prompt
         userPrompt = replacePlaceholders(customPrompt.user_prompt, snapshot)
@@ -136,8 +150,14 @@ export async function generateSectionReport(
         // Se não tiver user_prompt customizado, usar o do código
         userPrompt = buildSectionReportPrompt(sectionCode, snapshot, tone)
       }
-      
+
+      // Usar configurações de modelo do banco de dados
+      finalModel = customPrompt.model || optModel
+      finalTemperature = customPrompt.temperature || optTemperature
+      finalMaxTokens = customPrompt.max_tokens || 16384
+
       console.log(`Usando prompts customizados do banco para ${sectionCode}`)
+      console.log(`  Model: ${finalModel}, Temperature: ${finalTemperature}, Max Tokens: ${finalMaxTokens}`)
     } else {
       // Fallback: usar prompts do código
       systemPrompt = getSystemPrompt(tone)
@@ -151,8 +171,7 @@ export async function generateSectionReport(
     userPrompt = buildSectionReportPrompt(sectionCode, snapshot, tone)
   }
 
-  // 16384 tokens - limite máximo do gpt-4o-2024-08-06 para garantir relatórios completos
-  const maxTokens = 16384
+  const maxTokens = finalMaxTokens
 
   let response: Response
   try {
@@ -163,7 +182,7 @@ export async function generateSectionReport(
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model,
+        model: finalModel,
         messages: [
           {
             role: 'system',
@@ -174,7 +193,7 @@ export async function generateSectionReport(
             content: userPrompt,
           },
         ],
-        temperature,
+        temperature: finalTemperature,
         max_tokens: maxTokens,
         response_format: { type: 'json_object' },
       }),

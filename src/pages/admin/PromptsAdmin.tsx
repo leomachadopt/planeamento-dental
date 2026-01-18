@@ -46,7 +46,7 @@ const promptTypes = [
 const modelConfigs = {
   temperature: { min: 0, max: 2, default: 0.7, step: 0.1 },
   maxTokens: { min: 1000, max: 16000, default: 4000, step: 100 },
-  model: ['gpt-4', 'gpt-4-turbo', 'gpt-3.5-turbo'],
+  model: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo'],
 }
 
 export default function PromptsAdmin() {
@@ -56,7 +56,12 @@ export default function PromptsAdmin() {
   const [originalSystemPrompt, setOriginalSystemPrompt] = useState('')
   const [originalUserPrompt, setOriginalUserPrompt] = useState('')
   const [modelConfig, setModelConfig] = useState({
-    model: 'gpt-4',
+    model: 'gpt-4o',
+    temperature: 0.7,
+    maxTokens: 4000,
+  })
+  const [originalModelConfig, setOriginalModelConfig] = useState({
+    model: 'gpt-4o',
     temperature: 0.7,
     maxTokens: 4000,
   })
@@ -77,7 +82,16 @@ export default function PromptsAdmin() {
         setUserPrompt(response.user_prompt || '')
         setOriginalSystemPrompt(response.system_prompt || '')
         setOriginalUserPrompt(response.user_prompt || '')
-        
+
+        // Carregar configurações de modelo do banco
+        const loadedConfig = {
+          model: response.model || 'gpt-4o',
+          temperature: response.temperature ?? 0.7,
+          maxTokens: response.max_tokens || 4000,
+        }
+        setModelConfig(loadedConfig)
+        setOriginalModelConfig(loadedConfig)
+
         // Se não tiver prompts salvos, carregar defaults do código
         if (!response.system_prompt && !response.user_prompt) {
           const defaults = getDefaultPrompts(type)
@@ -93,6 +107,10 @@ export default function PromptsAdmin() {
         setUserPrompt(defaults.userPrompt)
         setOriginalSystemPrompt(defaults.systemPrompt)
         setOriginalUserPrompt(defaults.userPrompt)
+        // Reset model config to defaults
+        const defaultConfig = { model: 'gpt-4o', temperature: 0.7, maxTokens: 4000 }
+        setModelConfig(defaultConfig)
+        setOriginalModelConfig(defaultConfig)
       }
     } catch (error) {
       toast.error('Erro ao carregar prompt')
@@ -133,10 +151,15 @@ export default function PromptsAdmin() {
   const handleSave = async () => {
     try {
       try {
-        await api.savePrompt(selectedType, systemPrompt, userPrompt)
-        toast.success('Prompt salvo com sucesso')
+        await api.savePrompt(selectedType, systemPrompt, userPrompt, {
+          temperature: modelConfig.temperature,
+          max_tokens: modelConfig.maxTokens,
+          model: modelConfig.model,
+        })
+        toast.success('Prompt e configurações salvos com sucesso')
         setOriginalSystemPrompt(systemPrompt)
         setOriginalUserPrompt(userPrompt)
+        setOriginalModelConfig({ ...modelConfig })
       } catch (error: any) {
         toast.error(`Erro ao salvar prompt: ${error.message}`)
       }
@@ -146,14 +169,20 @@ export default function PromptsAdmin() {
   }
 
   const handleReset = () => {
-    if (confirm('Deseja restaurar os prompts originais? As alterações serão perdidas.')) {
+    if (confirm('Deseja restaurar os prompts e configurações originais? As alterações serão perdidas.')) {
       setSystemPrompt(originalSystemPrompt)
       setUserPrompt(originalUserPrompt)
-      toast.info('Prompts restaurados')
+      setModelConfig({ ...originalModelConfig })
+      toast.info('Prompts e configurações restaurados')
     }
   }
 
-  const hasChanges = systemPrompt !== originalSystemPrompt || userPrompt !== originalUserPrompt
+  const hasChanges =
+    systemPrompt !== originalSystemPrompt ||
+    userPrompt !== originalUserPrompt ||
+    modelConfig.model !== originalModelConfig.model ||
+    modelConfig.temperature !== originalModelConfig.temperature ||
+    modelConfig.maxTokens !== originalModelConfig.maxTokens
 
   return (
     <div className="space-y-8">
@@ -365,12 +394,9 @@ export default function PromptsAdmin() {
               </div>
             </TabsContent>
           </Tabs>
-          <div className="flex justify-end gap-2 mt-4">
-            <Button variant="outline" onClick={handleReset}>
-              Restaurar Padrões
-            </Button>
-            <Button onClick={handleSave}>Salvar Configurações</Button>
-          </div>
+          <p className="text-sm text-slate-500 mt-4">
+            As configurações de modelo serão salvas junto com os prompts ao clicar em "Salvar" no topo da página.
+          </p>
         </CardContent>
       </Card>
 

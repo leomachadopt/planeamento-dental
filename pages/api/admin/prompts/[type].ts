@@ -40,7 +40,7 @@ export default async function handler(
         if (req.method === 'GET') {
           // Buscar prompt do banco
           const result = await pool.query(
-            `SELECT 
+            `SELECT
               system_prompt,
               user_prompt,
               key,
@@ -48,7 +48,10 @@ export default async function handler(
               section_code,
               is_active,
               created_at,
-              updated_at
+              updated_at,
+              temperature,
+              max_tokens,
+              model
             FROM ai_prompt_templates
             WHERE key = $1 AND is_active = true
             ORDER BY created_at DESC
@@ -66,6 +69,9 @@ export default async function handler(
               is_active: result.rows[0].is_active,
               created_at: result.rows[0].created_at,
               updated_at: result.rows[0].updated_at,
+              temperature: parseFloat(result.rows[0].temperature) || 0.7,
+              max_tokens: result.rows[0].max_tokens || 4000,
+              model: result.rows[0].model || 'gpt-4o',
             })
           }
 
@@ -79,11 +85,14 @@ export default async function handler(
             is_active: false,
             created_at: null,
             updated_at: null,
+            temperature: 0.7,
+            max_tokens: 4000,
+            model: 'gpt-4o',
           })
         }
 
         if (req.method === 'PUT') {
-          const { system_prompt, user_prompt } = req.body
+          const { system_prompt, user_prompt, temperature, max_tokens, model } = req.body
 
           if (system_prompt === undefined && user_prompt === undefined) {
             return res.status(400).json({ error: 'system_prompt ou user_prompt é obrigatório' })
@@ -91,7 +100,7 @@ export default async function handler(
 
           // Verificar se já existe um prompt ativo
           const existingResult = await pool.query(
-            `SELECT id, version FROM ai_prompt_templates
+            `SELECT id, version, temperature, max_tokens, model FROM ai_prompt_templates
              WHERE key = $1 AND is_active = true
              ORDER BY created_at DESC
              LIMIT 1`,
@@ -99,6 +108,10 @@ export default async function handler(
           )
 
           let newVersion = '1.0.0'
+          let currentTemperature = 0.7
+          let currentMaxTokens = 4000
+          let currentModel = 'gpt-4o'
+
           if (existingResult.rows.length > 0) {
             // Desativar versão anterior
             await pool.query(
@@ -112,6 +125,10 @@ export default async function handler(
             const versionParts = currentVersion.split('.')
             const minor = parseInt(versionParts[1] || '0') + 1
             newVersion = `${versionParts[0]}.${minor}.0`
+            // Manter valores anteriores se não fornecidos
+            currentTemperature = parseFloat(existingResult.rows[0].temperature) || 0.7
+            currentMaxTokens = existingResult.rows[0].max_tokens || 4000
+            currentModel = existingResult.rows[0].model || 'gpt-4o'
           }
 
           // Buscar prompts atuais se não foram fornecidos
@@ -133,12 +150,18 @@ export default async function handler(
             }
           }
 
+          // Usar valores fornecidos ou manter anteriores
+          const finalTemperature = temperature !== undefined ? temperature : currentTemperature
+          const finalMaxTokens = max_tokens !== undefined ? max_tokens : currentMaxTokens
+          const finalModel = model !== undefined ? model : currentModel
+
           // Inserir nova versão
           const insertResult = await pool.query(
             `INSERT INTO ai_prompt_templates (
-              key, version, template_text, system_prompt, user_prompt, section_code, is_active
-            ) VALUES ($1, $2, $3, $4, $5, $6, true)
-            RETURNING id, key, version, system_prompt, user_prompt, section_code, is_active, created_at, updated_at`,
+              key, version, template_text, system_prompt, user_prompt, section_code, is_active,
+              temperature, max_tokens, model
+            ) VALUES ($1, $2, $3, $4, $5, $6, true, $7, $8, $9)
+            RETURNING id, key, version, system_prompt, user_prompt, section_code, is_active, created_at, updated_at, temperature, max_tokens, model`,
             [
               promptType,
               newVersion,
@@ -146,6 +169,9 @@ export default async function handler(
               finalSystemPrompt || '',
               finalUserPrompt || '',
               sectionCode,
+              finalTemperature,
+              finalMaxTokens,
+              finalModel,
             ],
           )
 
@@ -159,6 +185,9 @@ export default async function handler(
             is_active: insertResult.rows[0].is_active,
             created_at: insertResult.rows[0].created_at,
             updated_at: insertResult.rows[0].updated_at,
+            temperature: parseFloat(insertResult.rows[0].temperature),
+            max_tokens: insertResult.rows[0].max_tokens,
+            model: insertResult.rows[0].model,
           })
         }
 

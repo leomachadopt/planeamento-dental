@@ -219,10 +219,19 @@ export const api = {
   // Admin - Prompts
   getPrompts: () => fetchAPI('/admin/prompts'),
   getPrompt: (type: string) => fetchAPI(`/admin/prompts/${type}`),
-  savePrompt: (type: string, systemPrompt: string, userPrompt: string) =>
+  savePrompt: (
+    type: string,
+    systemPrompt: string,
+    userPrompt: string,
+    modelConfig?: { temperature?: number; max_tokens?: number; model?: string }
+  ) =>
     fetchAPI(`/admin/prompts/${type}`, {
       method: 'PUT',
-      body: JSON.stringify({ system_prompt: systemPrompt, user_prompt: userPrompt }),
+      body: JSON.stringify({
+        system_prompt: systemPrompt,
+        user_prompt: userPrompt,
+        ...(modelConfig || {}),
+      }),
     }),
 
   // Admin - Configurações
