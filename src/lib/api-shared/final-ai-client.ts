@@ -116,7 +116,7 @@ ${snapshot.sections.map((section) => {
 ${section.has_report ? `Scores: C=${section.scores?.clarity || 0}/10, Co=${section.scores?.consistency || 0}/10, Cp=${section.scores?.completeness || 0}/10, I=${section.scores?.impact_potential || 0}/10` : 'Sem relatório disponível'}
 ${section.alerts && section.alerts.length > 0 ? `Alertas: ${section.alerts.length} (${section.alerts.filter((a: any) => a.severity === 'high').length} alta, ${section.alerts.filter((a: any) => a.severity === 'medium').length} média, ${section.alerts.filter((a: any) => a.severity === 'low').length} baixa)` : ''}
 ${section.recommendations && section.recommendations.length > 0 ? `Recomendações: ${section.recommendations.length}` : ''}
-${section.report_markdown ? `\nResumo do relatório:\n${section.report_markdown.substring(0, 500)}...` : ''}
+${section.report_markdown ? `\nConteúdo completo do relatório:\n${section.report_markdown}` : ''}
 `
 }).join('\n')}
 
@@ -237,7 +237,7 @@ export interface GenerateOptions {
   tone?: string
 }
 
-const DEFAULT_MODEL = 'gpt-4o'
+const DEFAULT_MODEL = 'gpt-4o-2024-08-06' // Suporta até 16K tokens de output
 const DEFAULT_TEMPERATURE = 0.7
 const DEFAULT_TONE = 'intermediario'
 
@@ -278,7 +278,7 @@ export async function generateFinalReport(
         },
       ],
       temperature,
-      max_tokens: 10000, // Mais tokens para relatório final
+      max_tokens: 16384, // Limite máximo do gpt-4o-2024-08-06 para relatórios completos
       response_format: { type: 'json_object' },
     }),
   })

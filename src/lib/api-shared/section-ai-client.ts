@@ -58,7 +58,7 @@ export interface GenerateOptions {
   tone?: string
 }
 
-const DEFAULT_MODEL = 'gpt-4o'
+const DEFAULT_MODEL = 'gpt-4o-2024-08-06' // Suporta até 16K tokens de output
 const DEFAULT_TEMPERATURE = 0.5 // 0.4-0.6 para IDENTITY conforme especificado
 const DEFAULT_TONE = 'intermediario'
 
@@ -151,8 +151,8 @@ export async function generateSectionReport(
     userPrompt = buildSectionReportPrompt(sectionCode, snapshot, tone)
   }
 
-  // 10000 tokens para todas as seções - suficiente para relatórios completos + JSON structure
-  const maxTokens = 10000
+  // 16384 tokens - limite máximo do gpt-4o-2024-08-06 para garantir relatórios completos
+  const maxTokens = 16384
 
   let response: Response
   try {
@@ -214,9 +214,11 @@ export async function generateSectionReport(
   // Verificar se a resposta foi cortada (finish_reason = 'length')
   const finishReason = data.choices[0]?.finish_reason
   if (finishReason === 'length') {
-    console.warn('⚠️ ATENÇÃO: Resposta da IA foi cortada por limite de tokens!')
-    console.warn('Token usage:', data.usage)
-    console.warn('Tamanho do conteúdo recebido:', content.length, 'caracteres')
+    console.error('⚠️ CRÍTICO: Resposta da IA foi TRUNCADA por limite de tokens!')
+    console.error('Token usage:', data.usage)
+    console.error('Tamanho do conteúdo recebido:', content.length, 'caracteres')
+    // Lançar erro para forçar retry - resposta truncada não deve ser aceita
+    throw new Error(`TRUNCATED: Resposta foi cortada por limite de tokens (${content.length} chars recebidos). Token usage: ${JSON.stringify(data.usage)}`)
   }
 
   try {
@@ -225,8 +227,9 @@ export async function generateSectionReport(
     // Verificar se o report_markdown está completo
     if (parsed.report_markdown) {
       console.log(`Report markdown gerado: ${parsed.report_markdown.length} caracteres`)
-      if (finishReason === 'length' && parsed.report_markdown.length < 2000) {
-        console.warn('⚠️ Relatório pode estar incompleto devido ao limite de tokens')
+      // 6000 caracteres mínimo para relatórios de 900-1400 palavras
+      if (parsed.report_markdown.length < 6000) {
+        console.warn(`⚠️ Relatório pode estar incompleto: ${parsed.report_markdown.length} caracteres (esperado mínimo: 6000)`)
       }
     }
 

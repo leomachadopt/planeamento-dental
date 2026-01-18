@@ -23,7 +23,11 @@
       "Bash(ss -tlnp:*)",
       "Bash(lsof:*)",
       "Bash(npx tsc:*)",
-      "Bash(npx vercel --prod)"
+      "Bash(npx vercel --prod)",
+      "Bash(git rm:*)",
+      "Bash(pkill:*)",
+      "Bash(xargs:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

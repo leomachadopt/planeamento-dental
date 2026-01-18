@@ -462,6 +462,16 @@ IMPORTANTE:
 - O insights JSON deve ser válido e parseável sem ambiguidades.
 - Todos os campos são obrigatórios (arrays podem estar vazios).
 - Para seções que não sejam IDENTITY, o campo "identity_summary" pode ser um objeto vazio {}.
+
+INSTRUÇÕES CRÍTICAS DE OUTPUT (OBRIGATÓRIAS):
+- NUNCA resuma, colapse, encurte ou simplifique o conteúdo do relatório
+- O report_markdown DEVE conter TODAS as seções pedidas, COMPLETAS e DETALHADAS
+- Se houver limitação de espaço, priorize COMPLETAR o report_markdown sobre os insights
+- Prefira relatórios longos e completos a relatórios curtos e resumidos
+- Cada seção do relatório deve ter pelo menos 100-200 palavras
+- O relatório total deve ter no mínimo 900 palavras (aproximadamente 6000 caracteres)
+- NÃO use frases como "conforme mencionado", "como visto anteriormente" - escreva o conteúdo completo
+- NÃO faça resumos executivos que substituam o conteúdo detalhado - faça ambos
 `
 
 /**
@@ -652,7 +662,7 @@ ${snapshot.sections.map((section: any) => {
 ${section.has_report ? `Scores: C=${section.scores?.clarity || 0}/10, Co=${section.scores?.consistency || 0}/10, Cp=${section.scores?.completeness || 0}/10, I=${section.scores?.impact_potential || 0}/10` : 'Sem relatório disponível'}
 ${section.alerts && section.alerts.length > 0 ? `Alertas: ${section.alerts.length} (${section.alerts.filter((a: any) => a.severity === 'high').length} alta, ${section.alerts.filter((a: any) => a.severity === 'medium').length} média, ${section.alerts.filter((a: any) => a.severity === 'low').length} baixa)` : ''}
 ${section.recommendations && section.recommendations.length > 0 ? `Recomendações: ${section.recommendations.length}` : ''}
-${section.report_markdown ? `\nResumo do relatório:\n${section.report_markdown.substring(0, 500)}...` : ''}
+${section.report_markdown ? `\nConteúdo completo do relatório:\n${section.report_markdown}` : ''}
 `
 }).join('\n')}
 
