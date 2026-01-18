@@ -30,7 +30,7 @@ interface DossierSidebarProps {
 
 const sectionIcons: Record<string, any> = {
   IDENTITY: Fingerprint,
-  BUSINESS_MODEL: Building2,
+  BUSINESS: Building2,
   MARKET: Globe,
   OFFER: Package,
   OPERATIONS: Settings,
@@ -102,7 +102,7 @@ export default function DossierSidebar({ dossierId }: DossierSidebarProps) {
         // Mapear sectionCode para rotas
         const routeMap: Record<string, string> = {
           IDENTITY: 'identity',
-          BUSINESS_MODEL: 'business-model',
+          BUSINESS: 'business-model',
           MARKET: 'market',
           OFFER: 'offer',
           OPERATIONS: 'operations',

@@ -6,7 +6,7 @@
 -- ============================================
 INSERT INTO sections (code, name, order_index, description) VALUES
 ('IDENTITY', 'Identidade', 1, 'Definir quem a clínica é, por que ela existe, para quem ela existe e como ela escolhe competir. Base de todas as decisões estratégicas.'),
-('BUSINESS_MODEL', 'Modelo de Negócio', 2, 'Como a clínica cria, entrega e captura valor'),
+('BUSINESS', 'Modelo de Negócio', 2, 'Como a clínica cria, entrega e captura valor'),
 ('MARKET', 'Mercado', 3, 'Análise de mercado, concorrentes e oportunidades'),
 ('OFFER', 'Oferta', 4, 'Serviços, categorias e propostas de valor'),
 ('OPERATIONS', 'Operações', 5, 'Processos, capacidade e equipe'),

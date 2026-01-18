@@ -83,7 +83,7 @@ export default function DossierReports() {
   const getSectionRoute = (sectionCode: string) => {
     const routeMap: Record<string, string> = {
       IDENTITY: 'identity',
-      BUSINESS_MODEL: 'business-model',
+      BUSINESS: 'business-model',
       MARKET: 'market',
       OFFER: 'offer',
       OPERATIONS: 'operations',

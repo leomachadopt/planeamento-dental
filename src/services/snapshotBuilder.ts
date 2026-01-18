@@ -17,7 +17,7 @@ const SECTION_ENTITIES_MAP: Record<string, string[]> = {
   OPERATIONS: ['team_members', 'roles', 'capacities'],
   STRATEGY: ['strategic_choices'],
   PLAN: ['initiatives'],
-  BUSINESS_MODEL: [],
+  BUSINESS: [],
   FINAL_REPORT: [],
 }
 

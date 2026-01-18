@@ -26,7 +26,7 @@ import { getSectionInstruction, getSystemPrompt } from '@/lib/section-prompts'
 const promptTypes = [
   // Seções do Dossiê (ordem igual à sidebar do usuário)
   { value: 'section_IDENTITY', label: 'IDENTITY - Identidade', description: 'Prompt para relatório de identidade estratégica', category: 'sections' },
-  { value: 'section_BUSINESS_MODEL', label: 'BUSINESS_MODEL - Modelo de Negócio', description: 'Prompt para relatório de modelo de negócio', category: 'sections' },
+  { value: 'section_BUSINESS', label: 'BUSINESS - Modelo de Negócio', description: 'Prompt para relatório de modelo de negócio', category: 'sections' },
   { value: 'section_MARKET', label: 'MARKET - Mercado', description: 'Prompt para relatório de mercado e concorrência', category: 'sections' },
   { value: 'section_OFFER', label: 'OFFER - Oferta', description: 'Prompt para relatório de oferta de serviços', category: 'sections' },
   { value: 'section_OPERATIONS', label: 'OPERATIONS - Operações', description: 'Prompt para relatório de operações', category: 'sections' },

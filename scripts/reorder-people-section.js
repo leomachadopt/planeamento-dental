@@ -18,7 +18,7 @@ async function reorderSections() {
 
     // Nova ordem desejada:
     // 1. IDENTITY
-    // 2. BUSINESS_MODEL
+    // 2. BUSINESS
     // 3. MARKET
     // 4. OFFER
     // 5. OPERATIONS
@@ -29,7 +29,7 @@ async function reorderSections() {
 
     const sectionOrder = [
       { code: 'IDENTITY', order: 1 },
-      { code: 'BUSINESS_MODEL', order: 2 },
+      { code: 'BUSINESS', order: 2 },
       { code: 'MARKET', order: 3 },
       { code: 'OFFER', order: 4 },
       { code: 'OPERATIONS', order: 5 },

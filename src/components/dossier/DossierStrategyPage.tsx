@@ -69,7 +69,7 @@ export default function DossierStrategyPage({ sectionCode }: DossierStrategyPage
   }
 
   // Calcular status dos insumos (seções anteriores)
-  const diagnosticSections = ['IDENTITY', 'BUSINESS_MODEL', 'MARKET', 'OFFER', 'OPERATIONS', 'PEOPLE']
+  const diagnosticSections = ['IDENTITY', 'BUSINESS', 'MARKET', 'OFFER', 'OPERATIONS', 'PEOPLE']
   // TODO: buscar status real das seções do dossierId
 
   return (

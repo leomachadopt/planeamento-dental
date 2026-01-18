@@ -257,7 +257,7 @@ Atenção ao rigor:
 - Priorize qualidade sobre quantidade: melhor 7 iniciativas bem definidas do que 20 vagas.
   `,
 
-  BUSINESS_MODEL: `
+  BUSINESS: `
 Analise o MODELO DE NEGÓCIO com foco em:
 
 1. **Criação de Valor**: Como a clínica cria valor para os pacientes.
